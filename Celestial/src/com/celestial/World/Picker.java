@@ -39,9 +39,17 @@ public class Picker {
             for(BlockTerrainControl chunk : parent.sides) {
                 CollisionResults results = getRayCastingResults(worldNode, parent, cam);
                 if(results.size() > 0){
-                    Vector3f collisionContactPoint = results.getClosestCollision().getContactPoint();
+                    
+                	Vector3f collisionContactPoint = results.getClosestCollision().getContactPoint();
+                    if(collisionContactPoint == null)
+                    	return null;
                     values[0] = collisionContactPoint;
-                    values[1] = BlockNavigator.getPointedBlockLocation(chunk, collisionContactPoint, getNeighborLocation);
+                    
+                    Vector3Int blockPoint = BlockNavigator.getPointedBlockLocation(chunk, collisionContactPoint, getNeighborLocation);
+                    if(blockPoint == null)
+                    	return null;
+                    values[1] = blockPoint;
+                    
                     return values;
                 }
                 return null;

@@ -5,11 +5,11 @@
 package com.celestial.Input;
 
 import com.celestial.Celestial;
+import com.celestial.Blocks.Block_Stone;
+import com.celestial.Blocks.Block_Wood;
 import com.celestial.World.Picker;
 import com.cubes.BlockTerrainControl;
-import com.cubes.BlockType;
 import com.cubes.Vector3Int;
-import com.cubes.test.blocks.Block_Wood;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
@@ -57,36 +57,68 @@ public class InputControl {
 	private ActionListener actionListener = new ActionListener() {
 
 		public void onAction(String binding, boolean keyPressed, float tpf) {
-			if (binding.equals("Block_Del") && !keyPressed) {
+
+			if (binding.equals("Block_Del") && !keyPressed) 
+			{
 				Object[] values = Picker.getCurrentPointedBlockLocation(false, parent, cam);
+				if(values == null || values[0] == null || values[1] == null) //Check to see if they clicked the sky...
+				{
+					return;
+				}
 				Vector3Int blockLocation = (Vector3Int) values[1];
 				Vector3f blockAbsLocation = (Vector3f) values[0];
-				//(The block location is null, if the user looks in the sky or out of the map)
-				if(blockLocation != null){
+				if(blockLocation != null)
+				{
 					float dist = parent.player.getPhysicsLocation().distance(blockAbsLocation);
-					System.out.println(dist);
-					if(dist <= 15F)
+					if(!parent.bulletAppState.isEnabled()) //Are they flying?
 					{
-						//... and remove a block there :)
-						for(BlockTerrainControl chunk : parent.sides) {
-							chunk.removeBlock(blockLocation);
+						for(BlockTerrainControl chunk : parent.sides) 
+						{
+							if(chunk != null && blockLocation != null)
+								chunk.removeBlock(blockLocation); //Remove the Block
+						}
+					}
+					else
+					{
+						if(dist <= 15F) //Is the block nearby?
+						{
+							for(BlockTerrainControl chunk : parent.sides) 
+							{
+								if(chunk != null && blockLocation != null)
+									chunk.removeBlock(blockLocation); //Remove the Block
+							}
 						}
 					}
 				}
 			}
+
 			if (binding.equals("Block_Add") && !keyPressed) {
-				Object[] values = Picker.getCurrentPointedBlockLocation(false, parent, cam);
+				Object[] values = Picker.getCurrentPointedBlockLocation(true, parent, cam);
+				if(values == null || values[0] == null || values[1] == null) //Check to see if they clicked the sky...
+				{
+					return;
+				}
 				Vector3Int blockLocation = (Vector3Int) values[1];
 				Vector3f blockAbsLocation = (Vector3f) values[0];
-				//(The block location is null, if the user looks in the sky or out of the map)
 				if(blockLocation != null){
 					float dist = parent.player.getPhysicsLocation().distance(blockAbsLocation);
-					System.out.println(dist);
-					if(dist <= 15F)
+					if(!parent.bulletAppState.isEnabled()) //Are they flying?
 					{
-						//... and place a block there :)
-						for(BlockTerrainControl chunk : parent.sides) {
-							chunk.setBlock(blockLocation, Block_Wood.class);
+						for(BlockTerrainControl chunk : parent.sides) 
+						{
+							if(chunk != null && blockLocation != null)
+								chunk.setBlock(blockLocation, Block_Wood.class); //Add the Block
+						}
+					}
+					else
+					{
+						if(dist <= 15F) //Is the block nearby?
+						{
+							for(BlockTerrainControl chunk : parent.sides) 
+							{
+								if(chunk != null && blockLocation != null)
+									chunk.setBlock(blockLocation, Block_Stone.class); //Add the Block
+							}
 						}
 					}
 				}
@@ -113,11 +145,11 @@ public class InputControl {
 			}
 		}
 	};
-	
+
 	public void renderBlockBorder()
 	{
 		//BlockType block = Picker.getCurrentPointedBlock(false, parent, cam);
-		
+
 	}
 
 
