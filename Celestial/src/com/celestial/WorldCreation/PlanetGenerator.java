@@ -4,15 +4,12 @@
  */
 package com.celestial.WorldCreation;
 
-import com.celestial.Blocks.Block_BetterGrass;
-import com.celestial.Blocks.Block_Dirt;
+import com.celestial.Blocks.*;
 import com.celestial.Celestial;
 import com.celestial.World.*;
 import com.cubes.BlockTerrainControl;
 import com.cubes.Vector3Int;
 import com.cubes.test.CubesTestAssets;
-import com.cubes.test.blocks.Block_Stone;
-import com.cubes.test.blocks.Block_Wood;
 import com.jme3.scene.Node;
 import java.util.Random;
 
@@ -68,9 +65,9 @@ public class PlanetGenerator {
                         for (int idx = 1; idx <= 10; ++idx){
                             int rInt = randomGenerator.nextInt(10);
                             if(rInt == 2 || rInt == 5) {
-                                makeCubeAt(locx+i,locy+j,locz+k, GRASS, blockTerrain);
+                                makeCubeAt(locx+i,locy+j,locz+k, DIRT, blockTerrain);
                             } else if (rInt == 3 || rInt == 6) {
-                                makeCubeAt(locx+i,locy+j,locz+k, GRASS, blockTerrain);
+                                makeCubeAt(locx+i,locy+j,locz+k, DIRT, blockTerrain);
                             } else if (rInt == 4 || rInt == 7) {
                                 makeCubeAt(locx+i,locy+j,locz+k, STONE, blockTerrain);
                             }
@@ -90,7 +87,7 @@ public class PlanetGenerator {
         int z = (int) dz;
         
         if(BlockType == GRASS) {
-            blockTerrain.setBlock(new Vector3Int(x, y, z), Block_BetterGrass.class);
+            blockTerrain.setBlock(new Vector3Int(x, y, z), Block_Grass.class);
         } else if (BlockType == WOOD) {
             blockTerrain.setBlock(new Vector3Int(x, y, z), Block_Wood.class);
         } else if (BlockType == STONE) {

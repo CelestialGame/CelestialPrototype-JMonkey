@@ -107,7 +107,7 @@ public class Celestial extends SimpleApplication{
         statusText.setText("World loaded");
 
         for(Node node : WorldSides) {
-            CollisionShape sceneShape = CollisionShapeFactory.createMeshShape((Node) node);
+            CollisionShape sceneShape = CollisionShapeFactory.createMeshShape(node);
             RigidBodyControl landscape = new RigidBodyControl(sceneShape, 0.0f);
             node.addControl(landscape);
             bulletAppState.getPhysicsSpace().add(node);
