@@ -7,6 +7,7 @@ package com.celestial.Input;
 import com.celestial.Celestial;
 import com.celestial.Blocks.Block_Stone;
 import com.celestial.Blocks.Block_Wood;
+import com.celestial.Gui.Gui;
 import com.celestial.World.Picker;
 import com.cubes.BlockTerrainControl;
 import com.cubes.Vector3Int;
@@ -46,12 +47,14 @@ public class InputControl {
 		inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
 		inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
 		inputManager.addMapping("NoClip", new KeyTrigger(KeyInput.KEY_LSHIFT));
+		inputManager.addMapping("ESC", new KeyTrigger(KeyInput.KEY_ESCAPE));
 		inputManager.addListener(actionListener, "Left");
 		inputManager.addListener(actionListener, "Right");
 		inputManager.addListener(actionListener, "Up");
 		inputManager.addListener(actionListener, "Down");
 		inputManager.addListener(actionListener, "Jump");
 		inputManager.addListener(actionListener, "NoClip");
+		inputManager.addListener(actionListener, "ESC");
 	}
 
 	private ActionListener actionListener = new ActionListener() {
@@ -140,8 +143,14 @@ public class InputControl {
 					parent.setCamSpeed(100);
 				} else {
 					parent.bulletAppState.setEnabled(true);
-					parent.player.setPhysicsLocation(cam.getLocation());
+					parent.player.setPhysicsLocation(new Vector3f(cam.getLocation().getX(), cam.getLocation().getY()-Celestial.camHeight, cam.getLocation().getZ()));
 				}
+			}
+			else if(binding.equals("ESC"))
+			{
+				Celestial.app.stop();
+				Celestial.gui.gamePane.remove(Celestial.canvas);
+				Celestial.gui.changeCard(Gui.MAIN);
 			}
 		}
 	};
