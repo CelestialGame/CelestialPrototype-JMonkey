@@ -1,10 +1,12 @@
 package com.celestial;
 
-import com.celestial.Blocks.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.celestial.Blocks.Blocks;
 import com.celestial.Input.InputControl;
 import com.celestial.WorldCreation.PlanetGenerator;
-import com.cubes.*;
-import com.cubes.test.CubesTestAssets;
+import com.cubes.BlockTerrainControl;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
@@ -21,7 +23,6 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 import com.jme3.util.SkyFactory;
-import java.util.*;
 
 /**
  * test
@@ -44,7 +45,9 @@ public class Celestial extends SimpleApplication{
     
     public Vector3f walkDirection = new Vector3f();
     public boolean left = false, right = false, up = false, down = false;
-    public CharacterControl player; 
+    public CharacterControl player;
+
+	private InputControl inputControl; 
     
     public Celestial() {
         
@@ -82,7 +85,7 @@ public class Celestial extends SimpleApplication{
         sides.add(new PlanetGenerator(this).makePlanetSide(0,0,0,worldNode));
         WorldSides.add(worldNode);
         
-        InputControl inputControl = new InputControl(this, cam, inputManager);
+        inputControl = new InputControl(this, cam, inputManager);
         
         Spatial sky = SkyFactory.createSky(assetManager, "assets/textures/nightsky.jpg", true);
         sky.scale(-1, -1, 1);
@@ -130,6 +133,7 @@ public class Celestial extends SimpleApplication{
             if (down)  { walkDirection.addLocal(camDir.negate()); }
             player.setWalkDirection(walkDirection);
             cam.setLocation(player.getPhysicsLocation());
+            this.inputControl.renderBlockBorder();
         } else {
             //pass
         }

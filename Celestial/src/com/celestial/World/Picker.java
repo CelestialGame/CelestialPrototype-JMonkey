@@ -5,8 +5,10 @@
 package com.celestial.World;
 
 import com.celestial.Celestial;
+import com.cubes.Block;
 import com.cubes.BlockNavigator;
 import com.cubes.BlockTerrainControl;
+import com.cubes.BlockType;
 import com.cubes.Vector3Int;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
@@ -31,18 +33,35 @@ public class Picker {
         node.collideWith(ray, results);
         return results;
     }
-    public static Vector3Int getCurrentPointedBlockLocation(boolean getNeighborLocation, Celestial parent, Camera cam){
-        for(Node worldNode : parent.WorldSides) {
+    public static Object[] getCurrentPointedBlockLocation(boolean getNeighborLocation, Celestial parent, Camera cam){
+        Object[] values = new Object[2];
+    	for(Node worldNode : parent.WorldSides) {
             for(BlockTerrainControl chunk : parent.sides) {
                 CollisionResults results = getRayCastingResults(worldNode, parent, cam);
                 if(results.size() > 0){
                     Vector3f collisionContactPoint = results.getClosestCollision().getContactPoint();
-                    return BlockNavigator.getPointedBlockLocation(chunk, collisionContactPoint, getNeighborLocation);
+                    values[0] = collisionContactPoint;
+                    values[1] = BlockNavigator.getPointedBlockLocation(chunk, collisionContactPoint, getNeighborLocation);
+                    return values;
                 }
                 return null;
             }
         }
         return null;
     }
+	public static BlockType getCurrentPointedBlock(boolean getNeighborLocation, Celestial parent, Camera cam) {
+		for(Node worldNode : parent.WorldSides) {
+            for(BlockTerrainControl chunk : parent.sides) {
+                CollisionResults results = getRayCastingResults(worldNode, parent, cam);
+                if(results.size() > 0){
+                    Vector3f collisionContactPoint = results.getClosestCollision().getContactPoint();
+                    return chunk.getBlock(BlockNavigator.getPointedBlockLocation(chunk, collisionContactPoint, getNeighborLocation));
+                    
+                }
+                return null;
+            }
+        }
+        return null;
+	}
     
 }
