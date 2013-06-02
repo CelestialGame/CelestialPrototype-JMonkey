@@ -75,7 +75,6 @@ public class Celestial extends SimpleApplication{
         guiNode.attachChild(posText);
         initCrossHairs();
         
-        CubesTestAssets.registerBlocks();
         Blocks.init();
         
         
