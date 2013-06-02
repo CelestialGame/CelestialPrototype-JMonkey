@@ -18,23 +18,34 @@ import com.jme3.scene.Node;
  */
 public class ChunkListener implements BlockChunkListener{
     
-    Celestial parent;
-    
-    public ChunkListener(Celestial parent) {
-        this.parent = parent;
-    }
-    
-    public void onSpatialUpdated(BlockChunkControl bcc) {
-        for(Node side : parent.WorldSides) {
-            Geometry optimizedGeometry = bcc.getOptimizedGeometry_Opaque();
-            RigidBodyControl rigidBodyControl = optimizedGeometry.getControl(RigidBodyControl.class);
-            if(rigidBodyControl == null){
-                rigidBodyControl = new RigidBodyControl(0);
-                optimizedGeometry.addControl(rigidBodyControl);
-                parent.bulletAppState.getPhysicsSpace().add(rigidBodyControl);
-            }
-            rigidBodyControl.setCollisionShape(new MeshCollisionShape(optimizedGeometry.getMesh()));
-        }
-    }
+	Celestial parent;
+	   
+	   public ChunkListener(Celestial parent) {
+	       this.parent = parent;
+	   }
+	   
+	   public void onSpatialUpdated(BlockChunkControl bcc) {
+	       for(Node side : parent.WorldSides) {
+	           updateCollisionShape(bcc.getOptimizedGeometry_Opaque());
+	           updateCollisionShape(bcc.getOptimizedGeometry_Transparent());
+	       }
+	   }
+	   private void updateCollisionShape(Geometry chunkGeometry){
+	       RigidBodyControl rigidBodyControl = chunkGeometry.getControl(RigidBodyControl.class);
+	       if(chunkGeometry.getTriangleCount() > 0){
+	           if(rigidBodyControl != null){
+	               chunkGeometry.removeControl(rigidBodyControl);
+	               parent.bulletAppState.getPhysicsSpace().remove(rigidBodyControl);
+	           }
+	           rigidBodyControl = new RigidBodyControl(0);
+	           chunkGeometry.addControl(rigidBodyControl);
+	           parent.bulletAppState.getPhysicsSpace().add(rigidBodyControl);
+	       }
+	       else{
+	           if(rigidBodyControl != null){
+	               chunkGeometry.removeControl(rigidBodyControl);
+	           }
+	       }
+	   }
     
 }

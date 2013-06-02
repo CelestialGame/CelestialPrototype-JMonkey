@@ -52,7 +52,8 @@ public class Celestial extends SimpleApplication{
         this.settings.setTitle("Celestial");
        
     }
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void simpleInitApp() {
         
         /** Set up Physics */
@@ -84,7 +85,7 @@ public class Celestial extends SimpleApplication{
         
         InputControl inputControl = new InputControl(this, cam, inputManager);
         
-        Spatial sky = SkyFactory.createSky(assetManager, "textures/nightsky.jpg", true);
+        Spatial sky = SkyFactory.createSky(assetManager, "assets/textures/nightsky.jpg", true);
         sky.scale(-1, -1, 1);
         rootNode.attachChild(sky);
         
@@ -114,7 +115,6 @@ public class Celestial extends SimpleApplication{
             rootNode.attachChild(node);
         }
         bulletAppState.getPhysicsSpace().add(player);
-        bulletAppState.getPhysicsSpace().enableDebug(assetManager);
     }
 
     @Override
