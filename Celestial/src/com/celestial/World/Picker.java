@@ -6,6 +6,7 @@ package com.celestial.World;
 
 import com.celestial.Celestial;
 import com.cubes.Block;
+import com.cubes.BlockChunkControl;
 import com.cubes.BlockNavigator;
 import com.cubes.BlockTerrainControl;
 import com.cubes.BlockType;
@@ -57,13 +58,13 @@ public class Picker {
         }
         return null;
     }
-	public static BlockType getCurrentPointedBlock(boolean getNeighborLocation, Celestial parent, Camera cam) {
+	public static BlockChunkControl getCurrentPointedBlock(boolean getNeighborLocation, Celestial parent, Camera cam) {
 		for(Node worldNode : parent.WorldSides) {
             for(BlockTerrainControl chunk : parent.sides) {
                 CollisionResults results = getRayCastingResults(worldNode, parent, cam);
                 if(results.size() > 0){
                     Vector3f collisionContactPoint = results.getClosestCollision().getContactPoint();
-                    return chunk.getBlock(BlockNavigator.getPointedBlockLocation(chunk, collisionContactPoint, getNeighborLocation));
+                    return chunk.getChunk(BlockNavigator.getPointedBlockLocation(chunk, collisionContactPoint, getNeighborLocation));
                     
                 }
                 return null;

@@ -9,7 +9,9 @@ import com.celestial.Blocks.Block_Stone;
 import com.celestial.Blocks.Block_Wood;
 import com.celestial.Gui.Gui;
 import com.celestial.World.Picker;
+import com.cubes.BlockChunkControl;
 import com.cubes.BlockTerrainControl;
+import com.cubes.BlockType;
 import com.cubes.Vector3Int;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -17,6 +19,7 @@ import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 
@@ -29,6 +32,8 @@ public class InputControl {
 	Celestial parent;
 
 	Camera cam;
+	
+	public static boolean statson = false;
 
 	public InputControl(Celestial parent, Camera cam, InputManager inputManager) {
 		this.parent = parent;
@@ -48,6 +53,7 @@ public class InputControl {
 		inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
 		inputManager.addMapping("NoClip", new KeyTrigger(KeyInput.KEY_LSHIFT));
 		inputManager.addMapping("ESC", new KeyTrigger(KeyInput.KEY_ESCAPE));
+		inputManager.addMapping("SeeStats", new KeyTrigger(KeyInput.KEY_F3));
 		inputManager.addListener(actionListener, "Left");
 		inputManager.addListener(actionListener, "Right");
 		inputManager.addListener(actionListener, "Up");
@@ -55,6 +61,7 @@ public class InputControl {
 		inputManager.addListener(actionListener, "Jump");
 		inputManager.addListener(actionListener, "NoClip");
 		inputManager.addListener(actionListener, "ESC");
+		inputManager.addListener(actionListener, "SeeStats");
 	}
 
 	private ActionListener actionListener = new ActionListener() {
@@ -152,12 +159,27 @@ public class InputControl {
 				Celestial.gui.gamePane.remove(Celestial.canvas);
 				Celestial.gui.changeCard(Gui.MAIN);
 			}
+			else if(binding.equals("SeeStats") && !keyPressed) {
+				if(statson) {
+					Celestial.self.setDisplayFps(false);
+			        Celestial.self.setDisplayStatView(false);
+			        statson = false;
+				} else {
+					Celestial.self.setDisplayFps(true);
+			        Celestial.self.setDisplayStatView(true);
+			        statson = true;
+				}
+			}
 		}
 	};
 
 	public void renderBlockBorder()
 	{
-		//BlockType block = Picker.getCurrentPointedBlock(false, parent, cam);
+		// NOT DONE -- It'll turn the entire thing blue if you do use this.... xD
+		/*BlockChunkControl block = Picker.getCurrentPointedBlock(false, parent, cam);
+		if(block != null) {
+			block.getOptimizedGeometry_Opaque().getMaterial().setColor("Color", new ColorRGBA(0f,0f,0.5f, 1f));
+		}*/
 
 	}
 
