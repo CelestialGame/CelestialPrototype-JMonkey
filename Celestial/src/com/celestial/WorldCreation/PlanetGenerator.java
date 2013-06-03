@@ -31,11 +31,11 @@ public class PlanetGenerator {
     }
     
     public BlockTerrainControl makePlanetSide(double locx, double locy, double locz, Node sideNode) {
-        BlockTerrainControl Side = new BlockTerrainControl(CubesTestAssets.getSettings(parent), new Vector3Int(16,1,16));
+        BlockTerrainControl Side = new BlockTerrainControl(CubesTestAssets.getSettings(parent), new Vector3Int(4,1,4));
         Side.addChunkListener(new ChunkListener(parent));
-        for(int i=0; i<16; i++)
+        for(int i=0; i<4; i++)
         {    
-            for(int j=0; j<16; j++)
+            for(int j=0; j<4; j++)
             {
                 makeChunk(locx+(i*16), locy, locz+(j*16), Side);
                 int x1 = (int) locx+(i*16);
@@ -73,6 +73,10 @@ public class PlanetGenerator {
                                 makeCubeAt(locx+i,locy+j,locz+k, DIRT, blockTerrain);
                             } else if (rInt == 4 || rInt == 7) {
                                 makeCubeAt(locx+i,locy+j,locz+k, STONE, blockTerrain);
+                            }
+                            else
+                            {
+                            	makeCubeAt(locx+i,locy+j,locz+k, STONE, blockTerrain);
                             }
                         }
                     }
