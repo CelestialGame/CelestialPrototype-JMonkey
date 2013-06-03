@@ -14,6 +14,8 @@ import javax.swing.UIManager;
 import com.celestial.Blocks.Blocks;
 import com.celestial.Gui.Gui;
 import com.celestial.Input.InputControl;
+import com.celestial.SinglePlayer.Inventory.InventoryManager;
+import com.celestial.SinglePlayer.Inventory.InventoryRegister;
 import com.celestial.WorldCreation.PlanetGenerator;
 import com.cubes.BlockTerrainControl;
 import com.jme3.app.Application;
@@ -110,6 +112,8 @@ public class Celestial extends SimpleApplication{
 	private boolean playingGame; 
 	
 	public static Celestial self;
+	
+	InventoryManager invmanager;
     
     public Celestial() {
     
@@ -162,6 +166,10 @@ public class Celestial extends SimpleApplication{
         initCrossHairs();
         
         Blocks.init();
+        
+        invmanager = new InventoryManager();
+        
+        InventoryRegister.RegisterBlocks(invmanager);
         
         walkDirection = new Vector3f();
         left = false;
@@ -274,6 +282,9 @@ public class Celestial extends SimpleApplication{
   public AppSettings getSettings()
   {
       return settings;
+  }
+  public InventoryManager getInventoryManager(){
+	  return this.invmanager;
   }
     
 }

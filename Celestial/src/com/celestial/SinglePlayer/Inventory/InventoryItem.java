@@ -1,5 +1,10 @@
 package com.celestial.SinglePlayer.Inventory;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import com.cubes.Block;
 
 /**
@@ -10,19 +15,25 @@ import com.cubes.Block;
  */
 public class InventoryItem {
 
-	Block block;
+	Class<? extends Block> block;
 	String name;
+	BufferedImage icon;
 	
-	public InventoryItem(Block block, String name) {
+	public InventoryItem(Class<? extends Block> block, String name, BufferedImage icon) {
 		this.block = block;
 		this.name = name;
+		this.icon = icon;
 	}
 	
-	public Block getBlock() {
+	public Class<? extends Block> getBlock() {
 		return block;
 	}
 	
 	public String getName() {
 		return name;
+	}
+	
+	public BufferedImage getIcon() {
+		return icon;
 	}
 }
