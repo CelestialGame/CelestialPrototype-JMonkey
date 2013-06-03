@@ -25,10 +25,8 @@ public class ChunkListener implements BlockChunkListener{
 	   }
 	   
 	   public void onSpatialUpdated(BlockChunkControl bcc) {
-	       for(Node side : parent.WorldSides) {
 	           updateCollisionShape(bcc.getOptimizedGeometry_Opaque());
 	           updateCollisionShape(bcc.getOptimizedGeometry_Transparent());
-	       }
 	   }
 	   private void updateCollisionShape(Geometry chunkGeometry){
 	       RigidBodyControl rigidBodyControl = chunkGeometry.getControl(RigidBodyControl.class);

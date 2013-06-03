@@ -31,20 +31,22 @@ public class InputControl {
 	Celestial parent;
 
 	Camera cam;
-	
+
 	public static boolean statson = false;
 
 	public InputControl(Celestial parent, Camera cam, InputManager inputManager) {
 		this.parent = parent;
 		this.cam = cam;
 
-		inputManager.addMapping("Block_Del", // trigger 1: spacebar
-				new MouseButtonTrigger(MouseInput.BUTTON_LEFT)); // trigger 2: left-button click
+		inputManager.addMapping("Block_Del",
+				new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
 		inputManager.addListener(actionListener, "Block_Del");
-		inputManager.addMapping("Block_Add", // trigger 1: spacebar
-				new MouseButtonTrigger(MouseInput.BUTTON_RIGHT)); // trigger 2: left-button click
+		inputManager.addMapping("Block_Add",
+				new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
 		inputManager.addListener(actionListener, "Block_Add");
-
+		inputManager.addMapping("Block_Pick",
+				new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
+		inputManager.addListener(actionListener, "Block_Pick");
 		inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
 		inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
 		inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
@@ -65,6 +67,9 @@ public class InputControl {
 
 	private ActionListener actionListener = new ActionListener() {
 
+		private Vector3f lastabs;
+		private Vector3Int last;
+
 		public void onAction(String binding, boolean keyPressed, float tpf) {
 
 			if (binding.equals("Block_Del") && !keyPressed) 
@@ -81,26 +86,43 @@ public class InputControl {
 					float dist = parent.player.getPhysicsLocation().distance(blockAbsLocation);
 					if(!parent.bulletAppState.isEnabled()) //Are they flying?
 					{
-						for(BlockTerrainControl chunk : parent.sides) 
-						{
-							if(chunk != null && blockLocation != null)
-								chunk.removeBlock(blockLocation); //Remove the Block
-						}
+						BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
+						if(chunk != null && blockLocation != null)
+							chunk.removeBlock(blockLocation); //Remove the Block
 					}
 					else
 					{
 						if(dist <= 15F) //Is the block nearby?
 						{
-							for(BlockTerrainControl chunk : parent.sides) 
-							{
-								if(chunk != null && blockLocation != null)
-									chunk.removeBlock(blockLocation); //Remove the Block
-							}
+							BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
+							if(chunk != null && blockLocation != null)
+								chunk.removeBlock(blockLocation); //Remove the Block
 						}
 					}
 				}
 			}
-
+			if (binding.equals("Block_Pick") && !keyPressed) 
+			{
+				Object[] values = Picker.getCurrentPointedBlockLocation(false, parent, cam);
+				if(values == null || values[0] == null || values[1] == null) //Check to see if they clicked the sky...
+				{
+					return;
+				}
+				Vector3Int blockLocation = (Vector3Int) values[1];
+				Vector3f blockAbsLocation = (Vector3f) values[0];
+				if(blockLocation != null)
+				{
+					if(last == null)
+					{
+						this.last = new Vector3Int(0,0,0);
+						this.lastabs = new Vector3f(0,0,0);
+					}
+					System.out.println("Loc -- Rel: "+ blockLocation +"Abs: "+ blockAbsLocation);
+					System.out.println("Distance from last: "+lastabs.distance(blockAbsLocation)+" ("+lastabs.distance(blockAbsLocation)/3+")");
+					this.last = blockLocation;
+					this.lastabs = blockAbsLocation;
+				}
+			}
 			if (binding.equals("Block_Add") && !keyPressed) {
 				Object[] values = Picker.getCurrentPointedBlockLocation(true, parent, cam);
 				if(values == null || values[0] == null || values[1] == null) //Check to see if they clicked the sky...
@@ -113,21 +135,17 @@ public class InputControl {
 					float dist = parent.player.getPhysicsLocation().distance(blockAbsLocation);
 					if(!parent.bulletAppState.isEnabled()) //Are they flying?
 					{
-						for(BlockTerrainControl chunk : parent.sides) 
-						{
-							if(chunk != null && blockLocation != null)
-								chunk.setBlock(blockLocation, Block_Dirt.class); //Add the Block
-						}
+						BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
+						if(chunk != null && blockLocation != null)
+							chunk.setBlock(blockLocation, Block_Dirt.class); //Add the Block
 					}
 					else
 					{
 						if(dist <= 15F) //Is the block nearby?
 						{
-							for(BlockTerrainControl chunk : parent.sides) 
-							{
-								if(chunk != null && blockLocation != null)
-									chunk.setBlock(blockLocation, Block_Stone.class); //Add the Block
-							}
+							BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
+							if(chunk != null && blockLocation != null)
+								chunk.setBlock(blockLocation, Block_Stone.class); //Add the Block
 						}
 					}
 				}
@@ -161,12 +179,12 @@ public class InputControl {
 			else if(binding.equals("SeeStats") && !keyPressed) {
 				if(statson) {
 					Celestial.self.setDisplayFps(false);
-			        Celestial.self.setDisplayStatView(false);
-			        statson = false;
+					Celestial.self.setDisplayStatView(false);
+					statson = false;
 				} else {
 					Celestial.self.setDisplayFps(true);
-			        Celestial.self.setDisplayStatView(true);
-			        statson = true;
+					Celestial.self.setDisplayStatView(true);
+					statson = true;
 				}
 			}
 		}

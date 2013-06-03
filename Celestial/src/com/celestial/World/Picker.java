@@ -24,53 +24,46 @@ import java.util.List;
  * @author kevint
  */
 public class Picker {
-    
-    private static CollisionResults getRayCastingResults(Node node, Celestial parent, Camera cam){
-        Vector3f origin = cam.getWorldCoordinates(new Vector2f((parent.getSettings().getWidth() / 2), (parent.getSettings().getHeight() / 2)), 0.0f);
-        Vector3f direction = cam.getWorldCoordinates(new Vector2f((parent.getSettings().getWidth() / 2), (parent.getSettings().getHeight() / 2)), 0.3f);
-        direction.subtractLocal(origin).normalizeLocal();
-        Ray ray = new Ray(origin, direction);
-        CollisionResults results = new CollisionResults();
-        node.collideWith(ray, results);
-        return results;
-    }
-    public static Object[] getCurrentPointedBlockLocation(boolean getNeighborLocation, Celestial parent, Camera cam){
-        Object[] values = new Object[2];
-    	for(Node worldNode : parent.WorldSides) {
-            for(BlockTerrainControl chunk : parent.sides) {
-                CollisionResults results = getRayCastingResults(worldNode, parent, cam);
-                if(results.size() > 0){
-                    
-                	Vector3f collisionContactPoint = results.getClosestCollision().getContactPoint();
-                    if(collisionContactPoint == null)
-                    	return null;
-                    values[0] = collisionContactPoint;
-                    
-                    Vector3Int blockPoint = BlockNavigator.getPointedBlockLocation(chunk, collisionContactPoint, getNeighborLocation);
-                    if(blockPoint == null)
-                    	return null;
-                    values[1] = blockPoint;
-                    
-                    return values;
-                }
-                return null;
-            }
-        }
-        return null;
-    }
-	public static BlockChunkControl getCurrentPointedBlock(boolean getNeighborLocation, Celestial parent, Camera cam) {
-		for(Node worldNode : parent.WorldSides) {
-            for(BlockTerrainControl chunk : parent.sides) {
-                CollisionResults results = getRayCastingResults(worldNode, parent, cam);
-                if(results.size() > 0){
-                    Vector3f collisionContactPoint = results.getClosestCollision().getContactPoint();
-                    return chunk.getChunk(BlockNavigator.getPointedBlockLocation(chunk, collisionContactPoint, getNeighborLocation));
-                    
-                }
-                return null;
-            }
-        }
-        return null;
+
+	private static CollisionResults getRayCastingResults(Node node, Celestial parent, Camera cam){
+		Vector3f origin = cam.getWorldCoordinates(new Vector2f((parent.getSettings().getWidth() / 2), (parent.getSettings().getHeight() / 2)), 0.0f);
+		Vector3f direction = cam.getWorldCoordinates(new Vector2f((parent.getSettings().getWidth() / 2), (parent.getSettings().getHeight() / 2)), 0.3f);
+		direction.subtractLocal(origin).normalizeLocal();
+		Ray ray = new Ray(origin, direction);
+		CollisionResults results = new CollisionResults();
+		node.collideWith(ray, results);
+		return results;
 	}
-    
+	public static Object[] getCurrentPointedBlockLocation(boolean getNeighborLocation, Celestial parent, Camera cam){
+		Object[] values = new Object[2];
+		Node planetNode = parent.planets.get(0).getNode();
+		BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
+		CollisionResults results = getRayCastingResults(planetNode, parent, cam);
+		if(results.size() > 0){
+
+			Vector3f collisionContactPoint = results.getClosestCollision().getContactPoint();
+			if(collisionContactPoint == null)
+				return null;
+			values[0] = collisionContactPoint;
+
+			Vector3Int blockPoint = BlockNavigator.getPointedBlockLocation(chunk, collisionContactPoint, getNeighborLocation);
+			if(blockPoint == null)
+				return null;
+			values[1] = blockPoint;
+
+			return values;
+		}
+		return null;
+	}
+	public static BlockChunkControl getCurrentPointedBlock(boolean getNeighborLocation, Celestial parent, Camera cam) {
+		Node planetNode = parent.planets.get(0).getNode();
+		BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
+		CollisionResults results = getRayCastingResults(planetNode, parent, cam);
+		if(results.size() > 0){
+			Vector3f collisionContactPoint = results.getClosestCollision().getContactPoint();
+			return chunk.getChunk(BlockNavigator.getPointedBlockLocation(chunk, collisionContactPoint, getNeighborLocation));
+		}
+		return null;
+	}
+
 }

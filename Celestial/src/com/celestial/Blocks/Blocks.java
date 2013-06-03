@@ -17,7 +17,7 @@ import com.cubes.BlockChunkControl;
  * @author kevint
  */
 public class Blocks {
-    
+	
     public static void init() {
     	BlockManager.register(Block_Grass.class, new BlockSkin(new BlockSkin_TextureLocation[]{
     		    //We specify the 3 textures we need:

@@ -18,7 +18,7 @@ public class InventoryRegister {
 	
 	
 	public static void RegisterBlocks(InventoryManager IM) {
-		try {
+		/*try {
 			IM.registerItem(new InventoryItem(Block_BirchWood.class, "Birch Wood", 
 					ImageIO.read(IM.getClass().getResourceAsStream("/assets/textures/inventory/icons/BirchWood.png"))));
 			IM.registerItem(new InventoryItem(Block_Cobble.class, "Cobblestone", 
@@ -27,7 +27,7 @@ public class InventoryRegister {
 			//pass
 		} catch (IOException exception) {
 			exception.printStackTrace();
-		}
+		}*/
 	}
 	
 }
