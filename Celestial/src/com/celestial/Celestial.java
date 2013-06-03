@@ -68,6 +68,9 @@ public class Celestial extends SimpleApplication{
         Celestial.height = 500;
         Celestial.title = "Celestial";
         
+        Celestial.self.setDisplayFps(false);
+        Celestial.self.setDisplayStatView(false);
+        
         SwingUtilities.invokeLater(new Runnable(){
             public void run(){
                 JPopupMenu.setDefaultLightWeightPopupEnabled(false);
@@ -208,31 +211,38 @@ public class Celestial extends SimpleApplication{
         
         Celestial.gui.changeCard(Gui.GAME);
         
+        
+        
     }
 
     @Override
     public void simpleUpdate(float tpf) {
+    	if(InputControl.statson) {
 	        Vector3f location = cam.getLocation();
 	        posText.setText("X: "+location.x + " Y: "+location.y+" Z: "+location.z);
-	        if(bulletAppState.isEnabled()) {
-	            Vector3f camDir = cam.getDirection().clone().multLocal(0.6f);
-	            Vector3f camLeft = cam.getLeft().clone().multLocal(0.2f);
-	            walkDirection.set(0, 0, 0);
-	            if (left)  { walkDirection.addLocal(camLeft); }
-	            if (right) { walkDirection.addLocal(camLeft.negate()); }
-	            if (up)    { walkDirection.addLocal(camDir); }
-	            if (down)  { walkDirection.addLocal(camDir.negate()); }
-	            player.setWalkDirection(walkDirection);
-	            cam.setLocation(new Vector3f(player.getPhysicsLocation().getX(), player.getPhysicsLocation().getY()+camHeight, player.getPhysicsLocation().getZ()));
-	            this.inputControl.renderBlockBorder();
-	        } else {
-	            //pass
-	        }
-	        bulletAppState.update(tpf);
-	        if(player.getPhysicsLocation().getY() <= -150 || cam.getLocation().getY() <= -150) {
-	            player.setPhysicsLocation(new Vector3f(0, 50, 0));
-	            cam.setLocation(new Vector3f(player.getPhysicsLocation().getX(), player.getPhysicsLocation().getY()+camHeight, player.getPhysicsLocation().getZ()));
-	        }
+    	} else {
+    		posText.setText("");
+    	}
+        if(bulletAppState.isEnabled()) {
+            Vector3f camDir = cam.getDirection().clone().multLocal(0.6f);
+            Vector3f camLeft = cam.getLeft().clone().multLocal(0.2f);
+            walkDirection.set(0, 0, 0);
+            if (left)  { walkDirection.addLocal(camLeft); }
+            if (right) { walkDirection.addLocal(camLeft.negate()); }
+            if (up)    { walkDirection.addLocal(camDir); }
+            if (down)  { walkDirection.addLocal(camDir.negate()); }
+            walkDirection.y = 0;
+            player.setWalkDirection(walkDirection);
+            cam.setLocation(new Vector3f(player.getPhysicsLocation().getX(), player.getPhysicsLocation().getY()+camHeight, player.getPhysicsLocation().getZ()));
+            this.inputControl.renderBlockBorder();
+        } else {
+            //pass
+        }
+        bulletAppState.update(tpf);
+        if(player.getPhysicsLocation().getY() <= -150 || cam.getLocation().getY() <= -150) {
+            player.setPhysicsLocation(new Vector3f(0, 50, 0));
+            cam.setLocation(new Vector3f(player.getPhysicsLocation().getX(), player.getPhysicsLocation().getY()+camHeight, player.getPhysicsLocation().getZ()));
+        }
     }
 
     @Override
