@@ -205,7 +205,7 @@ public class Celestial extends SimpleApplication{
 		player.setJumpSpeed(20);
 		player.setFallSpeed(30);
 		player.setGravity(50);
-		player.setPhysicsLocation(new Vector3f(0, 50, 0));
+		player.setPhysicsLocation(new Vector3f(2, 24*3+2, 2));
 
 		flyCam.setMoveSpeed(100);
 
