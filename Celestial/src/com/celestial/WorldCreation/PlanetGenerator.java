@@ -98,7 +98,7 @@ public class PlanetGenerator {
     }
     
     public void makeTreeAt(Vector3Int loc, BlockTerrainControl blockTerrain) {
-    	//int y = loc.getY() +16;
+    	int y = loc.getY() +16;
     	int x = 0;
     	int z = 0;
     	boolean birchwood = false;
@@ -125,7 +125,7 @@ public class PlanetGenerator {
             	return;
             }
         }
-        int y = getTopBlock(loc,blockTerrain);
+        //int y = getTopBlock(loc,blockTerrain);
     	
         if(birchwood) {
         	blockTerrain.setBlock(new Vector3Int(x, y, z), Block_BirchWood.class);

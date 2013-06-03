@@ -16,6 +16,7 @@ import com.celestial.Gui.Gui;
 import com.celestial.Input.InputControl;
 import com.celestial.WorldCreation.PlanetGenerator;
 import com.cubes.BlockTerrainControl;
+import com.cubes.CubesSettings;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
@@ -121,13 +122,18 @@ public class Celestial extends SimpleApplication{
         settings.setWidth(Celestial.width);
         settings.setHeight(Celestial.height);
         settings.setTitle(Celestial.title);
-
+        
         app = Celestial.self;
 
         app.setPauseOnLostFocus(false);
         app.setSettings(settings);
         app.createCanvas();
 
+        CubesSettings csettings = new CubesSettings(app);
+        csettings.setChunkSizeX(16);
+        csettings.setChunkSizeY(16);
+        csettings.setChunkSizeZ(16);
+        
         context = (JmeCanvasContext) app.getContext();
         canvas = context.getCanvas();
         canvas.setSize(settings.getWidth(), settings.getHeight());
