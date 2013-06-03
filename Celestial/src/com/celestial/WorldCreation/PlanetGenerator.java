@@ -26,6 +26,8 @@ public class PlanetGenerator {
     public static int STONE = 3;
     public static int WOOD = 4;
     
+    public static int PLANETSIDESIZE = 4;
+    
     public PlanetGenerator(Celestial parent) {
         this.parent = parent;
     }
@@ -33,9 +35,10 @@ public class PlanetGenerator {
     public BlockTerrainControl makePlanetSide(double locx, double locy, double locz, Node sideNode) {
         BlockTerrainControl Side = new BlockTerrainControl(CubesTestAssets.getSettings(parent), new Vector3Int(4,1,4));
         Side.addChunkListener(new ChunkListener(parent));
-        for(int i=0; i<4; i++)
+        
+        for(int i=0; i<PLANETSIDESIZE; i++)
         {    
-            for(int j=0; j<4; j++)
+            for(int j=0; j<PLANETSIDESIZE; j++)
             {
                 makeChunk(locx+(i*16), locy, locz+(j*16), Side);
                 
@@ -43,9 +46,9 @@ public class PlanetGenerator {
         }
         
         //Post-terrain generation here
-        for(int i=0; i<16; i++)
+        for(int i=0; i<PLANETSIDESIZE; i++)
         {    
-            for(int j=0; j<16; j++)
+            for(int j=0; j<PLANETSIDESIZE; j++)
             {
             	int x1 = (int) locx+(i*16);
                 int y1 = (int) locy;

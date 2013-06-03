@@ -5,8 +5,7 @@
 package com.celestial.Input;
 
 import com.celestial.Celestial;
-import com.celestial.Blocks.Block_Stone;
-import com.celestial.Blocks.Block_Wood;
+import com.celestial.Blocks.*;
 import com.celestial.Gui.Gui;
 import com.celestial.World.Picker;
 import com.cubes.BlockChunkControl;
@@ -117,7 +116,7 @@ public class InputControl {
 						for(BlockTerrainControl chunk : parent.sides) 
 						{
 							if(chunk != null && blockLocation != null)
-								chunk.setBlock(blockLocation, Block_Wood.class); //Add the Block
+								chunk.setBlock(blockLocation, Block_Dirt.class); //Add the Block
 						}
 					}
 					else
