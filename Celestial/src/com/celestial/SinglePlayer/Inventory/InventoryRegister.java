@@ -33,6 +33,19 @@ public class InventoryRegister {
 					ImageIO.read(IM.getClass().getResourceAsStream("/assets/textures/inventory/icons/Stone.png"))),2);
 			IM.registerItem(new InventoryItem(Block_Wood.class, "Oak Wood", 
 					ImageIO.read(IM.getClass().getResourceAsStream("/assets/textures/inventory/icons/OakWood.png"))),5);
+			
+			IM.registerItem(new InventoryItem(Block_CoalOre.class, "Coal Ore", 
+					ImageIO.read(IM.getClass().getResourceAsStream("/assets/textures/inventory/icons/CoalOre.png"))),8);
+			IM.registerItem(new InventoryItem(Block_IronOre.class, "Iron Ore", 
+					ImageIO.read(IM.getClass().getResourceAsStream("/assets/textures/inventory/icons/IronOre.png"))),9);
+			IM.registerItem(new InventoryItem(Block_CopperOre.class, "Copper Ore", 
+					ImageIO.read(IM.getClass().getResourceAsStream("/assets/textures/inventory/icons/CopperOre.png"))),10);
+			IM.registerItem(new InventoryItem(Block_TinOre.class, "Tin Ore", 
+					ImageIO.read(IM.getClass().getResourceAsStream("/assets/textures/inventory/icons/TinOre.png"))),11);
+			IM.registerItem(new InventoryItem(Block_RawDiamond.class, "Raw Diamond", 
+					ImageIO.read(IM.getClass().getResourceAsStream("/assets/textures/inventory/icons/RawDiamond.png"))),12);
+			IM.registerItem(new InventoryItem(Block_GoldOre.class, "Gold Ore", 
+					ImageIO.read(IM.getClass().getResourceAsStream("/assets/textures/inventory/icons/GoldOre.png"))),13);
 		} catch (InventoryException exception) {
 			//pass
 		} catch (IOException exception) {
@@ -61,6 +74,19 @@ public class InventoryRegister {
 					ImageIO.read(IM.getClass().getResourceAsStream(path))),2);
 			IM.registerItem(new InventoryItem(Block_Wood.class, "Oak Wood", 
 					ImageIO.read(IM.getClass().getResourceAsStream(path))),5);
+			
+			IM.registerItem(new InventoryItem(Block_CoalOre.class, "Coal Ore", 
+					ImageIO.read(IM.getClass().getResourceAsStream(path))),8);
+			IM.registerItem(new InventoryItem(Block_IronOre.class, "Iron Ore", 
+					ImageIO.read(IM.getClass().getResourceAsStream(path))),9);
+			IM.registerItem(new InventoryItem(Block_CopperOre.class, "Copper Ore", 
+					ImageIO.read(IM.getClass().getResourceAsStream(path))),10);
+			IM.registerItem(new InventoryItem(Block_TinOre.class, "Tin Ore", 
+					ImageIO.read(IM.getClass().getResourceAsStream(path))),11);
+			IM.registerItem(new InventoryItem(Block_RawDiamond.class, "Raw Diamond", 
+					ImageIO.read(IM.getClass().getResourceAsStream(path))),12);
+			IM.registerItem(new InventoryItem(Block_GoldOre.class, "Gold Ore", 
+					ImageIO.read(IM.getClass().getResourceAsStream(path))),13);
 		} catch (InventoryException exception) {
 			exception.printStackTrace();
 		} catch (IOException exception) {

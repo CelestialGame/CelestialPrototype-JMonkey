@@ -168,6 +168,13 @@ public class Celestial extends SimpleApplication{
 		try {
 			invmanager.setHotSlot(invmanager.items.get(1), -1, 1);
 			invmanager.setHotSlot(invmanager.items.get(2), -1, 2);
+			
+			invmanager.setHotSlot(invmanager.items.get(8), -1, 3);
+			invmanager.setHotSlot(invmanager.items.get(9), -1, 4);
+			invmanager.setHotSlot(invmanager.items.get(10), -1, 5);
+			invmanager.setHotSlot(invmanager.items.get(11), -1, 6);
+			invmanager.setHotSlot(invmanager.items.get(12), -1, 7);
+			invmanager.setHotSlot(invmanager.items.get(13), -1, 8);
 		} catch (InventoryException e) {
 			//pass
 		}

@@ -75,6 +75,13 @@ public class Blocks {
         BlockManager.register(Block_Cobble.class, new BlockSkin(new BlockSkin_TextureLocation(9, 0), false));
         BlockManager.register(Block_Torch.class, new BlockSkin(new BlockSkin_TextureLocation(0, 2), false));
         
+        BlockManager.register(Block_CoalOre.class, new BlockSkin(new BlockSkin_TextureLocation(10, 1), false));
+        BlockManager.register(Block_CopperOre.class, new BlockSkin(new BlockSkin_TextureLocation(9, 1), false));
+        BlockManager.register(Block_RawDiamond.class, new BlockSkin(new BlockSkin_TextureLocation(8, 1), false));
+        BlockManager.register(Block_TinOre.class, new BlockSkin(new BlockSkin_TextureLocation(7, 1), false));
+        BlockManager.register(Block_GoldOre.class, new BlockSkin(new BlockSkin_TextureLocation(6, 1), false));
+        BlockManager.register(Block_IronOre.class, new BlockSkin(new BlockSkin_TextureLocation(5, 1), false));
+        
         
     }
     

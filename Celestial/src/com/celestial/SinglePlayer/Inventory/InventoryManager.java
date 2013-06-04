@@ -32,6 +32,8 @@ public class InventoryManager {
 	List<InventorySlot> hotslots;
 	
 	InventorySlot selectedhotslot;
+
+	private InventorySlot hotslot10;
 	
 	
 	public InventoryManager() {
@@ -46,6 +48,7 @@ public class InventoryManager {
 		this.hotslot7 = new InventorySlot(null, -2);
 		this.hotslot8 = new InventorySlot(null, -2);
 		this.hotslot9 = new InventorySlot(null, -2);
+		this.hotslot10 = new InventorySlot(null, -2);
 		
 		this.hotslots = new ArrayList<InventorySlot>();
 		this.hotslots.add(this.hotslot1);
@@ -57,6 +60,7 @@ public class InventoryManager {
 		this.hotslots.add(this.hotslot7);
 		this.hotslots.add(this.hotslot8);
 		this.hotslots.add(this.hotslot9);
+		this.hotslots.add(this.hotslot10);
 		
 		this.selectedhotslot = this.hotslot1;
 		
