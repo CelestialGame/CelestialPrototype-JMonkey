@@ -55,6 +55,15 @@ public class InputControl {
 		inputManager.addMapping("NoClip", new KeyTrigger(KeyInput.KEY_LSHIFT));
 		inputManager.addMapping("ESC", new KeyTrigger(KeyInput.KEY_ESCAPE));
 		inputManager.addMapping("SeeStats", new KeyTrigger(KeyInput.KEY_F3));
+		inputManager.addMapping("Slot1", new KeyTrigger(KeyInput.KEY_1));
+		inputManager.addMapping("Slot2", new KeyTrigger(KeyInput.KEY_2));
+		inputManager.addMapping("Slot3", new KeyTrigger(KeyInput.KEY_3));
+		inputManager.addMapping("Slot4", new KeyTrigger(KeyInput.KEY_4));
+		inputManager.addMapping("Slot5", new KeyTrigger(KeyInput.KEY_5));
+		inputManager.addMapping("Slot6", new KeyTrigger(KeyInput.KEY_6));
+		inputManager.addMapping("Slot7", new KeyTrigger(KeyInput.KEY_7));
+		inputManager.addMapping("Slot8", new KeyTrigger(KeyInput.KEY_8));
+		inputManager.addMapping("Slot9", new KeyTrigger(KeyInput.KEY_9));
 		inputManager.addListener(actionListener, "Left");
 		inputManager.addListener(actionListener, "Right");
 		inputManager.addListener(actionListener, "Up");
@@ -63,6 +72,15 @@ public class InputControl {
 		inputManager.addListener(actionListener, "NoClip");
 		inputManager.addListener(actionListener, "ESC");
 		inputManager.addListener(actionListener, "SeeStats");
+		inputManager.addListener(actionListener, "Slot1");
+		inputManager.addListener(actionListener, "Slot2");
+		inputManager.addListener(actionListener, "Slot3");
+		inputManager.addListener(actionListener, "Slot4");
+		inputManager.addListener(actionListener, "Slot5");
+		inputManager.addListener(actionListener, "Slot6");
+		inputManager.addListener(actionListener, "Slot7");
+		inputManager.addListener(actionListener, "Slot8");
+		inputManager.addListener(actionListener, "Slot9");
 	}
 
 	private ActionListener actionListener = new ActionListener() {
@@ -137,7 +155,7 @@ public class InputControl {
 					{
 						BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
 						if(chunk != null && blockLocation != null)
-							chunk.setBlock(blockLocation, Block_Dirt.class); //Add the Block
+							chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock()); //Add the Block
 					}
 					else
 					{
@@ -145,7 +163,7 @@ public class InputControl {
 						{
 							BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
 							if(chunk != null && blockLocation != null)
-								chunk.setBlock(blockLocation, Block_Stone.class); //Add the Block
+								chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock()); //Add the Block
 						}
 					}
 				}
@@ -186,6 +204,33 @@ public class InputControl {
 					Celestial.self.setDisplayStatView(true);
 					statson = true;
 				}
+			}
+			else if(binding.equals("Slot1") && !keyPressed) {
+				parent.getInventoryManager().setSelectedHotSlot(1);
+			}
+			else if(binding.equals("Slot2") && !keyPressed) {
+				parent.getInventoryManager().setSelectedHotSlot(2);
+			}
+			else if(binding.equals("Slot3") && !keyPressed) {
+				parent.getInventoryManager().setSelectedHotSlot(3);
+			}
+			else if(binding.equals("Slot4") && !keyPressed) {
+				parent.getInventoryManager().setSelectedHotSlot(4);
+			}
+			else if(binding.equals("Slot5") && !keyPressed) {
+				parent.getInventoryManager().setSelectedHotSlot(5);
+			}
+			else if(binding.equals("Slot6") && !keyPressed) {
+				parent.getInventoryManager().setSelectedHotSlot(6);
+			}
+			else if(binding.equals("Slot7") && !keyPressed) {
+				parent.getInventoryManager().setSelectedHotSlot(7);
+			}
+			else if(binding.equals("Slot8") && !keyPressed) {
+				parent.getInventoryManager().setSelectedHotSlot(8);
+			}
+			else if(binding.equals("Slot9") && !keyPressed) {
+				parent.getInventoryManager().setSelectedHotSlot(9);
 			}
 		}
 	};

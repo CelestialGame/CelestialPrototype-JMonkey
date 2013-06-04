@@ -17,6 +17,7 @@ import com.celestial.Input.InputControl;
 import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
 import com.celestial.SinglePlayer.Inventory.InventoryRegister;
+import com.celestial.util.InventoryException;
 import com.cubes.CubesSettings;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
@@ -116,6 +117,7 @@ public class Celestial extends SimpleApplication{
 	InventoryManager invmanager;
 	public List<Planet> planets;
 	private float lastRotation;
+	private BitmapText InvText;
 
 	public Celestial() {
 		Celestial.assetManage = assetManager;
@@ -157,26 +159,25 @@ public class Celestial extends SimpleApplication{
 		bulletAppState = new BulletAppState();
 		stateManager.attach(bulletAppState);
 
-		// Display a line of text with a default font
-		guiNode.detachAllChildren();
-		guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
-		BitmapText statusText = new BitmapText(guiFont, false);
-		statusText.setSize(guiFont.getCharSet().getRenderedSize());
-		statusText.setText("Loading world...");
-		statusText.setLocalTranslation(300, statusText.getLineHeight(), 0);
-		guiNode.attachChild(statusText);
-		posText = new BitmapText(guiFont, false);
-		posText.setSize(guiFont.getCharSet().getRenderedSize());
-		posText.setText("");
-		posText.setLocalTranslation(450, statusText.getLineHeight(), 0);
-		guiNode.attachChild(posText);
-		initCrossHairs();
-
 		Blocks.init();
 
 		invmanager = new InventoryManager();
 
 		InventoryRegister.RegisterBlocks(invmanager);
+		
+		try {
+			invmanager.setHotSlot(invmanager.items.get(1), -1, 1);
+			invmanager.setHotSlot(invmanager.items.get(2), -1, 2);
+		} catch (InventoryException e) {
+			//pass
+		}
+		
+		invmanager.setSelectedHotSlot(1);
+		
+		// Display a line of text with a default font
+		guiNode.detachAllChildren();
+		initCrossHairs();
+		initOtherHud();
 
 		walkDirection = new Vector3f();
 		left = false;
@@ -209,8 +210,6 @@ public class Celestial extends SimpleApplication{
 
 		flyCam.setMoveSpeed(100);
 
-		statusText.setText("World loaded");
-
 		Node node = planets.get(0).getNode();
 		CollisionShape sceneShape = CollisionShapeFactory.createMeshShape(node);
 		RigidBodyControl landscape = new RigidBodyControl(sceneShape, 0.0f);
@@ -228,6 +227,10 @@ public class Celestial extends SimpleApplication{
 
 	@Override
 	public void simpleUpdate(float tpf) {
+		if(invmanager.getSelectedHotSlot().getItem() != null)
+			InvText.setText("Selected Item: " + invmanager.getSelectedHotSlot().getItem().getName());
+		else 
+			InvText.setText("Selected Item: none");
 		if(InputControl.statson) {
 			Vector3f location = cam.getLocation();
 			posText.setText("X: "+location.x + " Y: "+location.y+" Z: "+location.z);
@@ -262,6 +265,7 @@ public class Celestial extends SimpleApplication{
 				planets.get(0).getNode().rotate(0.0001f*FastMath.DEG_TO_RAD, 0, 0);
 			}*/
 		}
+		invmanager.refreshHotSlots();
 	}
 
 	@Override
@@ -282,6 +286,20 @@ public class Celestial extends SimpleApplication{
 				settings.getWidth() / 2 - guiFont.getCharSet().getRenderedSize() / 3 * 2,
 				settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
 		guiNode.attachChild(ch);
+	}
+	
+	protected void initOtherHud() {
+		guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
+		posText = new BitmapText(guiFont, false);
+		posText.setSize(guiFont.getCharSet().getRenderedSize());
+		posText.setText("");
+		posText.setLocalTranslation(450, posText.getLineHeight(), 0);
+		guiNode.attachChild(posText);
+		InvText = new BitmapText(guiFont, false);
+		InvText.setSize(guiFont.getCharSet().getRenderedSize());
+		InvText.setText("Selected Item: " + invmanager.getSelectedHotSlot().getItem().getName());
+		InvText.setLocalTranslation(0, settings.getHeight() - posText.getLineHeight(), 0);
+		guiNode.attachChild(InvText);
 	}
 
 

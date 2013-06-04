@@ -71,7 +71,7 @@ public class Blocks {
         	    new BlockSkin_TextureLocation(5, 0),
         	    new BlockSkin_TextureLocation(5, 0)
         	}, false));
-        BlockManager.register(Block_Stone.class, new BlockSkin(new BlockSkin_TextureLocation(3, 1), false));
+        BlockManager.register(Block_Stone.class, new BlockSkin(new BlockSkin_TextureLocation(4, 1), false));
         BlockManager.register(Block_Cobble.class, new BlockSkin(new BlockSkin_TextureLocation(9, 0), false));
         BlockManager.register(Block_Torch.class, new BlockSkin(new BlockSkin_TextureLocation(0, 2), false));
         
