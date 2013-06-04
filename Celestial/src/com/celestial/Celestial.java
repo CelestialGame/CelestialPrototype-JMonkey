@@ -12,6 +12,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import com.celestial.Blocks.Blocks;
+import com.celestial.Blocks.BlocksEnum;
 import com.celestial.Gui.Gui;
 import com.celestial.Input.InputControl;
 import com.celestial.SinglePlayer.Components.Planet;
@@ -166,15 +167,15 @@ public class Celestial extends SimpleApplication{
 		InventoryRegister.RegisterBlocks(invmanager);
 		
 		try {
-			invmanager.setHotSlot(invmanager.items.get(1), -1, 1);
-			invmanager.setHotSlot(invmanager.items.get(2), -1, 2);
+			invmanager.setHotSlot(invmanager.items.get(BlocksEnum.DIRT.getID()), -1, 1);
+			invmanager.setHotSlot(invmanager.items.get(BlocksEnum.STONE.getID()), -1, 2);
 			
-			invmanager.setHotSlot(invmanager.items.get(8), -1, 3);
-			invmanager.setHotSlot(invmanager.items.get(9), -1, 4);
-			invmanager.setHotSlot(invmanager.items.get(10), -1, 5);
-			invmanager.setHotSlot(invmanager.items.get(11), -1, 6);
-			invmanager.setHotSlot(invmanager.items.get(12), -1, 7);
-			invmanager.setHotSlot(invmanager.items.get(13), -1, 8);
+			invmanager.setHotSlot(invmanager.items.get(BlocksEnum.COAL_ORE.getID()), -1, 3);
+			invmanager.setHotSlot(invmanager.items.get(BlocksEnum.IRON_ORE.getID()), -1, 4);
+			invmanager.setHotSlot(invmanager.items.get(BlocksEnum.COPPER_ORE.getID()), -1, 5);
+			invmanager.setHotSlot(invmanager.items.get(BlocksEnum.TIN_ORE.getID()), -1, 6);
+			invmanager.setHotSlot(invmanager.items.get(BlocksEnum.RAW_DIAMOND.getID()), -1, 7);
+			invmanager.setHotSlot(invmanager.items.get(BlocksEnum.GOLD_ORE.getID()), -1, 8);
 		} catch (InventoryException e) {
 			//pass
 		}
