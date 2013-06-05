@@ -35,6 +35,8 @@ public class InventoryManager {
 
 	private InventorySlot hotslot10;
 	
+	public static int TAKE = 1;
+	public static int GIVE = 2;
 	
 	public InventoryManager() {
 		this.items = new HashMap<Integer, InventoryItem>();
@@ -102,4 +104,5 @@ public class InventoryManager {
 	public InventorySlot getSelectedHotSlot() {
 		return this.selectedhotslot;
 	}
+	
 }

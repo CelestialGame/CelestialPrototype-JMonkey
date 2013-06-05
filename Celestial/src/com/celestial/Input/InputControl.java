@@ -154,16 +154,20 @@ public class InputControl {
 					if(!parent.bulletAppState.isEnabled()) //Are they flying?
 					{
 						BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
-						if(chunk != null && blockLocation != null && parent.getInventoryManager().getSelectedHotSlot().getItem() != null)
+						if(chunk != null && blockLocation != null && parent.getInventoryManager().getSelectedHotSlot().getItem() != null) {
 							chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock()); //Add the Block
+							parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
+						}
 					}
 					else
 					{
 						if(dist <= 15F) //Is the block nearby?
 						{
 							BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
-							if(chunk != null && blockLocation != null && parent.getInventoryManager().getSelectedHotSlot().getItem() != null)
+							if(chunk != null && blockLocation != null && parent.getInventoryManager().getSelectedHotSlot().getItem() != null) {
 								chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock()); //Add the Block
+								parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
+							}
 						}
 					}
 				}

@@ -32,5 +32,21 @@ public class InventorySlot {
 		this.item = item;
 		this.contents = contents;
 	}
+	
+	public void modifyNumberContents(boolean decrease, int inc) {
+		if(decrease)
+			this.contents = this.contents - inc;
+		else
+			this.contents = this.contents + inc;
+	}
+	
+	public void updateContents(boolean decrease) {
+		if(this.getNumberContents() > 0) {
+			if(decrease)
+				this.modifyNumberContents(true, 1);
+			else
+				this.modifyNumberContents(false, 1);
+		}
+	}
 
 }
