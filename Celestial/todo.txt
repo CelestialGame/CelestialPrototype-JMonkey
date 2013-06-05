@@ -1,0 +1,7 @@
+TODO list:
+
+Inventory: (Kevin)
+	- do drop items from blocks
+	- GUI
+
+Planet Generation: (Mitch)
