@@ -56,8 +56,6 @@ public enum BlocksEnum {
 	public BufferedImage getIcon()
 	{
 		try {
-			System.out.println(name);
-			System.out.println(iconpath);
 			return ImageIO.read(this.getClass().getResourceAsStream(iconpath));
 		} catch (IOException e) {
 			return null;
@@ -70,6 +68,7 @@ public enum BlocksEnum {
 		this.blockclass = block;
 		this.name = name;
 		this.id = id;
+		this.iconpath = iconpath;
 	}
 	private BlocksEnum(Class<? extends Block> blockClass, String name, int id, String iconpath)
 	{
