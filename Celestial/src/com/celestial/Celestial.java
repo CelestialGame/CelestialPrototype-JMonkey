@@ -40,6 +40,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeCanvasContext;
+import com.jme3.ui.Picture;
 import com.jme3.util.JmeFormatter;
 import com.jme3.util.SkyFactory;
 
@@ -55,7 +56,7 @@ public class Celestial extends SimpleApplication{
 	public static int width;
 	public static int height;
 	public static String title;
-	private static AssetManager assetManage;
+	public static AssetManager assetManage;
 
 	public static void main(String[] args) {
 		Celestial.self = new Celestial();
@@ -118,7 +119,7 @@ public class Celestial extends SimpleApplication{
 	InventoryManager invmanager;
 	public List<Planet> planets;
 	private float lastRotation;
-	private BitmapText InvText;
+	public BitmapText InvText;
 
 	public Celestial() {
 		Celestial.assetManage = this.assetManager;
@@ -161,13 +162,16 @@ public class Celestial extends SimpleApplication{
 		this.stateManager.attach(this.bulletAppState);
 
 		Blocks.init();
+		
+		this.guiNode.detachAllChildren();
+		
 
 		this.invmanager = new InventoryManager();
 
 		InventoryRegister.RegisterBlocks(this.invmanager);
 		
 		try {
-			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.DIRT.getID()), 5, 1);
+			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.DIRT.getID()), -1, 1);
 			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.STONE.getID()), -1, 2);
 			
 			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.COAL_ORE.getID()), -1, 3);
@@ -180,12 +184,10 @@ public class Celestial extends SimpleApplication{
 			//pass
 		}
 		
-		this.invmanager.setSelectedHotSlot(1);
-		
-		// Display a line of text with a default font
-		this.guiNode.detachAllChildren();
 		initCrossHairs();
 		initOtherHud();
+		
+		this.invmanager.setSelectedHotSlot(1);
 
 		this.walkDirection = new Vector3f();
 		this.left = false;
@@ -199,9 +201,9 @@ public class Celestial extends SimpleApplication{
 
 		this.inputControl = new InputControl(this, this.cam, this.inputManager);
 
-		Spatial sky = SkyFactory.createSky(this.assetManager, "assets/textures/nightsky.jpg", true);
-		sky.scale(-1, -1, 1);
-		this.rootNode.attachChild(sky);
+		//Spatial sky = SkyFactory.createSky(this.assetManager, "assets/textures/nightsky.jpg", true);
+		//sky.scale(-1, -1, 1);
+		//this.rootNode.attachChild(sky);
 
 
 		// You must add a light to make the model visible
@@ -282,6 +284,7 @@ public class Celestial extends SimpleApplication{
 			}*/
 		}
 		this.invmanager.refreshHotSlots();
+		this.invmanager.getInvGui().updateHotBar();
 	}
 
 	@Override
@@ -311,11 +314,13 @@ public class Celestial extends SimpleApplication{
 		this.posText.setText("");
 		this.posText.setLocalTranslation(450, this.posText.getLineHeight(), 0);
 		this.guiNode.attachChild(this.posText);
+		
 		this.InvText = new BitmapText(this.guiFont, false);
 		this.InvText.setSize(this.guiFont.getCharSet().getRenderedSize());
-		this.InvText.setText("Selected Item: " + this.invmanager.getSelectedHotSlot().getItem().getName());
-		this.InvText.setLocalTranslation(0, this.settings.getHeight() - this.posText.getLineHeight(), 0);
-		this.guiNode.attachChild(this.InvText);
+		this.InvText.setLocalTranslation(350, this.settings.getHeight() - this.InvText.getLineHeight(), 0);
+		//this.guiNode.attachChild(this.InvText);
+		
+		
 	}
 
 
@@ -330,6 +335,13 @@ public class Celestial extends SimpleApplication{
 	}
 	public InventoryManager getInventoryManager(){
 		return this.invmanager;
+	}
+	public Node getguiNode() {
+		return this.guiNode;
+	}
+	@Override
+	public AssetManager getAssetManager() {
+		return this.assetManager;
 	}
 
 }

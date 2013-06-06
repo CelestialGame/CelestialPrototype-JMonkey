@@ -17,9 +17,9 @@ public class InventoryItem {
 
 	Class<? extends Block> block;
 	String name;
-	BufferedImage icon;
+	String icon;
 	
-	public InventoryItem(Class<? extends Block> block, String name, BufferedImage icon) {
+	public InventoryItem(Class<? extends Block> block, String name, String icon) {
 		this.block = block;
 		this.name = name;
 		this.icon = icon;
@@ -33,7 +33,7 @@ public class InventoryItem {
 		return name;
 	}
 	
-	public BufferedImage getIcon() {
+	public String getIcon() {
 		return icon;
 	}
 }

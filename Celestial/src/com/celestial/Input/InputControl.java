@@ -202,10 +202,12 @@ public class InputControl {
 				if(statson) {
 					Celestial.self.setDisplayFps(false);
 					Celestial.self.setDisplayStatView(false);
+					Celestial.self.getguiNode().detachChild(Celestial.self.InvText);
 					statson = false;
 				} else {
 					Celestial.self.setDisplayFps(true);
 					Celestial.self.setDisplayStatView(true);
+					Celestial.self.getguiNode().attachChild(Celestial.self.InvText);
 					statson = true;
 				}
 			}

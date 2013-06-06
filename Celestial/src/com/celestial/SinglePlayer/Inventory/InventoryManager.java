@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.celestial.Celestial;
 import com.celestial.util.FixedHashMap;
 import com.celestial.util.InventoryException;
 
@@ -34,6 +35,8 @@ public class InventoryManager {
 	InventorySlot selectedhotslot;
 
 	private InventorySlot hotslot10;
+
+	private InventoryGui inventorygui;
 	
 	public static int TAKE = 1;
 	public static int GIVE = 2;
@@ -65,6 +68,8 @@ public class InventoryManager {
 		this.hotslots.add(this.hotslot10);
 		
 		this.selectedhotslot = this.hotslot1;
+		
+		this.inventorygui = new InventoryGui(Celestial.self);
 		
 		//TODO Add extended inv (stuffs not in the hotbar
 		
@@ -99,10 +104,18 @@ public class InventoryManager {
 	
 	public void setSelectedHotSlot(int hotslot) {
 		this.selectedhotslot = this.hotslots.get(hotslot);
+		this.inventorygui.setHotBarSelection(hotslot);
 	}
 	
 	public InventorySlot getSelectedHotSlot() {
 		return this.selectedhotslot;
+	}
+	
+	public List<InventorySlot> getAllHotSlots() {
+		return this.hotslots;
+	}
+	public InventoryGui getInvGui() {
+		return this.inventorygui;
 	}
 	
 }
