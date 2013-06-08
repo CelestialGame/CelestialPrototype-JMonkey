@@ -26,6 +26,8 @@ import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.collision.PhysicsCollisionEvent;
+import com.jme3.bullet.collision.PhysicsCollisionListener;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.CharacterControl;
@@ -123,6 +125,7 @@ public class Celestial extends SimpleApplication{
 	private float lastRotation;
 	public BitmapText InvText;
 	private Star star;
+	private Node playernode;
 
 	public Celestial() {
 		Celestial.assetManage = this.assetManager;
@@ -223,6 +226,8 @@ public class Celestial extends SimpleApplication{
 		this.player.setFallSpeed(30);
 		this.player.setGravity(50);
 		this.player.setPhysicsLocation(planets.get(0).getSpawnLocation());
+		this.playernode = new Node();
+		this.playernode.addControl(this.player);
 
 		this.flyCam.setMoveSpeed(100);
 
@@ -235,10 +240,9 @@ public class Celestial extends SimpleApplication{
 		terrnode.setShadowMode(ShadowMode.CastAndReceive);
 		this.rootNode.attachChild(planetnode);
 		this.bulletAppState.getPhysicsSpace().add(this.player);
+		this.rootNode.attachChild(this.playernode);
 
 		Celestial.gui.changeCard(Gui.GAME);
-
-
 
 	}
 
@@ -261,14 +265,13 @@ public class Celestial extends SimpleApplication{
 	
 	public void updatePhysics(float tpf) {
 		this.bulletAppState.update(tpf);
-		//  -- WIP
-		/*if(!this.invmanager.getDropItems().isEmpty())
+		if(!this.invmanager.getDropItems().isEmpty())
 			for(InventoryDrop drop : this.invmanager.getDropItems()) {
 				// Calculate detection results
 				CollisionResults results = new CollisionResults();
-				drop.getGeometry().collideWith((Collidable) player, results);
-				System.out.println("Number of Collisions between" + 
-						drop.getGeometry().getName()+ " and player: " + results.size());
+				this.playernode.collideWith(drop.getGeometry(), results);
+				/*System.out.println("Number of Collisions between" + 
+						drop.getGeometry().getName()+ " and player: " + results.size());*/
 				// Use the results
 				if (results.size() > 0) {
 					// how to react when a collision was detected
@@ -278,7 +281,7 @@ public class Celestial extends SimpleApplication{
 					System.out.println("Distance? " + closest.getDistance() );
 				} 
 			}
-		*/
+		
 	}
 	
 	public void updateCamera(float tpf) {

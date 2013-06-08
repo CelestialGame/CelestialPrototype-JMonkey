@@ -93,7 +93,7 @@ public class InventoryManager {
 	public void registerItem(InventoryItem item, int id) throws InventoryException {
 		if(!this.items.containsValue(item)) {
 			this.items.put(id, item);
-			System.out.println("Added " + item.getBlock().getSimpleName());
+			//System.out.println("Added " + item.getBlock().getSimpleName());
 		} else {
 			throw new InventoryException("AlreadyRegistered");
 		}
@@ -152,7 +152,7 @@ public class InventoryManager {
 		this.dropitemsnode.attachChild(drop.getGeometry());
 		this.dropitems.add(drop);
 		drop.getGeometry().setLocalTranslation(location);
-		System.out.println("Added drop");
+		//System.out.println("Added drop");
 	}
 	
 }
