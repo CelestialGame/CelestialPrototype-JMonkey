@@ -14,8 +14,8 @@ import javax.swing.UIManager;
 import com.celestial.Blocks.Blocks;
 import com.celestial.Blocks.BlocksEnum;
 import com.celestial.Gui.Gui;
-import com.celestial.Input.InputControl;
 import com.celestial.SinglePlayer.Components.Planet;
+import com.celestial.SinglePlayer.Input.InputControl;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
 import com.celestial.SinglePlayer.Inventory.InventoryRegister;
 import com.celestial.util.InventoryException;
@@ -338,6 +338,12 @@ public class Celestial extends SimpleApplication{
 	}
 	public Node getguiNode() {
 		return this.guiNode;
+	}
+	public Node getRootNode() {
+		return this.rootNode;
+	}
+	public BulletAppState getPhysics() {
+		return this.bulletAppState;
 	}
 	@Override
 	public AssetManager getAssetManager() {

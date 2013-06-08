@@ -5,10 +5,17 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.celestial.Celestial;
 import com.celestial.util.FixedHashMap;
 import com.celestial.util.InventoryException;
+import com.cubes.Block;
+import com.cubes.BlockSkin;
+import com.cubes.BlockType;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 
 /**
  * TODO Put here a description of what this class does.
@@ -41,6 +48,8 @@ public class InventoryManager {
 	public static int TAKE = 1;
 	public static int GIVE = 2;
 	
+	Node dropitems;
+	
 	public InventoryManager() {
 		this.items = new HashMap<Integer, InventoryItem>();
 		
@@ -71,6 +80,9 @@ public class InventoryManager {
 		
 		this.inventorygui = new InventoryGui(Celestial.self);
 		
+		this.dropitems = new Node();
+		Celestial.self.getRootNode().attachChild(this.dropitems);
+		
 		//TODO Add extended inv (stuffs not in the hotbar
 		
 	}
@@ -79,10 +91,22 @@ public class InventoryManager {
 	public void registerItem(InventoryItem item, int id) throws InventoryException {
 		if(!this.items.containsValue(item)) {
 			this.items.put(id, item);
+			System.out.println("Added " + item.getBlock().getSimpleName());
+		} else {
+			throw new InventoryException("AlreadyRegistered");
 		}
 	}
 	public InventoryItem getItembyID(int id) {
 		return this.items.get(id);
+	}
+	public InventoryItem getItembyBlock(Class<? extends Block> block) {
+		for(InventoryItem item : this.items.values()) {
+			if(item.getBlock().equals(block)) {
+				return item;
+			}
+		}
+		System.out.println("Can't find " + block.getSimpleName()+" in this.items");
+		return null;
 	}
 	
 	//HotSlot Stuffs
@@ -116,6 +140,13 @@ public class InventoryManager {
 	}
 	public InventoryGui getInvGui() {
 		return this.inventorygui;
+	}
+	
+	public void dropItem(InventoryItem item, Vector3f location) {
+		InventoryDrop drop = new InventoryDrop(item, location);
+		this.dropitems.attachChild(drop.getGeometry());
+		drop.getGeometry().setLocalTranslation(location);
+		System.out.println("Added drop");
 	}
 	
 }

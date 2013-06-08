@@ -36,7 +36,12 @@ public class InventoryRegister {
 				IM.registerItem(new InventoryItem(block.getBClass(), block.getName(), 
 						block.getIconPath()), block.getID());
 			} catch (InventoryException e) {
-				//do nothing
+				if(e.getMessage().equalsIgnoreCase("AlreadyRegistered")) {
+					//pass...w/e bro
+				} else {
+					//crap this must be serious
+					e.printStackTrace();
+				}
 			} catch (AssetNotFoundException e) {
 				RegBlankIconBlock(block, IM);
 				continue;

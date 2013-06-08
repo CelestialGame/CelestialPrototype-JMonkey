@@ -2,13 +2,17 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.celestial.Input;
+package com.celestial.SinglePlayer.Input;
 
 import com.celestial.Celestial;
 import com.celestial.Blocks.*;
 import com.celestial.Gui.Gui;
+import com.celestial.SinglePlayer.Inventory.InventoryItem;
 import com.celestial.World.Picker;
+import com.cubes.Block;
 import com.cubes.BlockChunkControl;
+import com.cubes.BlockManager;
+import com.cubes.BlockSkin;
 import com.cubes.BlockTerrainControl;
 import com.cubes.BlockType;
 import com.cubes.Vector3Int;
@@ -102,19 +106,33 @@ public class InputControl {
 				if(blockLocation != null)
 				{
 					float dist = parent.player.getPhysicsLocation().distance(blockAbsLocation);
+					InventoryItem item;
 					if(!parent.bulletAppState.isEnabled()) //Are they flying?
 					{
 						BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
-						if(chunk != null && blockLocation != null)
+						if(chunk != null && blockLocation != null) {
+							Class<? extends Block> block = BlockManager.getClass(chunk.getBlock(blockLocation).getType());
+							item = parent.getInventoryManager().getItembyBlock(block);
+							if(item != null) {
+								parent.getInventoryManager().dropItem(item, blockAbsLocation);
+							}
 							chunk.removeBlock(blockLocation); //Remove the Block
+						}
+					
 					}
 					else
 					{
 						if(dist <= 15F) //Is the block nearby?
 						{
 							BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
-							if(chunk != null && blockLocation != null)
+							if(chunk != null && blockLocation != null) {
+								Class<? extends Block> block = BlockManager.getClass(chunk.getBlock(blockLocation).getType());
+								item = parent.getInventoryManager().getItembyBlock(block);
+								if(item != null) {
+									parent.getInventoryManager().dropItem(item, blockAbsLocation);
+								}
 								chunk.removeBlock(blockLocation); //Remove the Block
+							}
 						}
 					}
 				}
