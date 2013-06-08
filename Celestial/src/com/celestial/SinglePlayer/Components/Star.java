@@ -17,11 +17,28 @@ public class Star {
 	private Node StarNode;
 	private PointLight light;
 
+	/**
+	 * Generates a star at given location	
+	 * @param solarSystem
+	 * @param location
+	 */
 	public Star(SolarSystem solarSystem, Vector3f location)
 	{
 		this.solarSystem = solarSystem;
 		this.location = location;
 	
+		this.generateStar();
+	}
+	
+	/**
+	 * Generates a star at 0,0,0
+	 * @param solarSystem
+	 */
+	public Star(SolarSystem solarSystem)
+	{
+		this.solarSystem = solarSystem;
+		this.location = new Vector3f(0,0,0);
+		
 		this.generateStar();
 	}
 	

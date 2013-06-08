@@ -137,7 +137,6 @@ public class Celestial extends SimpleApplication{
 	private float lastRotation;
 	public BitmapText InvText;
 	private Star star;
-	private Node playernode;
 
 	public Celestial() {
 		Celestial.assetManage = this.assetManager;
@@ -240,10 +239,8 @@ public class Celestial extends SimpleApplication{
 		this.player.setJumpSpeed(20);
 		this.player.setFallSpeed(30);
 		this.player.setGravity(50);
-		this.player.setPhysicsLocation(this.planets.get(0).getSpawnLocation());
-		this.playernode = new Node();
-		this.playernode.addControl(this.player);
-
+		this.player.setPhysicsLocation(planets.get(0).getSpawnLocation());
+		this.player.getCollisionGroup();
 		this.flyCam.setMoveSpeed(100);
 
 		Node terrnode = this.planets.get(0).getTerrainNode();
@@ -255,8 +252,6 @@ public class Celestial extends SimpleApplication{
 		terrnode.setShadowMode(ShadowMode.CastAndReceive);
 		this.rootNode.attachChild(planetnode);
 		this.bulletAppState.getPhysicsSpace().add(this.player);
-		this.rootNode.attachChild(this.playernode);
-
 		Celestial.gui.changeCard(Gui.GAME);
         
 
@@ -270,12 +265,12 @@ public class Celestial extends SimpleApplication{
 		AmbientLight ambientlight = new AmbientLight();
 		this.rootNode.addLight(ambientlight);
 		
-		PssmShadowRenderer pssmRenderer = new PssmShadowRenderer(assetManager, 2048, 3);
+		PssmShadowRenderer pssmRenderer = new PssmShadowRenderer(assetManager, 1024, 3);
 	    pssmRenderer.setDirection(new Vector3f(-.5f,-.5f,-.5f).normalizeLocal()); // light direction
 	    viewPort.addProcessor(pssmRenderer);
 		
 	    FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
-	    PssmShadowFilter pssmFilter = new PssmShadowFilter(assetManager, 2048, 3);
+	    PssmShadowFilter pssmFilter = new PssmShadowFilter(assetManager, 1024, 3);
 	    pssmFilter.setEnabled(true);
 	    //SSAOFilter ssaoFilter = new SSAOFilter(12.94f, 43.92f, 0.33f, 0.61f);
 	    //fpp.addFilter(ssaoFilter);
@@ -297,28 +292,6 @@ public class Celestial extends SimpleApplication{
 			}
 		}*/
 		this.invmanager.refreshHotSlots();
-		updatePhysics(tpf);
-	}
-	
-	public void updatePhysics(float tpf) {
-		this.bulletAppState.update(tpf);
-		if(!this.invmanager.getDropItems().isEmpty())
-			for(InventoryDrop drop : this.invmanager.getDropItems()) {
-				// Calculate detection results
-				CollisionResults results = new CollisionResults();
-				this.playernode.collideWith(drop.getGeometry(), results);
-				/*System.out.println("Number of Collisions between" + 
-						drop.getGeometry().getName()+ " and player: " + results.size());*/
-				// Use the results
-				if (results.size() > 0) {
-					// how to react when a collision was detected
-					CollisionResult closest  = results.getClosestCollision();
-					System.out.println("What was hit? " + closest.getGeometry().getName() );
-					System.out.println("Where was it hit? " + closest.getContactPoint() );
-					System.out.println("Distance? " + closest.getDistance() );
-				} 
-			}
-		
 	}
 	
 	public void updateCamera(float tpf) {

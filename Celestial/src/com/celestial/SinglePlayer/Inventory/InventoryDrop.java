@@ -53,7 +53,9 @@ public class InventoryDrop{
 		this.itemdrop.setQueueBucket(Bucket.Translucent); 
 		
 		this.rigidBodyControl = new RigidBodyControl();
+		this.rigidBodyControl.removeCollideWithGroup(Celestial.self.player.getCollisionGroup());
         this.itemdrop.addControl(rigidBodyControl);
+        Celestial.self.player.removeCollideWithGroup(this.rigidBodyControl.getCollisionGroup());
         Celestial.self.getPhysics().getPhysicsSpace().add(this.itemdrop);
         
         this.item = item;
