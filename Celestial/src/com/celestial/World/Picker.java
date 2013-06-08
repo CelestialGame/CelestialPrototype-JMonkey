@@ -36,9 +36,9 @@ public class Picker {
 	}
 	public static Object[] getCurrentPointedBlockLocation(boolean getNeighborLocation, Celestial parent, Camera cam){
 		Object[] values = new Object[2];
-		Node planetNode = parent.planets.get(0).getNode();
+		Node terrNode = parent.planets.get(0).getTerrainNode();
 		BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
-		CollisionResults results = getRayCastingResults(planetNode, parent, cam);
+		CollisionResults results = getRayCastingResults(terrNode, parent, cam);
 		if(results.size() > 0){
 
 			Vector3f collisionContactPoint = results.getClosestCollision().getContactPoint();
@@ -46,7 +46,12 @@ public class Picker {
 				return null;
 			values[0] = collisionContactPoint;
 
-			Vector3Int blockPoint = BlockNavigator.getPointedBlockLocation(chunk, collisionContactPoint, getNeighborLocation);
+			Vector3f relContactPoint = new Vector3f(
+					collisionContactPoint.getX() - terrNode.getWorldTranslation().getX(),
+					collisionContactPoint.getY() - terrNode.getWorldTranslation().getY(),
+					collisionContactPoint.getZ() - terrNode.getWorldTranslation().getZ());
+			
+			Vector3Int blockPoint = BlockNavigator.getPointedBlockLocation(chunk, relContactPoint, getNeighborLocation);
 			if(blockPoint == null)
 				return null;
 			values[1] = blockPoint;
@@ -56,9 +61,9 @@ public class Picker {
 		return null;
 	}
 	public static BlockChunkControl getCurrentPointedBlock(boolean getNeighborLocation, Celestial parent, Camera cam) {
-		Node planetNode = parent.planets.get(0).getNode();
+		Node terrNode = parent.planets.get(0).getTerrainNode();
 		BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
-		CollisionResults results = getRayCastingResults(planetNode, parent, cam);
+		CollisionResults results = getRayCastingResults(terrNode, parent, cam);
 		if(results.size() > 0){
 			Vector3f collisionContactPoint = results.getClosestCollision().getContactPoint();
 			return chunk.getChunk(BlockNavigator.getPointedBlockLocation(chunk, collisionContactPoint, getNeighborLocation));
