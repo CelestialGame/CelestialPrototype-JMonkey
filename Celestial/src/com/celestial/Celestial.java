@@ -16,6 +16,7 @@ import com.celestial.Blocks.BlocksEnum;
 import com.celestial.Gui.Gui;
 import com.celestial.Input.InputControl;
 import com.celestial.SinglePlayer.Components.Planet;
+import com.celestial.SinglePlayer.Components.Star;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
 import com.celestial.SinglePlayer.Inventory.InventoryRegister;
 import com.celestial.util.InventoryException;
@@ -31,18 +32,14 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.font.BitmapText;
 import com.jme3.light.DirectionalLight;
-import com.jme3.material.Material;
-import com.jme3.math.FastMath;
+import com.jme3.light.PointLight;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeCanvasContext;
-import com.jme3.ui.Picture;
 import com.jme3.util.JmeFormatter;
-import com.jme3.util.SkyFactory;
 
 /**
  * test
@@ -120,6 +117,7 @@ public class Celestial extends SimpleApplication{
 	public List<Planet> planets;
 	private float lastRotation;
 	public BitmapText InvText;
+	private Star star;
 
 	public Celestial() {
 		Celestial.assetManage = this.assetManager;
@@ -156,24 +154,24 @@ public class Celestial extends SimpleApplication{
 		csettings.setChunkSizeX(16);
 		csettings.setChunkSizeY(16);
 		csettings.setChunkSizeZ(16);
-		
+
 		/** Set up Physics **/
 		this.bulletAppState = new BulletAppState();
 		this.stateManager.attach(this.bulletAppState);
 
 		Blocks.init();
-		
+
 		this.guiNode.detachAllChildren();
-		
+
 
 		this.invmanager = new InventoryManager();
 
 		InventoryRegister.RegisterBlocks(this.invmanager);
-		
+
 		try {
 			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.DIRT.getID()), -1, 1);
 			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.STONE.getID()), -1, 2);
-			
+
 			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.COAL_ORE.getID()), -1, 3);
 			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.IRON_ORE.getID()), -1, 4);
 			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.COPPER_ORE.getID()), -1, 5);
@@ -183,10 +181,10 @@ public class Celestial extends SimpleApplication{
 		} catch (InventoryException e) {
 			//pass
 		}
-		
+
 		initCrossHairs();
 		initOtherHud();
-		
+
 		this.invmanager.setSelectedHotSlot(1);
 
 		this.walkDirection = new Vector3f();
@@ -207,9 +205,12 @@ public class Celestial extends SimpleApplication{
 
 
 		// You must add a light to make the model visible
-		DirectionalLight sun = new DirectionalLight();
+		this.star = new Star(null, new Vector3f(0,0,0));
+		this.rootNode.attachChild(star.getStarNode());
+		
+		/*DirectionalLight sun = new DirectionalLight();
 		sun.setDirection(new Vector3f(10f, 10f, 10f));
-		this.rootNode.addLight(sun);
+		this.rootNode.addLight(sun);*/
 
 		CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f, 2f, 1);
 		this.player = new CharacterControl(capsuleShape, 0.05f);
@@ -306,7 +307,7 @@ public class Celestial extends SimpleApplication{
 				this.settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
 		this.guiNode.attachChild(ch);
 	}
-	
+
 	protected void initOtherHud() {
 		this.guiFont = this.assetManager.loadFont("Interface/Fonts/Default.fnt");
 		this.posText = new BitmapText(this.guiFont, false);
@@ -314,13 +315,13 @@ public class Celestial extends SimpleApplication{
 		this.posText.setText("");
 		this.posText.setLocalTranslation(450, this.posText.getLineHeight(), 0);
 		this.guiNode.attachChild(this.posText);
-		
+
 		this.InvText = new BitmapText(this.guiFont, false);
 		this.InvText.setSize(this.guiFont.getCharSet().getRenderedSize());
 		this.InvText.setLocalTranslation(350, this.settings.getHeight() - this.InvText.getLineHeight(), 0);
 		//this.guiNode.attachChild(this.InvText);
-		
-		
+
+
 	}
 
 
