@@ -7,6 +7,7 @@ package com.cubes;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
+import com.jme3.math.ColorRGBA;
 import com.jme3.texture.Texture;
 
 /**
@@ -21,6 +22,10 @@ public class BlockChunk_Material extends Material{
         texture.setMagFilter(Texture.MagFilter.Nearest);
         texture.setMinFilter(Texture.MinFilter.NearestNoMipMaps);
         setTexture("DiffuseMap", texture);
+        setBoolean("UseMaterialColors", true);
+        setColor("Diffuse",  ColorRGBA.White);
+        setColor("Specular", ColorRGBA.White);
+        setColor("Ambient",  ColorRGBA.White);
         getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
     }
 }

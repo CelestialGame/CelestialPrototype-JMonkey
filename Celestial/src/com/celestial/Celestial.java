@@ -17,7 +17,6 @@ import com.celestial.Gui.Gui;
 import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.SinglePlayer.Input.InputControl;
 import com.celestial.SinglePlayer.Components.Star;
-import com.celestial.SinglePlayer.Inventory.InventoryDrop;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
 import com.celestial.SinglePlayer.Inventory.InventoryRegister;
 import com.celestial.util.InventoryException;
@@ -26,36 +25,20 @@ import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.collision.PhysicsCollisionEvent;
-import com.jme3.bullet.collision.PhysicsCollisionListener;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
-import com.jme3.collision.Collidable;
-import com.jme3.collision.CollisionResult;
-import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
-import com.jme3.light.AmbientLight;
-import com.jme3.light.DirectionalLight;
-import com.jme3.light.PointLight;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
-import com.jme3.post.ssao.SSAOFilter;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
-import com.jme3.shadow.BasicShadowRenderer;
-import com.jme3.shadow.DirectionalLightShadowFilter;
-import com.jme3.shadow.DirectionalLightShadowRenderer;
+import com.jme3.shadow.EdgeFilteringMode;
 import com.jme3.shadow.PointLightShadowFilter;
 import com.jme3.shadow.PointLightShadowRenderer;
-import com.jme3.shadow.PssmShadowFilter;
-import com.jme3.shadow.PssmShadowRenderer;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeCanvasContext;
 import com.jme3.util.JmeFormatter;
@@ -72,7 +55,6 @@ public class Celestial extends SimpleApplication{
 	public static int width;
 	public static int height;
 	public static String title;
-	public static AssetManager assetManage;
 
 	public static void main(String[] args) {
 		Celestial.self = new Celestial();
@@ -127,6 +109,8 @@ public class Celestial extends SimpleApplication{
 
 	public static Gui gui;
 
+	public static final int SHADOWMAP_SIZE = 512;
+	
 	private boolean playingGame; 
 
 	public static Celestial self;
@@ -139,7 +123,6 @@ public class Celestial extends SimpleApplication{
 	private Star star;
 
 	public Celestial() {
-		Celestial.assetManage = this.assetManager;
 	}
 
 	public static void createNewCanvas(){
@@ -197,6 +180,7 @@ public class Celestial extends SimpleApplication{
 			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.TIN_ORE.getID()), -1, 6);
 			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.RAW_DIAMOND.getID()), -1, 7);
 			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.GOLD_ORE.getID()), -1, 8);
+			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.GRASS.getID()), -1, 9);
 		} catch (InventoryException e) {
 			//pass
 		}
@@ -214,7 +198,7 @@ public class Celestial extends SimpleApplication{
 
 		this.planets = new ArrayList<Planet>();
 
-		this.planets.add(new Planet(null, 1, new Vector3f(-50,-50,-50)));
+		this.planets.add(new Planet(null, 1, new Vector3f(300,-100,-400)));
 
 		this.inputControl = new InputControl(this, this.cam, this.inputManager);
 
@@ -227,11 +211,6 @@ public class Celestial extends SimpleApplication{
 		this.star = new Star(null, new Vector3f(0,0,0));
 		this.rootNode.attachChild(this.star.getStarNode());
 		
-		/*PointLight sun = new PointLight();
-		sun.setPosition(new Vector3f(0,0,0));
-		this.rootNode.addLight(sun);
-		AmbientLight ambientlight = new AmbientLight();
-		this.rootNode.addLight(ambientlight);*/
 		initLighting();
 
 		CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f, 2f, 1);
@@ -242,6 +221,7 @@ public class Celestial extends SimpleApplication{
 		this.player.setPhysicsLocation(planets.get(0).getSpawnLocation());
 		this.player.getCollisionGroup();
 		this.flyCam.setMoveSpeed(100);
+		this.cam.setFrustumFar(65000);
 
 		Node terrnode = this.planets.get(0).getTerrainNode();
 		Node planetnode = this.planets.get(0).getPlanetNode();
@@ -257,31 +237,34 @@ public class Celestial extends SimpleApplication{
 
 	}
 
-	/**
-	 * TODO Put here a description of what this method does.
-	 *
-	 */
-	private void initLighting() {
-		AmbientLight ambientlight = new AmbientLight();
-		this.rootNode.addLight(ambientlight);
-		
-		PssmShadowRenderer pssmRenderer = new PssmShadowRenderer(assetManager, 1024, 3);
-	    pssmRenderer.setDirection(new Vector3f(-.5f,-.5f,-.5f).normalizeLocal()); // light direction
-	    viewPort.addProcessor(pssmRenderer);
-		
-	    FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
-	    PssmShadowFilter pssmFilter = new PssmShadowFilter(assetManager, 1024, 3);
-	    pssmFilter.setEnabled(true);
-	    //SSAOFilter ssaoFilter = new SSAOFilter(12.94f, 43.92f, 0.33f, 0.61f);
-	    //fpp.addFilter(ssaoFilter);
-	    fpp.addFilter(pssmFilter);
-	    viewPort.addProcessor(fpp);
+	private void initLighting() {	  
+		rootNode.addLight(star.getLight());
+	    PointLightShadowRenderer plsr = new PointLightShadowRenderer(assetManager, SHADOWMAP_SIZE);
+        plsr.setLight(this.star.getLight());
+        plsr.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
+       // plsr.setFlushQueues(false);
+        plsr.displayFrustum();
+        plsr.displayDebug();
+        viewPort.addProcessor(plsr);
+        
+        PointLightShadowFilter plsf = new PointLightShadowFilter(assetManager, SHADOWMAP_SIZE);
+        plsf.setLight(star.getLight());     
+        plsf.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
+        plsf.setEnabled(true);
+
+        FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
+        fpp.addFilter(plsf);
+        viewPort.addProcessor(fpp);
 	}
 
 	@Override
 	public void simpleUpdate(float tpf) {
 		updateCamera(tpf);
 		updateStats(tpf);
+		
+		/**
+		 * TODO: Rotation
+		 */
 		
 		/*if(this.planets.get(0) != null)
 		{

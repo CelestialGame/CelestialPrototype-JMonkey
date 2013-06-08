@@ -7,6 +7,7 @@ Date Created:
 package com.celestial.SinglePlayer.Components;
 
 import com.jme3.light.PointLight;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 
@@ -46,7 +47,9 @@ public class Star {
 	{
 		StarNode = new Node();
 		light = new PointLight();
-		light.setPosition(new Vector3f(0,0,0));
+		light.setPosition(location);
+		light.setColor(ColorRGBA.White);
+		light.setRadius(50000f);
 		
 		this.StarNode.addLight(light);
 		this.StarNode.move(location);
