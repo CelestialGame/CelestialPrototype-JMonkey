@@ -197,7 +197,7 @@ public class Celestial extends SimpleApplication{
 
 		this.planets = new ArrayList<Planet>();
 
-		this.planets.add(new Planet(null, 3, new Vector3f(50,50,50)));
+		this.planets.add(new Planet(null, 1, new Vector3f(-50,-50,-50)));
 
 		this.inputControl = new InputControl(this, this.cam, this.inputManager);
 
@@ -216,17 +216,18 @@ public class Celestial extends SimpleApplication{
 		this.player.setJumpSpeed(20);
 		this.player.setFallSpeed(30);
 		this.player.setGravity(50);
-		this.player.setPhysicsLocation(new Vector3f(2, 24*3+2, 2));
+		this.player.setPhysicsLocation(planets.get(0).getSpawnLocation());
 
 		this.flyCam.setMoveSpeed(100);
 
-		Node node = this.planets.get(0).getNode();
-		CollisionShape sceneShape = CollisionShapeFactory.createMeshShape(node);
+		Node terrnode = this.planets.get(0).getTerrainNode();
+		Node planetnode = this.planets.get(0).getPlanetNode();
+		CollisionShape sceneShape = CollisionShapeFactory.createMeshShape(terrnode);
 		RigidBodyControl landscape = new RigidBodyControl(sceneShape, 0.0f);
-		node.addControl(landscape);
-		this.bulletAppState.getPhysicsSpace().add(node);
-		node.setShadowMode(ShadowMode.CastAndReceive);
-		this.rootNode.attachChild(node);
+		terrnode.addControl(landscape);
+		this.bulletAppState.getPhysicsSpace().add(terrnode);
+		terrnode.setShadowMode(ShadowMode.CastAndReceive);
+		this.rootNode.attachChild(planetnode);
 		this.bulletAppState.getPhysicsSpace().add(this.player);
 
 		Celestial.gui.changeCard(Gui.GAME);
@@ -272,7 +273,7 @@ public class Celestial extends SimpleApplication{
 		}
 		this.bulletAppState.update(tpf);
 		if(this.player.getPhysicsLocation().getY() <= -150 || this.cam.getLocation().getY() <= -150) {
-			this.player.setPhysicsLocation(new Vector3f(0, 50, 0));
+			this.player.setPhysicsLocation(planets.get(0).getSpawnLocation());
 			this.cam.setLocation(new Vector3f(this.player.getPhysicsLocation().getX(), this.player.getPhysicsLocation().getY()+camHeight, this.player.getPhysicsLocation().getZ()));
 		}
 		if(this.planets.get(0) != null)
@@ -280,11 +281,10 @@ public class Celestial extends SimpleApplication{
 			/*if(this.timer.getTimeInSeconds()-this.lastRotation > 0)
 			{
 				this.lastRotation = this.timer.getTimeInSeconds();
-				planets.get(0).getNode().rotate(0.0001f*FastMath.DEG_TO_RAD, 0, 0);
+				planets.get(0).getPlanetNode().rotate(0.001f*FastMath.DEG_TO_RAD, 0.0001f*FastMath.DEG_TO_RAD, 0.0005f*FastMath.DEG_TO_RAD);
 			}*/
 		}
 		this.invmanager.refreshHotSlots();
-		this.invmanager.getInvGui().updateHotBar();
 	}
 
 	@Override

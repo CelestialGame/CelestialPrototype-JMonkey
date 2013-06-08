@@ -55,24 +55,7 @@ public class InventoryGui {
 				pic.setImage(this.parent.getAssetManager(), slot.getItem().getIcon(), true);
 				pic.setWidth(38);
 				pic.setHeight(38);
-				if(slots.indexOf(slot) == 1)
-					pic.setPosition(0, this.parent.getSettings().getHeight() - 63);
-				else if(slots.indexOf(slot) == 2)
-					pic.setPosition(38, this.parent.getSettings().getHeight() - 63);
-				else if(slots.indexOf(slot) == 3)
-					pic.setPosition(76, this.parent.getSettings().getHeight() - 63);
-				else if(slots.indexOf(slot) == 4)
-					pic.setPosition(114, this.parent.getSettings().getHeight() - 63);
-				else if(slots.indexOf(slot) == 5)
-					pic.setPosition(152, this.parent.getSettings().getHeight() - 63);
-				else if(slots.indexOf(slot) == 6)
-					pic.setPosition(190, this.parent.getSettings().getHeight() - 63);
-				else if(slots.indexOf(slot) == 7)
-					pic.setPosition(228, this.parent.getSettings().getHeight() - 63);
-				else if(slots.indexOf(slot) == 8)
-					pic.setPosition(266, this.parent.getSettings().getHeight() - 63);
-				else if(slots.indexOf(slot) == 9)
-					pic.setPosition(304, this.parent.getSettings().getHeight() - 63);
+				pic.setPosition((slots.indexOf(slot)-1)*38, this.parent.getSettings().getHeight() - 63);
 				this.hotbaricons.attachChild(pic);
 			}
 		}

@@ -18,6 +18,7 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 
 public class Planet implements BlockChunkListener {
 	private Star star;
@@ -25,8 +26,8 @@ public class Planet implements BlockChunkListener {
 	private Vector3f location;
 	private int centerofdiam;
 	private BlockTerrainControl terrcontrol;
-	private Vector3Int cornerofplanet;
 	private Node planetNode;
+	private Node terrainNode;
 
 	/**
 	 * Create a new Planet
@@ -40,8 +41,6 @@ public class Planet implements BlockChunkListener {
 		this.diameter = diameter;
 		this.location = location;
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
-		int equate = (16*centerofdiam)-8;
-		this.cornerofplanet = new Vector3Int(0-equate, 0-equate, 0-equate);
 
 		if(diameter % 2 == 0)
 		{
@@ -49,15 +48,12 @@ public class Planet implements BlockChunkListener {
 			return;
 		}
 		
-		System.out.println("New Planet -- Diam: "+diameter+" Loc: "+location+" Center: "+centerofdiam+" Corner: "+cornerofplanet);
-
 		this.generatePlanet();
 	}
 
 	private void generatePlanet() {
-		planetNode = new Node();
-		System.out.println(planetNode.getWorldTranslation());
-		//planetNode.move(location);
+		terrainNode = new Node();
+		System.out.println(terrainNode.getWorldTranslation());
 		terrcontrol = new BlockTerrainControl(Celestial.csettings, new Vector3Int(diameter, diameter, diameter));
 		terrcontrol.addChunkListener(this);
 
@@ -67,8 +63,8 @@ public class Planet implements BlockChunkListener {
 			{
 				for(int k=0; k<diameter; k++) //z
 				{
-					System.out.println("Make Chunk: "+(cornerofplanet.getX()+(j*16))+" "+(cornerofplanet.getY()+(i*16))+" "+(cornerofplanet.getZ()+(k*16)));
-					makeChunk(cornerofplanet.getX()+(j*16), cornerofplanet.getY()+(i*16), cornerofplanet.getZ()+(k*16), terrcontrol);
+					//System.out.println("Make Chunk: "+((j*16))+" "+((i*16))+" "+((k*16)));
+					makeChunk((j*16), (i*16), (k*16), terrcontrol);
 				}                
 			}
 		}
@@ -78,20 +74,25 @@ public class Planet implements BlockChunkListener {
 		{    
 			for(int j=0; j<diameter*2; j++)
 			{
-				int x1 = (int) cornerofplanet.getX()+(i*8);
-				int y1 = (int) Math.abs(cornerofplanet.getY());
-				int z1 = (int) cornerofplanet.getZ()+(j*8);
-				System.out.println("Make Tree At: "+new Vector3Int(x1, y1, z1));
+				int x1 = (int) (i*8);
+				int y1 = (int) diameter*16*3;
+				int z1 = (int) (j*8);
+				//System.out.println("Make Tree At: "+new Vector3Int(x1, y1, z1));
 				makeTreeAt(new Vector3Int(x1, y1, z1), terrcontrol);
 			}
 		}
-		planetNode.addControl(terrcontrol);
+		terrainNode.addControl(terrcontrol);
+		
+		planetNode = new Node();
+		planetNode.attachChild(terrainNode);
+		
+		terrainNode.move(((diameter*16)-8)*-3,((diameter*16)-8)*-3,((diameter*16)-8)*-3);
+		planetNode.move(location);
 		Celestial.self.getRootNode().attachChild(planetNode);
 	}
 
 	public void makeChunk(int locx, int locy, int locz, BlockTerrainControl blockTerrain)
 	{
-		//BlockChunkControl chunk = new BlockChunkControl(blockTerrain, locx, locy, locz);
 		int diameter = 16;
 
 		for(int i=0;i<diameter;i++)
@@ -241,9 +242,24 @@ public class Planet implements BlockChunkListener {
 		return terrcontrol;
 	}
 
-	public Node getNode() {
+	public Node getPlanetNode() {
 		return planetNode;
 	}
+	
+	public Node getTerrainNode()
+	{
+		return terrainNode;
+	}
 
-
+	public int getDiameter() {
+		return diameter;
+	}
+	
+	public Vector3f getSpawnLocation()
+	{
+		return new Vector3f(
+				this.location.getX()+1.5f,
+				this.location.getY() + this.diameter*16*3+3f,
+				this.location.getZ()+1.5f);
+	}
 }
