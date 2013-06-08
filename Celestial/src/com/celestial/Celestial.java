@@ -228,7 +228,8 @@ public class Celestial extends SimpleApplication{
 		this.player.setPhysicsLocation(planets.get(0).getSpawnLocation());
 		this.playernode = new Node();
 		this.playernode.addControl(this.player);
-
+		this.player.getCollisionGroup();
+		
 		this.flyCam.setMoveSpeed(100);
 
 		Node terrnode = this.planets.get(0).getTerrainNode();
