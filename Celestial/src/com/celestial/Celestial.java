@@ -37,13 +37,25 @@ import com.jme3.collision.Collidable;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
+import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.PointLight;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
+import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.ssao.SSAOFilter;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.shadow.BasicShadowRenderer;
+import com.jme3.shadow.DirectionalLightShadowFilter;
+import com.jme3.shadow.DirectionalLightShadowRenderer;
+import com.jme3.shadow.PointLightShadowFilter;
+import com.jme3.shadow.PointLightShadowRenderer;
+import com.jme3.shadow.PssmShadowFilter;
+import com.jme3.shadow.PssmShadowRenderer;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeCanvasContext;
 import com.jme3.util.JmeFormatter;
@@ -214,18 +226,21 @@ public class Celestial extends SimpleApplication{
 
 		// You must add a light to make the model visible
 		this.star = new Star(null, new Vector3f(0,0,0));
-		this.rootNode.attachChild(star.getStarNode());
+		this.rootNode.attachChild(this.star.getStarNode());
 		
-		/*DirectionalLight sun = new DirectionalLight();
-		sun.setDirection(new Vector3f(10f, 10f, 10f));
-		this.rootNode.addLight(sun);*/
+		/*PointLight sun = new PointLight();
+		sun.setPosition(new Vector3f(0,0,0));
+		this.rootNode.addLight(sun);
+		AmbientLight ambientlight = new AmbientLight();
+		this.rootNode.addLight(ambientlight);*/
+		initLighting();
 
 		CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f, 2f, 1);
 		this.player = new CharacterControl(capsuleShape, 0.05f);
 		this.player.setJumpSpeed(20);
 		this.player.setFallSpeed(30);
 		this.player.setGravity(50);
-		this.player.setPhysicsLocation(planets.get(0).getSpawnLocation());
+		this.player.setPhysicsLocation(this.planets.get(0).getSpawnLocation());
 		this.playernode = new Node();
 		this.playernode.addControl(this.player);
 
@@ -243,7 +258,29 @@ public class Celestial extends SimpleApplication{
 		this.rootNode.attachChild(this.playernode);
 
 		Celestial.gui.changeCard(Gui.GAME);
+        
 
+	}
+
+	/**
+	 * TODO Put here a description of what this method does.
+	 *
+	 */
+	private void initLighting() {
+		AmbientLight ambientlight = new AmbientLight();
+		this.rootNode.addLight(ambientlight);
+		
+		PssmShadowRenderer pssmRenderer = new PssmShadowRenderer(assetManager, 2048, 3);
+	    pssmRenderer.setDirection(new Vector3f(-.5f,-.5f,-.5f).normalizeLocal()); // light direction
+	    viewPort.addProcessor(pssmRenderer);
+		
+	    FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
+	    PssmShadowFilter pssmFilter = new PssmShadowFilter(assetManager, 2048, 3);
+	    pssmFilter.setEnabled(true);
+	    //SSAOFilter ssaoFilter = new SSAOFilter(12.94f, 43.92f, 0.33f, 0.61f);
+	    //fpp.addFilter(ssaoFilter);
+	    fpp.addFilter(pssmFilter);
+	    viewPort.addProcessor(fpp);
 	}
 
 	@Override
@@ -251,14 +288,14 @@ public class Celestial extends SimpleApplication{
 		updateCamera(tpf);
 		updateStats(tpf);
 		
-		if(this.planets.get(0) != null)
+		/*if(this.planets.get(0) != null)
 		{
-			/*if(this.timer.getTimeInSeconds()-this.lastRotation > 0)
+			if(this.timer.getTimeInSeconds()-this.lastRotation > 0)
 			{
 				this.lastRotation = this.timer.getTimeInSeconds();
-				planets.get(0).getPlanetNode().rotate(0.001f*FastMath.DEG_TO_RAD, 0.0001f*FastMath.DEG_TO_RAD, 0.0005f*FastMath.DEG_TO_RAD);
-			}*/
-		}
+				this.planets.get(0).getPlanetNode().rotate(0.001f*FastMath.DEG_TO_RAD, 0.0001f*FastMath.DEG_TO_RAD, 0.0005f*FastMath.DEG_TO_RAD);
+			}
+		}*/
 		this.invmanager.refreshHotSlots();
 		updatePhysics(tpf);
 	}
@@ -306,7 +343,7 @@ public class Celestial extends SimpleApplication{
 		}
 		
 		if(this.player.getPhysicsLocation().getY() <= -150 || this.cam.getLocation().getY() <= -150) {
-			this.player.setPhysicsLocation(planets.get(0).getSpawnLocation());
+			this.player.setPhysicsLocation(this.planets.get(0).getSpawnLocation());
 			this.cam.setLocation(new Vector3f(this.player.getPhysicsLocation().getX(), this.player.getPhysicsLocation().getY()+camHeight, this.player.getPhysicsLocation().getZ()));
 		}
 	}

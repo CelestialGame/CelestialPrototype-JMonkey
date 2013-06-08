@@ -111,11 +111,11 @@ public class InputControl {
 					{
 						BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
 						if(chunk != null && blockLocation != null) {
-							Class<? extends Block> block = BlockManager.getClass(chunk.getBlock(blockLocation).getType());
+							/*Class<? extends Block> block = BlockManager.getClass(chunk.getBlock(blockLocation).getType());
 							item = parent.getInventoryManager().getItembyBlock(block);
 							if(item != null) {
 								parent.getInventoryManager().dropItem(item, blockAbsLocation);
-							}
+							}*/
 							chunk.removeBlock(blockLocation); //Remove the Block
 						}
 					
