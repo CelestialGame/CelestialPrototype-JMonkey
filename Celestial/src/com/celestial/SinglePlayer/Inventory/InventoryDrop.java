@@ -24,6 +24,7 @@ public class InventoryDrop{
 	Geometry itemdrop;
 	
 	InventoryItem item;
+	private RigidBodyControl rigidBodyControl;
 	
 	public InventoryDrop(InventoryItem item, Vector3f location) {
 		/** Use this if there is light present **/
@@ -51,7 +52,7 @@ public class InventoryDrop{
 		
 		this.itemdrop.setQueueBucket(Bucket.Translucent); 
 		
-		RigidBodyControl rigidBodyControl = new RigidBodyControl();
+		this.rigidBodyControl = new RigidBodyControl();
         this.itemdrop.addControl(rigidBodyControl);
         Celestial.self.getPhysics().getPhysicsSpace().add(this.itemdrop);
         
@@ -68,6 +69,9 @@ public class InventoryDrop{
 	
 	public InventoryItem getItem() {
 		return this.item;
+	}
+	public RigidBodyControl getCollisionBox() {
+		return this.rigidBodyControl;
 	}
 	
 }

@@ -48,10 +48,12 @@ public class InventoryManager {
 	public static int TAKE = 1;
 	public static int GIVE = 2;
 	
-	Node dropitems;
+	Node dropitemsnode;
+	List<InventoryDrop> dropitems;
 	
 	public InventoryManager() {
 		this.items = new HashMap<Integer, InventoryItem>();
+		this.dropitems = new ArrayList<InventoryDrop>();
 		
 		this.hotslot1 = new InventorySlot(null, -2);
 		this.hotslot2 = new InventorySlot(null, -2);
@@ -80,8 +82,8 @@ public class InventoryManager {
 		
 		this.inventorygui = new InventoryGui(Celestial.self);
 		
-		this.dropitems = new Node();
-		Celestial.self.getRootNode().attachChild(this.dropitems);
+		this.dropitemsnode = new Node();
+		Celestial.self.getRootNode().attachChild(this.dropitemsnode);
 		
 		//TODO Add extended inv (stuffs not in the hotbar
 		
@@ -142,10 +144,13 @@ public class InventoryManager {
 	public InventoryGui getInvGui() {
 		return this.inventorygui;
 	}
-	
+	public List<InventoryDrop> getDropItems() {
+		return this.dropitems;
+	}
 	public void dropItem(InventoryItem item, Vector3f location) {
 		InventoryDrop drop = new InventoryDrop(item, location);
-		this.dropitems.attachChild(drop.getGeometry());
+		this.dropitemsnode.attachChild(drop.getGeometry());
+		this.dropitems.add(drop);
 		drop.getGeometry().setLocalTranslation(location);
 		System.out.println("Added drop");
 	}

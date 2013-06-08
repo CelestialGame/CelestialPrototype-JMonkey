@@ -17,6 +17,7 @@ import com.celestial.Gui.Gui;
 import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.SinglePlayer.Input.InputControl;
 import com.celestial.SinglePlayer.Components.Star;
+import com.celestial.SinglePlayer.Inventory.InventoryDrop;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
 import com.celestial.SinglePlayer.Inventory.InventoryRegister;
 import com.celestial.util.InventoryException;
@@ -30,6 +31,9 @@ import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
+import com.jme3.collision.Collidable;
+import com.jme3.collision.CollisionResult;
+import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.PointLight;
@@ -37,6 +41,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeCanvasContext;
 import com.jme3.util.JmeFormatter;
@@ -239,20 +244,44 @@ public class Celestial extends SimpleApplication{
 
 	@Override
 	public void simpleUpdate(float tpf) {
-		if(this.invmanager.getSelectedHotSlot().getItem() != null) {
-			int number = this.invmanager.getSelectedHotSlot().getNumberContents();
-			if(number == -1) 
-				this.InvText.setText("Selected Item: " + this.invmanager.getSelectedHotSlot().getItem().getName() + " - Contents: unlimited");
-			else 
-				this.InvText.setText("Selected Item: " + this.invmanager.getSelectedHotSlot().getItem().getName() + " - Contents: " + number);
-		} else 
-			this.InvText.setText("Selected Item: none");
-		if(InputControl.statson) {
-			Vector3f location = this.cam.getLocation();
-			this.posText.setText("X: "+location.x + " Y: "+location.y+" Z: "+location.z);
-		} else {
-			this.posText.setText("");
+		updateCamera(tpf);
+		updateStats(tpf);
+		
+		if(this.planets.get(0) != null)
+		{
+			/*if(this.timer.getTimeInSeconds()-this.lastRotation > 0)
+			{
+				this.lastRotation = this.timer.getTimeInSeconds();
+				planets.get(0).getPlanetNode().rotate(0.001f*FastMath.DEG_TO_RAD, 0.0001f*FastMath.DEG_TO_RAD, 0.0005f*FastMath.DEG_TO_RAD);
+			}*/
 		}
+		this.invmanager.refreshHotSlots();
+		updatePhysics(tpf);
+	}
+	
+	public void updatePhysics(float tpf) {
+		this.bulletAppState.update(tpf);
+		//  -- WIP
+		/*if(!this.invmanager.getDropItems().isEmpty())
+			for(InventoryDrop drop : this.invmanager.getDropItems()) {
+				// Calculate detection results
+				CollisionResults results = new CollisionResults();
+				drop.getGeometry().collideWith((Collidable) player, results);
+				System.out.println("Number of Collisions between" + 
+						drop.getGeometry().getName()+ " and player: " + results.size());
+				// Use the results
+				if (results.size() > 0) {
+					// how to react when a collision was detected
+					CollisionResult closest  = results.getClosestCollision();
+					System.out.println("What was hit? " + closest.getGeometry().getName() );
+					System.out.println("Where was it hit? " + closest.getContactPoint() );
+					System.out.println("Distance? " + closest.getDistance() );
+				} 
+			}
+		*/
+	}
+	
+	public void updateCamera(float tpf) {
 		if(this.bulletAppState.isEnabled()) {
 			Vector3f camDir = this.cam.getDirection().clone().multLocal(0.6f);
 			Vector3f camLeft = this.cam.getLeft().clone().multLocal(0.2f);
@@ -272,20 +301,27 @@ public class Celestial extends SimpleApplication{
 		} else {
 			//pass
 		}
-		this.bulletAppState.update(tpf);
+		
 		if(this.player.getPhysicsLocation().getY() <= -150 || this.cam.getLocation().getY() <= -150) {
 			this.player.setPhysicsLocation(planets.get(0).getSpawnLocation());
 			this.cam.setLocation(new Vector3f(this.player.getPhysicsLocation().getX(), this.player.getPhysicsLocation().getY()+camHeight, this.player.getPhysicsLocation().getZ()));
 		}
-		if(this.planets.get(0) != null)
-		{
-			/*if(this.timer.getTimeInSeconds()-this.lastRotation > 0)
-			{
-				this.lastRotation = this.timer.getTimeInSeconds();
-				planets.get(0).getPlanetNode().rotate(0.001f*FastMath.DEG_TO_RAD, 0.0001f*FastMath.DEG_TO_RAD, 0.0005f*FastMath.DEG_TO_RAD);
-			}*/
+	}
+	public void updateStats(float tpf) {
+		if(this.invmanager.getSelectedHotSlot().getItem() != null) {
+			int number = this.invmanager.getSelectedHotSlot().getNumberContents();
+			if(number == -1) 
+				this.InvText.setText("Selected Item: " + this.invmanager.getSelectedHotSlot().getItem().getName() + " - Contents: unlimited");
+			else 
+				this.InvText.setText("Selected Item: " + this.invmanager.getSelectedHotSlot().getItem().getName() + " - Contents: " + number);
+		} else 
+			this.InvText.setText("Selected Item: none");
+		if(InputControl.statson) {
+			Vector3f location = this.cam.getLocation();
+			this.posText.setText("X: "+location.x + " Y: "+location.y+" Z: "+location.z);
+		} else {
+			this.posText.setText("");
 		}
-		this.invmanager.refreshHotSlots();
 	}
 
 	@Override
@@ -345,6 +381,9 @@ public class Celestial extends SimpleApplication{
 	}
 	public BulletAppState getPhysics() {
 		return this.bulletAppState;
+	}
+	public CharacterControl getPlayer() {
+		return this.player;
 	}
 	@Override
 	public AssetManager getAssetManager() {
