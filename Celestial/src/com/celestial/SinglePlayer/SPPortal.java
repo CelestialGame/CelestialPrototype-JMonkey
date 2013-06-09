@@ -42,15 +42,16 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.shadow.EdgeFilteringMode;
 import com.jme3.shadow.PointLightShadowFilter;
 import com.jme3.shadow.PointLightShadowRenderer;
 import com.jme3.system.AppSettings;
+import com.jme3.util.SkyFactory;
 
 @SuppressWarnings("deprecation")
 public class SPPortal extends CelestialPortal{
 	
-	private Celestial parent;
 	private BitmapFont guiFont;
 	private Star star;
 	public static final int SHADOWMAP_SIZE = 1024;
@@ -121,13 +122,13 @@ public class SPPortal extends CelestialPortal{
 
 		this.planets = new ArrayList<Planet>();
 
-		this.planets.add(new Planet(null, 1, new Vector3f(300,-100,-400)));
+		this.planets.add(new Planet(null, 1, new Vector3f(1000,-2300,-200)));
 
 		this.inputControl = new InputControl(this, this.cam, this.inputManager);
 
-		//Spatial sky = SkyFactory.createSky(this.assetManager, "assets/textures/nightsky.jpg", true);
-		//sky.scale(-1, -1, 1);
-		//this.rootNode.attachChild(sky);
+		Spatial sky = SkyFactory.createSky(this.assetManager, "assets/textures/nightsky.jpg", true);
+		sky.scale(-1, -1, 1);
+		this.rootNode.attachChild(sky);
 
 
 		// You must add a light to make the model visible
@@ -183,7 +184,7 @@ public class SPPortal extends CelestialPortal{
 	
 	private void initLighting() {	  
 		AmbientLight al = new AmbientLight();
-		al.setColor(ColorRGBA.White.mult(1.3f));
+		al.setColor(ColorRGBA.White);
 		rootNode.addLight(al);
 		
 		this.rootNode.addLight(this.star.getLight());
@@ -228,11 +229,6 @@ public class SPPortal extends CelestialPortal{
 			this.inputControl.renderBlockBorder();
 		} else {
 			//pass
-		}
-		
-		if(this.player.getPhysicsLocation().getY() <= -150 || this.cam.getLocation().getY() <= -150) {
-			this.player.setPhysicsLocation(this.planets.get(0).getSpawnLocation());
-			this.cam.setLocation(new Vector3f(this.player.getPhysicsLocation().getX(), this.player.getPhysicsLocation().getY()+camHeight, this.player.getPhysicsLocation().getZ()));
 		}
 	}
 	public void updateStats(float tpf) {

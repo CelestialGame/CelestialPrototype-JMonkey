@@ -16,7 +16,6 @@ import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.CharacterControl;
-import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.font.BitmapText;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
@@ -35,7 +34,7 @@ public abstract class CelestialPortal {
 	protected InventoryManager invmanager;
 	protected Node rootNode;
 	protected Node guiNode;
-	protected Camera cam;
+	public Camera cam;
 	protected FlyByCamera flyCam;
 	protected ViewPort viewPort;
 	protected AssetManager assetManager;
