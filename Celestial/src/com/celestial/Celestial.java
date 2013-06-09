@@ -31,11 +31,19 @@ import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.font.BitmapText;
+import com.jme3.light.AmbientLight;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.BloomFilter;
+import com.jme3.post.ssao.SSAOFilter;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.shape.Box;
 import com.jme3.shadow.EdgeFilteringMode;
 import com.jme3.shadow.PointLightShadowFilter;
 import com.jme3.shadow.PointLightShadowRenderer;
@@ -109,7 +117,7 @@ public class Celestial extends SimpleApplication{
 
 	public static Gui gui;
 
-	public static final int SHADOWMAP_SIZE = 512;
+	public static final int SHADOWMAP_SIZE = 1024;
 	
 	private boolean playingGame; 
 
@@ -165,6 +173,26 @@ public class Celestial extends SimpleApplication{
 
 		this.guiNode.detachAllChildren();
 
+		// You must add a light to make the model visible
+		this.star = new Star(null, new Vector3f(0,0,0));
+		this.rootNode.attachChild(this.star.getStarNode());
+		
+		/** TODO: lighting fix -_- :P **/
+		initLighting();
+		
+		/*Box outerbox = new Box(5,5,5);
+		Geometry bigbox = new Geometry("BigBox", outerbox);
+		Material mat = new Material(Celestial.self.getAssetManager(),  // Create new material and...
+			    "Common/MatDefs/Light/Lighting.j3md");
+		mat.setColor("Diffuse", new ColorRGBA(0.5f,0.5f,0.5f,0f));
+		mat.setColor("Ambient", new ColorRGBA(0.5f,0.5f,0.5f,0f));
+		Material mat = new Material(Celestial.self.getAssetManager(),  // Create new material and...
+				"Common/MatDefs/Misc/Unshaded.j3md");
+		mat.setColor("Color", new ColorRGBA(0.5f,0.5f,0.5f,0f));
+		bigbox.setMaterial(mat);
+		bigbox.setShadowMode(ShadowMode.CastAndReceive);
+		bigbox.setLocalTranslation(301,-65,-408);
+		this.rootNode.attachChild(bigbox);*/
 
 		this.invmanager = new InventoryManager();
 
@@ -206,19 +234,12 @@ public class Celestial extends SimpleApplication{
 		//sky.scale(-1, -1, 1);
 		//this.rootNode.attachChild(sky);
 
-
-		// You must add a light to make the model visible
-		this.star = new Star(null, new Vector3f(0,0,0));
-		this.rootNode.attachChild(this.star.getStarNode());
-		
-		initLighting();
-
 		CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f, 2f, 1);
 		this.player = new CharacterControl(capsuleShape, 0.05f);
 		this.player.setJumpSpeed(20);
 		this.player.setFallSpeed(30);
 		this.player.setGravity(50);
-		this.player.setPhysicsLocation(planets.get(0).getSpawnLocation());
+		this.player.setPhysicsLocation(this.planets.get(0).getSpawnLocation());
 		this.player.getCollisionGroup();
 		this.flyCam.setMoveSpeed(100);
 		this.cam.setFrustumFar(65000);
@@ -229,32 +250,43 @@ public class Celestial extends SimpleApplication{
 		RigidBodyControl landscape = new RigidBodyControl(sceneShape, 0.0f);
 		terrnode.addControl(landscape);
 		this.bulletAppState.getPhysicsSpace().add(terrnode);
-		terrnode.setShadowMode(ShadowMode.CastAndReceive);
 		this.rootNode.attachChild(planetnode);
 		this.bulletAppState.getPhysicsSpace().add(this.player);
 		Celestial.gui.changeCard(Gui.GAME);
+		
+		rootNode.setShadowMode(ShadowMode.Off);
+		terrnode.setShadowMode(ShadowMode.CastAndReceive);
         
 
 	}
 
-	private void initLighting() {	  
-		rootNode.addLight(star.getLight());
-	    PointLightShadowRenderer plsr = new PointLightShadowRenderer(assetManager, SHADOWMAP_SIZE);
+	private void initLighting() {
+		AmbientLight al = new AmbientLight();
+		al.setColor(ColorRGBA.White.mult(1.3f));
+		rootNode.addLight(al);
+		
+		this.rootNode.addLight(this.star.getLight());
+		
+	    PointLightShadowRenderer plsr = new PointLightShadowRenderer(this.assetManager, SHADOWMAP_SIZE);
         plsr.setLight(this.star.getLight());
         plsr.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
-       // plsr.setFlushQueues(false);
+        //plsr.setFlushQueues(false);
         plsr.displayFrustum();
         plsr.displayDebug();
-        viewPort.addProcessor(plsr);
+        this.viewPort.addProcessor(plsr);
         
-        PointLightShadowFilter plsf = new PointLightShadowFilter(assetManager, SHADOWMAP_SIZE);
-        plsf.setLight(star.getLight());     
+        PointLightShadowFilter plsf = new PointLightShadowFilter(this.assetManager, SHADOWMAP_SIZE);
+        plsf.setLight(this.star.getLight());     
         plsf.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
         plsf.setEnabled(true);
 
-        FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
+        FilterPostProcessor fpp = new FilterPostProcessor(this.assetManager);
+        BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
+        fpp.addFilter(bloom);
         fpp.addFilter(plsf);
-        viewPort.addProcessor(fpp);
+        
+        this.viewPort.addProcessor(fpp);
+        
 	}
 
 	@Override
@@ -323,7 +355,9 @@ public class Celestial extends SimpleApplication{
 	@Override
 	public void simpleRender(RenderManager rm) {
 
-		//TODO: add render code
+		//TODO render code...?
+		
+		
 	}
 
 

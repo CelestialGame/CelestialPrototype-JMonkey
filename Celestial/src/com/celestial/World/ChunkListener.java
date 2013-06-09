@@ -9,6 +9,7 @@ import com.cubes.BlockChunkControl;
 import com.cubes.BlockChunkListener;
 import com.jme3.bullet.collision.shapes.MeshCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 
@@ -25,8 +26,8 @@ public class ChunkListener implements BlockChunkListener{
 	   }
 	   
 	   public void onSpatialUpdated(BlockChunkControl bcc) {
-	           updateCollisionShape(bcc.getOptimizedGeometry_Opaque());
-	           updateCollisionShape(bcc.getOptimizedGeometry_Transparent());
+	       updateCollisionShape(bcc.getOptimizedGeometry_Opaque());
+	       updateCollisionShape(bcc.getOptimizedGeometry_Transparent());
 	   }
 	   private void updateCollisionShape(Geometry chunkGeometry){
 	       RigidBodyControl rigidBodyControl = chunkGeometry.getControl(RigidBodyControl.class);
