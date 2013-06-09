@@ -110,7 +110,18 @@ public class Celestial extends SimpleApplication{
 		if(type == Celestial.SINGLEPLAYER)
 		{
 			
-			Celestial.portal = new SPPortal(this, rootNode, guiNode, cam, flyCam, viewPort, assetManager, inputManager, settings, app);
+			Celestial.portal = new SPPortal(
+					this, 
+					rootNode, 
+					guiNode, 
+					cam, 
+					flyCam, 
+					viewPort, 
+					assetManager, 
+					inputManager, 
+					settings, 
+					app, 
+					timer);
 		}
 		else
 		{

@@ -113,7 +113,7 @@ public class InputControl {
 					if(!parent.getBulletAppState().isEnabled()) //Are they flying?
 					{
 						BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
-						if(chunk != null && blockLocation != null) {
+						if(chunk != null && blockLocation != null && chunk.getBlock(blockLocation) != null) {
 							/*Class<? extends Block> block = BlockManager.getClass(chunk.getBlock(blockLocation).getType());
 							item = parent.getInventoryManager().getItembyBlock(block);
 							if(item != null) {
@@ -128,7 +128,7 @@ public class InputControl {
 						if(dist <= 15F) //Is the block nearby?
 						{
 							BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
-							if(chunk != null && blockLocation != null) {
+							if(chunk != null && blockLocation != null && chunk.getBlock(blockLocation) != null) {
 								Class<? extends Block> block = BlockManager.getClass(chunk.getBlock(blockLocation).getType());
 								item = parent.getInventoryManager().getItembyBlock(block);
 								if(item != null) {

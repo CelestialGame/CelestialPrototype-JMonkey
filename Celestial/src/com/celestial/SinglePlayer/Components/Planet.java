@@ -15,10 +15,13 @@ import com.cubes.BlockChunkListener;
 import com.cubes.BlockTerrainControl;
 import com.cubes.Vector3Int;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.util.TempVars;
 
 public class Planet implements BlockChunkListener {
 	private Star star;
@@ -28,6 +31,10 @@ public class Planet implements BlockChunkListener {
 	private BlockTerrainControl terrcontrol;
 	private Node planetNode;
 	private Node terrainNode;
+	private Vector3f axisRotation;
+	private Vector3f amountRotation;
+	private Quaternion originalRotation;
+	private Vector3f originalTranslationTerrain;
 
 	/**
 	 * Create a new Planet
@@ -42,6 +49,9 @@ public class Planet implements BlockChunkListener {
 		this.location = location;
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
 
+		this.amountRotation = new Vector3f(0, 0.00001f, 0);
+		this.axisRotation = new Vector3f(0,0,0);
+		
 		if(diameter % 2 == 0)
 		{
 			System.err.println("Planet Diameter MUST be odd number!");
@@ -84,9 +94,12 @@ public class Planet implements BlockChunkListener {
 		terrainNode.addControl(terrcontrol);
 		
 		planetNode = new Node();
+		this.originalRotation = planetNode.getWorldRotation().clone();
 		planetNode.attachChild(terrainNode);
 		
 		terrainNode.move(((centerofdiam*16)-8)*-3,((centerofdiam*16)-8)*-3,((centerofdiam*16)-8)*-3);
+		System.out.println(terrainNode.getWorldTranslation());
+		this.originalTranslationTerrain = terrainNode.getWorldTranslation().clone();
 		planetNode.move(location);
 		Celestial.portal.getRootNode().attachChild(planetNode);
 	}
@@ -261,5 +274,47 @@ public class Planet implements BlockChunkListener {
 				this.location.getX()+1.5f,
 				this.location.getY() + this.diameter*16*3+3f,
 				this.location.getZ()+1.5f);
+	}
+
+	public void rotate() {
+		this.axisRotation.setX(this.axisRotation.getX()+this.amountRotation.getX());
+		this.axisRotation.setY(this.axisRotation.getY()+this.amountRotation.getY());
+		this.axisRotation.setZ(this.axisRotation.getZ()+this.amountRotation.getZ());
+		if(this.axisRotation.getX() > 360)
+			this.axisRotation.setX(this.axisRotation.getX() - 360);
+		if(this.axisRotation.getY() > 360)
+			this.axisRotation.setY(this.axisRotation.getY() - 360);
+		if(this.axisRotation.getZ() > 360)
+			this.axisRotation.setZ(this.axisRotation.getZ() - 360);
+		planetNode.rotate(this.amountRotation.getX(), this.amountRotation.getY(), this.amountRotation.getZ());
+	}
+	
+	public Quaternion getRotation()
+	{
+		return planetNode.getWorldRotation();
+	}
+	
+	public Vector3f getInvertedVector(Vector3f vec)
+	{
+		TempVars vars = TempVars.get();
+        Quaternion q = vars.quat1;
+        q.fromAngles(this.axisRotation.x*FastMath.DEG_TO_RAD, this.axisRotation.y*FastMath.DEG_TO_RAD, this.axisRotation.z*FastMath.DEG_TO_RAD);
+		Quaternion q1 = this.getRotation().mult(q.inverse());
+        vars.release();
+        return q1.mult(vec);
+	}
+	
+	public Vector3f getRotatedVector(Vector3f vec)
+	{
+		TempVars vars = TempVars.get();
+        Quaternion q = vars.quat1;
+        q.fromAngles(this.axisRotation.x*FastMath.DEG_TO_RAD, this.axisRotation.y*FastMath.DEG_TO_RAD, this.axisRotation.z*FastMath.DEG_TO_RAD);
+		Quaternion q1 = this.getRotation().mult(q);
+        vars.release();
+        return q1.mult(vec);
+	}
+
+	public Vector3f getOriginalTranslation() {
+		return this.originalTranslationTerrain;
 	}
 }

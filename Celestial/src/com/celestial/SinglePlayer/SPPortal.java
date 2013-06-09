@@ -34,6 +34,7 @@ import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.light.AmbientLight;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.BloomFilter;
@@ -47,6 +48,7 @@ import com.jme3.shadow.EdgeFilteringMode;
 import com.jme3.shadow.PointLightShadowFilter;
 import com.jme3.shadow.PointLightShadowRenderer;
 import com.jme3.system.AppSettings;
+import com.jme3.system.Timer;
 import com.jme3.util.SkyFactory;
 
 @SuppressWarnings("deprecation")
@@ -54,10 +56,23 @@ public class SPPortal extends CelestialPortal{
 	
 	private BitmapFont guiFont;
 	private Star star;
+	private Timer timer;
+	private float lastRotation;
 	public static final int SHADOWMAP_SIZE = 1024;
 	public static float camHeight = 2f;
 
-	public SPPortal(Celestial parent, Node rootNode, Node guiNode, Camera cam, FlyByCamera flyCam, ViewPort viewPort, AssetManager assetManager, InputManager inputManager, AppSettings settings, Application app)
+	public SPPortal(
+			Celestial parent, 
+			Node rootNode, 
+			Node guiNode, 
+			Camera cam, 
+			FlyByCamera flyCam, 
+			ViewPort viewPort, 
+			AssetManager assetManager, 
+			InputManager inputManager, 
+			AppSettings settings, 
+			Application app,
+			Timer timer)
 	{
 		this.parent = parent;
 		this.rootNode = rootNode;
@@ -69,6 +84,7 @@ public class SPPortal extends CelestialPortal{
 		this.inputManager = inputManager;
 		this.settings = settings;
 		this.app = app;
+		this.timer = timer;
 	}
 
 	@Override
@@ -122,7 +138,7 @@ public class SPPortal extends CelestialPortal{
 
 		this.planets = new ArrayList<Planet>();
 
-		this.planets.add(new Planet(null, 5, new Vector3f(1000,-2300,-200)));
+		this.planets.add(new Planet(null, 3, new Vector3f(0,0,0)));
 
 		this.inputControl = new InputControl(this, this.cam, this.inputManager);
 
@@ -171,14 +187,14 @@ public class SPPortal extends CelestialPortal{
 		 * TODO: Rotation
 		 */
 		
-		/*if(this.planets.get(0) != null)
+		if(this.planets.get(0) != null)
 		{
 			if(this.timer.getTimeInSeconds()-this.lastRotation > 0)
 			{
 				this.lastRotation = this.timer.getTimeInSeconds();
-				this.planets.get(0).getPlanetNode().rotate(0.001f*FastMath.DEG_TO_RAD, 0.0001f*FastMath.DEG_TO_RAD, 0.0005f*FastMath.DEG_TO_RAD);
+				this.planets.get(0).rotate();
 			}
-		}*/
+		}
 		this.invmanager.refreshHotSlots();
 	}
 	
