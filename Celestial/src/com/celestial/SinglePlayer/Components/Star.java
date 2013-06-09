@@ -11,6 +11,7 @@ import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
@@ -64,6 +65,8 @@ public class Star {
 		mat.setBoolean("UseMaterialColors",true);
 		this.StarGeometry.setMaterial(mat);
 		this.StarNode.attachChild(this.StarGeometry);
+		
+		this.StarNode.setQueueBucket(Bucket.Opaque);
 		
 		light = new PointLight();
 		light.setPosition(location);

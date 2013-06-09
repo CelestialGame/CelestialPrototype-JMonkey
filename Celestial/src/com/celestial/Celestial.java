@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import com.celestial.Gui.Gui;
+import com.celestial.Gui.MainMenu;
 import com.celestial.MultiPlayer.MPPortal;
 import com.celestial.SinglePlayer.SPPortal;
 import com.jme3.app.Application;
@@ -63,8 +64,8 @@ public class Celestial extends SimpleApplication{
 				} catch(Exception e) {
 					System.out.println("Error setting Java LAF: " + e);
 				}
-				Gui frame = new Gui(cel);
-				frame.initGui();
+				MainMenu frame = new MainMenu(cel);
+				frame.init();
 				frame.setVisible(true);
 				Celestial.gui = frame;
 			}
@@ -73,7 +74,7 @@ public class Celestial extends SimpleApplication{
 
 	public static Canvas canvas;
 
-	public static Gui gui;
+	public static MainMenu gui;
 
 	public static final int SINGLEPLAYER = 0;
 	public static final int MULTIPLAYER = 1;
@@ -144,5 +145,10 @@ public class Celestial extends SimpleApplication{
 	@Override
 	public void simpleRender(RenderManager rm) {
 		Celestial.portal.simpleRender(rm);
+	}
+	
+	public static void toggleStats(boolean state) {
+		cel.setDisplayFps(state);
+		cel.setDisplayStatView(state);
 	}
 }

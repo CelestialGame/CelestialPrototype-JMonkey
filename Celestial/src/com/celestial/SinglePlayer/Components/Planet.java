@@ -13,11 +13,13 @@ import com.celestial.Blocks.BlocksEnum;
 import com.cubes.BlockChunkControl;
 import com.cubes.BlockChunkListener;
 import com.cubes.BlockTerrainControl;
+import com.cubes.BlockType;
 import com.cubes.Vector3Int;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -209,27 +211,21 @@ public class Planet implements BlockChunkListener {
 	}
 
 
-	private int getTopBlock(Vector3Int location, BlockTerrainControl blockTerrain2) {
-		try {
-			int x = +location.getX() / blockTerrain2.getSettings().getChunkSizeX();
-			int y = +location.getY() / blockTerrain2.getSettings().getChunkSizeY();
-			int z = +location.getZ() / blockTerrain2.getSettings().getChunkSizeZ();
-
-			while (blockTerrain2.getChunk(new Vector3Int(x, y, z)).isBlockOnSurface(location) == false) {
-				location.add(0, 1, 0);
-			}
-
-			int topBlock;
-			topBlock = location.getY();
-			return topBlock;
-		} catch (Exception e) {
-			//e.printStackTrace();
-			return 16;
-		}
-	}
+	private int getTopBlock(Vector3Int location, BlockChunkControl blockTerrain2) {
+        int height = 0;
+        for (int i = 0; i < 256; i++) {
+            BlockType block = blockTerrain2.getBlock(new Vector3Int(location.getX(), i, location.getZ()));
+            if (block != null) {
+                height++;
+            }
+        }
+        return height;
+    }
 
 	@Override
 	public void onSpatialUpdated(BlockChunkControl bcc) {
+		bcc.getOptimizedGeometry_Opaque().setQueueBucket(Bucket.Opaque);
+		bcc.getOptimizedGeometry_Transparent().setQueueBucket(Bucket.Transparent);
 		updateCollisionShape(bcc.getOptimizedGeometry_Opaque());
 		updateCollisionShape(bcc.getOptimizedGeometry_Transparent());
 	}
