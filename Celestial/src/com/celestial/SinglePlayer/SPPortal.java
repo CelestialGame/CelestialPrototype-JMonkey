@@ -122,7 +122,7 @@ public class SPPortal extends CelestialPortal{
 
 		this.planets = new ArrayList<Planet>();
 
-		this.planets.add(new Planet(null, 1, new Vector3f(1000,-2300,-200)));
+		this.planets.add(new Planet(null, 5, new Vector3f(1000,-2300,-200)));
 
 		this.inputControl = new InputControl(this, this.cam, this.inputManager);
 

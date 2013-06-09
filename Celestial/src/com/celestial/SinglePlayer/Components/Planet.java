@@ -86,7 +86,7 @@ public class Planet implements BlockChunkListener {
 		planetNode = new Node();
 		planetNode.attachChild(terrainNode);
 		
-		terrainNode.move(((diameter*16)-8)*-3,((diameter*16)-8)*-3,((diameter*16)-8)*-3);
+		terrainNode.move(((centerofdiam*16)-8)*-3,((centerofdiam*16)-8)*-3,((centerofdiam*16)-8)*-3);
 		planetNode.move(location);
 		Celestial.portal.getRootNode().attachChild(planetNode);
 	}
