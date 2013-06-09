@@ -6,11 +6,7 @@ Date Created:
 
 package com.celestial.SinglePlayer.Components;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.celestial.Celestial;
-import com.jme3.light.DirectionalLight;
 import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -19,7 +15,6 @@ import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
-import com.jme3.scene.shape.Sphere;
 
 
 public class Star {
@@ -58,7 +53,7 @@ public class Star {
 	{
 		StarNode = new Node();
 		
-		Box starsphere = new Box(50,50,50);
+		Box starsphere = new Box(500,500,500);
 		this.StarGeometry = new Geometry("Star", starsphere);
 		Material mat = new Material(Celestial.portal.getAssetManager(),  // Create new material and...
 			    "Common/MatDefs/Light/Lighting.j3md");
@@ -76,7 +71,7 @@ public class Star {
 		light = new PointLight();
 		light.setPosition(location);
 		light.setColor(ColorRGBA.White);
-		light.setRadius(50000f);
+		light.setRadius(65000f);
 		
 		this.StarNode.addLight(light);
 		this.StarNode.move(location);

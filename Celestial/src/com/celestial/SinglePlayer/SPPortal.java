@@ -59,7 +59,6 @@ import com.jme3.util.SkyFactory;
 @SuppressWarnings("deprecation")
 public class SPPortal extends CelestialPortal{
 	
-	private Celestial parent;
 	private BitmapFont guiFont;
 	private Star star;
 	public static final int SHADOWMAP_SIZE = 1024;
@@ -129,8 +128,7 @@ public class SPPortal extends CelestialPortal{
 		this.down = false;
 
 		this.planets = new ArrayList<Planet>();
-
-		this.planets.add(new Planet(null, 1, new Vector3f(700,-300,-700)));
+		this.planets.add(new Planet(null, 5, new Vector3f(1000,-2300,-200)));
 
 		this.inputControl = new InputControl(this, this.cam, this.inputManager);
 
@@ -194,8 +192,8 @@ public class SPPortal extends CelestialPortal{
 	
 	private void initLighting() {	  
 		AmbientLight al = new AmbientLight();
-		al.setColor(ColorRGBA.White.mult(1.3f));
-		this.rootNode.addLight(al);
+		al.setColor(ColorRGBA.White);
+		rootNode.addLight(al);
 		
 		this.rootNode.addLight(this.star.getLight());
 		

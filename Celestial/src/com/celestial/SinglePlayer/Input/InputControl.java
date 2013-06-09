@@ -70,6 +70,7 @@ public class InputControl {
 		inputManager.addMapping("Slot7", new KeyTrigger(KeyInput.KEY_7));
 		inputManager.addMapping("Slot8", new KeyTrigger(KeyInput.KEY_8));
 		inputManager.addMapping("Slot9", new KeyTrigger(KeyInput.KEY_9));
+		inputManager.addMapping("Respawn", new KeyTrigger(KeyInput.KEY_R));
 		inputManager.addListener(actionListener, "Left");
 		inputManager.addListener(actionListener, "Right");
 		inputManager.addListener(actionListener, "Up");
@@ -87,6 +88,7 @@ public class InputControl {
 		inputManager.addListener(actionListener, "Slot7");
 		inputManager.addListener(actionListener, "Slot8");
 		inputManager.addListener(actionListener, "Slot9");
+		inputManager.addListener(actionListener, "Respawn");
 	}
 
 	private ActionListener actionListener = new ActionListener() {
@@ -255,6 +257,11 @@ public class InputControl {
 			}
 			else if(binding.equals("Slot9") && !keyPressed) {
 				parent.getInventoryManager().setSelectedHotSlot(9);
+			}
+			else if(binding.equals("Respawn") && !keyPressed)
+			{
+				parent.player.setPhysicsLocation(parent.planets.get(0).getSpawnLocation());
+				parent.cam.setLocation(new Vector3f(parent.player.getPhysicsLocation().getX(), parent.player.getPhysicsLocation().getY()+parent.getCamHeight(), parent.player.getPhysicsLocation().getZ()));
 			}
 		}
 	};
