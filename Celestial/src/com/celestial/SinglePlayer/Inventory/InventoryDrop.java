@@ -52,7 +52,7 @@ public class InventoryDrop{
 		
 		this.itemdrop.setLocalTranslation(location);
 		
-		this.itemdrop.setQueueBucket(Bucket.Transparent); 
+		this.itemdrop.setQueueBucket(Bucket.Transparent);
 		this.itemdrop.setShadowMode(ShadowMode.Cast);
 		
 		this.rigidBodyControl = new RigidBodyControl();

@@ -8,6 +8,7 @@ import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
 import com.celestial.Blocks.*;
 import com.celestial.Gui.Gui;
+import com.celestial.Gui.MainMenu;
 import com.celestial.SinglePlayer.Inventory.InventoryItem;
 import com.celestial.World.Picker;
 import com.cubes.Block;
@@ -214,18 +215,16 @@ public class InputControl {
 			else if(binding.equals("ESC"))
 			{
 				parent.app.stop();
-				Celestial.gui.gamePane.remove(Celestial.canvas);
-				Celestial.gui.changeCard(Gui.MAIN);
+				Celestial.gui.topcardPane.remove(Celestial.canvas);
+				Celestial.gui.changeCard(MainMenu.MAIN);
 			}
 			else if(binding.equals("SeeStats") && !keyPressed) {
 				if(statson) {
-					parent.setDisplayFps(false);
-					parent.setDisplayStatView(false);
+					Celestial.toggleStats(false);
 					parent.getGuiNode().detachChild(parent.InvText);
 					statson = false;
 				} else {
-					parent.setDisplayFps(true);
-					parent.setDisplayStatView(true);
+					Celestial.toggleStats(true);
 					parent.getGuiNode().attachChild(parent.InvText);
 					statson = true;
 				}

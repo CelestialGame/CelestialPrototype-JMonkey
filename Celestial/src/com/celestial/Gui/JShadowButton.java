@@ -23,8 +23,8 @@ public class JShadowButton extends JButton {
 	public JShadowButton(String text, Float size, Font font, Color c) {
 		super();
 		this.text = text;
-		f = font.deriveFont(size);
-		color = c;
+		this.f = font.deriveFont(size);
+		this.color = c;
 	}
 
 	@Override
@@ -32,24 +32,24 @@ public class JShadowButton extends JButton {
 		Graphics2D g2 = (Graphics2D) g.create();		
 		
 		g2.setPaint(Color.DARK_GRAY);
-		g2.setFont(f);
+		g2.setFont(this.f);
 		int stringLen = (int)
-				g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+				g2.getFontMetrics().getStringBounds(this.text, g2).getWidth();
 		int stringTall = (int)
-				g2.getFontMetrics().getStringBounds(text, g2).getHeight();
+				g2.getFontMetrics().getStringBounds(this.text, g2).getHeight();
 		int startx = this.getWidth()/2 - stringLen/2+2;
 		int starty = this.getHeight()/2 + stringTall/4+2;
-		g2.drawString(text, startx, starty);
+		g2.drawString(this.text, startx, starty);
 		
-		g2.setPaint(color);
-		g2.setFont(f);
+		g2.setPaint(this.color);
+		g2.setFont(this.f);
 		stringLen = (int)
-				g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+				g2.getFontMetrics().getStringBounds(this.text, g2).getWidth();
 		stringTall = (int)
-				g2.getFontMetrics().getStringBounds(text, g2).getHeight();
+				g2.getFontMetrics().getStringBounds(this.text, g2).getHeight();
 		startx = this.getWidth()/2 - stringLen/2;
 		starty = this.getHeight()/2 + stringTall/4;
-		g2.drawString(text, startx, starty);
+		g2.drawString(this.text, startx, starty);
 		
 		g2.dispose();
 	}

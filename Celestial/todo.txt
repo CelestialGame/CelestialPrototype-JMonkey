@@ -5,3 +5,10 @@ Inventory: (Kevin)
 	- GUI
 
 Planet Generation: (Mitch)
+
+Planet - Sun:
+	orbit
+	revolution
+	rotation
+	distance calcuation (too close and you burn up!)
+	

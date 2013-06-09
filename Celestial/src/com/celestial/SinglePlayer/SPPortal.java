@@ -8,6 +8,9 @@ package com.celestial.SinglePlayer;
 
 import java.util.ArrayList;
 
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
 import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
 import com.celestial.Blocks.Blocks;
@@ -22,6 +25,7 @@ import com.celestial.util.InventoryException;
 import com.cubes.CubesSettings;
 import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
@@ -34,18 +38,23 @@ import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.light.AmbientLight;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.BloomFilter;
+import com.jme3.post.filters.LightScatteringFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.shadow.EdgeFilteringMode;
 import com.jme3.shadow.PointLightShadowFilter;
 import com.jme3.shadow.PointLightShadowRenderer;
 import com.jme3.system.AppSettings;
+import com.jme3.util.SkyFactory;
 
 @SuppressWarnings("deprecation")
 public class SPPortal extends CelestialPortal{
@@ -72,17 +81,17 @@ public class SPPortal extends CelestialPortal{
 
 	@Override
 	public void startGame() {
-		parent.getInputManager().setCursorVisible(true);
+		this.parent.getInputManager().setCursorVisible(true);
 
-		csettings = new CubesSettings(Celestial.app);
-		csettings.setDefaultBlockMaterial("assets/textures/terrain.png");
-		csettings.setChunkSizeX(16);
-		csettings.setChunkSizeY(16);
-		csettings.setChunkSizeZ(16);
+		this.csettings = new CubesSettings(Celestial.app);
+		this.csettings.setDefaultBlockMaterial("assets/textures/terrain.png");
+		this.csettings.setChunkSizeX(16);
+		this.csettings.setChunkSizeY(16);
+		this.csettings.setChunkSizeZ(16);
 
 		/** Set up Physics **/
 		this.bulletAppState = new BulletAppState();
-		parent.getStateManager().attach(this.getBulletAppState());
+		this.parent.getStateManager().attach(this.getBulletAppState());
 
 		Blocks.init();
 
@@ -121,18 +130,18 @@ public class SPPortal extends CelestialPortal{
 
 		this.planets = new ArrayList<Planet>();
 
-		this.planets.add(new Planet(null, 1, new Vector3f(300,-100,-400)));
+		this.planets.add(new Planet(null, 1, new Vector3f(700,-300,-700)));
 
 		this.inputControl = new InputControl(this, this.cam, this.inputManager);
 
-		//Spatial sky = SkyFactory.createSky(this.assetManager, "assets/textures/nightsky.jpg", true);
-		//sky.scale(-1, -1, 1);
-		//this.rootNode.attachChild(sky);
+		Spatial sky = SkyFactory.createSky(this.assetManager, "assets/textures/nightsky.jpg", true);
+		sky.rotate(270*FastMath.DEG_TO_RAD,0,0);
+		this.rootNode.attachChild(sky);
 
 
 		// You must add a light to make the model visible
 		this.star = new Star(null, new Vector3f(0,0,0));
-		rootNode.attachChild(this.star.getStarNode());
+		this.rootNode.attachChild(this.star.getStarNode());
 		
 		/** TODO: lighting fix -_- :P **/
 		initLighting();
@@ -142,7 +151,7 @@ public class SPPortal extends CelestialPortal{
 		this.player.setJumpSpeed(20);
 		this.player.setFallSpeed(30);
 		this.player.setGravity(50);
-		this.player.setPhysicsLocation(planets.get(0).getSpawnLocation());
+		this.player.setPhysicsLocation(this.planets.get(0).getSpawnLocation());
 		this.player.getCollisionGroup();
 		this.flyCam.setMoveSpeed(100);
 		this.cam.setFrustumFar(65000);
@@ -157,8 +166,10 @@ public class SPPortal extends CelestialPortal{
 		this.bulletAppState.getPhysicsSpace().add(this.player);
 		Celestial.gui.changeCard(Gui.GAME);
 		
-		rootNode.setShadowMode(ShadowMode.Off);
+		this.rootNode.setShadowMode(ShadowMode.Off);
 		terrnode.setShadowMode(ShadowMode.CastAndReceive);
+		
+		initAudio();
 	}
 	
 	@Override
@@ -184,7 +195,7 @@ public class SPPortal extends CelestialPortal{
 	private void initLighting() {	  
 		AmbientLight al = new AmbientLight();
 		al.setColor(ColorRGBA.White.mult(1.3f));
-		rootNode.addLight(al);
+		this.rootNode.addLight(al);
 		
 		this.rootNode.addLight(this.star.getLight());
 		
@@ -192,8 +203,8 @@ public class SPPortal extends CelestialPortal{
         plsr.setLight(this.star.getLight());
         plsr.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
         //plsr.setFlushQueues(false);
-        plsr.displayFrustum();
-        plsr.displayDebug();
+        //plsr.displayFrustum();
+        //plsr.displayDebug();
         this.viewPort.addProcessor(plsr);
         
         PointLightShadowFilter plsf = new PointLightShadowFilter(this.assetManager, SHADOWMAP_SIZE);
@@ -207,6 +218,17 @@ public class SPPortal extends CelestialPortal{
         fpp.addFilter(plsf);
         
         this.viewPort.addProcessor(fpp);
+	}
+	
+	public void initAudio() {
+		/* nature sound - keeps playing in a loop. */
+	    AudioNode audio_ambient = new AudioNode(this.assetManager, "assets/sounds/ambient/DST-ArcOfDawn.ogg", false);
+	    audio_ambient.setLooping(true);  // activate continuous playing
+	    audio_ambient.setPositional(false);
+	    //audio_ambient.setLocalTranslation(Vector3f.ZERO.clone());
+	    audio_ambient.setVolume(3);
+	    this.rootNode.attachChild(audio_ambient);
+	    audio_ambient.play(); // play continuously!
 	}
 	
 	public void updateCamera(float tpf) {
@@ -229,11 +251,13 @@ public class SPPortal extends CelestialPortal{
 		} else {
 			//pass
 		}
+		this.parent.getListener().setLocation(this.cam.getLocation());
+		this.parent.getListener().setRotation(this.cam.getRotation());
 		
-		if(this.player.getPhysicsLocation().getY() <= -150 || this.cam.getLocation().getY() <= -150) {
+		/*if(this.player.getPhysicsLocation().getY() <= -150 || this.cam.getLocation().getY() <= -150) {
 			this.player.setPhysicsLocation(this.planets.get(0).getSpawnLocation());
 			this.cam.setLocation(new Vector3f(this.player.getPhysicsLocation().getX(), this.player.getPhysicsLocation().getY()+camHeight, this.player.getPhysicsLocation().getZ()));
-		}
+		}*/
 	}
 	public void updateStats(float tpf) {
 		if(this.invmanager.getSelectedHotSlot().getItem() != null) {
@@ -253,7 +277,7 @@ public class SPPortal extends CelestialPortal{
 	}
 		
 	protected void initCrossHairs() {
-		this.guiFont = parent.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
+		this.guiFont = this.parent.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
 		BitmapText ch = new BitmapText(this.guiFont, false);
 		ch.setSize(this.guiFont.getCharSet().getRenderedSize() * 2);
 		ch.setText("+"); // crosshairs
@@ -281,7 +305,7 @@ public class SPPortal extends CelestialPortal{
 
 	@Override
 	public CharacterControl getPlayer() {
-		return player;
+		return this.player;
 	}
 
 	@Override
