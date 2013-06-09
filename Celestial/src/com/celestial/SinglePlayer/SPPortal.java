@@ -32,8 +32,11 @@ import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
+import com.jme3.light.AmbientLight;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.BloomFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -131,6 +134,7 @@ public class SPPortal extends CelestialPortal{
 		this.star = new Star(null, new Vector3f(0,0,0));
 		rootNode.attachChild(this.star.getStarNode());
 		
+		/** TODO: lighting fix -_- :P **/
 		initLighting();
 
 		CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f, 2f, 1);
@@ -148,11 +152,13 @@ public class SPPortal extends CelestialPortal{
 		CollisionShape sceneShape = CollisionShapeFactory.createMeshShape(terrnode);
 		RigidBodyControl landscape = new RigidBodyControl(sceneShape, 0.0f);
 		terrnode.addControl(landscape);
-		this.getBulletAppState().getPhysicsSpace().add(terrnode);
-		terrnode.setShadowMode(ShadowMode.CastAndReceive);
+		this.bulletAppState.getPhysicsSpace().add(terrnode);
 		this.rootNode.attachChild(planetnode);
-		this.getBulletAppState().getPhysicsSpace().add(this.player);
+		this.bulletAppState.getPhysicsSpace().add(this.player);
 		Celestial.gui.changeCard(Gui.GAME);
+		
+		rootNode.setShadowMode(ShadowMode.Off);
+		terrnode.setShadowMode(ShadowMode.CastAndReceive);
 	}
 	
 	@Override
@@ -176,23 +182,31 @@ public class SPPortal extends CelestialPortal{
 	}
 	
 	private void initLighting() {	  
-		rootNode.addLight(star.getLight());
-	    PointLightShadowRenderer plsr = new PointLightShadowRenderer(assetManager, SHADOWMAP_SIZE);
+		AmbientLight al = new AmbientLight();
+		al.setColor(ColorRGBA.White.mult(1.3f));
+		rootNode.addLight(al);
+		
+		this.rootNode.addLight(this.star.getLight());
+		
+	    PointLightShadowRenderer plsr = new PointLightShadowRenderer(this.assetManager, SHADOWMAP_SIZE);
         plsr.setLight(this.star.getLight());
-        plsr.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
-       // plsr.setFlushQueues(false);
+        plsr.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
+        //plsr.setFlushQueues(false);
         plsr.displayFrustum();
         plsr.displayDebug();
-        viewPort.addProcessor(plsr);
+        this.viewPort.addProcessor(plsr);
         
-        PointLightShadowFilter plsf = new PointLightShadowFilter(assetManager, SHADOWMAP_SIZE);
-        plsf.setLight(star.getLight());     
-        plsf.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
+        PointLightShadowFilter plsf = new PointLightShadowFilter(this.assetManager, SHADOWMAP_SIZE);
+        plsf.setLight(this.star.getLight());     
+        plsf.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
         plsf.setEnabled(true);
 
-        FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
+        FilterPostProcessor fpp = new FilterPostProcessor(this.assetManager);
+        BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
+        fpp.addFilter(bloom);
         fpp.addFilter(plsf);
-        viewPort.addProcessor(fpp);
+        
+        this.viewPort.addProcessor(fpp);
 	}
 	
 	public void updateCamera(float tpf) {

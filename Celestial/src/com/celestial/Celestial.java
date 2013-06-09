@@ -1,8 +1,6 @@
 package com.celestial;
 
 import java.awt.Canvas;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
@@ -11,36 +9,12 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import com.celestial.Blocks.Blocks;
-import com.celestial.Blocks.BlocksEnum;
 import com.celestial.Gui.Gui;
 import com.celestial.MultiPlayer.MPPortal;
 import com.celestial.SinglePlayer.SPPortal;
-import com.celestial.SinglePlayer.Components.Planet;
-import com.celestial.SinglePlayer.Input.InputControl;
-import com.celestial.SinglePlayer.Components.Star;
-import com.celestial.SinglePlayer.Inventory.InventoryManager;
-import com.celestial.SinglePlayer.Inventory.InventoryRegister;
-import com.celestial.util.InventoryException;
-import com.cubes.CubesSettings;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
-import com.jme3.asset.AssetManager;
-import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
-import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.bullet.control.CharacterControl;
-import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.bullet.util.CollisionShapeFactory;
-import com.jme3.font.BitmapText;
-import com.jme3.math.Vector3f;
-import com.jme3.post.FilterPostProcessor;
 import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.queue.RenderQueue.ShadowMode;
-import com.jme3.scene.Node;
-import com.jme3.shadow.EdgeFilteringMode;
-import com.jme3.shadow.PointLightShadowFilter;
-import com.jme3.shadow.PointLightShadowRenderer;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeCanvasContext;
 import com.jme3.util.JmeFormatter;
@@ -49,7 +23,6 @@ import com.jme3.util.JmeFormatter;
  * test
  * @author kevint
  */
-@SuppressWarnings("deprecation")
 public class Celestial extends SimpleApplication{
 
 	public static Application app;
@@ -104,6 +77,7 @@ public class Celestial extends SimpleApplication{
 
 	public static final int SINGLEPLAYER = 0;
 	public static final int MULTIPLAYER = 1;
+
 	
 	private static int type;
 
@@ -160,5 +134,4 @@ public class Celestial extends SimpleApplication{
 	public void simpleRender(RenderManager rm) {
 		Celestial.portal.simpleRender(rm);
 	}
-
 }
