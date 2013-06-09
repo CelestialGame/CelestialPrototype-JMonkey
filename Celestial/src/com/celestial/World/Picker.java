@@ -48,7 +48,7 @@ public class Picker {
 			Vector3f rotatedContactPoint = q.mult(collisionContactPoint);
 			Vector3f rotatedTranslation = q.mult(terrNode.getWorldTranslation());
 			Vector3f originalTranslation = parent.planets.get(0).getOriginalTranslation();
-			System.out.println(collisionContactPoint);
+			System.out.println(rotatedContactPoint + " - " + originalTranslation);
 			rotatedContactPoint = smartRound(rotatedContactPoint, false);
 			Vector3f relContactPoint = new Vector3f(
 					rotatedContactPoint.getX() - originalTranslation.getX(),

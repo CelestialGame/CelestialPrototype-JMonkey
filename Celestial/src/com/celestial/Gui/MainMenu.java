@@ -110,9 +110,9 @@ public class MainMenu extends JFrame implements ActionListener, MouseListener{
 				new JLabel("<html><div style='margin-top:20px;background-color:black;'><img src='"+MainMenu.class.getResource("/assets/images/Logo_119px.png")+"'></div></html>", SwingConstants.CENTER);
 		this.mainPane.add(mainlabel, BorderLayout.NORTH);
 		
-		JMEBackground.jmebg = new JMEBackground();
+		/*JMEBackground.jmebg = new JMEBackground();
 		JMEBackground.createNewCanvas();
-		this.mainPane.add(JMEBackground.canvas, BorderLayout.CENTER);
+		this.mainPane.add(JMEBackground.canvas, BorderLayout.CENTER);*/
 		
 		JPanel glassbg = new JPanel();
 		this.spplay = new JButton("SinglePlayer");

@@ -189,14 +189,14 @@ public class SPPortal extends CelestialPortal{
 		 * TODO: Rotation
 		 */
 		
-		if(this.planets.get(0) != null)
+		/*if(this.planets.get(0) != null)
 		{
 			if(this.timer.getTimeInSeconds()-this.lastRotation > 0)
 			{
 				this.lastRotation = this.timer.getTimeInSeconds();
 				this.planets.get(0).rotate();
 			}
-		}
+		}*/
 		this.invmanager.refreshHotSlots();
 	}
 	
