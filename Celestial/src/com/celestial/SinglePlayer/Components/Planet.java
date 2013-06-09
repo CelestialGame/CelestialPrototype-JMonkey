@@ -54,7 +54,7 @@ public class Planet implements BlockChunkListener {
 	private void generatePlanet() {
 		terrainNode = new Node();
 		System.out.println(terrainNode.getWorldTranslation());
-		terrcontrol = new BlockTerrainControl(Celestial.csettings, new Vector3Int(diameter, diameter, diameter));
+		terrcontrol = new BlockTerrainControl(Celestial.portal.csettings, new Vector3Int(diameter, diameter, diameter));
 		terrcontrol.addChunkListener(this);
 
 		for(int i=0; i<diameter; i++) //y
@@ -88,7 +88,7 @@ public class Planet implements BlockChunkListener {
 		
 		terrainNode.move(((diameter*16)-8)*-3,((diameter*16)-8)*-3,((diameter*16)-8)*-3);
 		planetNode.move(location);
-		Celestial.self.getRootNode().attachChild(planetNode);
+		Celestial.portal.getRootNode().attachChild(planetNode);
 	}
 
 	public void makeChunk(int locx, int locy, int locz, BlockTerrainControl blockTerrain)
@@ -225,11 +225,11 @@ public class Planet implements BlockChunkListener {
 		if(chunkGeometry.getTriangleCount() > 0){
 			if(rigidBodyControl != null){
 				chunkGeometry.removeControl(rigidBodyControl);
-				Celestial.self.bulletAppState.getPhysicsSpace().remove(rigidBodyControl);
+				Celestial.portal.getBulletAppState().getPhysicsSpace().remove(rigidBodyControl);
 			}
 			rigidBodyControl = new RigidBodyControl(0);
 			chunkGeometry.addControl(rigidBodyControl);
-			Celestial.self.bulletAppState.getPhysicsSpace().add(rigidBodyControl);
+			Celestial.portal.getBulletAppState().getPhysicsSpace().add(rigidBodyControl);
 		}
 		else{
 			if(rigidBodyControl != null){

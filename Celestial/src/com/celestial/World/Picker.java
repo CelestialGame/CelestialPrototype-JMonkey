@@ -5,6 +5,7 @@
 package com.celestial.World;
 
 import com.celestial.Celestial;
+import com.celestial.CelestialPortal;
 import com.cubes.Block;
 import com.cubes.BlockChunkControl;
 import com.cubes.BlockNavigator;
@@ -25,7 +26,7 @@ import java.util.List;
  */
 public class Picker {
 
-	private static CollisionResults getRayCastingResults(Node node, Celestial parent, Camera cam){
+	private static CollisionResults getRayCastingResults(Node node, CelestialPortal parent, Camera cam){
 		Vector3f origin = cam.getWorldCoordinates(new Vector2f((parent.getSettings().getWidth() / 2), (parent.getSettings().getHeight() / 2)), 0.0f);
 		Vector3f direction = cam.getWorldCoordinates(new Vector2f((parent.getSettings().getWidth() / 2), (parent.getSettings().getHeight() / 2)), 0.3f);
 		direction.subtractLocal(origin).normalizeLocal();
@@ -34,7 +35,7 @@ public class Picker {
 		node.collideWith(ray, results);
 		return results;
 	}
-	public static Object[] getCurrentPointedBlockLocation(boolean getNeighborLocation, Celestial parent, Camera cam){
+	public static Object[] getCurrentPointedBlockLocation(boolean getNeighborLocation, CelestialPortal parent, Camera cam){
 		Object[] values = new Object[2];
 		Node terrNode = parent.planets.get(0).getTerrainNode();
 		BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
@@ -60,7 +61,7 @@ public class Picker {
 		}
 		return null;
 	}
-	public static BlockChunkControl getCurrentPointedBlock(boolean getNeighborLocation, Celestial parent, Camera cam) {
+	public static BlockChunkControl getCurrentPointedBlock(boolean getNeighborLocation, CelestialPortal parent, Camera cam) {
 		Node terrNode = parent.planets.get(0).getTerrainNode();
 		BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
 		CollisionResults results = getRayCastingResults(terrNode, parent, cam);

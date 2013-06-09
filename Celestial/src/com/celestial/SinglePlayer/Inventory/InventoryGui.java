@@ -3,6 +3,7 @@ package com.celestial.SinglePlayer.Inventory;
 import java.util.List;
 
 import com.celestial.Celestial;
+import com.celestial.CelestialPortal;
 import com.jme3.scene.Node;
 import com.jme3.ui.Picture;
 
@@ -14,13 +15,13 @@ import com.jme3.ui.Picture;
  */
 public class InventoryGui {
 
-	Celestial parent;
+	CelestialPortal parent;
 	
 	private Picture hotbarsel;
 	
 	Node hotbaricons = new Node();
 	
-	public InventoryGui(Celestial parent) {
+	public InventoryGui(CelestialPortal parent) {
 		this.parent = parent;
 		
 		initHotBar();
@@ -33,20 +34,20 @@ public class InventoryGui {
 		pic.setWidth(342);
 		pic.setHeight(38);
 		pic.setPosition(0, this.parent.getSettings().getHeight() - 63);
-		this.parent.getguiNode().attachChild(pic);
+		this.parent.getGuiNode().attachChild(pic);
 		
 		this.hotbarsel = new Picture("HotBarSelection");
 		this.hotbarsel.setImage(this.parent.getAssetManager(), "/assets/textures/inventory/selected.png", true);
 		this.hotbarsel.setWidth(38);
 		this.hotbarsel.setHeight(38);
 		this.hotbarsel.setPosition(0, this.parent.getSettings().getHeight() - 63);
-		this.parent.getguiNode().attachChild(this.hotbarsel);
+		this.parent.getGuiNode().attachChild(this.hotbarsel);
 		
-		this.parent.getguiNode().attachChild(this.hotbaricons);
+		this.parent.getGuiNode().attachChild(this.hotbaricons);
 	}
 	
 	public void updateHotBar() {
-		this.parent.getguiNode().detachChild(this.hotbaricons);
+		this.parent.getGuiNode().detachChild(this.hotbaricons);
 		this.hotbaricons.detachAllChildren();
 		List<InventorySlot> slots = this.parent.getInventoryManager().getAllHotSlots();
 		for(InventorySlot slot : slots) {
@@ -59,7 +60,7 @@ public class InventoryGui {
 				this.hotbaricons.attachChild(pic);
 			}
 		}
-		this.parent.getguiNode().attachChild(this.hotbaricons);
+		this.parent.getGuiNode().attachChild(this.hotbaricons);
 	}
 	
 	public void setHotBarSelection(int slot) {

@@ -5,6 +5,7 @@
 package com.celestial.SinglePlayer.Input;
 
 import com.celestial.Celestial;
+import com.celestial.CelestialPortal;
 import com.celestial.Blocks.*;
 import com.celestial.Gui.Gui;
 import com.celestial.SinglePlayer.Inventory.InventoryItem;
@@ -32,13 +33,13 @@ import com.jme3.renderer.Camera;
  */
 public class InputControl {
 
-	Celestial parent;
+	CelestialPortal parent;
 
 	Camera cam;
 
 	public static boolean statson = false;
 
-	public InputControl(Celestial parent, Camera cam, InputManager inputManager) {
+	public InputControl(CelestialPortal parent, Camera cam, InputManager inputManager) {
 		this.parent = parent;
 		this.cam = cam;
 
@@ -105,9 +106,9 @@ public class InputControl {
 				Vector3f blockAbsLocation = (Vector3f) values[0];
 				if(blockLocation != null)
 				{
-					float dist = parent.player.getPhysicsLocation().distance(blockAbsLocation);
+					float dist = parent.getPlayer().getPhysicsLocation().distance(blockAbsLocation);
 					InventoryItem item;
-					if(!parent.bulletAppState.isEnabled()) //Are they flying?
+					if(!parent.getBulletAppState().isEnabled()) //Are they flying?
 					{
 						BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
 						if(chunk != null && blockLocation != null) {
@@ -169,7 +170,7 @@ public class InputControl {
 				Vector3f blockAbsLocation = (Vector3f) values[0];
 				if(blockLocation != null){
 					float dist = parent.player.getPhysicsLocation().distance(blockAbsLocation);
-					if(!parent.bulletAppState.isEnabled()) //Are they flying?
+					if(!parent.getBulletAppState().isEnabled()) //Are they flying?
 					{
 						BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
 						if(chunk != null && blockLocation != null && parent.getInventoryManager().getSelectedHotSlot().getItem() != null) {
@@ -202,30 +203,30 @@ public class InputControl {
 				parent.player.jump();
 			}
 			else if(binding.equals("NoClip") && !keyPressed) {
-				if(parent.bulletAppState.isEnabled()) {
-					parent.bulletAppState.setEnabled(false);
+				if(parent.getBulletAppState().isEnabled()) {
+					parent.getBulletAppState().setEnabled(false);
 					parent.setCamSpeed(100);
 				} else {
-					parent.bulletAppState.setEnabled(true);
-					parent.player.setPhysicsLocation(new Vector3f(cam.getLocation().getX(), cam.getLocation().getY()-Celestial.camHeight, cam.getLocation().getZ()));
+					parent.getBulletAppState().setEnabled(true);
+					parent.player.setPhysicsLocation(new Vector3f(cam.getLocation().getX(), cam.getLocation().getY()-parent.getCamHeight(), cam.getLocation().getZ()));
 				}
 			}
 			else if(binding.equals("ESC"))
 			{
-				Celestial.app.stop();
+				parent.app.stop();
 				Celestial.gui.gamePane.remove(Celestial.canvas);
 				Celestial.gui.changeCard(Gui.MAIN);
 			}
 			else if(binding.equals("SeeStats") && !keyPressed) {
 				if(statson) {
-					Celestial.self.setDisplayFps(false);
-					Celestial.self.setDisplayStatView(false);
-					Celestial.self.getguiNode().detachChild(Celestial.self.InvText);
+					parent.setDisplayFps(false);
+					parent.setDisplayStatView(false);
+					parent.getGuiNode().detachChild(parent.InvText);
 					statson = false;
 				} else {
-					Celestial.self.setDisplayFps(true);
-					Celestial.self.setDisplayStatView(true);
-					Celestial.self.getguiNode().attachChild(Celestial.self.InvText);
+					parent.setDisplayFps(true);
+					parent.setDisplayStatView(true);
+					parent.getGuiNode().attachChild(parent.InvText);
 					statson = true;
 				}
 			}

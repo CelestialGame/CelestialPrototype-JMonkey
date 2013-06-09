@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.celestial.Celestial;
+import com.celestial.CelestialPortal;
 import com.celestial.util.FixedHashMap;
 import com.celestial.util.InventoryException;
 import com.cubes.Block;
@@ -51,7 +52,7 @@ public class InventoryManager {
 	Node dropitemsnode;
 	List<InventoryDrop> dropitems;
 	
-	public InventoryManager() {
+	public InventoryManager(CelestialPortal parent) {
 		this.items = new HashMap<Integer, InventoryItem>();
 		this.dropitems = new ArrayList<InventoryDrop>();
 		
@@ -80,10 +81,10 @@ public class InventoryManager {
 		
 		this.selectedhotslot = this.hotslot1;
 		
-		this.inventorygui = new InventoryGui(Celestial.self);
+		this.inventorygui = new InventoryGui(parent);
 		
 		this.dropitemsnode = new Node();
-		Celestial.self.getRootNode().attachChild(this.dropitemsnode);
+		parent.getRootNode().attachChild(this.dropitemsnode);
 		
 		//TODO Add extended inv (stuffs not in the hotbar
 		

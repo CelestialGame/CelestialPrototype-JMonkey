@@ -36,10 +36,10 @@ public class InventoryDrop{
 		mat.setBoolean("UseAlpha",true);*/
 		
 		/** if theres no light, use this **/
-		Material mat = new Material(Celestial.self.getAssetManager(),  // Create new material and...
+		Material mat = new Material(Celestial.portal.getAssetManager(),  // Create new material and...
 				"Common/MatDefs/Misc/Unshaded.j3md");
 		//mat.setColor("Color", new ColorRGBA(0,0,0,1f));
-		mat.setTexture("ColorMap", Celestial.self.getAssetManager().loadTexture(item.getIcon()));
+		mat.setTexture("ColorMap", Celestial.portal.getAssetManager().loadTexture(item.getIcon()));
 		
 		mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
 		
@@ -53,10 +53,10 @@ public class InventoryDrop{
 		this.itemdrop.setQueueBucket(Bucket.Translucent); 
 		
 		this.rigidBodyControl = new RigidBodyControl();
-		this.rigidBodyControl.removeCollideWithGroup(Celestial.self.player.getCollisionGroup());
+		this.rigidBodyControl.removeCollideWithGroup(Celestial.portal.player.getCollisionGroup());
         this.itemdrop.addControl(rigidBodyControl);
-        Celestial.self.player.removeCollideWithGroup(this.rigidBodyControl.getCollisionGroup());
-        Celestial.self.getPhysics().getPhysicsSpace().add(this.itemdrop);
+        Celestial.portal.player.removeCollideWithGroup(this.rigidBodyControl.getCollisionGroup());
+        Celestial.portal.getPhysics().getPhysicsSpace().add(this.itemdrop);
         
         this.item = item;
 	}

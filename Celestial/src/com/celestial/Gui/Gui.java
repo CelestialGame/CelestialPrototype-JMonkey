@@ -222,7 +222,7 @@ public class Gui extends JFrame implements ActionListener, MouseListener {
 		if(arg0.getSource().equals(this.btnPlay))
 		{
 			this.changeCard(GAMELOAD);
-			Celestial.createNewCanvas();
+			Celestial.createNewCanvas(Celestial.SINGLEPLAYER);
 			gamePane.add(Celestial.canvas, BorderLayout.CENTER);
 			Celestial.app.startCanvas(true);
 		}

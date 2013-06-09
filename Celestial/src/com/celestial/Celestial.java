@@ -14,6 +14,8 @@ import javax.swing.UIManager;
 import com.celestial.Blocks.Blocks;
 import com.celestial.Blocks.BlocksEnum;
 import com.celestial.Gui.Gui;
+import com.celestial.MultiPlayer.MPPortal;
+import com.celestial.SinglePlayer.SPPortal;
 import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.SinglePlayer.Input.InputControl;
 import com.celestial.SinglePlayer.Components.Star;
@@ -55,9 +57,11 @@ public class Celestial extends SimpleApplication{
 	public static int width;
 	public static int height;
 	public static String title;
+	private static Celestial cel;
 
 	public static void main(String[] args) {
-		Celestial.self = new Celestial();
+		cel = new Celestial();
+		
 		JmeFormatter formatter = new JmeFormatter();
 
 		Handler consoleHandler = new ConsoleHandler();
@@ -75,8 +79,8 @@ public class Celestial extends SimpleApplication{
 		Celestial.height = 500;
 		Celestial.title = "Celestial";
 
-		Celestial.self.setDisplayFps(false);
-		Celestial.self.setDisplayStatView(false);
+		cel.setDisplayFps(false);
+		cel.setDisplayStatView(false);
 
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
@@ -86,7 +90,7 @@ public class Celestial extends SimpleApplication{
 				} catch(Exception e) {
 					System.out.println("Error setting Java LAF: " + e);
 				}
-				Gui frame = new Gui(Celestial.self);
+				Gui frame = new Gui(cel);
 				frame.initGui();
 				frame.setVisible(true);
 				Celestial.gui = frame;
@@ -94,44 +98,29 @@ public class Celestial extends SimpleApplication{
 		});
 	}
 
-	BitmapText posText;
-	public BulletAppState bulletAppState;
-
-	public Vector3f walkDirection;
-	public boolean left = false, right = false, up = false, down = false;
-	public CharacterControl player;
-
-	public static float camHeight = 2f;
-
 	public static Canvas canvas;
-
-	private InputControl inputControl;
 
 	public static Gui gui;
 
-	public static final int SHADOWMAP_SIZE = 512;
+	public static final int SINGLEPLAYER = 0;
+	public static final int MULTIPLAYER = 1;
 	
-	private boolean playingGame; 
+	private static int type;
 
-	public static Celestial self;
-	public static CubesSettings csettings;
-
-	InventoryManager invmanager;
-	public List<Planet> planets;
-	private float lastRotation;
-	public BitmapText InvText;
-	private Star star;
+	public static CelestialPortal portal;
 
 	public Celestial() {
 	}
 
-	public static void createNewCanvas(){
+	public static void createNewCanvas(int type){
 		AppSettings settings = new AppSettings(true);
 		settings.setWidth(Celestial.width);
 		settings.setHeight(Celestial.height);
 		settings.setTitle(Celestial.title);
 
-		app = Celestial.self;
+		app = cel;
+		
+		Celestial.type = type;
 
 		app.setPauseOnLostFocus(false);
 		app.setSettings(settings);
@@ -144,246 +133,32 @@ public class Celestial extends SimpleApplication{
 
 	@Override
 	public void simpleInitApp() {
+		if(type == Celestial.SINGLEPLAYER)
+		{
+			
+			Celestial.portal = new SPPortal(this, rootNode, guiNode, cam, flyCam, viewPort, assetManager, inputManager, settings, app);
+		}
+		else
+		{
+			Celestial.portal = new MPPortal(this);
+		}
 		startGame();
 	}
 
 	public void startGame()
 	{    	
-		getInputManager().setCursorVisible(true);
-
-		csettings = new CubesSettings(app);
-		csettings.setDefaultBlockMaterial("assets/textures/terrain.png");
-		csettings.setChunkSizeX(16);
-		csettings.setChunkSizeY(16);
-		csettings.setChunkSizeZ(16);
-
-		/** Set up Physics **/
-		this.bulletAppState = new BulletAppState();
-		this.stateManager.attach(this.bulletAppState);
-
-		Blocks.init();
-
-		this.guiNode.detachAllChildren();
-
-
-		this.invmanager = new InventoryManager();
-
-		InventoryRegister.RegisterBlocks(this.invmanager);
-
-		try {
-			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.DIRT.getID()), -1, 1);
-			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.STONE.getID()), -1, 2);
-
-			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.COAL_ORE.getID()), -1, 3);
-			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.IRON_ORE.getID()), -1, 4);
-			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.COPPER_ORE.getID()), -1, 5);
-			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.TIN_ORE.getID()), -1, 6);
-			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.RAW_DIAMOND.getID()), -1, 7);
-			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.GOLD_ORE.getID()), -1, 8);
-			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.GRASS.getID()), -1, 9);
-		} catch (InventoryException e) {
-			//pass
-		}
-
-		initCrossHairs();
-		initOtherHud();
-
-		this.invmanager.setSelectedHotSlot(1);
-
-		this.walkDirection = new Vector3f();
-		this.left = false;
-		this.right = false;
-		this.up = false;
-		this.down = false;
-
-		this.planets = new ArrayList<Planet>();
-
-		this.planets.add(new Planet(null, 1, new Vector3f(300,-100,-400)));
-
-		this.inputControl = new InputControl(this, this.cam, this.inputManager);
-
-		//Spatial sky = SkyFactory.createSky(this.assetManager, "assets/textures/nightsky.jpg", true);
-		//sky.scale(-1, -1, 1);
-		//this.rootNode.attachChild(sky);
-
-
-		// You must add a light to make the model visible
-		this.star = new Star(null, new Vector3f(0,0,0));
-		this.rootNode.attachChild(this.star.getStarNode());
-		
-		initLighting();
-
-		CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f, 2f, 1);
-		this.player = new CharacterControl(capsuleShape, 0.05f);
-		this.player.setJumpSpeed(20);
-		this.player.setFallSpeed(30);
-		this.player.setGravity(50);
-		this.player.setPhysicsLocation(planets.get(0).getSpawnLocation());
-		this.player.getCollisionGroup();
-		this.flyCam.setMoveSpeed(100);
-		this.cam.setFrustumFar(65000);
-
-		Node terrnode = this.planets.get(0).getTerrainNode();
-		Node planetnode = this.planets.get(0).getPlanetNode();
-		CollisionShape sceneShape = CollisionShapeFactory.createMeshShape(terrnode);
-		RigidBodyControl landscape = new RigidBodyControl(sceneShape, 0.0f);
-		terrnode.addControl(landscape);
-		this.bulletAppState.getPhysicsSpace().add(terrnode);
-		terrnode.setShadowMode(ShadowMode.CastAndReceive);
-		this.rootNode.attachChild(planetnode);
-		this.bulletAppState.getPhysicsSpace().add(this.player);
-		Celestial.gui.changeCard(Gui.GAME);
-        
-
-	}
-
-	private void initLighting() {	  
-		rootNode.addLight(star.getLight());
-	    PointLightShadowRenderer plsr = new PointLightShadowRenderer(assetManager, SHADOWMAP_SIZE);
-        plsr.setLight(this.star.getLight());
-        plsr.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
-       // plsr.setFlushQueues(false);
-        plsr.displayFrustum();
-        plsr.displayDebug();
-        viewPort.addProcessor(plsr);
-        
-        PointLightShadowFilter plsf = new PointLightShadowFilter(assetManager, SHADOWMAP_SIZE);
-        plsf.setLight(star.getLight());     
-        plsf.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
-        plsf.setEnabled(true);
-
-        FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
-        fpp.addFilter(plsf);
-        viewPort.addProcessor(fpp);
+		if(portal != null)
+			Celestial.portal.startGame();
 	}
 
 	@Override
 	public void simpleUpdate(float tpf) {
-		updateCamera(tpf);
-		updateStats(tpf);
-		
-		/**
-		 * TODO: Rotation
-		 */
-		
-		/*if(this.planets.get(0) != null)
-		{
-			if(this.timer.getTimeInSeconds()-this.lastRotation > 0)
-			{
-				this.lastRotation = this.timer.getTimeInSeconds();
-				this.planets.get(0).getPlanetNode().rotate(0.001f*FastMath.DEG_TO_RAD, 0.0001f*FastMath.DEG_TO_RAD, 0.0005f*FastMath.DEG_TO_RAD);
-			}
-		}*/
-		this.invmanager.refreshHotSlots();
-	}
-	
-	public void updateCamera(float tpf) {
-		if(this.bulletAppState.isEnabled()) {
-			Vector3f camDir = this.cam.getDirection().clone().multLocal(0.6f);
-			Vector3f camLeft = this.cam.getLeft().clone().multLocal(0.2f);
-			this.walkDirection.set(0, 0, 0);
-			if (this.left)  { this.walkDirection.addLocal(camLeft); }
-			if (this.right) { this.walkDirection.addLocal(camLeft.negate()); }
-			if (this.up)    { this.walkDirection.addLocal(camDir); }
-			if (this.down)  { this.walkDirection.addLocal(camDir.negate()); }
-			this.walkDirection.y = 0;
-			if(this.up || this.down) {
-				this.walkDirection.x = this.walkDirection.x/2;
-				this.walkDirection.z = this.walkDirection.z/2;
-			}
-			this.player.setWalkDirection(this.walkDirection);
-			this.cam.setLocation(new Vector3f(this.player.getPhysicsLocation().getX(), this.player.getPhysicsLocation().getY()+camHeight, this.player.getPhysicsLocation().getZ()));
-			this.inputControl.renderBlockBorder();
-		} else {
-			//pass
-		}
-		
-		if(this.player.getPhysicsLocation().getY() <= -150 || this.cam.getLocation().getY() <= -150) {
-			this.player.setPhysicsLocation(this.planets.get(0).getSpawnLocation());
-			this.cam.setLocation(new Vector3f(this.player.getPhysicsLocation().getX(), this.player.getPhysicsLocation().getY()+camHeight, this.player.getPhysicsLocation().getZ()));
-		}
-	}
-	public void updateStats(float tpf) {
-		if(this.invmanager.getSelectedHotSlot().getItem() != null) {
-			int number = this.invmanager.getSelectedHotSlot().getNumberContents();
-			if(number == -1) 
-				this.InvText.setText("Selected Item: " + this.invmanager.getSelectedHotSlot().getItem().getName() + " - Contents: unlimited");
-			else 
-				this.InvText.setText("Selected Item: " + this.invmanager.getSelectedHotSlot().getItem().getName() + " - Contents: " + number);
-		} else 
-			this.InvText.setText("Selected Item: none");
-		if(InputControl.statson) {
-			Vector3f location = this.cam.getLocation();
-			this.posText.setText("X: "+location.x + " Y: "+location.y+" Z: "+location.z);
-		} else {
-			this.posText.setText("");
-		}
+		Celestial.portal.simpleUpdate(tpf);
 	}
 
 	@Override
 	public void simpleRender(RenderManager rm) {
-
-		//TODO: add render code
-	}
-
-
-
-	/** A centred plus sign to help the player aim. */
-	protected void initCrossHairs() {
-		this.guiFont = this.assetManager.loadFont("Interface/Fonts/Default.fnt");
-		BitmapText ch = new BitmapText(this.guiFont, false);
-		ch.setSize(this.guiFont.getCharSet().getRenderedSize() * 2);
-		ch.setText("+"); // crosshairs
-		ch.setLocalTranslation( // center
-				this.settings.getWidth() / 2 - this.guiFont.getCharSet().getRenderedSize() / 3 * 2,
-				this.settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
-		this.guiNode.attachChild(ch);
-	}
-
-	protected void initOtherHud() {
-		this.guiFont = this.assetManager.loadFont("Interface/Fonts/Default.fnt");
-		this.posText = new BitmapText(this.guiFont, false);
-		this.posText.setSize(this.guiFont.getCharSet().getRenderedSize());
-		this.posText.setText("");
-		this.posText.setLocalTranslation(450, this.posText.getLineHeight(), 0);
-		this.guiNode.attachChild(this.posText);
-
-		this.InvText = new BitmapText(this.guiFont, false);
-		this.InvText.setSize(this.guiFont.getCharSet().getRenderedSize());
-		this.InvText.setLocalTranslation(350, this.settings.getHeight() - this.InvText.getLineHeight(), 0);
-		//this.guiNode.attachChild(this.InvText);
-
-
-	}
-
-
-	public void setCamSpeed(float speed)
-	{
-		this.flyCam.setMoveSpeed(speed);
-	}
-
-	public AppSettings getSettings()
-	{
-		return this.settings;
-	}
-	public InventoryManager getInventoryManager(){
-		return this.invmanager;
-	}
-	public Node getguiNode() {
-		return this.guiNode;
-	}
-	public Node getRootNode() {
-		return this.rootNode;
-	}
-	public BulletAppState getPhysics() {
-		return this.bulletAppState;
-	}
-	public CharacterControl getPlayer() {
-		return this.player;
-	}
-	@Override
-	public AssetManager getAssetManager() {
-		return this.assetManager;
+		Celestial.portal.simpleRender(rm);
 	}
 
 }
