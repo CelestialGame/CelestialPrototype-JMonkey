@@ -51,7 +51,7 @@ public class Planet implements BlockChunkListener {
 		this.location = location;
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
 
-		this.amountRotation = new Vector3f(0, 0.00001f, 0);
+		this.amountRotation = new Vector3f(0, 0.0001f, 0.001f);
 		this.axisRotation = new Vector3f(0,0,0);
 		
 		if(diameter % 2 == 0)
@@ -128,9 +128,9 @@ public class Planet implements BlockChunkListener {
 							if(rInt == 2 || rInt == 5) {
 								makeCubeAt(locx+i,locy+j,locz+k, BlocksEnum.DIRT, blockTerrain);
 							} else if (rInt == 3 || rInt == 6) {
-								makeCubeAt(locx+i,locy+j,locz+k, BlocksEnum.DIRT, blockTerrain);
-							} else if (rInt == 4 || rInt == 7) {
 								makeCubeAt(locx+i,locy+j,locz+k, BlocksEnum.STONE, blockTerrain);
+							} else if (rInt == 4 || rInt == 7) {
+								makeCubeAt(locx+i,locy+j,locz+k, BlocksEnum.DIRT, blockTerrain);
 							}
 							else
 							{
@@ -282,7 +282,7 @@ public class Planet implements BlockChunkListener {
 			this.axisRotation.setY(this.axisRotation.getY() - 360);
 		if(this.axisRotation.getZ() > 360)
 			this.axisRotation.setZ(this.axisRotation.getZ() - 360);
-		planetNode.rotate(this.amountRotation.getX(), this.amountRotation.getY(), this.amountRotation.getZ());
+		planetNode.rotate(this.amountRotation.getX()*FastMath.DEG_TO_RAD, this.amountRotation.getY()*FastMath.DEG_TO_RAD, this.amountRotation.getZ()*FastMath.DEG_TO_RAD);
 	}
 	
 	public Quaternion getRotation()
@@ -312,5 +312,9 @@ public class Planet implements BlockChunkListener {
 
 	public Vector3f getOriginalTranslation() {
 		return this.originalTranslationTerrain;
+	}
+
+	public Vector3f getWantedLocation() {
+		return location;
 	}
 }

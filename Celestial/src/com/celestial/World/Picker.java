@@ -38,22 +38,33 @@ public class Picker {
 		BlockTerrainControl terrcontrol = parent.planets.get(0).getTerrControl();
 		CollisionResults results = getRayCastingResults(terrNode, parent, cam);
 		if(results.size() > 0){
-
+			
 			Vector3f collisionContactPoint = results.getClosestCollision().getContactPoint();
+			
 			if(collisionContactPoint == null)
 				return null;
+			
 			values[0] = collisionContactPoint;
-			//collisionContactPoint = smartRound(collisionContactPoint, true);
+
 			Quaternion q = parent.planets.get(0).getRotation().inverse();
-			Vector3f rotatedContactPoint = q.mult(collisionContactPoint);
+			parent.planets.get(0).getPlanetNode().move(-parent.planets.get(0).getWantedLocation().x, -parent.planets.get(0).getWantedLocation().y, -parent.planets.get(0).getWantedLocation().z);
+			
+			Vector3f translatedContactPoint = new Vector3f(
+					collisionContactPoint.x - parent.planets.get(0).getWantedLocation().x,
+					collisionContactPoint.y - parent.planets.get(0).getWantedLocation().y,
+					collisionContactPoint.z - parent.planets.get(0).getWantedLocation().z);
+			Vector3f rotatedContactPoint = q.mult(translatedContactPoint);
 			Vector3f rotatedTranslation = q.mult(terrNode.getWorldTranslation());
-			Vector3f originalTranslation = parent.planets.get(0).getOriginalTranslation();
-			System.out.println(rotatedContactPoint + " - " + originalTranslation);
+			
 			rotatedContactPoint = smartRound(rotatedContactPoint, false);
+			
 			Vector3f relContactPoint = new Vector3f(
-					rotatedContactPoint.getX() - originalTranslation.getX(),
-					rotatedContactPoint.getY() - originalTranslation.getY(),
-					rotatedContactPoint.getZ() - originalTranslation.getZ());
+					rotatedContactPoint.getX() - rotatedTranslation.getX(),
+					rotatedContactPoint.getY() - rotatedTranslation.getY(),
+					rotatedContactPoint.getZ() - rotatedTranslation.getZ());
+			
+			parent.planets.get(0).getPlanetNode().move(parent.planets.get(0).getWantedLocation());
+			
 			if(getNeighborLocation)
 				relContactPoint = smartRound(relContactPoint, false);
 

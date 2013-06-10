@@ -126,7 +126,7 @@ public class Celestial extends SimpleApplication{
 		}
 		else
 		{
-			Celestial.portal = new MPPortal(this);
+			Celestial.portal = null;//new MPPortal(this);
 		}
 		startGame();
 	}
