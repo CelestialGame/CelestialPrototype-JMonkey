@@ -5,20 +5,18 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
 
-import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-
 import com.celestial.Gui.Gui;
-import com.celestial.Gui.MainMenu;
-import com.celestial.MultiPlayer.MPPortal;
 import com.celestial.SinglePlayer.SPPortal;
+import com.celestial.util.FontLocator;
+import com.celestial.util.TTFFontLoader;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeCanvasContext;
 import com.jme3.util.JmeFormatter;
+
+import de.lessvoid.nifty.Nifty;
 
 /**
  * test
@@ -35,6 +33,7 @@ public class Celestial extends SimpleApplication{
 
 	public static void main(String[] args) {
 		cel = new Celestial();
+		cel.setShowSettings(false);
 		
 		JmeFormatter formatter = new JmeFormatter();
 
@@ -55,8 +54,11 @@ public class Celestial extends SimpleApplication{
 
 		cel.setDisplayFps(false);
 		cel.setDisplayStatView(false);
-
-		SwingUtilities.invokeLater(new Runnable(){
+		
+		createNewCanvas();
+		app.start();
+		
+		/*SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
 				JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 				try {
@@ -69,12 +71,12 @@ public class Celestial extends SimpleApplication{
 				frame.setVisible(true);
 				Celestial.gui = frame;
 			}
-		});
+		});*/
 	}
 
 	public static Canvas canvas;
 
-	public static MainMenu gui;
+	public static Gui gui;
 
 	public static final int SINGLEPLAYER = 0;
 	public static final int MULTIPLAYER = 1;
@@ -83,20 +85,18 @@ public class Celestial extends SimpleApplication{
 	private static int type;
 
 	public static CelestialPortal portal;
+	private Nifty nifty;
 
 	public Celestial() {
 	}
 
-	public static void createNewCanvas(int type){
+	public static void createNewCanvas(){
 		AppSettings settings = new AppSettings(true);
 		settings.setWidth(Celestial.width);
 		settings.setHeight(Celestial.height);
 		settings.setTitle(Celestial.title);
 
 		app = cel;
-		
-		Celestial.type = type;
-
 		app.setPauseOnLostFocus(false);
 		app.setSettings(settings);
 		app.createCanvas();
@@ -108,6 +108,20 @@ public class Celestial extends SimpleApplication{
 
 	@Override
 	public void simpleInitApp() {
+		
+		assetManager.registerLoader(TTFFontLoader.class, "ttf");
+		
+		gui = new Gui(
+				this,
+				assetManager,
+				inputManager,
+				audioRenderer,
+				guiViewPort,
+				flyCam);
+	}
+
+	public void startGame(int type)
+	{    	
 		if(type == Celestial.SINGLEPLAYER)
 		{
 			
@@ -128,23 +142,26 @@ public class Celestial extends SimpleApplication{
 		{
 			Celestial.portal = null;//new MPPortal(this);
 		}
-		startGame();
-	}
-
-	public void startGame()
-	{    	
+		
 		if(portal != null)
+		{
+			inputManager.setCursorVisible(false);
+			flyCam.setDragToRotate(false);
+			flyCam.setEnabled(true);
 			Celestial.portal.startGame();
+		}
 	}
 
 	@Override
 	public void simpleUpdate(float tpf) {
-		Celestial.portal.simpleUpdate(tpf);
+		if(portal != null)
+			Celestial.portal.simpleUpdate(tpf);
 	}
 
 	@Override
 	public void simpleRender(RenderManager rm) {
-		Celestial.portal.simpleRender(rm);
+		if(portal != null)
+			Celestial.portal.simpleRender(rm);
 	}
 	
 	public static void toggleStats(boolean state) {

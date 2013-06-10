@@ -6,17 +6,11 @@ package com.celestial.SinglePlayer.Input;
 
 import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
-import com.celestial.Blocks.*;
-import com.celestial.Gui.Gui;
-import com.celestial.Gui.MainMenu;
 import com.celestial.SinglePlayer.Inventory.InventoryItem;
 import com.celestial.World.Picker;
 import com.cubes.Block;
-import com.cubes.BlockChunkControl;
 import com.cubes.BlockManager;
-import com.cubes.BlockSkin;
 import com.cubes.BlockTerrainControl;
-import com.cubes.BlockType;
 import com.cubes.Vector3Int;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -24,7 +18,6 @@ import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 
@@ -217,8 +210,8 @@ public class InputControl {
 			else if(binding.equals("ESC"))
 			{
 				parent.app.stop();
-				Celestial.gui.topcardPane.remove(Celestial.canvas);
-				Celestial.gui.changeCard(MainMenu.MAIN);
+//				Celestial.gui.topcardPane.remove(Celestial.canvas);
+//				Celestial.gui.changeCard(MainMenu.MAIN);
 			}
 			else if(binding.equals("SeeStats") && !keyPressed) {
 				if(statson) {

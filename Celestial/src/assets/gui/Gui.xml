@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty>
+    <useStyles filename="nifty-default-styles.xml" />
+    <useControls filename="nifty-default-controls.xml" />
+	<screen id="start" controller="com.celestial.Gui.Gui">
+		<layer id="background" childLayout="center">
+
+		</layer>
+		<layer id="foreground" childLayout="horizontal">
+			<panel id="panel_left" width="100px" height="100%" childLayout="vertical">
+				<panel id="panel_left_top" width="100%" height="75px"
+					backgroundColor="#c6c6c6">
+				</panel>
+				<panel id="panel_left_spacer" width="100%" height="*">
+				</panel>
+				<panel id="panel_left_bottom" width="100%" height="10%"
+					backgroundColor="#c6c6c6">
+				</panel>
+			</panel>
+			<panel id="panel_right" width="200px" height="100%"
+				childLayout="vertical">
+				<panel id="panel_right_top" width="100%" height="115px"
+					childLayout="center" backgroundColor="#c6c6c6">
+				</panel>
+				<panel id="panel_right_buttons" width="100%" height="*"
+					childLayout="vertical">
+					<panel id="panel_right_buttons_s0" width="100%" height="*">
+
+					</panel>
+					<panel id="panel_right_buttons_1" width="100%" height="40px"
+						backgroundColor="#c6c6c6" childLayout="center">
+						<control name="label" font="assets/fonts/visitor.fnt" text="Singleplayer" id="Singleplayer"
+							align="center" valign="center" visibleToMouse="true" width="100%" height="100%">
+							<interact onClick="actionPerformed(1)" onMouseOver="hoverPerformed(1)"/>
+						</control>
+					</panel>
+					<panel id="panel_right_buttons_s1" width="100%" height="*">
+
+					</panel>
+					<panel id="panel_right_buttons_2" width="100%" height="40px"
+						backgroundColor="#c6c6c6" childLayout="center">
+						<control name="label" font="assets/fonts/visitor.fnt" text="Multiplayer" id="Multiplayer"
+							align="center" valign="center" visibleToMouse="true" width="100%" height="100%">
+							<interact onClick="actionPerformed(2)" onMouseOver="hoverPerformed(2)" />
+						</control>
+					</panel>
+					<panel id="panel_right_buttons_s2" width="100%" height="*">
+
+					</panel>
+					<panel id="panel_right_buttons_3" width="100%" height="40px"
+						backgroundColor="#c6c6c6" childLayout="center">
+						<control name="label" font="assets/fonts/visitor.fnt" text="Options" id="Options"
+							align="center" valign="center" visibleToMouse="true" width="100%" height="100%">
+							<interact onClick="actionPerformed(3)" onMouseOver="hoverPerformed(3)" />
+						</control>
+					</panel>
+					<panel id="panel_right_buttons_s3" width="100%" height="*">
+
+					</panel>
+					<panel id="panel_right_buttons_4" width="100%" height="40px"
+						backgroundColor="#c6c6c6" childLayout="center">
+						<control name="label" font="assets/fonts/visitor.fnt" text="Credits" id="Credits"
+							align="center" valign="center" visibleToMouse="true" width="100%" height="100%">
+							<interact onClick="actionPerformed(4)" onMouseOver="hoverPerformed(4)" />
+						</control>
+					</panel>
+					<panel id="panel_right_buttons_s4" width="100%" height="*">
+
+					</panel>
+					<panel id="panel_right_buttons_5" width="100%" height="40px"
+						backgroundColor="#c6c6c6" childLayout="center">
+						<control name="label" font="assets/fonts/visitor.fnt" text="Quit Game" id="Quit"
+							align="center" valign="center" visibleToMouse="true" width="100%" height="100%">
+							<interact onClick="actionPerformed(5)" onMouseOver="hoverPerformed(5)" />
+						</control>
+					</panel>
+					<panel id="panel_right_buttons_s5" width="100%" height="*">
+
+					</panel>
+				</panel>
+				<panel id="panel_right_bottom" width="100%" height="20%"
+					valign="center" backgroundColor="#c6c6c6">
+				</panel>
+			</panel>
+			<panel id="panel_footer" width="*" height="20%" childLayout="vertical"
+				backgroundColor="#c6c6c6" valign="bottom">
+
+			</panel>
+		</layer>
+	</screen>
+	<screen id="hud">
+		<layer id="background" backgroundColor="#000000" childLayout="center">
+
+		</layer>
+		<layer id="foreground" backgroundColor="#000000" childLayout="vertical">
+
+		</layer>
+	</screen>
+</nifty>

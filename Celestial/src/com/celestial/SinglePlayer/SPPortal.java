@@ -172,7 +172,7 @@ public class SPPortal extends CelestialPortal{
 		this.bulletAppState.getPhysicsSpace().add(terrnode);
 		this.rootNode.attachChild(planetnode);
 		this.bulletAppState.getPhysicsSpace().add(this.player);
-		Celestial.gui.changeCard(Gui.GAME);
+		//Celestial.gui.changeCard(Gui.GAME);
 		
 		this.rootNode.setShadowMode(ShadowMode.Off);
 		terrnode.setShadowMode(ShadowMode.CastAndReceive);
