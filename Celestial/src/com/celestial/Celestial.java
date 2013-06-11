@@ -33,7 +33,7 @@ public class Celestial extends SimpleApplication{
 
 	public static void main(String[] args) {
 		cel = new Celestial();
-		//cel.setShowSettings(false);
+		cel.setShowSettings(false);
 		
 		JmeFormatter formatter = new JmeFormatter();
 
@@ -48,8 +48,8 @@ public class Celestial extends SimpleApplication{
 		} catch (InterruptedException ex) {
 		}
 
-		Celestial.width = 1024;//850;
-		Celestial.height = 768;//500;
+		Celestial.width = 850;
+		Celestial.height = 500;
 		Celestial.title = "Celestial";
 
 		cel.setDisplayFps(false);

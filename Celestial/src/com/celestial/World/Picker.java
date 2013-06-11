@@ -38,33 +38,40 @@ public class Picker {
 		BlockTerrainControl terrcontrol = parent.planets.get(0).getTerrControl();
 		CollisionResults results = getRayCastingResults(terrNode, parent, cam);
 		if(results.size() > 0){
-			
+
 			Vector3f collisionContactPoint = results.getClosestCollision().getContactPoint();
-			
+
 			if(collisionContactPoint == null)
 				return null;
-			
+
 			values[0] = collisionContactPoint;
 
-			Quaternion q = parent.planets.get(0).getRotation().inverse();
-			parent.planets.get(0).getPlanetNode().move(-parent.planets.get(0).getWantedLocation().x, -parent.planets.get(0).getWantedLocation().y, -parent.planets.get(0).getWantedLocation().z);
-			
-			Vector3f translatedContactPoint = new Vector3f(
-					collisionContactPoint.x - parent.planets.get(0).getWantedLocation().x,
-					collisionContactPoint.y - parent.planets.get(0).getWantedLocation().y,
-					collisionContactPoint.z - parent.planets.get(0).getWantedLocation().z);
-			Vector3f rotatedContactPoint = q.mult(translatedContactPoint);
-			Vector3f rotatedTranslation = q.mult(terrNode.getWorldTranslation());
-			
+			Quaternion q1 = parent.planets.get(0).getPlanetNode().getWorldRotation().inverse();
+			Quaternion q2 = parent.planets.get(0).getTerrainNode().getWorldRotation().inverse();
+
+			float dist = (parent.planets.get(0).getPlanetNode().getWorldTranslation().distance(
+					collisionContactPoint)
+					/
+					parent.planets.get(0).getPlanetNode().getWorldTranslation().distance(
+							parent.planets.get(0).getTerrainNode().getWorldTranslation()));
+
+			Quaternion q3 = new Quaternion().slerp(q1, q2, dist);
+
+			//parent.planets.get(0).getPlanetNode().move(-parent.planets.get(0).getWantedLocation().x, -parent.planets.get(0).getWantedLocation().y, -parent.planets.get(0).getWantedLocation().z);
+			Vector3f translatedContactPoint = collisionContactPoint.subtract(parent.planets.get(0).getWantedLocation());
+			Vector3f rotatedContactPoint = q3.mult(translatedContactPoint);
+			Vector3f rotatedTranslation = q2.mult(terrNode.getWorldTranslation().subtract(parent.planets.get(0).getWantedLocation()));//q.mult(terrNode.getWorldTranslation());
+
 			rotatedContactPoint = smartRound(rotatedContactPoint, false);
-			
-			Vector3f relContactPoint = new Vector3f(
-					rotatedContactPoint.getX() - rotatedTranslation.getX(),
-					rotatedContactPoint.getY() - rotatedTranslation.getY(),
-					rotatedContactPoint.getZ() - rotatedTranslation.getZ());
-			
-			parent.planets.get(0).getPlanetNode().move(parent.planets.get(0).getWantedLocation());
-			
+			rotatedTranslation = round(rotatedTranslation);
+
+			System.out.println("Sub: "+collisionContactPoint.subtract(terrNode.getWorldTranslation()));
+			System.out.println("Q: "+q3+" - Rotated: "+rotatedTranslation);
+
+			Vector3f relContactPoint = rotatedContactPoint.subtract(rotatedTranslation);
+
+			//parent.planets.get(0).getPlanetNode().move(parent.planets.get(0).getWantedLocation());
+
 			if(getNeighborLocation)
 				relContactPoint = smartRound(relContactPoint, false);
 
@@ -76,6 +83,12 @@ public class Picker {
 			return values;
 		}
 		return null;
+	}
+	private static Vector3f round(Vector3f vec) {
+		return new Vector3f(
+				StrictMath.round(vec.x),
+				StrictMath.round(vec.y),
+				StrictMath.round(vec.z));
 	}
 	private static Vector3f smartRound(Vector3f vec, boolean floor) {
 

@@ -51,7 +51,7 @@ public class Planet implements BlockChunkListener {
 		this.location = location;
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
 
-		this.amountRotation = new Vector3f(0, 0.0001f, 0.001f);
+		this.amountRotation = new Vector3f(0, 0.001f, 0);
 		this.axisRotation = new Vector3f(0,0,0);
 		
 		if(diameter % 2 == 0)
@@ -65,7 +65,6 @@ public class Planet implements BlockChunkListener {
 
 	private void generatePlanet() {
 		terrainNode = new Node();
-		System.out.println(terrainNode.getWorldTranslation());
 		terrcontrol = new BlockTerrainControl(Celestial.portal.csettings, new Vector3Int(diameter, diameter, diameter));
 		terrcontrol.addChunkListener(this);
 
@@ -101,7 +100,7 @@ public class Planet implements BlockChunkListener {
 		
 		terrainNode.move(((centerofdiam*16)-8)*-3,((centerofdiam*16)-8)*-3,((centerofdiam*16)-8)*-3);
 		planetNode.move(location);
-		System.out.println(terrainNode.getWorldTranslation());
+		System.out.println(terrainNode.getWorldTranslation().subtract(location));
 		this.originalTranslationTerrain = terrainNode.getWorldTranslation().clone();
 		Celestial.portal.getRootNode().attachChild(planetNode);
 	}
@@ -287,6 +286,7 @@ public class Planet implements BlockChunkListener {
 	
 	public Quaternion getRotation()
 	{
+		System.out.println("pwr: "+planetNode.getWorldRotation()+" plr: "+planetNode.getLocalRotation()+" \ntwr: "+terrainNode.getWorldRotation()+" tlr: "+terrainNode.getLocalRotation());
 		return planetNode.getWorldRotation();
 	}
 	
@@ -299,6 +299,11 @@ public class Planet implements BlockChunkListener {
         vars.release();
         return q1.mult(vec);
 	}
+	
+	/*public Quaternion getLookAt()
+	{
+		return new Quaternion().lo
+	}*/
 	
 	public Vector3f getRotatedVector(Vector3f vec)
 	{
