@@ -30,6 +30,11 @@ public class Gui implements ScreenController {
                 inputManager,
                 audioRenderer,
                 guiViewPort);
+
+		// disable the fly cam
+        flyCam.setEnabled(false);
+        flyCam.setDragToRotate(true);
+        inputManager.setCursorVisible(true);
 		
 		this.parent = parent;
 		
@@ -38,11 +43,6 @@ public class Gui implements ScreenController {
 
         // attach the nifty display to the gui view port as a processor
         guiViewPort.addProcessor(niftyDisplay);
-
-        // disable the fly cam
-        flyCam.setEnabled(false);
-        flyCam.setDragToRotate(true);
-        inputManager.setCursorVisible(true);
 	}
 
 	@Override
@@ -68,10 +68,10 @@ public class Gui implements ScreenController {
 		switch(Integer.parseInt(id))
 		{
 		case 1: //SP
-			parent.startGame(Celestial.SINGLEPLAYER);
+			this.startGame(Celestial.SINGLEPLAYER);
 			break;
 		case 2: //MP
-			parent.startGame(Celestial.MULTIPLAYER);
+			this.startGame(Celestial.MULTIPLAYER);
 			break;
 		case 3: //Options
 			break;
@@ -85,6 +85,11 @@ public class Gui implements ScreenController {
 		}
 	}
 	
+	private void startGame(final int type) {
+		nifty.gotoScreen("hud");
+		parent.startGame(type);
+	}
+
 	public void hoverPerformed(String id)
 	{
 		switch(Integer.parseInt(id))

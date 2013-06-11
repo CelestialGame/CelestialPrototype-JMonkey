@@ -33,7 +33,7 @@ public class Celestial extends SimpleApplication{
 
 	public static void main(String[] args) {
 		cel = new Celestial();
-		cel.setShowSettings(false);
+		//cel.setShowSettings(false);
 		
 		JmeFormatter formatter = new JmeFormatter();
 
@@ -48,8 +48,8 @@ public class Celestial extends SimpleApplication{
 		} catch (InterruptedException ex) {
 		}
 
-		Celestial.width = 850;
-		Celestial.height = 500;
+		Celestial.width = 1024;//850;
+		Celestial.height = 768;//500;
 		Celestial.title = "Celestial";
 
 		cel.setDisplayFps(false);
@@ -57,21 +57,6 @@ public class Celestial extends SimpleApplication{
 		
 		createNewCanvas();
 		app.start();
-		
-		/*SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
-				JPopupMenu.setDefaultLightWeightPopupEnabled(false);
-				try {
-					UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-				} catch(Exception e) {
-					System.out.println("Error setting Java LAF: " + e);
-				}
-				MainMenu frame = new MainMenu(cel);
-				frame.init();
-				frame.setVisible(true);
-				Celestial.gui = frame;
-			}
-		});*/
 	}
 
 	public static Canvas canvas;
@@ -145,9 +130,9 @@ public class Celestial extends SimpleApplication{
 		
 		if(portal != null)
 		{
-			inputManager.setCursorVisible(false);
-			flyCam.setDragToRotate(false);
 			flyCam.setEnabled(true);
+			flyCam.setDragToRotate(false);
+			inputManager.setCursorVisible(false);
 			Celestial.portal.startGame();
 		}
 	}

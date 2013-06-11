@@ -90,7 +90,6 @@ public class SPPortal extends CelestialPortal{
 
 	@Override
 	public void startGame() {
-		this.parent.getInputManager().setCursorVisible(true);
 
 		this.csettings = new CubesSettings(Celestial.app);
 		this.csettings.setDefaultBlockMaterial("assets/textures/terrain.png");
