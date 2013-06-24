@@ -33,7 +33,6 @@ public class Planet implements BlockChunkListener {
 	private BlockTerrainControl terrcontrol;
 	private Node planetNode;
 	private Node terrainNode;
-	private Vector3f axisRotation;
 	private Vector3f amountRotation;
 	private Quaternion originalRotation;
 	private Vector3f originalTranslationTerrain;
@@ -51,8 +50,7 @@ public class Planet implements BlockChunkListener {
 		this.location = location;
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
 
-		this.amountRotation = new Vector3f(0f, 0.001f, 0f);
-		this.axisRotation = new Vector3f(0,0,0);
+		this.amountRotation = new Vector3f(0.0001f, 0.001f, 0f);
 		
 		if(diameter % 2 == 0)
 		{

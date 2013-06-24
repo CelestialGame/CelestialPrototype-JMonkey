@@ -46,22 +46,13 @@ public class Gui implements ScreenController {
 	}
 
 	@Override
-	public void bind(Nifty arg0, Screen arg1) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void bind(Nifty arg0, Screen arg1) {}
 
 	@Override
-	public void onEndScreen() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onEndScreen() {}
 
 	@Override
-	public void onStartScreen() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onStartScreen() {}
 	
 	public void actionPerformed(String id)
 	{

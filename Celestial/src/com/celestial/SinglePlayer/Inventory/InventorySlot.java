@@ -1,11 +1,5 @@
 package com.celestial.SinglePlayer.Inventory;
 
-/**
- * TODO Put here a description of what this class does.
- *
- * @author kevint.
- *         Created Jun 3, 2013.
- */
 public class InventorySlot {
 	
 	InventoryItem item;

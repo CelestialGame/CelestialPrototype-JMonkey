@@ -19,35 +19,25 @@ public class MPPortal extends CelestialPortal {
 	public MPPortal(Celestial parent)
 	{
 		this.parent = parent;
+		//TODO: Multiplayer...
 	}
 	
 	@Override
-	public void simpleUpdate(float tpf) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void simpleUpdate(float tpf) {}
 
 	@Override
-	public void startGame() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void startGame() {}
 
 	@Override
 	public CharacterControl getPlayer() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void simpleRender(RenderManager rm) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void simpleRender(RenderManager rm) {}
 
 	@Override
 	public float getCamHeight() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

@@ -1,6 +1,8 @@
 package com.celestial.World;
 
 import com.celestial.CelestialPortal;
+import com.celestial.SinglePlayer.Components.Planet;
+import com.celestial.SinglePlayer.Components.SectorCoord;
 import com.cubes.BlockChunkControl;
 import com.cubes.BlockNavigator;
 import com.cubes.BlockTerrainControl;
@@ -26,8 +28,8 @@ public class Picker {
 	}
 	public static Object[] getCurrentPointedBlockLocation(boolean getNeighborLocation, CelestialPortal parent, Camera cam){
 		Object[] values = new Object[2];
-		Node terrNode = parent.planets.get(0).getTerrainNode();
-		BlockTerrainControl terrcontrol = parent.planets.get(0).getTerrControl();
+		Node terrNode = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrainNode();
+		BlockTerrainControl terrcontrol = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 		CollisionResults results = getRayCastingResults(terrNode, parent, cam);
 		if(results.size() > 0){
 
@@ -38,11 +40,13 @@ public class Picker {
 
 			values[0] = collisionContactPoint;
 
-			Quaternion q1 = parent.planets.get(0).getPlanetNode().getLocalRotation().inverse();
+			Planet p = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0);
+			
+			Quaternion q1 = p.getPlanetNode().getLocalRotation().inverse();
 
-			Vector3f translatedContactPoint = collisionContactPoint.subtract(parent.planets.get(0).getWantedLocation());
+			Vector3f translatedContactPoint = collisionContactPoint.subtract(p.getWantedLocation());
 			Vector3f rotatedContactPoint = q1.mult(translatedContactPoint);
-			Vector3f rotatedTranslation = q1.mult(terrNode.getWorldTranslation().subtract(parent.planets.get(0).getWantedLocation()));//q.mult(terrNode.getWorldTranslation());	
+			Vector3f rotatedTranslation = q1.mult(terrNode.getWorldTranslation().subtract(p.getWantedLocation()));//q.mult(terrNode.getWorldTranslation());	
 
 			System.out.println(rotatedContactPoint);
 			rotatedContactPoint = smartRound(rotatedContactPoint);
@@ -206,16 +210,6 @@ public class Picker {
 		}
 		
 		return newvec;
-	}
-	public static BlockChunkControl getCurrentPointedBlock(boolean getNeighborLocation, CelestialPortal parent, Camera cam) {
-		Node terrNode = parent.planets.get(0).getTerrainNode();
-		BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
-		CollisionResults results = getRayCastingResults(terrNode, parent, cam);
-		if(results.size() > 0){
-			Vector3f collisionContactPoint = results.getClosestCollision().getContactPoint();
-			return chunk.getChunk(BlockNavigator.getPointedBlockLocation(chunk, collisionContactPoint, getNeighborLocation));
-		}
-		return null;
 	}
 
 }

@@ -7,12 +7,6 @@ import javax.imageio.ImageIO;
 
 import com.cubes.Block;
 
-/**
- * TODO Put here a description of what this class does.
- *
- * @author kevint.
- *         Created Jun 2, 2013.
- */
 public class InventoryItem {
 
 	Class<? extends Block> block;

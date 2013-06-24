@@ -6,6 +6,7 @@ package com.celestial.SinglePlayer.Input;
 
 import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
+import com.celestial.SinglePlayer.Components.SectorCoord;
 import com.celestial.SinglePlayer.Inventory.InventoryItem;
 import com.celestial.World.Picker;
 import com.cubes.Block;
@@ -106,7 +107,7 @@ public class InputControl {
 					InventoryItem item;
 					if(!parent.getBulletAppState().isEnabled()) //Are they flying?
 					{
-						BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
+						BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 						if(chunk != null && blockLocation != null && chunk.getBlock(blockLocation) != null) {
 							/*Class<? extends Block> block = BlockManager.getClass(chunk.getBlock(blockLocation).getType());
 							item = parent.getInventoryManager().getItembyBlock(block);
@@ -121,7 +122,7 @@ public class InputControl {
 					{
 						if(dist <= 15F) //Is the block nearby?
 						{
-							BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
+							BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 							if(chunk != null && blockLocation != null && chunk.getBlock(blockLocation) != null) {
 								Class<? extends Block> block = BlockManager.getClass(chunk.getBlock(blockLocation).getType());
 								item = parent.getInventoryManager().getItembyBlock(block);
@@ -168,7 +169,7 @@ public class InputControl {
 					float dist = parent.player.getPhysicsLocation().distance(blockAbsLocation);
 					if(!parent.getBulletAppState().isEnabled()) //Are they flying?
 					{
-						BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
+						BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 						if(chunk != null && blockLocation != null && parent.getInventoryManager().getSelectedHotSlot().getItem() != null) {
 							chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock()); //Add the Block
 							parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
@@ -178,7 +179,7 @@ public class InputControl {
 					{
 						if(dist <= 15F) //Is the block nearby?
 						{
-							BlockTerrainControl chunk = parent.planets.get(0).getTerrControl();
+							BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 							if(chunk != null && blockLocation != null && parent.getInventoryManager().getSelectedHotSlot().getItem() != null) {
 								chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock()); //Add the Block
 								parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
@@ -253,7 +254,7 @@ public class InputControl {
 			}
 			else if(binding.equals("Respawn") && !keyPressed)
 			{
-				parent.player.setPhysicsLocation(parent.planets.get(0).getSpawnLocation());
+				parent.player.setPhysicsLocation(parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getSpawnLocation());
 				parent.cam.setLocation(new Vector3f(parent.player.getPhysicsLocation().getX(), parent.player.getPhysicsLocation().getY()+parent.getCamHeight(), parent.player.getPhysicsLocation().getZ()));
 			}
 		}

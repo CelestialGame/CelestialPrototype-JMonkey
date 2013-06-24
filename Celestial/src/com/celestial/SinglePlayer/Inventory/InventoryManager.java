@@ -18,12 +18,6 @@ import com.cubes.BlockType;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 
-/**
- * TODO Put here a description of what this class does.
- *
- * @author kevint.
- *         Created Jun 2, 2013.
- */
 public class InventoryManager {
 
 	public HashMap<Integer, InventoryItem> items;

@@ -8,6 +8,7 @@ package com.celestial;
 
 import java.util.List;
 
+import com.celestial.SinglePlayer.Components.Galaxy;
 import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.SinglePlayer.Input.InputControl;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
@@ -44,11 +45,11 @@ public abstract class CelestialPortal {
 	protected InputControl inputControl;
 	protected InputManager inputManager;
 	public CharacterControl player;
-	public List<Planet> planets;
 	public Application app;
 	public BitmapText posText;
 	public BitmapText InvText;
 	public CubesSettings csettings;
+	public Galaxy galaxy;
 	
 	public abstract void startGame();
 	
