@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.celestial.World;
 
 import com.celestial.CelestialPortal;
@@ -17,10 +13,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 
-/**
- *
- * @author kevint
- */
 public class Picker {
 
 	private static CollisionResults getRayCastingResults(Node node, CelestialPortal parent, Camera cam){
@@ -46,34 +38,21 @@ public class Picker {
 
 			values[0] = collisionContactPoint;
 
-			Quaternion q1 = parent.planets.get(0).getPlanetNode().getWorldRotation().inverse();
-			Quaternion q2 = parent.planets.get(0).getTerrainNode().getWorldRotation().inverse();
+			Quaternion q1 = parent.planets.get(0).getPlanetNode().getLocalRotation().inverse();
 
-			float dist = (parent.planets.get(0).getPlanetNode().getWorldTranslation().distance(
-					collisionContactPoint)
-					/
-					parent.planets.get(0).getPlanetNode().getWorldTranslation().distance(
-							parent.planets.get(0).getTerrainNode().getWorldTranslation()));
-
-			Quaternion q3 = new Quaternion().slerp(q1, q2, dist);
-
-			//parent.planets.get(0).getPlanetNode().move(-parent.planets.get(0).getWantedLocation().x, -parent.planets.get(0).getWantedLocation().y, -parent.planets.get(0).getWantedLocation().z);
 			Vector3f translatedContactPoint = collisionContactPoint.subtract(parent.planets.get(0).getWantedLocation());
-			Vector3f rotatedContactPoint = q3.mult(translatedContactPoint);
-			Vector3f rotatedTranslation = q2.mult(terrNode.getWorldTranslation().subtract(parent.planets.get(0).getWantedLocation()));//q.mult(terrNode.getWorldTranslation());
+			Vector3f rotatedContactPoint = q1.mult(translatedContactPoint);
+			Vector3f rotatedTranslation = q1.mult(terrNode.getWorldTranslation().subtract(parent.planets.get(0).getWantedLocation()));//q.mult(terrNode.getWorldTranslation());	
 
-			rotatedContactPoint = smartRound(rotatedContactPoint, false);
+			System.out.println(rotatedContactPoint);
+			rotatedContactPoint = smartRound(rotatedContactPoint);
+			System.out.println(rotatedContactPoint);
 			rotatedTranslation = round(rotatedTranslation);
 
 			System.out.println("Sub: "+collisionContactPoint.subtract(terrNode.getWorldTranslation()));
-			System.out.println("Q: "+q3+" - Rotated: "+rotatedTranslation);
+			System.out.println("Q: "+q1+" - Rotated: "+rotatedTranslation);
 
 			Vector3f relContactPoint = rotatedContactPoint.subtract(rotatedTranslation);
-
-			//parent.planets.get(0).getPlanetNode().move(parent.planets.get(0).getWantedLocation());
-
-			if(getNeighborLocation)
-				relContactPoint = smartRound(relContactPoint, false);
 
 			Vector3Int blockPoint = BlockNavigator.getPointedBlockLocation(terrcontrol, relContactPoint, getNeighborLocation);
 			if(blockPoint == null)
@@ -90,59 +69,142 @@ public class Picker {
 				StrictMath.round(vec.y),
 				StrictMath.round(vec.z));
 	}
-	private static Vector3f smartRound(Vector3f vec, boolean floor) {
+	private static Vector3f smartRound(Vector3f vec) {
 
 		float x = vec.x;
 		float y = vec.y;
 		float z = vec.z;
 
-		float xd = x - (int)x;
-		float yd = y - (int)y;
-		float zd = z - (int)z;
+		String xs = new String(x+"");
+		String ys = new String(y+"");
+		String zs = new String(z+"");
+		System.out.println(xs+" "+ys+" "+zs);
+		float xd = Float.parseFloat("0."+xs.substring(xs.indexOf(".")+1, xs.length()));
+		float yd = Float.parseFloat("0."+ys.substring(ys.indexOf(".")+1, ys.length()));
+		float zd = Float.parseFloat("0."+zs.substring(zs.indexOf(".")+1, zs.length()));
 
-		Vector3f newvec = vec;
-		if(!floor)
+		System.out.println(xd+" "+yd+" "+zd);
+		
+		Vector3f newvec = vec.clone();
+		int greatest = 0, smallest = 0;
+
+		if((xd > yd && xd > zd))
 		{
-			if((xd > yd && xd > zd))
-			{
-				newvec = new Vector3f((float) Math.ceil(x), y, z);
-			}
-			else if((yd > xd && yd > zd))
-			{
-				newvec = new Vector3f(x, (float) Math.ceil(y), z);
-			}
-			else if((zd > xd && zd > yd))
-			{
-				newvec = new Vector3f(x, y, (float) Math.ceil(z));
-			}
-
-			if(xd == 0 || yd == 0 || zd == 0)
-			{
-				newvec = vec;
-			}
+			greatest=0;
 		}
-		else
+		else if((yd > xd && yd > zd))
 		{
-			if((xd < yd && xd < zd))
-			{
-				newvec = new Vector3f((float) Math.floor(x), y, z);
-			}
-			else if((yd < xd && yd < zd))
-			{
-				newvec = new Vector3f(x, (float) Math.floor(y), z);
-			}
-			else if((zd < xd && zd < yd))
-			{
-				newvec = new Vector3f(x, y, (float) Math.floor(z));
-			}
-
-			if(xd == 0 || yd == 0 || zd == 0)
-			{
-				newvec = vec;
-			}
+			greatest=1;
 		}
-
-
+		else if((zd > xd && zd > yd))
+		{
+			greatest=2;
+		}
+		
+		if((xd < yd && xd < zd))
+		{
+			smallest=0;
+		}
+		else if((yd < xd && yd < zd))
+		{
+			smallest=1;
+		}
+		else if((zd < xd && zd < yd))
+		{
+			smallest=2;
+		}
+		
+		if(greatest == 0 && smallest == 1) //xy
+		{
+			int ground = StrictMath.round(x);
+			int sround = StrictMath.round(y);
+			
+			if(ground % 3 == 0 && sround % 3 == 0)
+				if(Math.abs(x-ground) < Math.abs(y-sround))
+					newvec = new Vector3f(ground, y, z);
+				else
+					newvec = new Vector3f(x, sround, z);
+			else if(ground % 3 == 0)
+				newvec = new Vector3f(ground, y, z);
+			else
+				newvec = new Vector3f(x, sround, z);
+		}
+		else if(greatest == 0 && smallest == 2) //xz
+		{
+			int ground = StrictMath.round(x);
+			int sround = StrictMath.round(z);
+			
+			if(ground % 3 == 0 && sround % 3 == 0)
+				if(Math.abs(x-ground) < Math.abs(z-sround))
+					newvec = new Vector3f(ground, y, z);
+				else
+					newvec = new Vector3f(x, y, sround);
+			else if(ground % 3 == 0)
+				newvec = new Vector3f(ground, y, z);
+			else
+				newvec = new Vector3f(x, y, sround);
+		}
+		else if(greatest == 1 && smallest == 0) //yx
+		{
+			int ground = StrictMath.round(y);
+			int sround = StrictMath.round(x);
+			
+			if(ground % 3 == 0 && sround % 3 == 0)
+				if(Math.abs(y-ground) < Math.abs(x-sround))
+					newvec = new Vector3f(x, ground, z);
+				else
+					newvec = new Vector3f(sround, y, z);
+			else if(ground % 3 == 0)
+				newvec = new Vector3f(x, ground, z);
+			else
+				newvec = new Vector3f(sround, y, z);
+		}
+		else if(greatest == 1 && smallest == 2) //yz
+		{
+			int ground = StrictMath.round(y);
+			int sround = StrictMath.round(z);
+			
+			if(ground % 3 == 0 && sround % 3 == 0)
+				if(Math.abs(y-ground) < Math.abs(z-sround))
+					newvec = new Vector3f(x, ground, z);
+				else
+					newvec = new Vector3f(x, y, sround);
+			else if(ground % 3 == 0)
+				newvec = new Vector3f(x, ground, z);
+			else
+				newvec = new Vector3f(x, y, sround);
+		}
+		else if(greatest == 2 && smallest == 0) //zx
+		{
+			int ground = StrictMath.round(z);
+			int sround = StrictMath.round(x);
+			
+			if(ground % 3 == 0 && sround % 3 == 0)
+				if(Math.abs(z-ground) < Math.abs(x-sround))
+					newvec = new Vector3f(x, y, ground);
+				else
+					newvec = new Vector3f(sround, y, z);
+			else if(ground % 3 == 0)
+				newvec = new Vector3f(x, y, ground);
+			else
+				newvec = new Vector3f(sround, y, z);
+		}
+		else if(greatest == 2 && smallest == 1) //zy
+		{
+			int ground = StrictMath.round(z);
+			int sround = StrictMath.round(y);
+			
+			if(ground % 3 == 0 && sround % 3 == 0)
+				if(Math.abs(z-ground) < Math.abs(y-sround))
+					newvec = new Vector3f(x, y, ground);
+				else
+					newvec = new Vector3f(x, sround, z);
+			else if(ground % 3 == 0)
+				newvec = new Vector3f(x, y, ground);
+			else
+				newvec = new Vector3f(x, sround, z);
+		}
+		
 		return newvec;
 	}
 	public static BlockChunkControl getCurrentPointedBlock(boolean getNeighborLocation, CelestialPortal parent, Camera cam) {

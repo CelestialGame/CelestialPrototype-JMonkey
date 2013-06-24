@@ -59,6 +59,7 @@ public class SPPortal extends CelestialPortal{
 	private Star star;
 	private Timer timer;
 	private float lastRotation;
+	private boolean rotated = false;
 	public static final int SHADOWMAP_SIZE = 1024;
 	public static float camHeight = 2f;
 
@@ -176,7 +177,7 @@ public class SPPortal extends CelestialPortal{
 		this.rootNode.setShadowMode(ShadowMode.Off);
 		terrnode.setShadowMode(ShadowMode.CastAndReceive);
 		
-		initAudio();
+		initAudio();		
 	}
 	
 	@Override
@@ -196,6 +197,13 @@ public class SPPortal extends CelestialPortal{
 				this.planets.get(0).rotate();
 			}
 		}
+		
+		/*if(this.rotated == false)
+		{
+			this.planets.get(0).rotate();
+			this.rotated = true;
+		}*/
+		
 		this.invmanager.refreshHotSlots();
 	}
 	
