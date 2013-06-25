@@ -2,7 +2,7 @@
 @author	Mitch Talmadge
 Date Created:
 	Jun 2, 2013
-*/
+ */
 
 package com.celestial.SinglePlayer.Components;
 
@@ -14,7 +14,7 @@ import com.jme3.scene.Node;
 
 @SuppressWarnings("deprecation")
 public class Player extends CharacterControl{
-	
+
 	private CapsuleCollisionShape capsuleShape;
 	private CelestialPortal portal;
 	private Galaxy galaxy;
@@ -32,42 +32,42 @@ public class Player extends CharacterControl{
 		setPhysicsLocation(portal.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getSpawnLocation());
 		//setCollisionGroup(COLLISION_GROUP_01);
 	}
-	
+
 	public void setGalaxy(Galaxy galaxy)
 	{
 		this.galaxy = galaxy;
 	}
-	
+
 	public void setSector(Sector sector)
 	{
 		this.sector = sector;
 	}
-	
+
 	public void setSystem(SolarSystem system)
 	{
 		this.system = system;
 	}
-	
+
 	public Galaxy getGalaxy()
 	{
 		return galaxy;
 	}
-	
+
 	public Sector getSector()
 	{
 		return sector;
 	}
-	
+
 	public SolarSystem getSystem()
 	{
 		return system;
 	}
-	
+
 	public Planet getClosestPlanet()
 	{
 		for(Planet planet : getSystem().getPlanets()) {
 			float distance = this.getPhysicsLocation().distance(planet.getPlanetNode().getWorldTranslation());
-			
+
 			float factor = (((planet.centerofdiam*16)-8)*3)*7;
 			if(distance <= factor) {
 				return planet;
@@ -75,58 +75,50 @@ public class Player extends CharacterControl{
 		}
 		return null;
 	}
-	
-	public int getCurrentFaceOfPlanet(Planet planet)
-	{
-		for(int i = 0; i<=5; i++)
-		{
-			System.out.println("------------\nFace: "+i);
-			PlanetCorner[] corners = planet.getCornersForFace(i);
-			
-			Vector3f P1 = planet.getPlanetNode().getWorldTranslation();
-			Vector3f P2 = corners[0].getWorldTranslation();
-			Vector3f P3 = corners[1].getWorldTranslation();
-			Vector3f P4 = corners[2].getWorldTranslation();
-			Vector3f P5 = corners[3].getWorldTranslation();
-			
-			Vector3f playerP = null;
-			if(portal.getPhysics().isEnabled())
-				playerP = this.getPhysicsLocation();
-			else
-				playerP = portal.getCam().getLocation();
-			
-			Vector3f s1a = P2.subtract(P1);
-			Vector3f s1b = P3.subtract(P1);
-			Vector3f s1c = s1a.cross(s1b);
-			Vector3f s1n = s1c.normalize();
-			float s1d = playerP.dot(s1n);
-			
-			Vector3f s2a = P3.subtract(P1);
-			Vector3f s2b = P4.subtract(P1);
-			Vector3f s2c = s2a.cross(s2b);
-			Vector3f s2n = s2c.normalize();
-			float s2d = playerP.dot(s2n);
-			
-			Vector3f s3a = P4.subtract(P1);
-			Vector3f s3b = P5.subtract(P1);
-			Vector3f s3c = s3a.cross(s3b);
-			Vector3f s3n = s3c.normalize();
-			float s3d = playerP.dot(s3n);
-			
-			Vector3f s4a = P5.subtract(P1);
-			Vector3f s4b = P2.subtract(P1);
-			Vector3f s4c = s4a.cross(s4b);
-			Vector3f s4n = s4c.normalize();
-			float s4d = playerP.dot(s4n);
-			
-			System.out.println("1: "+s1d+" 2: "+s2d+" 3: "+s3d+" 4: "+s4d);
 
-			/*if(s1d > 0 && s2d > 0 && s3d < 0 && s4d < 0)
-			{
-				return i;
-			}*/
-			
+	public int getCurrentFaceOfPlanet(Planet planet)
+	{		
+		Vector3f P1 = planet.getPlanetNode().getWorldTranslation();
+
+		Vector3f playerP = null;
+		if(portal.getPhysics().isEnabled())
+			playerP = this.getPhysicsLocation();
+		else
+			playerP = portal.getCam().getLocation();
+
+		Vector3f transP = playerP.subtract(P1);
+		Vector3f rotP = planet.getPlanetNode().getLocalRotation().inverse().mult(transP);
+
+		System.out.println("nonrotated: "+playerP+" rotated: "+rotP+"\nPlanet: "+P1);
+
+		float x,y,z;
+
+		x = rotP.x;
+		y = rotP.y;
+		z = rotP.z;
+
+		if( Math.abs(y) > Math.abs(x) && Math.abs(y) > Math.abs(z) ) {
+			// on top or bottom, ie: it’s farther up then it is to either side.
+			// at x == y or z == y you’d be at the 1:1 slope point (45 degrees)
+			if( y < 0 ) {
+				return Planet.BOTTOM;
+			} else {
+				return Planet.TOP;
+			}
+		} else if( Math.abs(x) > Math.abs(z) ) {
+			if( x < 0 ) {
+				return Planet.WEST;
+			} else {
+				return Planet.EAST;
+			}
+		} else if( Math.abs(z) > Math.abs(x) ) {
+			if( z < 0 ) {
+				return Planet.NORTH;
+			} else {
+				return Planet.SOUTH;
+			}
+		} else {
+			return -1;
 		}
-		return -1;
 	}
 }

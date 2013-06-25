@@ -29,6 +29,12 @@ import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 
 public class Planet implements BlockChunkListener {
+	public static final int TOP = 0;
+	public static final int NORTH = 1;
+	public static final int EAST = 2;
+	public static final int SOUTH = 3;
+	public static final int WEST = 4;
+	public static final int BOTTOM = 5;
 	private Star star;
 	protected int diameter;
 	private String name;
@@ -56,7 +62,7 @@ public class Planet implements BlockChunkListener {
 		this.location = location;
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
 		this.portal = star.getSolarSystem().getSector().getGalaxy().getPortal();
-		this.amountRotation = new Vector3f(0.000f, 0.00f, 0f);
+		this.amountRotation = new Vector3f(0f, 0f, 0f);
 		this.name = name;
 		
 		if(diameter % 2 == 0)
@@ -111,42 +117,42 @@ public class Planet implements BlockChunkListener {
 		/* CORNERS */
 		this.cornerList = new ArrayList<PlanetCorner>();
 		
-		PlanetCorner c1 = new PlanetCorner(0,1,2);
+		PlanetCorner c1 = new PlanetCorner(TOP,NORTH,EAST);
 		planetNode.attachChild(c1);
 		c1.move(((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*3);
 		this.cornerList.add(c1);
 		
-		PlanetCorner c2 = new PlanetCorner(0,2,4);
+		PlanetCorner c2 = new PlanetCorner(TOP,EAST,SOUTH);
 		planetNode.attachChild(c2);
 		c2.move(((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*-3);
 		this.cornerList.add(c2);
 		
-		PlanetCorner c3 = new PlanetCorner(0,4,3);
+		PlanetCorner c3 = new PlanetCorner(TOP,SOUTH,WEST);
 		planetNode.attachChild(c3);
 		c3.move(((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*-3);
 		this.cornerList.add(c3);
 		
-		PlanetCorner c4 = new PlanetCorner(0,3,1);
+		PlanetCorner c4 = new PlanetCorner(TOP,WEST,NORTH);
 		planetNode.attachChild(c4);
 		c4.move(((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*3);
 		this.cornerList.add(c4);
 		
-		PlanetCorner c5 = new PlanetCorner(5,1,2);
+		PlanetCorner c5 = new PlanetCorner(BOTTOM,NORTH,EAST);
 		planetNode.attachChild(c5);
 		c5.move(((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*3);
 		this.cornerList.add(c5);
 		
-		PlanetCorner c6 = new PlanetCorner(5,2,4);
+		PlanetCorner c6 = new PlanetCorner(BOTTOM,EAST,SOUTH);
 		planetNode.attachChild(c6);
 		c6.move(((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*-3);
 		this.cornerList.add(c6);
 		
-		PlanetCorner c7 = new PlanetCorner(5,4,3);
+		PlanetCorner c7 = new PlanetCorner(BOTTOM,SOUTH,WEST);
 		planetNode.attachChild(c7);
 		c7.move(((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*-3);
 		this.cornerList.add(c7);
 		
-		PlanetCorner c8 = new PlanetCorner(5,3,1);
+		PlanetCorner c8 = new PlanetCorner(BOTTOM,WEST,NORTH);
 		planetNode.attachChild(c8);
 		c8.move(((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*3);
 		this.cornerList.add(c8);
@@ -295,37 +301,37 @@ public class Planet implements BlockChunkListener {
 			
 			switch(face)
 			{
-				case 0:
+				case TOP:
 					values[0] = c1;
 					values[1] = c2;
 					values[2] = c3;
 					values[3] = c4;
 					break;
-				case 1:
-					values[0] = c1;
-					values[1] = c2;
-					values[2] = c4;
-					values[3] = c3;
-					break;
-				case 2:
-					values[0] = c2;
-					values[1] = c1;
-					values[2] = c3;
-					values[3] = c4;
-					break;
-				case 3:
+				case NORTH:
 					values[0] = c1;
 					values[1] = c2;
 					values[2] = c4;
 					values[3] = c3;
 					break;
-				case 4:
+				case EAST:
 					values[0] = c2;
 					values[1] = c1;
 					values[2] = c3;
 					values[3] = c4;
 					break;
-				case 5:
+				case SOUTH:
+					values[0] = c2;
+					values[1] = c1;
+					values[2] = c3;
+					values[3] = c4;
+					break;
+				case WEST:
+					values[0] = c1;
+					values[1] = c2;
+					values[2] = c4;
+					values[3] = c3;
+					break;
+				case BOTTOM:
 					values[0] = c1;
 					values[1] = c4;
 					values[2] = c3;
