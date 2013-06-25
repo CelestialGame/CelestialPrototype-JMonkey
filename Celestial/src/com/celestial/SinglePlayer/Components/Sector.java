@@ -17,15 +17,17 @@ import com.jme3.math.Vector3f;
 public class Sector {
 	private Galaxy galaxy;
 	private int amountOfSystems;
+	private String name;
 	private Map<Vector3f,SolarSystem> systemMap;
 	
 	//Temporary...
 	public List<SolarSystem> systemList;
 	
-	public Sector(Galaxy galaxy, int amountOfSystems)
+	public Sector(Galaxy galaxy, int amountOfSystems, String name)
 	{
 		this.galaxy = galaxy;
 		this.amountOfSystems = amountOfSystems;
+		this.name = name;
 		
 		this.generate();
 	}
@@ -39,7 +41,7 @@ public class Sector {
 		for(int i = 0; i < this.amountOfSystems; i++)
 		{
 			//TODO: Sector size, system location
-			SolarSystem system = new SolarSystem(this);
+			SolarSystem system = new SolarSystem(this, name);
 			float randomx = (float) (Math.random() * 100 + 1);
 			float randomy = (float) (Math.random() * 100 + 1);
 			float randomz = (float) (Math.random() * 100 + 1);

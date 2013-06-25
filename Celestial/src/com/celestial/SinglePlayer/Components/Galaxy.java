@@ -65,24 +65,25 @@ public class Galaxy {
 			{
 				for(int k = 0; k<depth; k++)
 				{
-					this.createSectorAt(i-(this.centerOfDiameter-1), j-(this.centerOfDiameter-1), k-(this.centerOfDepth-1));
+					//TODO random name generation
+					this.createSectorAt(i-(this.centerOfDiameter-1), j-(this.centerOfDiameter-1), k-(this.centerOfDepth-1), "Alpha");
 				}
 			}
 		}
 	}
 
-	private void createSectorAt(int x, int y, int z) 
+	private void createSectorAt(int x, int y, int z, String name) 
 	{
-		this.createSectorAt(new SectorCoord(x,y,z));
+		this.createSectorAt(new SectorCoord(x,y,z), name);
 	}
 	
-	private void createSectorAt(SectorCoord coord)
+	private void createSectorAt(SectorCoord coord, String name)
 	{
 		if(this.sectorMap.get(coord) == null)
 		{
 			int amountOfSystems = 1 + (int)Math.random() * this.maxSystemsPerSector;
 			System.out.println(coord + " Amount of systems: "+amountOfSystems);
-			Sector sector = new Sector(this, amountOfSystems);
+			Sector sector = new Sector(this, amountOfSystems, name);
 			this.sectorMap.put(coord, sector);
 		}
 	}

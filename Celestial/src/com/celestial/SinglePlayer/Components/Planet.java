@@ -27,9 +27,10 @@ import com.jme3.util.TempVars;
 
 public class Planet implements BlockChunkListener {
 	private Star star;
-	private int diameter;
+	protected int diameter;
+	private String name;
 	private Vector3f location;
-	private int centerofdiam;
+	protected int centerofdiam;
 	private BlockTerrainControl terrcontrol;
 	private Node planetNode;
 	private Node terrainNode;
@@ -43,13 +44,13 @@ public class Planet implements BlockChunkListener {
 	 * @param diameter Diameter of the planet (in 16 block chunks) MUST BE ODD NUMBER
 	 * @param location Center point of planet
 	 */
-	public Planet(Star star, int diameter, Vector3f location)
+	public Planet(Star star, int diameter, Vector3f location, String name)
 	{
 		this.star = star;
 		this.diameter = diameter;
 		this.location = location;
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
-
+		this.name = name;
 		this.amountRotation = new Vector3f(0.0001f, 0.001f, 0f);
 		
 		if(diameter % 2 == 0)
@@ -259,6 +260,10 @@ public class Planet implements BlockChunkListener {
 
 	public int getDiameter() {
 		return diameter;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	public Vector3f getSpawnLocation()

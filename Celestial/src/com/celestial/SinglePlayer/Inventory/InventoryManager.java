@@ -123,6 +123,10 @@ public class InventoryManager {
 		}
 	}
 	
+	public void updateAll() {
+		refreshHotSlots();
+	}
+	
 	public void setSelectedHotSlot(int hotslot) {
 		this.selectedhotslot = this.hotslots.get(hotslot);
 		this.inventorygui.setHotBarSelection(hotslot);
