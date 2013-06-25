@@ -12,3 +12,7 @@ Planet - Sun:
 	rotation
 	distance calcuation (too close and you burn up!)
 	
+Planet:
+	figuring what side you're on
+	change gravity relative to what side you're on -- figured out, just need to know what side we're on
+	calculating height from the planet surface for player's gravity.
