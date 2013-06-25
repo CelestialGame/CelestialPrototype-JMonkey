@@ -176,7 +176,7 @@ public class SPPortal extends CelestialPortal{
 		this.rootNode.setShadowMode(ShadowMode.Off);
 		terrnode.setShadowMode(ShadowMode.CastAndReceive);
 		
-		initAudio();
+		//initAudio();
 	}
 	
 	@Override
@@ -184,19 +184,25 @@ public class SPPortal extends CelestialPortal{
 		updateCamera(tpf);
 		updateStats(tpf);
 		
+		updateGravity(tpf);
+		
 		/**
 		 * TODO: Rotation
 		 */
 		
-		if(this.planets.get(0) != null)
+		/*if(this.planets.get(0) != null)
 		{
 			if(this.timer.getTimeInSeconds()-this.lastRotation > 0)
 			{
 				this.lastRotation = this.timer.getTimeInSeconds();
 				this.planets.get(0).rotate();
 			}
-		}
+		}*/
 		this.invmanager.refreshHotSlots();
+	}
+	
+	private void updateGravity(float tpf) {
+		
 	}
 	
 	private void initLighting() {	  
@@ -204,9 +210,9 @@ public class SPPortal extends CelestialPortal{
 		al.setColor(ColorRGBA.White);
 		rootNode.addLight(al);
 		
-		//this.rootNode.addLight(this.star.getLight());
+		this.rootNode.addLight(this.star.getLight());
 		
-	    /*PointLightShadowRenderer plsr = new PointLightShadowRenderer(this.assetManager, SHADOWMAP_SIZE);
+	    PointLightShadowRenderer plsr = new PointLightShadowRenderer(this.assetManager, SHADOWMAP_SIZE);
         plsr.setLight(this.star.getLight());
         plsr.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
         //plsr.setFlushQueues(false);
@@ -224,7 +230,7 @@ public class SPPortal extends CelestialPortal{
         fpp.addFilter(bloom);
         fpp.addFilter(plsf);
         
-        this.viewPort.addProcessor(fpp);*/
+        this.viewPort.addProcessor(fpp);
 	}
 	
 	public void initAudio() {
