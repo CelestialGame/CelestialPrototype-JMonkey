@@ -33,7 +33,6 @@ public class Planet implements BlockChunkListener {
 	private BlockTerrainControl terrcontrol;
 	private Node planetNode;
 	private Node terrainNode;
-	private Vector3f axisRotation;
 	private Vector3f amountRotation;
 	private Quaternion originalRotation;
 	private Vector3f originalTranslationTerrain;
@@ -51,8 +50,7 @@ public class Planet implements BlockChunkListener {
 		this.location = location;
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
 
-		this.amountRotation = new Vector3f(0, 0.001f, 0);
-		this.axisRotation = new Vector3f(0,0,0);
+		this.amountRotation = new Vector3f(0.0001f, 0.001f, 0f);
 		
 		if(diameter % 2 == 0)
 		{
@@ -272,47 +270,12 @@ public class Planet implements BlockChunkListener {
 	}
 
 	public void rotate() {
-		this.axisRotation.setX(this.axisRotation.getX()+this.amountRotation.getX());
-		this.axisRotation.setY(this.axisRotation.getY()+this.amountRotation.getY());
-		this.axisRotation.setZ(this.axisRotation.getZ()+this.amountRotation.getZ());
-		if(this.axisRotation.getX() > 360)
-			this.axisRotation.setX(this.axisRotation.getX() - 360);
-		if(this.axisRotation.getY() > 360)
-			this.axisRotation.setY(this.axisRotation.getY() - 360);
-		if(this.axisRotation.getZ() > 360)
-			this.axisRotation.setZ(this.axisRotation.getZ() - 360);
 		planetNode.rotate(this.amountRotation.getX()*FastMath.DEG_TO_RAD, this.amountRotation.getY()*FastMath.DEG_TO_RAD, this.amountRotation.getZ()*FastMath.DEG_TO_RAD);
 	}
 	
 	public Quaternion getRotation()
 	{
-		System.out.println("pwr: "+planetNode.getWorldRotation()+" plr: "+planetNode.getLocalRotation()+" \ntwr: "+terrainNode.getWorldRotation()+" tlr: "+terrainNode.getLocalRotation());
 		return planetNode.getWorldRotation();
-	}
-	
-	public Vector3f getInvertedVector(Vector3f vec)
-	{
-		TempVars vars = TempVars.get();
-        Quaternion q = vars.quat1;
-        q.fromAngles(this.axisRotation.x*FastMath.DEG_TO_RAD, this.axisRotation.y*FastMath.DEG_TO_RAD, this.axisRotation.z*FastMath.DEG_TO_RAD);
-		Quaternion q1 = this.getRotation().mult(q.inverse());
-        vars.release();
-        return q1.mult(vec);
-	}
-	
-	/*public Quaternion getLookAt()
-	{
-		return new Quaternion().lo
-	}*/
-	
-	public Vector3f getRotatedVector(Vector3f vec)
-	{
-		TempVars vars = TempVars.get();
-        Quaternion q = vars.quat1;
-        q.fromAngles(this.axisRotation.x*FastMath.DEG_TO_RAD, this.axisRotation.y*FastMath.DEG_TO_RAD, this.axisRotation.z*FastMath.DEG_TO_RAD);
-		Quaternion q1 = this.getRotation().mult(q);
-        vars.release();
-        return q1.mult(vec);
 	}
 
 	public Vector3f getOriginalTranslation() {

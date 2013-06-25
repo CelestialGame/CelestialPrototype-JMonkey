@@ -12,12 +12,6 @@ import com.celestial.Blocks.*;
 import com.celestial.util.InventoryException;
 import com.jme3.asset.AssetNotFoundException;
 
-/**
- * TODO Put here a description of what this class does.
- *
- * @author kevint.
- *         Created Jun 2, 2013.
- */
 public class InventoryRegister {
 	
 	
@@ -55,7 +49,6 @@ public class InventoryRegister {
 				IM.registerItem(new InventoryItem(block.getBClass(), block.getName(), 
 						path), block.getID());
 			} catch (InventoryException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	}

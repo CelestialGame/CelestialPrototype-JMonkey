@@ -7,13 +7,16 @@ Date Created:
 package com.celestial.SinglePlayer;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
 import com.celestial.Blocks.Blocks;
 import com.celestial.Blocks.BlocksEnum;
-import com.celestial.Gui.Gui;
+import com.celestial.SinglePlayer.Components.Galaxy;
 import com.celestial.SinglePlayer.Components.Planet;
+import com.celestial.SinglePlayer.Components.Sector;
+import com.celestial.SinglePlayer.Components.SectorCoord;
 import com.celestial.SinglePlayer.Components.Star;
 import com.celestial.SinglePlayer.Input.InputControl;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
@@ -59,6 +62,7 @@ public class SPPortal extends CelestialPortal{
 	private Star star;
 	private Timer timer;
 	private float lastRotation;
+	private boolean rotated = false;
 	public static final int SHADOWMAP_SIZE = 1024;
 	public static float camHeight = 2f;
 
@@ -96,7 +100,7 @@ public class SPPortal extends CelestialPortal{
 		this.csettings.setChunkSizeX(16);
 		this.csettings.setChunkSizeY(16);
 		this.csettings.setChunkSizeZ(16);
-
+		
 		/** Set up Physics **/
 		this.bulletAppState = new BulletAppState();
 		this.parent.getStateManager().attach(this.getBulletAppState());
@@ -105,7 +109,10 @@ public class SPPortal extends CelestialPortal{
 
 		this.guiNode.detachAllChildren();
 
-
+		/* Create Galaxy */
+		
+		this.galaxy = new Galaxy(this, 1, 1, 1);
+		
 		this.invmanager = new InventoryManager(this);
 
 		InventoryRegister.RegisterBlocks(this.invmanager);
@@ -135,9 +142,6 @@ public class SPPortal extends CelestialPortal{
 		this.right = false;
 		this.up = false;
 		this.down = false;
-		
-		this.planets = new ArrayList<Planet>();
-		this.planets.add(new Planet(null, 3, new Vector3f(5000,10000,-3000)));
 
 		this.inputControl = new InputControl(this, this.cam, this.inputManager);
 
@@ -158,13 +162,13 @@ public class SPPortal extends CelestialPortal{
 		this.player.setJumpSpeed(20);
 		this.player.setFallSpeed(30);
 		this.player.setGravity(50);
-		this.player.setPhysicsLocation(this.planets.get(0).getSpawnLocation());
+		this.player.setPhysicsLocation(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getSpawnLocation());
 		this.player.getCollisionGroup();
 		this.flyCam.setMoveSpeed(100);
 		this.cam.setFrustumFar(65000);
 
-		Node terrnode = this.planets.get(0).getTerrainNode();
-		Node planetnode = this.planets.get(0).getPlanetNode();
+		Node terrnode = this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrainNode();
+		Node planetnode = this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getPlanetNode();
 		CollisionShape sceneShape = CollisionShapeFactory.createMeshShape(terrnode);
 		RigidBodyControl landscape = new RigidBodyControl(sceneShape, 0.0f);
 		terrnode.addControl(landscape);
@@ -175,7 +179,7 @@ public class SPPortal extends CelestialPortal{
 		
 		this.rootNode.setShadowMode(ShadowMode.Off);
 		terrnode.setShadowMode(ShadowMode.CastAndReceive);
-		
+
 		//initAudio();
 	}
 	
@@ -189,15 +193,14 @@ public class SPPortal extends CelestialPortal{
 		/**
 		 * TODO: Rotation
 		 */
-		
-		/*if(this.planets.get(0) != null)
+		if(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0) != null)
 		{
 			if(this.timer.getTimeInSeconds()-this.lastRotation > 0)
 			{
 				this.lastRotation = this.timer.getTimeInSeconds();
-				this.planets.get(0).rotate();
+				this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).rotate();
 			}
-		}*/
+		}
 		this.invmanager.refreshHotSlots();
 	}
 	
@@ -322,10 +325,7 @@ public class SPPortal extends CelestialPortal{
 	}
 
 	@Override
-	public void simpleRender(RenderManager rm) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void simpleRender(RenderManager rm) {}
 
 	@Override
 	public float getCamHeight() {

@@ -5,12 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * TODO Put here a description of what this class does.
- *
- * @author kevint.
- *         Created Jun 2, 2013.
- */
 public class FixedHashMap<K, V> implements Map<K, V> {
 
     private Map<K, V> map;
