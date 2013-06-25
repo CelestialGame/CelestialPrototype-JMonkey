@@ -311,9 +311,9 @@ public class SPPortal extends CelestialPortal{
 		this.posText.setLocalTranslation(450, this.posText.getLineHeight(), 0);
 		this.guiNode.attachChild(this.posText);
 
-		this.InvText = new BitmapText(this.guiFont, false);
-		this.InvText.setSize(this.guiFont.getCharSet().getRenderedSize());
-		this.InvText.setLocalTranslation(350, this.settings.getHeight() - this.InvText.getLineHeight(), 0);
+		//this.InvText = new BitmapText(this.guiFont, false);
+		//this.InvText.setSize(this.guiFont.getCharSet().getRenderedSize());
+		//this.InvText.setLocalTranslation(350, this.settings.getHeight() - this.InvText.getLineHeight(), 0);
 		//this.guiNode.attachChild(this.InvText);
 
 
