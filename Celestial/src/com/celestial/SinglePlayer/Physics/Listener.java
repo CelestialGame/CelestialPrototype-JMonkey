@@ -17,49 +17,34 @@ import com.jme3.bullet.collision.PhysicsCollisionListener;
  */
 public class Listener implements PhysicsCollisionListener {
 
-	CelestialPortal parent;
-	
-	public Listener(CelestialPortal parent) {
-		this.parent = parent;
+	CelestialPortal portal;
+
+	public Listener(CelestialPortal portal) {
+		this.portal = portal;
 	}
-	
+
 	@Override
 	public void collision(PhysicsCollisionEvent e) {
 		//System.out.println("[A] " + e.getObjectA() + " [B] " + e.getObjectB());
-		InventoryManager invmanager = parent.getInventoryManager();
+		InventoryManager invmanager = portal.getInventoryManager();
 		if(!invmanager.getDropItems().isEmpty()) {
 			Iterator<InventoryDrop> itr = invmanager.getDropItems().iterator();
 			while(itr.hasNext()) {
 				InventoryDrop drop = itr.next();
-				if(e.getObjectA().equals(drop.getCollisionBox())) {
-					if(e.getObjectB().equals(this.parent.player)) {
-						System.out.println("Collsion detected!");
-						if(invmanager.getNextEmptySlot() != InventoryManager.EMPTY) {
-							try {
-								invmanager.setHotSlot(drop.getItem(), 1, invmanager.getNextEmptySlot());
-								invmanager.removeDropItem(drop);
-							} catch (InventoryException exception) {
-								exception.printStackTrace();
-							}
+				if((e.getObjectA().equals(drop.getCollisionBox()) && e.getObjectB().equals(this.portal.player)) || (e.getObjectB().equals(drop.getCollisionBox()) && e.getObjectA().equals(this.portal.player))) {
+					System.out.println("Collsion detected!");
+					if(invmanager.getNextEmptySlot() != InventoryManager.EMPTY) {
+						try {
+							invmanager.setHotSlot(drop.getItem(), 1, invmanager.getNextEmptySlot());
+							invmanager.getInvGui().updateHotBar();
+							invmanager.removeDropItem(drop, itr);
+						} catch (InventoryException exception) {
+							exception.printStackTrace();
 						}
 					}
 				}
-				if(e.getObjectA().equals(this.parent.player)) {
-					if(e.getObjectB().equals(drop.getCollisionBox())) {
-						System.out.println("Collsion detected!");
-						if(invmanager.getNextEmptySlot() != InventoryManager.EMPTY) {
-							try {
-								invmanager.setHotSlot(drop.getItem(), 1, invmanager.getNextEmptySlot());
-								invmanager.removeDropItem(drop);
-							} catch (InventoryException exception) {
-								exception.printStackTrace();
-							}
-						}
-					}
-				}
-				itr.remove();
 			}
 		}
-		
+
 	}
 }

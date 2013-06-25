@@ -268,6 +268,7 @@ public class InputControl {
 
 	public void renderBlockBorder()
 	{
+		//TODO: Render Block Borders
 		// NOT DONE -- It'll turn the entire thing blue if you do use this.... xD
 		/*BlockChunkControl block = Picker.getCurrentPointedBlock(false, parent, cam);
 		if(block != null) {

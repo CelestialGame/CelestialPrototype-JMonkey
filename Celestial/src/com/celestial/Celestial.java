@@ -73,6 +73,7 @@ public class Celestial extends SimpleApplication{
 	private Nifty nifty;
 
 	public Celestial() {
+
 	}
 
 	public static void createNewCanvas(){
@@ -85,7 +86,7 @@ public class Celestial extends SimpleApplication{
 		app.setPauseOnLostFocus(false);
 		app.setSettings(settings);
 		app.createCanvas();
-
+		
 		context = (JmeCanvasContext) app.getContext();
 		canvas = context.getCanvas();
 		canvas.setSize(settings.getWidth(), settings.getHeight());

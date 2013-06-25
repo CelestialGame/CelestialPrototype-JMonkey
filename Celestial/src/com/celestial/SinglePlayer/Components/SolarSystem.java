@@ -34,7 +34,7 @@ public class SolarSystem {
 		
 		this.star = new Star(this);
 		
-		Planet p = new Planet(star, 3, new Vector3f(100, 100, 100), name);
+		Planet p = new Planet(star, 3, new Vector3f(1000, -2000, 3200), name);
 		
 		this.planetMap.put(p.getWantedLocation(), p);
 	

@@ -3,6 +3,7 @@ package com.celestial.SinglePlayer.Inventory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,16 +55,16 @@ public class InventoryManager {
 		this.items = new HashMap<Integer, InventoryItem>();
 		this.dropitems = new ArrayList<InventoryDrop>();
 		
-		this.hotslot1 = new InventorySlot(null, -2);
-		this.hotslot2 = new InventorySlot(null, -2);
-		this.hotslot3 = new InventorySlot(null, -2);
-		this.hotslot4 = new InventorySlot(null, -2);
-		this.hotslot5 = new InventorySlot(null, -2);
-		this.hotslot6 = new InventorySlot(null, -2);
-		this.hotslot7 = new InventorySlot(null, -2);
-		this.hotslot8 = new InventorySlot(null, -2);
-		this.hotslot9 = new InventorySlot(null, -2);
-		this.hotslot10 = new InventorySlot(null, -2);
+		this.hotslot1 = new InventorySlot(null, -2, this);
+		this.hotslot2 = new InventorySlot(null, -2, this);
+		this.hotslot3 = new InventorySlot(null, -2, this);
+		this.hotslot4 = new InventorySlot(null, -2, this);
+		this.hotslot5 = new InventorySlot(null, -2, this);
+		this.hotslot6 = new InventorySlot(null, -2, this);
+		this.hotslot7 = new InventorySlot(null, -2, this);
+		this.hotslot8 = new InventorySlot(null, -2, this);
+		this.hotslot9 = new InventorySlot(null, -2, this);
+		this.hotslot10 = new InventorySlot(null, -2, this);
 		
 		this.hotslots = new ArrayList<InventorySlot>();
 		this.hotslots.add(this.hotslot1);
@@ -130,17 +131,20 @@ public class InventoryManager {
 	}
 	
 	public void refreshHotSlots() {
+		boolean updateHotbar = false;
 		for(InventorySlot hotslot : this.hotslots) {
-			if(hotslot.getNumberContents() == 0) {
+			if(hotslot.getNumberContents() == 0 && hotslot.getItem() != null) {
 				hotslot.setItem(null, 0);
+				updateHotbar = true;
 			}
 		}
+		if(updateHotbar)
+			getInvGui().updateHotBar();
 	}
 	
 	public void setSelectedHotSlot(int hotslot) {
 		this.selectedhotslot = this.hotslots.get(hotslot);
 		this.inventorygui.setHotBarSelection(hotslot);
-		this.inventorygui.updateHotBar();
 	}
 	
 	public int getNextEmptySlot() {
@@ -170,12 +174,11 @@ public class InventoryManager {
 		this.dropitemsnode.attachChild(drop.getNode());
 		this.dropitems.add(drop);
 		drop.getNode().setLocalTranslation(location);
-		//System.out.println("Added drop");
 	}
-	public void removeDropItem(InventoryDrop drop) {
+	public void removeDropItem(InventoryDrop drop, Iterator<InventoryDrop> itr) {
 		if(this.dropitems.contains(drop)) {
 			this.dropitemsnode.detachChild(drop.getNode());
-			this.dropitems.remove(drop);
+			itr.remove();
 		}
 	}
 	

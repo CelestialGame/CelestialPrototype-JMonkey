@@ -269,16 +269,11 @@ public class SPPortal extends CelestialPortal{
 			this.player.setWalkDirection(this.walkDirection);
 			this.cam.setLocation(new Vector3f(this.player.getPhysicsLocation().getX(), this.player.getPhysicsLocation().getY()+camHeight, this.player.getPhysicsLocation().getZ()));
 			this.inputControl.renderBlockBorder();
-		} else {
-			//pass
 		}
+		
 		this.parent.getListener().setLocation(this.cam.getLocation());
 		this.parent.getListener().setRotation(this.cam.getRotation());
 		
-		/*if(this.player.getPhysicsLocation().getY() <= -150 || this.cam.getLocation().getY() <= -150) {
-			this.player.setPhysicsLocation(this.planets.get(0).getSpawnLocation());
-			this.cam.setLocation(new Vector3f(this.player.getPhysicsLocation().getX(), this.player.getPhysicsLocation().getY()+camHeight, this.player.getPhysicsLocation().getZ()));
-		}*/
 	}
 	public void updateStats(float tpf) {
 		if(this.invmanager.getSelectedHotSlot().getItem() != null) {

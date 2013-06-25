@@ -19,6 +19,10 @@ import com.cubes.BlockTerrainControl;
 import com.cubes.BlockType;
 import com.cubes.Vector3Int;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
+import com.jme3.material.RenderState.FaceCullMode;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -26,6 +30,7 @@ import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Box;
 import com.jme3.util.TempVars;
 
 public class Planet implements BlockChunkListener {
@@ -48,6 +53,9 @@ public class Planet implements BlockChunkListener {
 	private Vector3f originalTranslationTerrain;
 	private CelestialPortal portal;
 	private List<PlanetCorner> cornerList;
+	private Box atmospherebox;
+	private Geometry atmospheregeom;
+	private Material atmospheremat;
 
 	/**
 	 * Create a new Planet
@@ -156,6 +164,21 @@ public class Planet implements BlockChunkListener {
 		planetNode.attachChild(c8);
 		c8.move(((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*3);
 		this.cornerList.add(c8);
+		
+		/* ATMOSPHERE */
+		this.atmospherebox = new Box(this.diameter*16*3*1.2f, this.diameter*16*3*1.2f, this.diameter*16*3*1.2f);
+		this.atmospheregeom = new Geometry("Atmosphere", this.atmospherebox);
+		this.atmospheremat = new Material(portal.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+		
+		this.atmospheremat.setColor("Color", new ColorRGBA(0, 120, 255, 0.5f));
+		this.atmospheregeom.setMaterial(this.atmospheremat);
+		
+		this.atmospheremat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+		this.atmospheremat.getAdditionalRenderState().setFaceCullMode(FaceCullMode.Off);
+		this.atmospheregeom.setQueueBucket(Bucket.Transparent);
+		
+		this.planetNode.attachChild(this.atmospheregeom);
+	
 	}
 	
 	public void makeChunk(int locx, int locy, int locz, BlockTerrainControl blockTerrain)

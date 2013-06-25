@@ -53,8 +53,8 @@ public class Star {
 	{
 		StarNode = new Node();
 		
-		Box starsphere = new Box(500,500,500);
-		this.StarGeometry = new Geometry("Star", starsphere);
+		Box starbox = new Box(500,500,500);
+		this.StarGeometry = new Geometry("Star", starbox);
 		Material mat = new Material(Celestial.portal.getAssetManager(),  // Create new material and...
 			    "Common/MatDefs/Light/Lighting.j3md");
 		mat.setColor("Diffuse", new ColorRGBA(247f, 214f, 81f, 0f));

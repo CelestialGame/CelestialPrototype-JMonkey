@@ -4,10 +4,12 @@ public class InventorySlot {
 	
 	InventoryItem item;
 	int contents;
+	private InventoryManager invmanager;
 	
-	public InventorySlot(InventoryItem item, int contents) {
+	public InventorySlot(InventoryItem item, int contents, InventoryManager inventoryManager) {
 		this.item = item;
 		this.contents = contents;
+		this.invmanager = inventoryManager;
 	}
 	
 	public InventoryItem getItem() {
@@ -29,9 +31,9 @@ public class InventorySlot {
 	
 	public void modifyNumberContents(boolean decrease, int inc) {
 		if(decrease)
-			this.contents = this.contents - inc;
+			this.contents -= inc;
 		else
-			this.contents = this.contents + inc;
+			this.contents += inc;
 	}
 	
 	public void updateContents(boolean decrease) {

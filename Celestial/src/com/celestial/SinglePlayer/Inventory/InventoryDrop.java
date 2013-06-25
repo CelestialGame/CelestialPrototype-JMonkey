@@ -22,13 +22,13 @@ import com.jme3.scene.shape.Quad;
  */
 public class InventoryDrop{
 	
-	Box itemdropshape;
-	Geometry itemdrop;
+	private Box itemdropshape;
+	private Geometry itemdrop;
 	
-	InventoryItem item;
+	private InventoryItem item;
 	private RigidBodyControl rigidBodyControl;
 	
-	Node itemdropnode;
+	private Node itemdropnode;
 	
 	public InventoryDrop(InventoryItem item, Vector3f location) {
 		/** Use this if there is light present **/
