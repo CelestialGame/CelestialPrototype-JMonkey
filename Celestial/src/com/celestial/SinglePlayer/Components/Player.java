@@ -9,6 +9,7 @@ package com.celestial.SinglePlayer.Components;
 import com.celestial.CelestialPortal;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
+import com.jme3.scene.Node;
 
 @SuppressWarnings("deprecation")
 public class Player extends CharacterControl{
@@ -27,7 +28,7 @@ public class Player extends CharacterControl{
 		setFallSpeed(30);
 		setGravity(50);
 		setPhysicsLocation(portal.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getSpawnLocation());
-		setCollisionGroup(COLLISION_GROUP_01);
+		//setCollisionGroup(COLLISION_GROUP_01);
 	}
 	
 	public void setGalaxy(Galaxy galaxy)

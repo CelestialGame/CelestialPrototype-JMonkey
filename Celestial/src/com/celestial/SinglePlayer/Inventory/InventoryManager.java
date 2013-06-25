@@ -20,6 +20,8 @@ import com.jme3.scene.Node;
 
 public class InventoryManager {
 
+	CelestialPortal parent;
+	
 	public HashMap<Integer, InventoryItem> items;
 
 	InventorySlot hotslot1;
@@ -43,8 +45,10 @@ public class InventoryManager {
 	public static int TAKE = 1;
 	public static int GIVE = 2;
 	
+	public static int EMPTY = -70;
+	
 	Node dropitemsnode;
-	List<InventoryDrop> dropitems;
+	public ArrayList<InventoryDrop> dropitems;
 	
 	public InventoryManager(CelestialPortal parent) {
 		this.items = new HashMap<Integer, InventoryItem>();
@@ -80,6 +84,8 @@ public class InventoryManager {
 		this.dropitemsnode = new Node();
 		parent.getRootNode().attachChild(this.dropitemsnode);
 		
+		this.parent = parent;
+		
 		//TODO Add extended inv (stuffs not in the hotbar
 		
 	}
@@ -106,10 +112,18 @@ public class InventoryManager {
 		return null;
 	}
 	
+	public void updateAll() {
+		refreshHotSlots();
+	}
+	
 	//HotSlot Stuffs
 	public void setHotSlot(InventoryItem item, int contents, int hotslot) throws InventoryException {
 		if(this.items.containsValue(item)) {
-			this.hotslots.get(hotslot).setItem(item, contents);
+			if(hotslot <= 9) {
+				this.hotslots.get(hotslot).setItem(item, contents);
+			} else {
+				throw new InventoryException("OutOfBounds");
+			}
 		} else {
 			throw new InventoryException("ItemNotRegistered");
 		}
@@ -123,14 +137,19 @@ public class InventoryManager {
 		}
 	}
 	
-	public void updateAll() {
-		refreshHotSlots();
-	}
-	
 	public void setSelectedHotSlot(int hotslot) {
 		this.selectedhotslot = this.hotslots.get(hotslot);
 		this.inventorygui.setHotBarSelection(hotslot);
 		this.inventorygui.updateHotBar();
+	}
+	
+	public int getNextEmptySlot() {
+		for (int i=0;i<this.hotslots.size();i++) {
+			if(this.hotslots.get(i).getItem() == null) {
+				return i;
+			}
+		}
+		return EMPTY;
 	}
 	
 	public InventorySlot getSelectedHotSlot() {
@@ -148,10 +167,16 @@ public class InventoryManager {
 	}
 	public void dropItem(InventoryItem item, Vector3f location) {
 		InventoryDrop drop = new InventoryDrop(item, location);
-		this.dropitemsnode.attachChild(drop.getGeometry());
+		this.dropitemsnode.attachChild(drop.getNode());
 		this.dropitems.add(drop);
-		drop.getGeometry().setLocalTranslation(location);
+		drop.getNode().setLocalTranslation(location);
 		//System.out.println("Added drop");
+	}
+	public void removeDropItem(InventoryDrop drop) {
+		if(this.dropitems.contains(drop)) {
+			this.dropitemsnode.detachChild(drop.getNode());
+			this.dropitems.remove(drop);
+		}
 	}
 	
 }

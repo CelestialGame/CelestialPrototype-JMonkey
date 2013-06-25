@@ -22,6 +22,7 @@ import com.celestial.SinglePlayer.Components.Star;
 import com.celestial.SinglePlayer.Input.InputControl;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
 import com.celestial.SinglePlayer.Inventory.InventoryRegister;
+import com.celestial.SinglePlayer.Physics.Listener;
 import com.celestial.util.InventoryException;
 import com.cubes.CubesSettings;
 import com.jme3.app.Application;
@@ -118,7 +119,7 @@ public class SPPortal extends CelestialPortal{
 
 		InventoryRegister.RegisterBlocks(this.invmanager);
 
-		try {
+		/*try {
 			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.DIRT.getID()), -1, 1);
 			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.STONE.getID()), -1, 2);
 
@@ -131,7 +132,7 @@ public class SPPortal extends CelestialPortal{
 			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.GRASS.getID()), -1, 9);
 		} catch (InventoryException e) {
 			//pass
-		}
+		}*/
 
 		initCrossHairs();
 		initOtherHud();
@@ -179,6 +180,7 @@ public class SPPortal extends CelestialPortal{
 		this.rootNode.setShadowMode(ShadowMode.Off);
 		terrnode.setShadowMode(ShadowMode.CastAndReceive);
 
+		this.bulletAppState.getPhysicsSpace().addCollisionListener(new Listener(this));
 		//initAudio();
 		
 	}

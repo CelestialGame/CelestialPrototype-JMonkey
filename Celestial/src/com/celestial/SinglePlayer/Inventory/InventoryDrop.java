@@ -10,6 +10,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 
@@ -26,6 +27,8 @@ public class InventoryDrop{
 	
 	InventoryItem item;
 	private RigidBodyControl rigidBodyControl;
+	
+	Node itemdropnode;
 	
 	public InventoryDrop(InventoryItem item, Vector3f location) {
 		/** Use this if there is light present **/
@@ -56,10 +59,13 @@ public class InventoryDrop{
 		this.itemdrop.setShadowMode(ShadowMode.Cast);
 		
 		this.rigidBodyControl = new RigidBodyControl();
-		this.rigidBodyControl.removeCollideWithGroup(Celestial.portal.player.getCollisionGroup());
+		//this.rigidBodyControl.removeCollideWithGroup(Celestial.portal.player.getCollisionGroup());
         this.itemdrop.addControl(rigidBodyControl);
-        Celestial.portal.player.removeCollideWithGroup(this.rigidBodyControl.getCollisionGroup());
+        //Celestial.portal.player.removeCollideWithGroup(this.rigidBodyControl.getCollisionGroup());
         Celestial.portal.getPhysics().getPhysicsSpace().add(this.itemdrop);
+        
+        this.itemdropnode = new Node();
+        this.itemdropnode.attachChild(itemdrop);
         
         this.item = item;
 	}
@@ -74,6 +80,9 @@ public class InventoryDrop{
 	
 	public InventoryItem getItem() {
 		return this.item;
+	}
+	public Node getNode() {
+		return this.itemdropnode;
 	}
 	public RigidBodyControl getCollisionBox() {
 		return this.rigidBodyControl;
