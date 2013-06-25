@@ -22,6 +22,7 @@ import com.celestial.SinglePlayer.Components.Star;
 import com.celestial.SinglePlayer.Input.InputControl;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
 import com.celestial.SinglePlayer.Inventory.InventoryRegister;
+import com.celestial.SinglePlayer.Physics.Listener;
 import com.celestial.util.InventoryException;
 import com.cubes.CubesSettings;
 import com.jme3.app.Application;
@@ -118,7 +119,7 @@ public class SPPortal extends CelestialPortal{
 
 		InventoryRegister.RegisterBlocks(this.invmanager);
 
-		try {
+		/*try {
 			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.DIRT.getID()), -1, 1);
 			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.STONE.getID()), -1, 2);
 
@@ -131,7 +132,7 @@ public class SPPortal extends CelestialPortal{
 			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.GRASS.getID()), -1, 9);
 		} catch (InventoryException e) {
 			//pass
-		}
+		}*/
 
 		initCrossHairs();
 		initOtherHud();
@@ -159,6 +160,9 @@ public class SPPortal extends CelestialPortal{
 		initLighting();
 
 		this.player = new Player(this, new CapsuleCollisionShape(1.5f, 2f, 1));
+		this.player.setGalaxy(this.galaxy);
+		this.player.setSector(this.galaxy.getSectorAt(0,0,0));
+		this.player.setSystem(this.player.getSector().getSystem(0));
 		
 		this.flyCam.setMoveSpeed(100);
 		this.cam.setFrustumFar(65000);
@@ -176,7 +180,9 @@ public class SPPortal extends CelestialPortal{
 		this.rootNode.setShadowMode(ShadowMode.Off);
 		terrnode.setShadowMode(ShadowMode.CastAndReceive);
 
+		this.bulletAppState.getPhysicsSpace().addCollisionListener(new Listener(this));
 		//initAudio();
+		
 	}
 	
 	@Override
@@ -197,11 +203,14 @@ public class SPPortal extends CelestialPortal{
 				this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).rotate();
 			}
 		}
-		this.invmanager.refreshHotSlots();
+		this.invmanager.updateAll();
 	}
 	
 	private void updateGravity(float tpf) {
-		
+		if(this.player.getClosestPlanet() != null) {
+			Planet planet = this.player.getClosestPlanet();
+			//TODO
+		}
 	}
 	
 	private void initLighting() {	  
@@ -283,8 +292,16 @@ public class SPPortal extends CelestialPortal{
 		if(InputControl.statson) {
 			Vector3f location = this.cam.getLocation();
 			this.posText.setText("X: "+location.x + " Y: "+location.y+" Z: "+location.z);
+			if(this.player.getClosestPlanet() != null) {
+				if(this.player.getClosestPlanet().getName() == "null")
+					this.PlanetText.setText("Planet: None");
+				else
+					this.PlanetText.setText("Planet: "+this.player.getClosestPlanet().getName());
+			} else
+				this.PlanetText.setText("Planet: None");
 		} else {
 			this.posText.setText("");
+			this.PlanetText.setText("");
 		}
 	}
 		
@@ -311,6 +328,11 @@ public class SPPortal extends CelestialPortal{
 		this.InvText.setSize(this.guiFont.getCharSet().getRenderedSize());
 		this.InvText.setLocalTranslation(350, this.settings.getHeight() - this.InvText.getLineHeight(), 0);
 		//this.guiNode.attachChild(this.InvText);
+		
+		this.PlanetText = new BitmapText(this.guiFont, false);
+		this.PlanetText.setSize(this.guiFont.getCharSet().getRenderedSize());
+		this.PlanetText.setLocalTranslation(0, this.PlanetText.getLineHeight(), 0);
+		this.guiNode.attachChild(this.PlanetText);
 
 
 	}

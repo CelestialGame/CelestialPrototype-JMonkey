@@ -17,13 +17,14 @@ import com.jme3.math.Vector3f;
 public class SolarSystem {
 	private Sector sector;
 	private Star star;
+	private String name;
 	private Map<Vector3f,Planet> planetMap;
 	private List<Planet> planetList;
 
-	public SolarSystem(Sector sector)
+	public SolarSystem(Sector sector, String name)
 	{
 		this.sector = sector;
-		
+		this.name = name;
 		this.generate();
 	}
 
@@ -33,7 +34,7 @@ public class SolarSystem {
 		
 		this.star = new Star(this);
 		
-		Planet p = new Planet(star, 3, new Vector3f(100, 100, 100));
+		Planet p = new Planet(star, 3, new Vector3f(100, 100, 100), name);
 		
 		this.planetMap.put(p.getWantedLocation(), p);
 	
@@ -58,5 +59,13 @@ public class SolarSystem {
 
 	public Sector getSector() {
 		return sector;
+	}
+	
+	public List<Planet> getPlanets() {
+		return this.planetList;
+	}
+	
+	public String getName() {
+		return name;
 	}
 }

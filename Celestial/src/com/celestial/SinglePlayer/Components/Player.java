@@ -10,6 +10,7 @@ import com.celestial.CelestialPortal;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 
 @SuppressWarnings("deprecation")
 public class Player extends CharacterControl{
@@ -29,6 +30,7 @@ public class Player extends CharacterControl{
 		setFallSpeed(30);
 		setGravity(50);
 		setPhysicsLocation(portal.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getSpawnLocation());
+		//setCollisionGroup(COLLISION_GROUP_01);
 	}
 	
 	public void setGalaxy(Galaxy galaxy)
@@ -63,6 +65,14 @@ public class Player extends CharacterControl{
 	
 	public Planet getClosestPlanet()
 	{
+		for(Planet planet : getSystem().getPlanets()) {
+			float distance = this.getPhysicsLocation().distance(planet.getPlanetNode().getWorldTranslation());
+			
+			float factor = (((planet.centerofdiam*16)-8)*3)*7;
+			if(distance <= factor) {
+				return planet;
+			}
+		}
 		return null;
 	}
 	
