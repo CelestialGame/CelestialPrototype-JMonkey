@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.celestial.SinglePlayer.Components.Galaxy;
 import com.celestial.SinglePlayer.Components.Planet;
+import com.celestial.SinglePlayer.Components.Player;
 import com.celestial.SinglePlayer.Input.InputControl;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
 import com.cubes.CubesSettings;
@@ -44,7 +45,7 @@ public abstract class CelestialPortal {
 	protected AppSettings settings;
 	protected InputControl inputControl;
 	protected InputManager inputManager;
-	public CharacterControl player;
+	public Player player;
 	public Application app;
 	public BitmapText posText;
 	public BitmapText InvText;

@@ -6,6 +6,66 @@ Date Created:
 
 package com.celestial.SinglePlayer.Components;
 
-public class Player {
+import com.celestial.CelestialPortal;
+import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
+import com.jme3.bullet.control.CharacterControl;
 
+@SuppressWarnings("deprecation")
+public class Player extends CharacterControl{
+	
+	private CapsuleCollisionShape capsuleShape;
+	private CelestialPortal portal;
+	private Galaxy galaxy;
+	private Sector sector;
+	private SolarSystem system;
+
+	public Player(CelestialPortal portal, CapsuleCollisionShape capsuleShape)
+	{
+		super(capsuleShape, 0.05f);	
+		this.capsuleShape = capsuleShape;
+		setJumpSpeed(20);
+		setFallSpeed(30);
+		setGravity(50);
+		setPhysicsLocation(portal.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getSpawnLocation());
+	}
+	
+	public void setGalaxy(Galaxy galaxy)
+	{
+		this.galaxy = galaxy;
+	}
+	
+	public void setSector(Sector sector)
+	{
+		this.sector = sector;
+	}
+	
+	public void setSystem(SolarSystem system)
+	{
+		this.system = system;
+	}
+	
+	public Galaxy getGalaxy()
+	{
+		return galaxy;
+	}
+	
+	public Sector getSector()
+	{
+		return sector;
+	}
+	
+	public SolarSystem getSystem()
+	{
+		return system;
+	}
+	
+	public Planet getClosestPlanet()
+	{
+		return null;
+	}
+	
+	public int getCurrentFaceOfPlanet(Planet planet)
+	{
+		return 0;
+	}
 }

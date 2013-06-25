@@ -15,6 +15,7 @@ import com.celestial.Blocks.Blocks;
 import com.celestial.Blocks.BlocksEnum;
 import com.celestial.SinglePlayer.Components.Galaxy;
 import com.celestial.SinglePlayer.Components.Planet;
+import com.celestial.SinglePlayer.Components.Player;
 import com.celestial.SinglePlayer.Components.Sector;
 import com.celestial.SinglePlayer.Components.SectorCoord;
 import com.celestial.SinglePlayer.Components.Star;
@@ -152,13 +153,8 @@ public class SPPortal extends CelestialPortal{
 		/** TODO: lighting fix -_- :P **/
 		initLighting();
 
-		CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f, 2f, 1);
-		this.player = new CharacterControl(capsuleShape, 0.05f);
-		this.player.setJumpSpeed(20);
-		this.player.setFallSpeed(30);
-		this.player.setGravity(50);
-		this.player.setPhysicsLocation(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getSpawnLocation());
-		this.player.getCollisionGroup();
+		this.player = new Player(this, new CapsuleCollisionShape(1.5f, 2f, 1));
+		
 		this.flyCam.setMoveSpeed(100);
 		this.cam.setFrustumFar(65000);
 
