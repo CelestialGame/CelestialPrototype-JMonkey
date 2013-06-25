@@ -41,12 +41,17 @@ import com.jme3.light.AmbientLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
+import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.BloomFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.shadow.EdgeFilteringMode;
+import com.jme3.shadow.PointLightShadowFilter;
+import com.jme3.shadow.PointLightShadowRenderer;
 import com.jme3.system.AppSettings;
 import com.jme3.system.Timer;
 import com.jme3.util.SkyFactory;
@@ -170,8 +175,8 @@ public class SPPortal extends CelestialPortal{
 		
 		this.rootNode.setShadowMode(ShadowMode.Off);
 		terrnode.setShadowMode(ShadowMode.CastAndReceive);
-		
-		initAudio();		
+
+		//initAudio();
 	}
 	
 	@Override
@@ -179,10 +184,11 @@ public class SPPortal extends CelestialPortal{
 		updateCamera(tpf);
 		updateStats(tpf);
 		
+		updateGravity(tpf);
+		
 		/**
 		 * TODO: Rotation
 		 */
-		
 		if(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0) != null)
 		{
 			if(this.timer.getTimeInSeconds()-this.lastRotation > 0)
@@ -191,8 +197,11 @@ public class SPPortal extends CelestialPortal{
 				this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).rotate();
 			}
 		}
-
 		this.invmanager.refreshHotSlots();
+	}
+	
+	private void updateGravity(float tpf) {
+		
 	}
 	
 	private void initLighting() {	  
@@ -200,9 +209,9 @@ public class SPPortal extends CelestialPortal{
 		al.setColor(ColorRGBA.White);
 		rootNode.addLight(al);
 		
-		//this.rootNode.addLight(this.star.getLight());
+		this.rootNode.addLight(this.star.getLight());
 		
-	    /*PointLightShadowRenderer plsr = new PointLightShadowRenderer(this.assetManager, SHADOWMAP_SIZE);
+	    PointLightShadowRenderer plsr = new PointLightShadowRenderer(this.assetManager, SHADOWMAP_SIZE);
         plsr.setLight(this.star.getLight());
         plsr.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
         //plsr.setFlushQueues(false);
@@ -220,7 +229,7 @@ public class SPPortal extends CelestialPortal{
         fpp.addFilter(bloom);
         fpp.addFilter(plsf);
         
-        this.viewPort.addProcessor(fpp);*/
+        this.viewPort.addProcessor(fpp);
 	}
 	
 	public void initAudio() {
