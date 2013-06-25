@@ -106,5 +106,15 @@ public abstract class CelestialPortal {
 	public BulletAppState getPhysics() {
 		return bulletAppState;
 	}
+	
+	public FlyByCamera getFlyCam()
+	{
+		return flyCam;
+	}
+
+	public Camera getCam() {
+		// TODO Auto-generated method stub
+		return cam;
+	}
 
 }

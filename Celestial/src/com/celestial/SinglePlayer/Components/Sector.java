@@ -70,8 +70,11 @@ public class Sector {
 			return this.systemList.get(index);
 		else
 		{
-			System.out.println("System Null!");
 			return null;
 		}
+	}
+
+	public Galaxy getGalaxy() {
+		return galaxy;
 	}
 }

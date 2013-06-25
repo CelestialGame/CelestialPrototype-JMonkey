@@ -9,12 +9,13 @@ package com.celestial.SinglePlayer.Components;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.celestial.CelestialPortal;
 import com.celestial.SinglePlayer.SPPortal;
 import com.jme3.math.Vector3f;
 
 public class Galaxy {
 
-	private SPPortal portal;
+	private CelestialPortal portal;
 	private Map<SectorCoord,Sector> sectorMap;
 	private int diameter;
 	private int depth;
@@ -30,7 +31,7 @@ public class Galaxy {
 	 * @param depth The depth of the galaxy (in sectors) MUST be odd number
 	 * @param maxSystemsPerSector The maximum amount of systems per sector
 	 */
-	public Galaxy(SPPortal portal, int diameter, int depth, int maxSystemsPerSector)
+	public Galaxy(CelestialPortal portal, int diameter, int depth, int maxSystemsPerSector)
 	{
 		this.portal = portal;
 		this.sectorMap = new HashMap<SectorCoord,Sector>();
@@ -106,6 +107,10 @@ public class Galaxy {
 			System.out.println("Sector Null!");
 			return null;
 		}
+	}
+
+	public CelestialPortal getPortal() {
+		return portal;
 	}
 
 }

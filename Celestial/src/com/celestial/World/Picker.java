@@ -48,13 +48,8 @@ public class Picker {
 			Vector3f rotatedContactPoint = q1.mult(translatedContactPoint);
 			Vector3f rotatedTranslation = q1.mult(terrNode.getWorldTranslation().subtract(p.getWantedLocation()));//q.mult(terrNode.getWorldTranslation());	
 
-			System.out.println(rotatedContactPoint);
 			rotatedContactPoint = smartRound(rotatedContactPoint);
-			System.out.println(rotatedContactPoint);
 			rotatedTranslation = round(rotatedTranslation);
-
-			System.out.println("Sub: "+collisionContactPoint.subtract(terrNode.getWorldTranslation()));
-			System.out.println("Q: "+q1+" - Rotated: "+rotatedTranslation);
 
 			Vector3f relContactPoint = rotatedContactPoint.subtract(rotatedTranslation);
 

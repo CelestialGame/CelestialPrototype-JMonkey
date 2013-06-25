@@ -55,4 +55,8 @@ public class SolarSystem {
 	{
 		return this.planetList.get(index);
 	}
+
+	public Sector getSector() {
+		return sector;
+	}
 }

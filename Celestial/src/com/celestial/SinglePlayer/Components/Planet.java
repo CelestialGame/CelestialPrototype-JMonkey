@@ -6,9 +6,12 @@ Date Created:
 
 package com.celestial.SinglePlayer.Components;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.celestial.Celestial;
+import com.celestial.CelestialPortal;
 import com.celestial.Blocks.BlocksEnum;
 import com.cubes.BlockChunkControl;
 import com.cubes.BlockChunkListener;
@@ -36,6 +39,8 @@ public class Planet implements BlockChunkListener {
 	private Vector3f amountRotation;
 	private Quaternion originalRotation;
 	private Vector3f originalTranslationTerrain;
+	private CelestialPortal portal;
+	private List<PlanetCorner> cornerList;
 
 	/**
 	 * Create a new Planet
@@ -50,7 +55,9 @@ public class Planet implements BlockChunkListener {
 		this.location = location;
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
 
-		this.amountRotation = new Vector3f(0.0001f, 0.001f, 0f);
+		this.portal = star.getSolarSystem().getSector().getGalaxy().getPortal();
+		
+		this.amountRotation = new Vector3f(0.000f, 0.00f, 0f);
 		
 		if(diameter % 2 == 0)
 		{
@@ -63,7 +70,7 @@ public class Planet implements BlockChunkListener {
 
 	private void generatePlanet() {
 		terrainNode = new Node();
-		terrcontrol = new BlockTerrainControl(Celestial.portal.csettings, new Vector3Int(diameter, diameter, diameter));
+		terrcontrol = new BlockTerrainControl(portal.csettings, new Vector3Int(diameter, diameter, diameter));
 		terrcontrol.addChunkListener(this);
 
 		for(int i=0; i<diameter; i++) //y
@@ -98,11 +105,53 @@ public class Planet implements BlockChunkListener {
 		
 		terrainNode.move(((centerofdiam*16)-8)*-3,((centerofdiam*16)-8)*-3,((centerofdiam*16)-8)*-3);
 		planetNode.move(location);
-		System.out.println(terrainNode.getWorldTranslation().subtract(location));
 		this.originalTranslationTerrain = terrainNode.getWorldTranslation().clone();
-		Celestial.portal.getRootNode().attachChild(planetNode);
+		portal.getRootNode().attachChild(planetNode);
+		
+		/* CORNERS */
+		this.cornerList = new ArrayList<PlanetCorner>();
+		
+		PlanetCorner c1 = new PlanetCorner(0,1,2);
+		planetNode.attachChild(c1);
+		c1.move(((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*3);
+		this.cornerList.add(c1);
+		
+		PlanetCorner c2 = new PlanetCorner(0,2,4);
+		planetNode.attachChild(c2);
+		c2.move(((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*-3);
+		this.cornerList.add(c2);
+		
+		PlanetCorner c3 = new PlanetCorner(0,4,3);
+		planetNode.attachChild(c3);
+		c3.move(((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*-3);
+		this.cornerList.add(c3);
+		
+		PlanetCorner c4 = new PlanetCorner(0,3,1);
+		planetNode.attachChild(c4);
+		c4.move(((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*3);
+		this.cornerList.add(c4);
+		
+		PlanetCorner c5 = new PlanetCorner(5,1,2);
+		planetNode.attachChild(c5);
+		c5.move(((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*3);
+		this.cornerList.add(c5);
+		
+		PlanetCorner c6 = new PlanetCorner(5,2,4);
+		planetNode.attachChild(c6);
+		c6.move(((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*-3);
+		this.cornerList.add(c6);
+		
+		PlanetCorner c7 = new PlanetCorner(5,4,3);
+		planetNode.attachChild(c7);
+		c7.move(((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*-3);
+		this.cornerList.add(c7);
+		
+		PlanetCorner c8 = new PlanetCorner(5,3,1);
+		planetNode.attachChild(c8);
+		c8.move(((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*3);
+		this.cornerList.add(c8);
 	}
-
+	
 	public void makeChunk(int locx, int locy, int locz, BlockTerrainControl blockTerrain)
 	{
 		int diameter = 16;
@@ -207,7 +256,92 @@ public class Planet implements BlockChunkListener {
 
 	}
 
-
+	public PlanetCorner[] getCornersForFace(int face)
+	{
+		PlanetCorner[] values = new PlanetCorner[4];
+		
+		PlanetCorner c1 = null;
+		PlanetCorner c2 = null;
+		PlanetCorner c3 = null;
+		PlanetCorner c4 = null;
+		
+		int amt = 0;
+		for(PlanetCorner c : this.cornerList)
+			if(c.getSides().contains(face))
+				switch(amt)
+				{
+				case 0:
+					c1 = c;
+					amt++;
+					break;
+				case 1:
+					c2 = c;
+					amt++;
+					break;
+				case 2:
+					c3 = c;
+					amt++;
+					break;
+				case 3:
+					c4 = c;
+					amt++;
+					break;
+				default:
+					break;
+				}
+		
+		if(c1 != null && c2 != null && c3 != null && c4 != null)
+		{
+			
+			switch(face)
+			{
+				case 0:
+					values[0] = c1;
+					values[1] = c2;
+					values[2] = c3;
+					values[3] = c4;
+					break;
+				case 1:
+					values[0] = c1;
+					values[1] = c2;
+					values[2] = c4;
+					values[3] = c3;
+					break;
+				case 2:
+					values[0] = c2;
+					values[1] = c1;
+					values[2] = c3;
+					values[3] = c4;
+					break;
+				case 3:
+					values[0] = c1;
+					values[1] = c2;
+					values[2] = c4;
+					values[3] = c3;
+					break;
+				case 4:
+					values[0] = c2;
+					values[1] = c1;
+					values[2] = c3;
+					values[3] = c4;
+					break;
+				case 5:
+					values[0] = c1;
+					values[1] = c4;
+					values[2] = c3;
+					values[3] = c2;
+					break;
+				default:
+					return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+		return values;
+	}
+	
 	private int getTopBlock(Vector3Int location, BlockChunkControl blockTerrain2) {
         int height = 0;
         for (int i = 0; i < 256; i++) {
@@ -231,11 +365,11 @@ public class Planet implements BlockChunkListener {
 		if(chunkGeometry.getTriangleCount() > 0){
 			if(rigidBodyControl != null){
 				chunkGeometry.removeControl(rigidBodyControl);
-				Celestial.portal.getBulletAppState().getPhysicsSpace().remove(rigidBodyControl);
+				portal.getBulletAppState().getPhysicsSpace().remove(rigidBodyControl);
 			}
 			rigidBodyControl = new RigidBodyControl(0);
 			chunkGeometry.addControl(rigidBodyControl);
-			Celestial.portal.getBulletAppState().getPhysicsSpace().add(rigidBodyControl);
+			portal.getBulletAppState().getPhysicsSpace().add(rigidBodyControl);
 		}
 		else{
 			if(rigidBodyControl != null){

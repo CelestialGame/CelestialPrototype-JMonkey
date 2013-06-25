@@ -18,7 +18,7 @@ import com.jme3.scene.shape.Box;
 
 
 public class Star {
-	private Object solarSystem;
+	private SolarSystem system;
 	private Vector3f location;
 	private Node StarNode;
 	private PointLight light;
@@ -29,9 +29,9 @@ public class Star {
 	 * @param solarSystem
 	 * @param location
 	 */
-	public Star(SolarSystem solarSystem, Vector3f location)
+	public Star(SolarSystem system, Vector3f location)
 	{
-		this.solarSystem = solarSystem;
+		this.system = system;
 		this.location = location;
 		
 		this.generateStar();
@@ -41,9 +41,9 @@ public class Star {
 	 * Generates a star at 0,0,0
 	 * @param solarSystem
 	 */
-	public Star(SolarSystem solarSystem)
+	public Star(SolarSystem system)
 	{
-		this.solarSystem = solarSystem;
+		this.system = system;
 		this.location = new Vector3f(0,0,0);
 		
 		this.generateStar();
@@ -89,5 +89,9 @@ public class Star {
 	public Vector3f getLocation()
 	{
 		return location;
+	}
+
+	public SolarSystem getSolarSystem() {
+		return system;
 	}
 }
