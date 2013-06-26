@@ -17,6 +17,7 @@ import com.cubes.CubesSettings;
 import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.font.BitmapText;
 import com.jme3.input.FlyByCamera;
@@ -59,7 +60,7 @@ public abstract class CelestialPortal {
 	
 	public abstract void simpleRender(RenderManager rm);
 	
-	public abstract CharacterControl getPlayer();
+	public abstract BetterCharacterControl getPlayer();
 
 	public BulletAppState getBulletAppState() {
 		return bulletAppState;

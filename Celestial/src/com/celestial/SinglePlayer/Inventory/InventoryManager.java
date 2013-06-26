@@ -36,6 +36,7 @@ public class InventoryManager {
 	InventorySlot hotslot9;
 	
 	List<InventorySlot> hotslots;
+	List<InventorySlot> extendedinv;
 	
 	InventorySlot selectedhotslot;
 
@@ -64,7 +65,7 @@ public class InventoryManager {
 		this.hotslot7 = new InventorySlot(null, -2, this);
 		this.hotslot8 = new InventorySlot(null, -2, this);
 		this.hotslot9 = new InventorySlot(null, -2, this);
-		this.hotslot10 = new InventorySlot(null, -2, this);
+		//this.hotslot10 = new InventorySlot(null, -2, this);
 		
 		this.hotslots = new ArrayList<InventorySlot>();
 		this.hotslots.add(this.hotslot1);
@@ -76,7 +77,7 @@ public class InventoryManager {
 		this.hotslots.add(this.hotslot7);
 		this.hotslots.add(this.hotslot8);
 		this.hotslots.add(this.hotslot9);
-		this.hotslots.add(this.hotslot10);
+		//this.hotslots.add(this.hotslot10);
 		
 		this.selectedhotslot = this.hotslot1;
 		
@@ -118,7 +119,7 @@ public class InventoryManager {
 	}
 	
 	//HotSlot Stuffs
-	public void setHotSlot(InventoryItem item, int contents, int hotslot) throws InventoryException {
+	private void setHotSlot(InventoryItem item, int contents, int hotslot) throws InventoryException {
 		if(this.items.containsValue(item)) {
 			if(hotslot <= 9) {
 				this.hotslots.get(hotslot).setItem(item, contents);
@@ -147,7 +148,7 @@ public class InventoryManager {
 		this.inventorygui.setHotBarSelection(hotslot);
 	}
 	
-	public int getNextEmptySlot() {
+	private int getNextEmptySlot() {
 		for (int i=0;i<this.hotslots.size();i++) {
 			if(this.hotslots.get(i).getItem() == null) {
 				return i;
@@ -169,6 +170,15 @@ public class InventoryManager {
 	public List<InventoryDrop> getDropItems() {
 		return this.dropitems;
 	}
+	private List<InventoryItem> getHotSlotItems() {
+		List<InventoryItem> returnlist = new ArrayList<InventoryItem>();
+		for(InventorySlot slot : this.hotslots) {
+			returnlist.add(slot.getItem());
+		}
+		return returnlist;
+	}
+	
+	// Drop Items
 	public void dropItem(InventoryItem item, Vector3f location) {
 		InventoryDrop drop = new InventoryDrop(item, location);
 		this.dropitemsnode.attachChild(drop.getNode());
@@ -179,6 +189,40 @@ public class InventoryManager {
 		if(this.dropitems.contains(drop)) {
 			this.dropitemsnode.detachChild(drop.getNode());
 			itr.remove();
+		}
+	}
+	
+	public void pickupDrop(InventoryDrop drop, int amount) {
+		for(InventorySlot slot : this.hotslots) {
+			System.out.println(slot+" "+slot.item + " " + slot.contents);
+		}
+		if(getHotSlotItems().contains(drop.getItem())) {
+			int index = getHotSlotItems().lastIndexOf(drop.getItem());
+			InventorySlot slot = this.hotslots.get(index);
+			if(slot.getNumberContents() < 64) {
+				slot.updateContents(false);
+				return;
+			} else {
+				if(this.getNextEmptySlot() != EMPTY) {
+					try {
+						setHotSlot(drop.getItem(), 1, getNextEmptySlot());
+					} catch (InventoryException exception) {
+						exception.printStackTrace();
+					}
+				} else {
+					this.extendedinv.add(new InventorySlot(drop.getItem(), 1, this));
+				}
+			}
+		} else {
+			if(this.getNextEmptySlot() != EMPTY) {
+				try {
+					setHotSlot(drop.getItem(), 1, getNextEmptySlot());
+				} catch (InventoryException exception) {
+					exception.printStackTrace();
+				}
+			} else {
+				this.extendedinv.add(new InventorySlot(drop.getItem(), 1, this));
+			}
 		}
 	}
 	

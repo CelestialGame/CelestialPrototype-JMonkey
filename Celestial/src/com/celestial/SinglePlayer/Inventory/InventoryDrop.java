@@ -1,6 +1,7 @@
 package com.celestial.SinglePlayer.Inventory;
 
 import com.celestial.Celestial;
+import com.celestial.SinglePlayer.SPPortal;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
@@ -86,6 +87,9 @@ public class InventoryDrop{
 	}
 	public RigidBodyControl getCollisionBox() {
 		return this.rigidBodyControl;
+	}
+	public InventorySlot getSlot(InventoryManager invmanager) {
+		return new InventorySlot(getItem(), 1, invmanager);
 	}
 	
 }

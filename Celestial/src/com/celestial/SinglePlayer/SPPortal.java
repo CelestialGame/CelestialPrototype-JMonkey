@@ -31,6 +31,7 @@ import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
@@ -69,6 +70,9 @@ public class SPPortal extends CelestialPortal{
 	private FilterPostProcessor fpp;
 	public static final int SHADOWMAP_SIZE = 1024;
 	public static float camHeight = 2f;
+	
+	private Vector3f normalGravity = new Vector3f(0, -9.81f, 0);
+	private Vector3f zeroGravity = new Vector3f(0, 0, 0);
 
 	public SPPortal(
 			Celestial parent, 
@@ -161,10 +165,11 @@ public class SPPortal extends CelestialPortal{
 		/** TODO: lighting fix -_- :P **/
 		initLighting();
 
-		this.player = new Player(this, new CapsuleCollisionShape(1.5f, 2f, 1));
+		this.player = new Player(this);
 		this.player.setGalaxy(this.galaxy);
 		this.player.setSector(this.galaxy.getSectorAt(0,0,0));
 		this.player.setSystem(this.player.getSector().getSystem(0));
+		this.rootNode.attachChild(this.player.getNode());
 		
 		this.flyCam.setMoveSpeed(100);
 		this.cam.setFrustumFar(65000);
@@ -228,26 +233,38 @@ public class SPPortal extends CelestialPortal{
 	private void updateGravity(float tpf) {
 		if(this.player.getClosestPlanet() != null) {
 			Planet planet = this.player.getClosestPlanet();
-			int FaceOn = this.player.getCurrentFaceOfPlanet(planet);
+			/*int FaceOn = this.player.getCurrentFaceOfPlanet(planet);
 			if(FaceOn == planet.TOP) {
 				this.player.setGravity(50);
 				this.player.setUpAxis(1);
+				this.player.rotatePlayer(planet.TOP);
 			} else if (FaceOn == planet.BOTTOM) {
 				this.player.setGravity(-50);
 				this.player.setUpAxis(1);
+				this.player.rotatePlayer(planet.BOTTOM);
 			} else if (FaceOn == planet.NORTH) {
 				this.player.setGravity(-50);
 				this.player.setUpAxis(2);
+				this.player.rotatePlayer(planet.NORTH);
 			} else if (FaceOn == planet.SOUTH) {
 				this.player.setGravity(50);
 				this.player.setUpAxis(2);
+				this.player.rotatePlayer(planet.SOUTH);
 			} else if (FaceOn == planet.EAST) {
 				this.player.setGravity(50);
 				this.player.setUpAxis(0);
+				this.player.rotatePlayer(planet.EAST);
 			} else if (FaceOn == planet.WEST) {
 				this.player.setGravity(-50);
 				this.player.setUpAxis(0);
-			}
+				this.player.rotatePlayer(planet.WEST);
+			}*/
+			if(planet.getName().equals("null")) {
+				this.player.setGravity(zeroGravity);
+			} else
+				this.player.setGravity(normalGravity);
+		} else {
+			this.player.setGravity(zeroGravity);
 		}
 	}
 	
@@ -291,6 +308,7 @@ public class SPPortal extends CelestialPortal{
 	}
 	
 	public void updateCamera(float tpf) {
+		//TODO modify to work with planet sides
 		if(this.bulletAppState.isEnabled()) {
 			Vector3f camDir = this.cam.getDirection().clone().multLocal(0.6f);
 			Vector3f camLeft = this.cam.getLeft().clone().multLocal(0.2f);
@@ -299,13 +317,14 @@ public class SPPortal extends CelestialPortal{
 			if (this.right) { this.walkDirection.addLocal(camLeft.negate()); }
 			if (this.up)    { this.walkDirection.addLocal(camDir); }
 			if (this.down)  { this.walkDirection.addLocal(camDir.negate()); }
-			this.walkDirection.y = 0;
+			//this.walkDirection.y = 0;
 			if(this.up || this.down) {
 				this.walkDirection.x = this.walkDirection.x/2;
 				this.walkDirection.z = this.walkDirection.z/2;
 			}
 			this.player.setWalkDirection(this.walkDirection);
-			this.cam.setLocation(new Vector3f(this.player.getPhysicsLocation().getX(), this.player.getPhysicsLocation().getY()+camHeight, this.player.getPhysicsLocation().getZ()));
+			this.cam.setLocation(new Vector3f(this.player.getNode().getLocalTranslation().getX(), this.player.getNode().getLocalTranslation().getY()+camHeight, this.player.getNode().getLocalTranslation().getZ()));
+			
 			this.inputControl.renderBlockBorder();
 		}
 		
@@ -371,7 +390,7 @@ public class SPPortal extends CelestialPortal{
 	}
 
 	@Override
-	public CharacterControl getPlayer() {
+	public Player getPlayer() {
 		return this.player;
 	}
 
