@@ -37,7 +37,7 @@ public class Planet implements BlockChunkListener {
 	public static final int SOUTH = 3;
 	public static final int WEST = 4;
 	public static final int BOTTOM = 5;
-	public static float atmospheresizefactor;
+	public float atmospheresizefactor;
 	private Star star;
 	protected int diameter;
 	private String name;
