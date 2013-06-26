@@ -105,7 +105,7 @@ public class InputControl {
 				Vector3f blockAbsLocation = (Vector3f) values[0];
 				if(blockLocation != null)
 				{
-					float dist = parent.getPlayer().getPhysicsLocation().distance(blockAbsLocation);
+					float dist = parent.player.getNode().getLocalTranslation().distance(blockAbsLocation);
 					InventoryItem item;
 					if(!parent.getBulletAppState().isEnabled()) //Are they flying?
 					{
@@ -168,7 +168,7 @@ public class InputControl {
 				Vector3Int blockLocation = (Vector3Int) values[1];
 				Vector3f blockAbsLocation = (Vector3f) values[0];
 				if(blockLocation != null){
-					float dist = parent.player.getPhysicsLocation().distance(blockAbsLocation);
+					float dist = parent.player.getNode().getLocalTranslation().distance(blockAbsLocation);
 					if(!parent.getBulletAppState().isEnabled()) //Are they flying?
 					{
 						BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
@@ -184,7 +184,8 @@ public class InputControl {
 							BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 							if(chunk != null && blockLocation != null && parent.getInventoryManager().getSelectedHotSlot().getItem() != null) {
 								chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock()); //Add the Block
-								parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
+								if(chunk.getBlock(blockLocation) != null)
+									parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
 							}
 						}
 					}
@@ -207,7 +208,7 @@ public class InputControl {
 					parent.setCamSpeed(100);
 				} else {
 					parent.getBulletAppState().setEnabled(true);
-					parent.player.setPhysicsLocation(new Vector3f(cam.getLocation().getX(), cam.getLocation().getY()-parent.getCamHeight(), cam.getLocation().getZ()));
+					parent.player.getNode().setLocalTranslation(new Vector3f(cam.getLocation().getX(), cam.getLocation().getY()-parent.getCamHeight(), cam.getLocation().getZ()));
 				}
 			}
 			else if(binding.equals("ESC"))
@@ -256,8 +257,8 @@ public class InputControl {
 			}
 			else if(binding.equals("Respawn") && !keyPressed)
 			{
-				parent.player.setPhysicsLocation(parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getSpawnLocation());
-				parent.cam.setLocation(new Vector3f(parent.player.getPhysicsLocation().getX(), parent.player.getPhysicsLocation().getY()+parent.getCamHeight(), parent.player.getPhysicsLocation().getZ()));
+				parent.player.getNode().setLocalTranslation(parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getSpawnLocation());
+				parent.cam.setLocation(new Vector3f(parent.player.getNode().getLocalTranslation().getX(), parent.player.getNode().getLocalTranslation().getY()+parent.getCamHeight(), parent.player.getNode().getLocalTranslation().getZ()));
 			}
 			else if(binding.equals("FindFace") && !keyPressed)
 			{

@@ -31,15 +31,10 @@ public class Listener implements PhysicsCollisionListener {
 			while(itr.hasNext()) {
 				InventoryDrop drop = itr.next();
 				if((e.getObjectA().equals(drop.getCollisionBox()) && e.getObjectB().equals(this.portal.player)) || (e.getObjectB().equals(drop.getCollisionBox()) && e.getObjectA().equals(this.portal.player))) {
-					if(invmanager.getNextEmptySlot() != InventoryManager.EMPTY) {
-						try {
-							invmanager.setHotSlot(drop.getItem(), 1, invmanager.getNextEmptySlot());
-							invmanager.getInvGui().updateHotBar();
-							invmanager.removeDropItem(drop, itr);
-						} catch (InventoryException exception) {
-							exception.printStackTrace();
-						}
-					}
+					//System.out.println("Collsion detected!");
+					invmanager.pickupDrop(drop, 1);
+					invmanager.updateAll();
+					invmanager.removeDropItem(drop, itr);
 				}
 			}
 		}

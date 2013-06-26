@@ -31,6 +31,7 @@ import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
@@ -44,6 +45,7 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.BloomFilter;
+import com.jme3.post.filters.LightScatteringFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -64,8 +66,12 @@ public class SPPortal extends CelestialPortal{
 	private Timer timer;
 	private float lastRotation;
 	private boolean rotated = false;
+	private FilterPostProcessor fpp;
 	public static final int SHADOWMAP_SIZE = 1024;
 	public static float camHeight = 2f;
+	
+	private Vector3f normalGravity = new Vector3f(0, -9.81f, 0);
+	private Vector3f zeroGravity = new Vector3f(0, 0, 0);
 
 	public SPPortal(
 			Celestial parent, 
@@ -153,10 +159,11 @@ public class SPPortal extends CelestialPortal{
 		/** TODO: lighting fix -_- :P **/
 		initLighting();
 
-		this.player = new Player(this, new CapsuleCollisionShape(1.5f, 2f, 1));
+		this.player = new Player(this);
 		this.player.setGalaxy(this.galaxy);
 		this.player.setSector(this.galaxy.getSectorAt(0,0,0));
 		this.player.setSystem(this.player.getSector().getSystem(0));
+		this.rootNode.attachChild(this.player.getNode());
 		
 		this.flyCam.setMoveSpeed(100);
 		this.cam.setFrustumFar(65000);
@@ -183,7 +190,7 @@ public class SPPortal extends CelestialPortal{
 	public void simpleUpdate(float tpf) {
 		updateCamera(tpf);
 		updateStats(tpf);
-		
+		updateLight(tpf);
 		updateGravity(tpf);
 		
 		/**
@@ -200,39 +207,88 @@ public class SPPortal extends CelestialPortal{
 		this.invmanager.updateAll();
 	}
 	
+	public void updateLight(float tpf) {
+		/*if(this.player.getClosestAtmosphere() != null) {
+			Planet planet = this.player.getClosestAtmosphere();
+	        Vector3f lightPos = planet.getStar().getLocation();
+	        LightScatteringFilter filter = new LightScatteringFilter(lightPos);
+	        if(!this.fpp.getFilterList().contains(filter))
+	        	this.fpp.addFilter(filter);
+	        if(!this.viewPort.getProcessors().contains(this.fpp))
+	        	this.viewPort.addProcessor(this.fpp);
+		} else {
+			if(this.fpp.getFilterList().contains(LightScatteringFilter.class)) {
+				LightScatteringFilter filter = this.fpp.getFilter(LightScatteringFilter.class);
+				this.fpp.removeFilter(filter);
+			}	
+		}*/
+	}
+	
 	private void updateGravity(float tpf) {
 		if(this.player.getClosestPlanet() != null) {
 			Planet planet = this.player.getClosestPlanet();
-			//TODO
+			/*int FaceOn = this.player.getCurrentFaceOfPlanet(planet);
+			if(FaceOn == planet.TOP) {
+				this.player.setGravity(50);
+				this.player.setUpAxis(1);
+				this.player.rotatePlayer(planet.TOP);
+			} else if (FaceOn == planet.BOTTOM) {
+				this.player.setGravity(-50);
+				this.player.setUpAxis(1);
+				this.player.rotatePlayer(planet.BOTTOM);
+			} else if (FaceOn == planet.NORTH) {
+				this.player.setGravity(-50);
+				this.player.setUpAxis(2);
+				this.player.rotatePlayer(planet.NORTH);
+			} else if (FaceOn == planet.SOUTH) {
+				this.player.setGravity(50);
+				this.player.setUpAxis(2);
+				this.player.rotatePlayer(planet.SOUTH);
+			} else if (FaceOn == planet.EAST) {
+				this.player.setGravity(50);
+				this.player.setUpAxis(0);
+				this.player.rotatePlayer(planet.EAST);
+			} else if (FaceOn == planet.WEST) {
+				this.player.setGravity(-50);
+				this.player.setUpAxis(0);
+				this.player.rotatePlayer(planet.WEST);
+			}*/
+			if(planet.getName().equals("null")) {
+				this.player.setGravity(zeroGravity);
+			} else
+				this.player.setGravity(normalGravity);
+		} else {
+			this.player.setGravity(zeroGravity);
 		}
 	}
 	
 	private void initLighting() {	  
 		AmbientLight al = new AmbientLight();
 		al.setColor(ColorRGBA.White);
-		rootNode.addLight(al);
+		this.rootNode.addLight(al);
 		
 		this.rootNode.addLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
 		
-	    PointLightShadowRenderer plsr = new PointLightShadowRenderer(this.assetManager, SHADOWMAP_SIZE);
-        plsr.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
-        plsr.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
+
+//	    PointLightShadowRenderer plsr = new PointLightShadowRenderer(this.assetManager, SHADOWMAP_SIZE);
+//        plsr.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
+//        plsr.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
         //plsr.setFlushQueues(false);
         //plsr.displayFrustum();
         //plsr.displayDebug();
-        this.viewPort.addProcessor(plsr);
+        //this.viewPort.addProcessor(plsr);
         
-        PointLightShadowFilter plsf = new PointLightShadowFilter(this.assetManager, SHADOWMAP_SIZE);
-        plsf.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());     
-        plsf.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
-        plsf.setEnabled(true);
+//        PointLightShadowFilter plsf = new PointLightShadowFilter(this.assetManager, SHADOWMAP_SIZE);
+//        plsf.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());     
+//        plsf.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
+//        plsf.setEnabled(true);
 
-        FilterPostProcessor fpp = new FilterPostProcessor(this.assetManager);
+        this.fpp = new FilterPostProcessor(this.assetManager);
         BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
-        fpp.addFilter(bloom);
-        fpp.addFilter(plsf);
+        this.fpp.addFilter(bloom);
+        //fpp.addFilter(plsf);
         
-        this.viewPort.addProcessor(fpp);
+        this.viewPort.addProcessor(this.fpp);
 	}
 	
 	public void initAudio() {
@@ -247,6 +303,7 @@ public class SPPortal extends CelestialPortal{
 	}
 	
 	public void updateCamera(float tpf) {
+		//TODO modify to work with planet sides
 		if(this.bulletAppState.isEnabled()) {
 			Vector3f camDir = this.cam.getDirection().clone().multLocal(0.6f);
 			Vector3f camLeft = this.cam.getLeft().clone().multLocal(0.2f);
@@ -255,13 +312,14 @@ public class SPPortal extends CelestialPortal{
 			if (this.right) { this.walkDirection.addLocal(camLeft.negate()); }
 			if (this.up)    { this.walkDirection.addLocal(camDir); }
 			if (this.down)  { this.walkDirection.addLocal(camDir.negate()); }
-			this.walkDirection.y = 0;
+			//this.walkDirection.y = 0;
 			if(this.up || this.down) {
 				this.walkDirection.x = this.walkDirection.x/2;
 				this.walkDirection.z = this.walkDirection.z/2;
 			}
 			this.player.setWalkDirection(this.walkDirection);
-			this.cam.setLocation(new Vector3f(this.player.getPhysicsLocation().getX(), this.player.getPhysicsLocation().getY()+camHeight, this.player.getPhysicsLocation().getZ()));
+			this.cam.setLocation(new Vector3f(this.player.getNode().getLocalTranslation().getX(), this.player.getNode().getLocalTranslation().getY()+camHeight, this.player.getNode().getLocalTranslation().getZ()));
+			
 			this.inputControl.renderBlockBorder();
 		}
 		
@@ -327,7 +385,7 @@ public class SPPortal extends CelestialPortal{
 	}
 
 	@Override
-	public CharacterControl getPlayer() {
+	public Player getPlayer() {
 		return this.player;
 	}
 

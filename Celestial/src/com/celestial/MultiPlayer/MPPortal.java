@@ -8,6 +8,7 @@ package com.celestial.MultiPlayer;
 
 import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
+import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.renderer.RenderManager;
 
@@ -29,7 +30,7 @@ public class MPPortal extends CelestialPortal {
 	public void startGame() {}
 
 	@Override
-	public CharacterControl getPlayer() {
+	public BetterCharacterControl getPlayer() {
 		return null;
 	}
 
