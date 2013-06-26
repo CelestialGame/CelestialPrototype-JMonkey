@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
 import com.celestial.Blocks.BlocksEnum;
 import com.cubes.BlockChunkControl;
@@ -29,9 +28,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
-import com.jme3.util.TempVars;
 
 public class Planet implements BlockChunkListener {
 	public static final int TOP = 0;
@@ -56,12 +53,15 @@ public class Planet implements BlockChunkListener {
 	private Box atmospherebox;
 	private Geometry atmospheregeom;
 	private Material atmospheremat;
+	private Node starNode;
+	private Vector3f amountRevolution;
 
 	/**
 	 * Create a new Planet
 	 * @param star Parent Star
-	 * @param diameter Diameter of the planet (in 16 block chunks) MUST BE ODD NUMBER
+	 * @param diameter Diameter of the planet (in 16 block chunks) MUST be odd number
 	 * @param location Center point of planet
+	 * @param name Name of the planet
 	 */
 	public Planet(Star star, int diameter, Vector3f location, String name)
 	{
@@ -70,7 +70,8 @@ public class Planet implements BlockChunkListener {
 		this.location = location;
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
 		this.portal = star.getSolarSystem().getSector().getGalaxy().getPortal();
-		this.amountRotation = new Vector3f(0f, 0f, 0f);
+		this.amountRotation = new Vector3f(0f, 0.1f, 0f);
+		this.amountRevolution = new Vector3f(0f, 10f, 0f);
 		this.name = name;
 		
 		if(diameter % 2 == 0)
@@ -83,7 +84,12 @@ public class Planet implements BlockChunkListener {
 	}
 
 	private void generatePlanet() {
+		starNode = new Node();
+		planetNode = new Node();
+		starNode.attachChild(planetNode);
 		terrainNode = new Node();
+		planetNode.attachChild(terrainNode);
+		
 		terrcontrol = new BlockTerrainControl(portal.csettings, new Vector3Int(diameter, diameter, diameter));
 		terrcontrol.addChunkListener(this);
 
@@ -93,7 +99,6 @@ public class Planet implements BlockChunkListener {
 			{
 				for(int k=0; k<diameter; k++) //z
 				{
-					//System.out.println("Make Chunk: "+((j*16))+" "+((i*16))+" "+((k*16)));
 					makeChunk((j*16), (i*16), (k*16), terrcontrol);
 				}                
 			}
@@ -107,20 +112,23 @@ public class Planet implements BlockChunkListener {
 				int x1 = (int) (i*8);
 				int y1 = (int) diameter*16*3;
 				int z1 = (int) (j*8);
-				//System.out.println("Make Tree At: "+new Vector3Int(x1, y1, z1));
 				makeTreeAt(new Vector3Int(x1, y1, z1), terrcontrol);
 			}
 		}
 		terrainNode.addControl(terrcontrol);
 		
-		planetNode = new Node();
-		this.originalRotation = planetNode.getWorldRotation().clone();
-		planetNode.attachChild(terrainNode);
+		/* NODES */
+		
+		this.originalRotation = planetNode.getWorldRotation().clone(); 
 		
 		terrainNode.move(((centerofdiam*16)-8)*-3,((centerofdiam*16)-8)*-3,((centerofdiam*16)-8)*-3);
 		planetNode.move(location);
+		starNode.move(star.getStarNode().getWorldTranslation());
 		this.originalTranslationTerrain = terrainNode.getWorldTranslation().clone();
-		portal.getRootNode().attachChild(planetNode);
+		
+		star.getStarNode().attachChild(starNode);
+		
+		System.out.println("star: "+starNode.getWorldTranslation());
 		
 		/* CORNERS */
 		this.cornerList = new ArrayList<PlanetCorner>();
@@ -437,6 +445,7 @@ public class Planet implements BlockChunkListener {
 	}
 
 	public void rotate() {
+		starNode.rotate(this.amountRevolution.getX()*FastMath.DEG_TO_RAD, this.amountRevolution.getY()*FastMath.DEG_TO_RAD, this.amountRevolution.getZ()*FastMath.DEG_TO_RAD);
 		planetNode.rotate(this.amountRotation.getX()*FastMath.DEG_TO_RAD, this.amountRotation.getY()*FastMath.DEG_TO_RAD, this.amountRotation.getZ()*FastMath.DEG_TO_RAD);
 	}
 	
@@ -451,5 +460,9 @@ public class Planet implements BlockChunkListener {
 
 	public Vector3f getWantedLocation() {
 		return location;
+	}
+
+	public Star getStar() {
+		return star;
 	}
 }

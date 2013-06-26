@@ -7,6 +7,7 @@ Date Created:
 package com.celestial.SinglePlayer.Components;
 
 import com.celestial.Celestial;
+import com.celestial.CelestialPortal;
 import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -23,6 +24,7 @@ public class Star {
 	private Node StarNode;
 	private PointLight light;
 	private Geometry StarGeometry;
+	private CelestialPortal portal;
 
 	/**
 	 * Generates a star at given location	
@@ -45,6 +47,7 @@ public class Star {
 	{
 		this.system = system;
 		this.location = new Vector3f(0,0,0);
+		this.portal = system.getSector().getGalaxy().getPortal();
 		
 		this.generateStar();
 	}
@@ -55,7 +58,7 @@ public class Star {
 		
 		Box starbox = new Box(500,500,500);
 		this.StarGeometry = new Geometry("Star", starbox);
-		Material mat = new Material(Celestial.portal.getAssetManager(),  // Create new material and...
+		Material mat = new Material(portal.getAssetManager(),  // Create new material and...
 			    "Common/MatDefs/Light/Lighting.j3md");
 		mat.setColor("Diffuse", new ColorRGBA(247f, 214f, 81f, 0f));
 		mat.setColor("Ambient", new ColorRGBA(247f, 214f, 81f, 0f));
@@ -65,6 +68,7 @@ public class Star {
 		mat.setBoolean("UseMaterialColors",true);
 		this.StarGeometry.setMaterial(mat);
 		this.StarNode.attachChild(this.StarGeometry);
+		portal.getRootNode().attachChild(StarNode);
 		
 		this.StarNode.setQueueBucket(Bucket.Opaque);
 		

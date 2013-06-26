@@ -89,8 +89,6 @@ public class Player extends CharacterControl{
 		Vector3f transP = playerP.subtract(P1);
 		Vector3f rotP = planet.getPlanetNode().getLocalRotation().inverse().mult(transP);
 
-		System.out.println("nonrotated: "+playerP+" rotated: "+rotP+"\nPlanet: "+P1);
-
 		float x,y,z;
 
 		x = rotP.x;

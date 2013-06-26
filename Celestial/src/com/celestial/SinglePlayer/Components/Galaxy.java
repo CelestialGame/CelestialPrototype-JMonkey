@@ -41,8 +41,6 @@ public class Galaxy {
 		this.centerOfDiameter = (int)Math.ceil((float)diameter/2);
 		this.centerOfDepth = (int)Math.ceil((float)depth/2);
 		
-		System.out.println("Creating Galaxy.");
-		
 		if(diameter % 2 == 0)
 		{
 			System.err.println("Galaxy Diameter MUST be odd number!");
@@ -59,7 +57,6 @@ public class Galaxy {
 	}
 	
 	private void generate() {
-		System.out.println("Generating Galaxy.");
 		for(int i = 0; i<diameter; i++)
 		{
 			for(int j = 0; j<diameter; j++)
@@ -83,7 +80,6 @@ public class Galaxy {
 		if(this.sectorMap.get(coord) == null)
 		{
 			int amountOfSystems = 1 + (int)Math.random() * this.maxSystemsPerSector;
-			System.out.println(coord + " Amount of systems: "+amountOfSystems);
 			Sector sector = new Sector(this, amountOfSystems, name);
 			this.sectorMap.put(coord, sector);
 		}
@@ -105,7 +101,6 @@ public class Galaxy {
 			return this.getSectorAt(coord).getSystem(index).getPlanet(index2);
 		else
 		{
-			System.out.println("Sector Null!");
 			return null;
 		}
 	}

@@ -77,12 +77,9 @@ public class Picker {
 		String xs = new String(x+"");
 		String ys = new String(y+"");
 		String zs = new String(z+"");
-		System.out.println(xs+" "+ys+" "+zs);
 		float xd = Float.parseFloat("0."+xs.substring(xs.indexOf(".")+1, xs.length()));
 		float yd = Float.parseFloat("0."+ys.substring(ys.indexOf(".")+1, ys.length()));
 		float zd = Float.parseFloat("0."+zs.substring(zs.indexOf(".")+1, zs.length()));
-
-		System.out.println(xd+" "+yd+" "+zd);
 		
 		Vector3f newvec = vec.clone();
 		int greatest = 0, smallest = 0;

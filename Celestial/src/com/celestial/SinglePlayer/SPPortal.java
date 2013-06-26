@@ -61,7 +61,6 @@ import com.jme3.util.SkyFactory;
 public class SPPortal extends CelestialPortal{
 	
 	private BitmapFont guiFont;
-	private Star star;
 	private Timer timer;
 	private float lastRotation;
 	private boolean rotated = false;
@@ -150,11 +149,6 @@ public class SPPortal extends CelestialPortal{
 		Spatial sky = SkyFactory.createSky(this.assetManager, "assets/textures/nightsky.jpg", true);
 		sky.rotate(270*FastMath.DEG_TO_RAD,0,0);
 		this.rootNode.attachChild(sky);
-
-
-		// You must add a light to make the model visible
-		this.star = new Star(null, new Vector3f(0,0,0));
-		this.rootNode.attachChild(this.star.getStarNode());
 		
 		/** TODO: lighting fix -_- :P **/
 		initLighting();
@@ -218,10 +212,10 @@ public class SPPortal extends CelestialPortal{
 		al.setColor(ColorRGBA.White);
 		rootNode.addLight(al);
 		
-		this.rootNode.addLight(this.star.getLight());
+		this.rootNode.addLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
 		
 	    PointLightShadowRenderer plsr = new PointLightShadowRenderer(this.assetManager, SHADOWMAP_SIZE);
-        plsr.setLight(this.star.getLight());
+        plsr.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
         plsr.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
         //plsr.setFlushQueues(false);
         //plsr.displayFrustum();
@@ -229,7 +223,7 @@ public class SPPortal extends CelestialPortal{
         this.viewPort.addProcessor(plsr);
         
         PointLightShadowFilter plsf = new PointLightShadowFilter(this.assetManager, SHADOWMAP_SIZE);
-        plsf.setLight(this.star.getLight());     
+        plsf.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());     
         plsf.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
         plsf.setEnabled(true);
 
