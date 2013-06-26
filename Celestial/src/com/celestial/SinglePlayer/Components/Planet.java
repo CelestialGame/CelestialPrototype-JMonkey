@@ -40,6 +40,7 @@ public class Planet implements BlockChunkListener {
 	public static final int SOUTH = 3;
 	public static final int WEST = 4;
 	public static final int BOTTOM = 5;
+	public static float atmospheresizefactor;
 	private Star star;
 	protected int diameter;
 	private String name;
@@ -56,6 +57,7 @@ public class Planet implements BlockChunkListener {
 	private Box atmospherebox;
 	private Geometry atmospheregeom;
 	private Material atmospheremat;
+	
 
 	/**
 	 * Create a new Planet
@@ -72,6 +74,8 @@ public class Planet implements BlockChunkListener {
 		this.portal = star.getSolarSystem().getSector().getGalaxy().getPortal();
 		this.amountRotation = new Vector3f(0f, 0f, 0f);
 		this.name = name;
+		
+		atmospheresizefactor = this.diameter*16*3*1.2f;
 		
 		if(diameter % 2 == 0)
 		{
@@ -166,11 +170,11 @@ public class Planet implements BlockChunkListener {
 		this.cornerList.add(c8);
 		
 		/* ATMOSPHERE */
-		this.atmospherebox = new Box(this.diameter*16*3*1.2f, this.diameter*16*3*1.2f, this.diameter*16*3*1.2f);
+		this.atmospherebox = new Box(atmospheresizefactor, atmospheresizefactor, atmospheresizefactor);
 		this.atmospheregeom = new Geometry("Atmosphere", this.atmospherebox);
 		this.atmospheremat = new Material(portal.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
 		
-		this.atmospheremat.setColor("Color", new ColorRGBA(0, 120, 255, 0.5f));
+		this.atmospheremat.setColor("Color", new ColorRGBA(0.3f, 0.5f, 1, 0.75f));
 		this.atmospheregeom.setMaterial(this.atmospheremat);
 		
 		this.atmospheremat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
@@ -409,6 +413,9 @@ public class Planet implements BlockChunkListener {
 
 	public BlockTerrainControl getTerrControl() {
 		return terrcontrol;
+	}
+	public Star getStar() {
+		return this.star;
 	}
 
 	public Node getPlanetNode() {

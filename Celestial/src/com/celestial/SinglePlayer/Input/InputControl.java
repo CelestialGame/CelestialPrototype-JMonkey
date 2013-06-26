@@ -184,7 +184,8 @@ public class InputControl {
 							BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 							if(chunk != null && blockLocation != null && parent.getInventoryManager().getSelectedHotSlot().getItem() != null) {
 								chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock()); //Add the Block
-								parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
+								if(chunk.getBlock(blockLocation) != null)
+									parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
 							}
 						}
 					}

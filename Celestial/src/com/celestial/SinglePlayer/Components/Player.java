@@ -75,6 +75,19 @@ public class Player extends CharacterControl{
 		}
 		return null;
 	}
+	
+	public Planet getClosestAtmosphere()
+	{
+		for(Planet planet : getSystem().getPlanets()) {
+			float distance = this.getPhysicsLocation().distance(planet.getPlanetNode().getWorldTranslation());
+
+			float factor = planet.atmospheresizefactor;
+			if(distance <= factor) {
+				return planet;
+			}
+		}
+		return null;
+	}
 
 	public int getCurrentFaceOfPlanet(Planet planet)
 	{		
@@ -101,20 +114,26 @@ public class Player extends CharacterControl{
 			// on top or bottom, ie: it’s farther up then it is to either side.
 			// at x == y or z == y you’d be at the 1:1 slope point (45 degrees)
 			if( y < 0 ) {
+				System.out.println("Bottom");
 				return Planet.BOTTOM;
 			} else {
+				System.out.println("Top");
 				return Planet.TOP;
 			}
 		} else if( Math.abs(x) > Math.abs(z) ) {
 			if( x < 0 ) {
+				System.out.println("West");
 				return Planet.WEST;
 			} else {
+				System.out.println("East");
 				return Planet.EAST;
 			}
 		} else if( Math.abs(z) > Math.abs(x) ) {
 			if( z < 0 ) {
+				System.out.println("North");
 				return Planet.NORTH;
 			} else {
+				System.out.println("South");
 				return Planet.SOUTH;
 			}
 		} else {
