@@ -42,16 +42,17 @@ public class Picker {
 
 			Planet p = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0);
 			
-			Quaternion q1 = p.getPlanetNode().getLocalRotation().inverse();
+			Quaternion q1 = p.getStarNode().getLocalRotation().inverse();
+			Quaternion q2 = p.getPlanetNode().getLocalRotation().inverse();
 
-			Vector3f translatedContactPoint = collisionContactPoint.subtract(p.getWantedLocation());
-			Vector3f rotatedContactPoint = q1.mult(translatedContactPoint);
-			Vector3f rotatedTranslation = q1.mult(terrNode.getWorldTranslation().subtract(p.getWantedLocation()));//q.mult(terrNode.getWorldTranslation());	
-
+			//Vector3f translatedContactPoint = collisionContactPoint.subtract(p.getWantedLocation());
+			Vector3f rotatedContactPoint = q1.mult(collisionContactPoint);
+			Vector3f translatedContactPoint = rotatedContactPoint.subtract(p.getWantedLocation());
+			rotatedContactPoint = q2.mult(translatedContactPoint);
+			
 			rotatedContactPoint = smartRound(rotatedContactPoint);
-			rotatedTranslation = round(rotatedTranslation);
-
-			Vector3f relContactPoint = rotatedContactPoint.subtract(rotatedTranslation);
+			
+			Vector3f relContactPoint = rotatedContactPoint.subtract(p.getOriginalTranslation().subtract(p.getWantedLocation()));
 
 			Vector3Int blockPoint = BlockNavigator.getPointedBlockLocation(terrcontrol, relContactPoint, getNeighborLocation);
 			if(blockPoint == null)

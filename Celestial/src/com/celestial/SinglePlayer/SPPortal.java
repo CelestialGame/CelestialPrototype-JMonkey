@@ -222,9 +222,9 @@ public class SPPortal extends CelestialPortal{
 				this.player.setUpAxis(0);
 				this.player.rotatePlayer(planet.WEST);
 			}*/
-			
+			this.player.setGravity(normalGravity);
 		} else {
-			//this.player.setGravity(zeroGravity);
+			this.player.setGravity(zeroGravity);
 		}
 	}
 	

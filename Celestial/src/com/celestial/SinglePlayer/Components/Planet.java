@@ -31,6 +31,7 @@ import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 
 public class Planet implements BlockChunkListener {
@@ -76,8 +77,8 @@ public class Planet implements BlockChunkListener {
 		this.location = location;
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
 		this.portal = star.getSolarSystem().getSector().getGalaxy().getPortal();
-		this.amountRotation = new Vector3f(0f, 0f, 0f);
-		this.amountRevolution = new Vector3f(0f, 0.001f, 0f);
+		this.amountRotation = new Vector3f(0f, 0.0001f, 0f);
+		this.amountRevolution = new Vector3f(0f, 0.0001f, 0f);
 		this.name = name;
 		this.atmosphereSizeFactor = 1.2f;
 		
@@ -493,5 +494,9 @@ public class Planet implements BlockChunkListener {
 
 	public Vector3f getWantedLocation() {
 		return location;
+	}
+
+	public Spatial getStarNode() {
+		return starNode;
 	}
 }

@@ -189,22 +189,23 @@ public class Player extends BetterCharacterControl{
 
 	public int getCurrentFaceOfPlanet(Planet planet)
 	{		
-		Vector3f P1 = planet.getPlanetNode().getWorldTranslation();
-
+		Vector3f P1 = planet.getWantedLocation();
+		
 		Vector3f playerP = null;
 		if(portal.getPhysics().isEnabled())
 			playerP = this.node.getLocalTranslation();
 		else
 			playerP = portal.getCam().getLocation();
 
-		Vector3f transP = playerP.subtract(P1);
-		Vector3f rotP = planet.getPlanetNode().getLocalRotation().inverse().mult(transP);
+		Vector3f rot1P = planet.getStarNode().getLocalRotation().inverse().mult(playerP);
+		Vector3f transP = rot1P.subtract(P1);
+		Vector3f rot2P = planet.getPlanetNode().getLocalRotation().inverse().mult(transP);
 
 		float x,y,z;
 
-		x = rotP.x;
-		y = rotP.y;
-		z = rotP.z;
+		x = rot2P.x;
+		y = rot2P.y;
+		z = rot2P.z;
 
 		if( Math.abs(y) > Math.abs(x) && Math.abs(y) > Math.abs(z) ) {
 			if( y < 0 ) {
