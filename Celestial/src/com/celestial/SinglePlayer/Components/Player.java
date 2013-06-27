@@ -35,6 +35,8 @@ public class Player extends BetterCharacterControl{
 		//setCollisionGroup(COLLISION_GROUP_01);
 		this.node = new Node("Player");
 		this.node.addControl(this);
+		portal.getRootNode().attachChild(node);
+		portal.getBulletAppState().getPhysicsSpace().add(this);
 		this.cam = portal.cam;
 	}
 	

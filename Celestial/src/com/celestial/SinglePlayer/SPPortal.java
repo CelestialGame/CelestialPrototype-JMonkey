@@ -45,7 +45,6 @@ import com.jme3.system.AppSettings;
 import com.jme3.system.Timer;
 import com.jme3.util.SkyFactory;
 
-@SuppressWarnings("deprecation")
 public class SPPortal extends CelestialPortal{
 	
 	private BitmapFont guiFont;
@@ -149,24 +148,13 @@ public class SPPortal extends CelestialPortal{
 		this.player.setGalaxy(this.galaxy);
 		this.player.setSector(this.galaxy.getSectorAt(0,0,0));
 		this.player.setSystem(this.player.getSector().getSystem(0));
-		this.rootNode.attachChild(this.player.getNode());
 		
 		player.spawnPlayer(player.getSystem().getPlanet(0), 0);
 		
 		this.flyCam.setMoveSpeed(100);
 		this.cam.setFrustumFar(65000);
-
-		Node terrnode = this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrainNode();
-		Node planetnode = this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getPlanetNode();
-		CollisionShape sceneShape = CollisionShapeFactory.createMeshShape(terrnode);
-		RigidBodyControl landscape = new RigidBodyControl(sceneShape, 0.0f);
-		terrnode.addControl(landscape);
-		this.bulletAppState.getPhysicsSpace().add(terrnode);
-		this.rootNode.attachChild(planetnode);
-		this.bulletAppState.getPhysicsSpace().add(this.player);
 		
 		this.rootNode.setShadowMode(ShadowMode.Off);
-		terrnode.setShadowMode(ShadowMode.CastAndReceive);
 
 		this.bulletAppState.getPhysicsSpace().addCollisionListener(new Listener(this));
 		//initAudio();

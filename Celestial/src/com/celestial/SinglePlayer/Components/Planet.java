@@ -17,7 +17,9 @@ import com.cubes.BlockChunkListener;
 import com.cubes.BlockTerrainControl;
 import com.cubes.BlockType;
 import com.cubes.Vector3Int;
+import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.material.RenderState.FaceCullMode;
@@ -26,6 +28,7 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
+import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
@@ -56,6 +59,8 @@ public class Planet implements BlockChunkListener {
 	private Material atmospheremat;
 	private Node starNode;
 	private Vector3f amountRevolution;
+	private CollisionShape terrainCollision;
+	private RigidBodyControl terrainRigidBody;
 
 	/**
 	 * Create a new Planet
@@ -72,7 +77,7 @@ public class Planet implements BlockChunkListener {
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
 		this.portal = star.getSolarSystem().getSector().getGalaxy().getPortal();
 		this.amountRotation = new Vector3f(0f, 0f, 0f);
-		this.amountRevolution = new Vector3f(0f, 10f, 0f);
+		this.amountRevolution = new Vector3f(0f, 0.001f, 0f);
 		this.name = name;
 		this.atmosphereSizeFactor = 1.2f;
 		
@@ -129,6 +134,15 @@ public class Planet implements BlockChunkListener {
 		this.originalTranslationTerrain = terrainNode.getWorldTranslation().clone();
 		
 		star.getStarNode().attachChild(starNode);
+		
+		/* COLLISION */
+		terrainCollision = CollisionShapeFactory.createMeshShape(terrainNode);
+		terrainRigidBody = new RigidBodyControl(terrainCollision, 0.0f);
+		terrainNode.addControl(terrainRigidBody);
+		portal.getBulletAppState().getPhysicsSpace().add(terrainNode);
+		
+		/* LIGHTING */
+		planetNode.setShadowMode(ShadowMode.CastAndReceive);
 		
 		/* CORNERS */
 		this.cornerList = new ArrayList<PlanetCorner>();
@@ -464,7 +478,7 @@ public class Planet implements BlockChunkListener {
 	}
 
 	public void rotate() {
-		//starNode.rotate(this.amountRevolution.getX()*FastMath.DEG_TO_RAD, this.amountRevolution.getY()*FastMath.DEG_TO_RAD, this.amountRevolution.getZ()*FastMath.DEG_TO_RAD);
+		starNode.rotate(this.amountRevolution.getX()*FastMath.DEG_TO_RAD, this.amountRevolution.getY()*FastMath.DEG_TO_RAD, this.amountRevolution.getZ()*FastMath.DEG_TO_RAD);
 		planetNode.rotate(this.amountRotation.getX()*FastMath.DEG_TO_RAD, this.amountRotation.getY()*FastMath.DEG_TO_RAD, this.amountRotation.getZ()*FastMath.DEG_TO_RAD);
 	}
 	
