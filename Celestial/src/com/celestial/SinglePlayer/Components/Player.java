@@ -40,11 +40,21 @@ public class Player extends BetterCharacterControl{
 		this.cam = portal.cam;
 	}
 	
+	public void setLocation(Vector3f location)
+	{
+		this.warp(location);
+	}
+	
+	public Vector3f getLocation()
+	{
+		return this.node.getWorldTranslation();
+	}
+	
 	public void spawnPlayer(Planet planet, int face)
 	{
 		if(PlayerEvents.PlayerMoveEvent(this, node.getWorldTranslation(), planet.getSpawnLocation(face)))
 		{
-			this.node.setLocalTranslation(planet.getSpawnLocation(face));
+			this.setLocation(planet.getSpawnLocation(face));
 			this.rotatePlayer(face);
 		}
 	}

@@ -472,9 +472,9 @@ public class Planet implements BlockChunkListener {
 	public Vector3f getSpawnLocation(int face)
 	{
 		return new Vector3f(
-				this.location.getX()+1.5f,
-				this.location.getY() + this.diameter*16*3+3f,
-				this.location.getZ()+1.5f);
+				this.planetNode.getWorldTranslation().getX()+1.5f,
+				this.planetNode.getWorldTranslation().getY() + this.diameter*16*3+3f,
+				this.planetNode.getWorldTranslation().getZ()+1.5f);
 	}
 
 	public void rotate() {

@@ -216,8 +216,8 @@ public class InputControl {
 					parent.setCamSpeed(100);
 				} else {
 					parent.getBulletAppState().setEnabled(true);
-					if(PlayerEvents.PlayerMoveEvent(parent.player, parent.player.getNode().getWorldTranslation(), new Vector3f(cam.getLocation().getX(), cam.getLocation().getY()-parent.getCamHeight(), cam.getLocation().getZ()).subtract(parent.player.getNode().getWorldTranslation())))
-						parent.player.getNode().move(new Vector3f(cam.getLocation().getX(), cam.getLocation().getY()-parent.getCamHeight(), cam.getLocation().getZ()).subtract(parent.player.getNode().getWorldTranslation()));
+					if(PlayerEvents.PlayerMoveEvent(parent.player, parent.player.getLocation(), new Vector3f(cam.getLocation().getX(), cam.getLocation().getY()-parent.getCamHeight(), cam.getLocation().getZ()).subtract(parent.player.getNode().getWorldTranslation())))
+						parent.player.setLocation(new Vector3f(cam.getLocation().getX(), cam.getLocation().getY()-parent.getCamHeight(), cam.getLocation().getZ()));
 				}
 			}
 			else if(binding.equals("ESC"))
@@ -264,7 +264,7 @@ public class InputControl {
 			}
 			else if(binding.equals("Respawn") && !keyPressed)
 			{
-				if(PlayerEvents.PlayerMoveEvent(parent.player, parent.player.getNode().getWorldTranslation(), parent.player.getSpawnLocation(parent.player.getSystem().getPlanet(0), 0)))
+				if(PlayerEvents.PlayerMoveEvent(parent.player, parent.player.getLocation(), parent.player.getSpawnLocation(parent.player.getSystem().getPlanet(0), 0)))
 				{
 					parent.player.spawnPlayer(parent.player.getSystem().getPlanet(0), 0);
 				}
