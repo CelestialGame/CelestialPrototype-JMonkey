@@ -14,6 +14,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
+import com.jme3.texture.Texture.WrapMode;
 
 /**
  * Inventory Drop Items
@@ -32,27 +33,17 @@ public class InventoryDrop{
 	private Node itemdropnode;
 	
 	public InventoryDrop(InventoryItem item, Vector3f location) {
-		/** Use this if there is light present **/
 		Material mat = new Material(Celestial.portal.getAssetManager(),  // Create new material and...
 			    "Common/MatDefs/Light/Lighting.j3md");
 		mat.setColor("Diffuse", new ColorRGBA(0.5f,0.5f,0.5f,0.3f));
 		mat.setColor("Ambient", new ColorRGBA(0.5f,0.5f,0.5f,0.3f));
 		mat.setTexture("DiffuseMap", Celestial.portal.getAssetManager().loadTexture(item.getIcon()));
-		//mat.setBoolean("UseAlpha",true);
-		
-		/** if theres no light, use this **/
-		/*Material mat = new Material(Celestial.self.getAssetManager(),  // Create new material and...
-				"Common/MatDefs/Misc/Unshaded.j3md");
-		//mat.setColor("Color", new ColorRGBA(0,0,0,1f));
-		mat.setTexture("ColorMap", Celestial.portal.getAssetManager().loadTexture(item.getIcon()));
-		*/
-		
 		mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
 		
 		this.itemdropshape = new Box(0.3f,0.3f,0.3f);
 		this.itemdrop = new Geometry("DropItem", this.itemdropshape);
 		this.itemdrop.setMaterial(mat);
-		//this.itemdrop.getMesh().scaleTextureCoordinates(new Vector2f(0.6f,0.6f));
+		this.itemdrop.getMesh().scaleTextureCoordinates(new Vector2f(1f,1f));
 		
 		this.itemdrop.setLocalTranslation(location);
 		
@@ -60,6 +51,7 @@ public class InventoryDrop{
 		this.itemdrop.setShadowMode(ShadowMode.Cast);
 		
 		this.rigidBodyControl = new RigidBodyControl();
+		this.rigidBodyControl.setMass(1);
 		//this.rigidBodyControl.removeCollideWithGroup(Celestial.portal.player.getCollisionGroup());
         this.itemdrop.addControl(rigidBodyControl);
         //Celestial.portal.player.removeCollideWithGroup(this.rigidBodyControl.getCollisionGroup());

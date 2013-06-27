@@ -31,7 +31,6 @@ public class Listener implements PhysicsCollisionListener {
 			while(itr.hasNext()) {
 				InventoryDrop drop = itr.next();
 				if((e.getObjectA().equals(drop.getCollisionBox()) && e.getObjectB().equals(this.portal.player.getCollisionBox())) || (e.getObjectB().equals(drop.getCollisionBox()) && e.getObjectA().equals(this.portal.player.getCollisionBox()))) {
-					//System.out.println("Collsion detected!");
 					invmanager.pickupDrop(drop, 1);
 					invmanager.updateAll();
 					invmanager.removeDropItem(drop, itr);

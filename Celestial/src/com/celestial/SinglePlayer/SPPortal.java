@@ -51,7 +51,7 @@ public class SPPortal extends CelestialPortal{
 	private boolean rotated = false;
 	private FilterPostProcessor fpp;
 	public static final int SHADOWMAP_SIZE = 1024;
-	public static float camHeight = 2f;
+	public static float camHeight = 4.9f;
 
 	private Vector3f normalGravity = new Vector3f(0.0f, -9.81f, 0.0f);
 	private Vector3f zeroGravity = new Vector3f(0.0f, 0.0f, 0.0f);
@@ -147,7 +147,8 @@ public class SPPortal extends CelestialPortal{
 		this.player.setGalaxy(this.galaxy);
 		this.player.setSector(this.galaxy.getSectorAt(0,0,0));
 		this.player.setSystem(this.player.getSector().getSystem(0));
-
+		this.player.setVisibleToClient(false);
+		
 		player.spawnPlayer(player.getSystem().getPlanet(0), 0);
 
 		this.flyCam.setMoveSpeed(100);
@@ -284,8 +285,8 @@ public class SPPortal extends CelestialPortal{
 	public void updateCamera(float tpf) {
 		//TODO modify to work with planet sides
 		if(this.bulletAppState.isEnabled()) {
-			Vector3f camDir = this.cam.getDirection().clone().multLocal(16);
-			Vector3f camLeft = this.cam.getLeft().clone().multLocal(10);
+			Vector3f camDir = this.cam.getDirection().clone().multLocal(20);
+			Vector3f camLeft = this.cam.getLeft().clone().multLocal(20);
 			this.walkDirection.set(0, 0, 0);
 			if (this.left)
 				this.walkDirection.addLocal(camLeft); 
@@ -300,11 +301,7 @@ public class SPPortal extends CelestialPortal{
 
 			if(this.up || this.down || this.right || this.left)
 				PlayerEvents.PlayerMoveEvent(player, player.getLocation().add(this.walkDirection));
-			
-			if(this.up || this.down) {
-				this.walkDirection.x = this.walkDirection.x/2;
-				this.walkDirection.z = this.walkDirection.z/2;
-			}
+		
 			this.player.setWalkDirection(this.walkDirection);
 			this.cam.setLocation(new Vector3f(this.player.getLocation().getX(), this.player.getLocation().getY()+camHeight, this.player.getLocation().getZ()));
 

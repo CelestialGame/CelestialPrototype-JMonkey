@@ -208,10 +208,12 @@ public class InputControl {
 				if(parent.getBulletAppState().isEnabled()) {
 					parent.getBulletAppState().setEnabled(false);
 					parent.setCamSpeed(100);
+					parent.player.setVisibleToClient(true);
 				} else {
 					parent.getBulletAppState().setEnabled(true);
 					parent.player.setLocation(new Vector3f(cam.getLocation().getX(), cam.getLocation().getY()-parent.getCamHeight(), cam.getLocation().getZ()));
 					PlayerEvents.PlayerMoveEvent(parent.player, new Vector3f(cam.getLocation().getX(), cam.getLocation().getY()-parent.getCamHeight(), cam.getLocation().getZ()));
+					parent.player.setVisibleToClient(false);
 				}
 			}
 			else if(binding.equals("ESC"))

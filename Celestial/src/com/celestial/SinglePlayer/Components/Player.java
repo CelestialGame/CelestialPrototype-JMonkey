@@ -18,6 +18,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.Spatial.CullHint;
 
 @SuppressWarnings("deprecation")
 public class Player extends BetterCharacterControl{
@@ -33,19 +34,27 @@ public class Player extends BetterCharacterControl{
 
 	public Player(CelestialPortal portal)
 	{
-		super(1.5f, 6f, 1f);	
+		super(1.2f, 5.8f, 1f);	
 		this.portal = portal;
-		//setCollisionGroup(COLLISION_GROUP_01);
 		portal.getBulletAppState().getPhysicsSpace().add(this);
 		playerSpatial = portal.getAssetManager().loadModel("Models/Ninja/Ninja.mesh.xml");
 		playerSpatial.scale(0.0275f);
 		playerNode = (Node) playerSpatial;
 		playerNode.addControl(this);
-		this.setPhysicsDamping(0);
+		this.setJumpForce(new Vector3f(0, 8f, 0));
+		this.setPhysicsDamping(0.9f);
 		portal.getRootNode().attachChild(playerNode);
 		this.cam = portal.cam;
 	}
 
+	public void setVisibleToClient(boolean visible)
+	{
+		if(visible)
+			this.playerSpatial.setCullHint(CullHint.Never);
+		else
+			this.playerSpatial.setCullHint(CullHint.Always);
+	}
+	
 	public void setLocation(Vector3f location)
 	{
 		this.warp(location);

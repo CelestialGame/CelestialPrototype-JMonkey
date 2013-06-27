@@ -140,8 +140,7 @@ public class Planet implements BlockChunkListener {
 
 		/* COLLISION */
 		terrainCollision = CollisionShapeFactory.createMeshShape(terrainNode);
-		terrainRigidBody = new RigidBodyControl(terrainCollision, 1.0f);
-		terrainRigidBody.setKinematic(true);
+		terrainRigidBody = new RigidBodyControl(terrainCollision, 0.0f);
 		terrainNode.addControl(terrainRigidBody);
 		portal.getBulletAppState().getPhysicsSpace().add(terrainNode);
 
