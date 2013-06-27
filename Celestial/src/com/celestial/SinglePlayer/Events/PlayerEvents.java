@@ -26,18 +26,7 @@ public class PlayerEvents {
 	 */
 	public static void PlayerMoveEvent(Player player, Vector3f newLocation)
 	{
-		Planet closest = player.getClosestPlanet();
-		System.out.println(closest.getName());
-		if(player.isWithinLoadingDistance(closest, newLocation)) //They are within range of a planet			
-		{
-			System.out.println("Player is within");
-			player.setPlanet(closest);
-		}
-		else //They are no longer within range of any planet (Deep Space)
-		{
-			System.out.println("Player is not within");
-			player.setPlanet(null);
-		}
+		
 	}
 	
 	/**

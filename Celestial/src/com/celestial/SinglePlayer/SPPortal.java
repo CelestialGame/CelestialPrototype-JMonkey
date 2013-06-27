@@ -162,6 +162,7 @@ public class SPPortal extends CelestialPortal{
 
 	@Override
 	public void simpleUpdate(float tpf) {
+		updatePlayer(tpf);
 		updateCamera(tpf);
 		updateStats(tpf);
 		updateLight(tpf);
@@ -176,6 +177,14 @@ public class SPPortal extends CelestialPortal{
 			}
 		}
 		this.invmanager.updateAll();
+	}
+
+	private void updatePlayer(float tpf) {
+		Planet closest = player.getClosestPlanet();
+		if(player.isWithinLoadingDistance(closest, player.getLocation())) //They are within range of a planet			
+			player.setPlanet(closest);
+		else //They are no longer within range of any planet (Deep Space)
+			player.setPlanet(null);
 	}
 
 	public void updateLight(float tpf) {
