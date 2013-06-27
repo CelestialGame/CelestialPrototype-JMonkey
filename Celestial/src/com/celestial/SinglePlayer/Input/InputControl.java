@@ -7,6 +7,7 @@ package com.celestial.SinglePlayer.Input;
 import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
 import com.celestial.SinglePlayer.Components.SectorCoord;
+import com.celestial.SinglePlayer.Events.PlayerEvents;
 import com.celestial.SinglePlayer.Inventory.InventoryItem;
 import com.celestial.World.Picker;
 import com.cubes.Block;
@@ -208,14 +209,13 @@ public class InputControl {
 					parent.setCamSpeed(100);
 				} else {
 					parent.getBulletAppState().setEnabled(true);
-					parent.player.getNode().setLocalTranslation(new Vector3f(cam.getLocation().getX(), cam.getLocation().getY()-parent.getCamHeight(), cam.getLocation().getZ()));
+					if(PlayerEvents.PlayerMoveEvent(parent.player, parent.player.getNode().getWorldTranslation(), new Vector3f(cam.getLocation().getX(), cam.getLocation().getY()-parent.getCamHeight(), cam.getLocation().getZ()).subtract(parent.player.getNode().getWorldTranslation())))
+						parent.player.getNode().move(new Vector3f(cam.getLocation().getX(), cam.getLocation().getY()-parent.getCamHeight(), cam.getLocation().getZ()).subtract(parent.player.getNode().getWorldTranslation()));
 				}
 			}
 			else if(binding.equals("ESC"))
 			{
 				parent.app.stop();
-//				Celestial.gui.topcardPane.remove(Celestial.canvas);
-//				Celestial.gui.changeCard(MainMenu.MAIN);
 			}
 			else if(binding.equals("SeeStats") && !keyPressed) {
 				if(statson) {
@@ -257,7 +257,7 @@ public class InputControl {
 			}
 			else if(binding.equals("Respawn") && !keyPressed)
 			{
-				parent.player.getNode().setLocalTranslation(parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getSpawnLocation());
+				parent.player.spawnPlayer(parent.player.getSystem().getPlanet(0), 0);
 				parent.cam.setLocation(new Vector3f(parent.player.getNode().getLocalTranslation().getX(), parent.player.getNode().getLocalTranslation().getY()+parent.getCamHeight(), parent.player.getNode().getLocalTranslation().getZ()));
 			}
 			else if(binding.equals("FindFace") && !keyPressed)

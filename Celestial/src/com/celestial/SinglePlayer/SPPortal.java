@@ -6,33 +6,23 @@ Date Created:
 
 package com.celestial.SinglePlayer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
 import com.celestial.Blocks.Blocks;
-import com.celestial.Blocks.BlocksEnum;
 import com.celestial.SinglePlayer.Components.Galaxy;
 import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.SinglePlayer.Components.Player;
-import com.celestial.SinglePlayer.Components.Sector;
 import com.celestial.SinglePlayer.Components.SectorCoord;
-import com.celestial.SinglePlayer.Components.Star;
 import com.celestial.SinglePlayer.Input.InputControl;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
 import com.celestial.SinglePlayer.Inventory.InventoryRegister;
 import com.celestial.SinglePlayer.Physics.Listener;
-import com.celestial.util.InventoryException;
 import com.cubes.CubesSettings;
 import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.bullet.control.BetterCharacterControl;
-import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.font.BitmapFont;
@@ -45,16 +35,12 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.BloomFilter;
-import com.jme3.post.filters.LightScatteringFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.shadow.EdgeFilteringMode;
-import com.jme3.shadow.PointLightShadowFilter;
-import com.jme3.shadow.PointLightShadowRenderer;
 import com.jme3.system.AppSettings;
 import com.jme3.system.Timer;
 import com.jme3.util.SkyFactory;
@@ -165,6 +151,8 @@ public class SPPortal extends CelestialPortal{
 		this.player.setSystem(this.player.getSector().getSystem(0));
 		this.rootNode.attachChild(this.player.getNode());
 		
+		player.spawnPlayer(player.getSystem().getPlanet(0), 0);
+		
 		this.flyCam.setMoveSpeed(100);
 		this.cam.setFrustumFar(65000);
 
@@ -176,7 +164,6 @@ public class SPPortal extends CelestialPortal{
 		this.bulletAppState.getPhysicsSpace().add(terrnode);
 		this.rootNode.attachChild(planetnode);
 		this.bulletAppState.getPhysicsSpace().add(this.player);
-		//Celestial.gui.changeCard(Gui.GAME);
 		
 		this.rootNode.setShadowMode(ShadowMode.Off);
 		terrnode.setShadowMode(ShadowMode.CastAndReceive);
@@ -253,10 +240,7 @@ public class SPPortal extends CelestialPortal{
 				this.player.setUpAxis(0);
 				this.player.rotatePlayer(planet.WEST);
 			}*/
-			if(planet.getName().equals("null")) {
-				this.player.setGravity(zeroGravity);
-			} else
-				this.player.setGravity(normalGravity);
+			this.player.setGravity(new Vector3f(this.player.getNode().getWorldTranslation().x, this.player.getNode().getWorldTranslation().y-9.81f, this.player.getNode().getWorldTranslation().z));
 		} else {
 			this.player.setGravity(zeroGravity);
 		}
@@ -312,13 +296,13 @@ public class SPPortal extends CelestialPortal{
 			if (this.right) { this.walkDirection.addLocal(camLeft.negate()); }
 			if (this.up)    { this.walkDirection.addLocal(camDir); }
 			if (this.down)  { this.walkDirection.addLocal(camDir.negate()); }
-			//this.walkDirection.y = 0;
+			this.walkDirection.y = 0;
 			if(this.up || this.down) {
 				this.walkDirection.x = this.walkDirection.x/2;
 				this.walkDirection.z = this.walkDirection.z/2;
 			}
 			this.player.setWalkDirection(this.walkDirection);
-			this.cam.setLocation(new Vector3f(this.player.getNode().getLocalTranslation().getX(), this.player.getNode().getLocalTranslation().getY()+camHeight, this.player.getNode().getLocalTranslation().getZ()));
+			this.cam.setLocation(new Vector3f(this.player.getNode().getWorldTranslation().getX(), this.player.getNode().getWorldTranslation().getY()+camHeight, this.player.getNode().getWorldTranslation().getZ()));
 			
 			this.inputControl.renderBlockBorder();
 		}

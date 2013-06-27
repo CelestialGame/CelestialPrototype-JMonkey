@@ -36,8 +36,15 @@ public class Player extends BetterCharacterControl{
 		this.node = new Node("Player");
 		this.node.addControl(this);
 		this.cam = portal.cam;
-		if(PlayerEvents.PlayerMoveEvent(node.getWorldTranslation(), portal.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getSpawnLocation()))
-			this.node.setLocalTranslation(portal.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getSpawnLocation());
+	}
+	
+	public void spawnPlayer(Planet planet, int face)
+	{
+		if(PlayerEvents.PlayerMoveEvent(this, node.getWorldTranslation(), planet.getSpawnLocation(face)))
+		{
+			this.node.setLocalTranslation(planet.getSpawnLocation(face));
+			this.rotatePlayer(face);
+		}
 	}
 
 	public void setGalaxy(Galaxy galaxy)
@@ -118,14 +125,6 @@ public class Player extends BetterCharacterControl{
 				closestdist = distance;
 				closestplanet = planet;
 			}
-			/*float factor = (((planet.centerofdiam*16)-8)*3)*7;
-			if(distance <= factor) {
-				if(planet.getName().equals("null")) {
-					return null;
-				} else {
-					return planet;
-				}
-			}*/
 		}
 		return closestplanet;
 	}
@@ -139,17 +138,36 @@ public class Player extends BetterCharacterControl{
 		return -1;
 	}
 	
-	public Planet getClosestAtmosphere()
+	public float getDistanceFromPlanet(Planet planet, Vector3f location)
 	{
-		for(Planet planet : getSystem().getPlanets()) {
-			float distance = node.getLocalTranslation().distance(planet.getPlanetNode().getWorldTranslation());
-
-			float factor = planet.atmospheresizefactor;
-			if(distance <= factor) {
-				return planet;
-			}
+		if(planet != null)
+		{
+			return location.distance(planet.getPlanetNode().getWorldTranslation());
 		}
-		return null;
+		return -1;
+	}
+	
+	public boolean isInAtmosphere(Planet planet)
+	{
+		//do box check thing... This will require more than just a check of distance, 
+		//I'ma have to use normals and crap. Leave this here till I get the time to do it
+		return false;
+	}
+	
+	public boolean isWithinLoadingDistance(Planet planet)
+	{
+		if(this.getDistanceFromPlanet(planet)
+				<= planet.getRadiusAsFloat(true)+200)
+			return true;
+		return false;
+	}
+	
+	public boolean isWithinLoadingDistance(Planet planet, Vector3f location)
+	{
+		if(this.getDistanceFromPlanet(planet, location)
+				<= planet.getRadiusAsFloat(true)+200)
+			return true;
+		return false;
 	}
 
 	public int getCurrentFaceOfPlanet(Planet planet)

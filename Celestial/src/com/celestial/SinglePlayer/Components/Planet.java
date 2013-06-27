@@ -37,7 +37,7 @@ public class Planet implements BlockChunkListener {
 	public static final int SOUTH = 3;
 	public static final int WEST = 4;
 	public static final int BOTTOM = 5;
-	public float atmospheresizefactor;
+	public float atmosphereSizeFactor;
 	private Star star;
 	protected int diameter;
 	private String name;
@@ -74,7 +74,7 @@ public class Planet implements BlockChunkListener {
 		this.amountRotation = new Vector3f(0f, 0f, 0f);
 		this.amountRevolution = new Vector3f(0f, 10f, 0f);
 		this.name = name;
-		atmospheresizefactor = this.diameter*16*3*1.2f;
+		this.atmosphereSizeFactor = 1.2f;
 		
 		if(diameter % 2 == 0)
 		{
@@ -130,8 +130,6 @@ public class Planet implements BlockChunkListener {
 		
 		star.getStarNode().attachChild(starNode);
 		
-		System.out.println("star: "+starNode.getWorldTranslation());
-		
 		/* CORNERS */
 		this.cornerList = new ArrayList<PlanetCorner>();
 		
@@ -176,7 +174,7 @@ public class Planet implements BlockChunkListener {
 		this.cornerList.add(c8);
 		
 		/* ATMOSPHERE */
-		this.atmospherebox = new Box(atmospheresizefactor, atmospheresizefactor, atmospheresizefactor);
+		this.atmospherebox = new Box(this.diameter*16*3*atmosphereSizeFactor, this.diameter*16*3*atmosphereSizeFactor, this.diameter*16*3*atmosphereSizeFactor);
 		this.atmospheregeom = new Geometry("Atmosphere", this.atmospherebox);
 		this.atmospheremat = new Material(portal.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
 		
@@ -441,7 +439,23 @@ public class Planet implements BlockChunkListener {
 		return name;
 	}
 	
-	public Vector3f getSpawnLocation()
+	public float getDiameterAsFloat(boolean includeAtmosphere)
+	{
+		if(includeAtmosphere)
+			return this.diameter*16*3*atmosphereSizeFactor;
+		else
+			return this.diameter*16*3;
+	}
+	
+	public float getRadiusAsFloat(boolean includeAtmosphere)
+	{
+		if(includeAtmosphere)
+			return (this.centerofdiam*16-8)*3*atmosphereSizeFactor;
+		else
+			return (this.centerofdiam*16-8)*3;
+	}
+	
+	public Vector3f getSpawnLocation(int face)
 	{
 		return new Vector3f(
 				this.location.getX()+1.5f,
