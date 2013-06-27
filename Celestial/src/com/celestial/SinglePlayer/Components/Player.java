@@ -122,16 +122,22 @@ public class Player extends BetterCharacterControl{
 		int x=0,y=0,z=0;
 		if(face == Planet.TOP) {
 			x=0;y=0;z=0;
+			this.spatial.rotateUpTo(new Vector3f(0, 1, 0));
 		} else if (face == Planet.BOTTOM) {
 			x=0;y=180;z=0;
+			this.spatial.rotateUpTo(new Vector3f(0, -1, 0));
 		} else if (face == Planet.NORTH) {
 			x=0;y=0;z=90;
+			this.spatial.rotateUpTo(new Vector3f(0, 0, 1));
 		} else if (face == Planet.SOUTH) {
 			x=0;y=0;z=270;
+			this.spatial.rotateUpTo(new Vector3f(0, 0, -1));
 		} else if (face == Planet.EAST) {
 			x=90;y=0;z=0;
+			this.spatial.rotateUpTo(new Vector3f(1, 0, 0));
 		} else if (face == Planet.WEST) {
 			x=270;y=0;z=0;
+			this.spatial.rotateUpTo(new Vector3f(-1, 0, 0));
 		} else {
 			return;
 		}

@@ -208,34 +208,26 @@ public class SPPortal extends CelestialPortal{
 	private void updateGravity(float tpf) {
 		if(this.player.getPlanet() != null) {
 			Planet planet = this.player.getPlanet();
-			/*int FaceOn = this.player.getCurrentFaceOfPlanet(planet);
-			if(FaceOn == planet.TOP) {
-				this.player.setGravity(50);
-				this.player.setUpAxis(1);
-				this.player.rotatePlayer(planet.TOP);
-			} else if (FaceOn == planet.BOTTOM) {
-				this.player.setGravity(-50);
-				this.player.setUpAxis(1);
-				this.player.rotatePlayer(planet.BOTTOM);
-			} else if (FaceOn == planet.NORTH) {
-				this.player.setGravity(-50);
-				this.player.setUpAxis(2);
-				this.player.rotatePlayer(planet.NORTH);
-			} else if (FaceOn == planet.SOUTH) {
-				this.player.setGravity(50);
-				this.player.setUpAxis(2);
-				this.player.rotatePlayer(planet.SOUTH);
-			} else if (FaceOn == planet.EAST) {
-				this.player.setGravity(50);
-				this.player.setUpAxis(0);
-				this.player.rotatePlayer(planet.EAST);
-			} else if (FaceOn == planet.WEST) {
-				this.player.setGravity(-50);
-				this.player.setUpAxis(0);
-				this.player.rotatePlayer(planet.WEST);
-			}*/
-			if(player.getGravity() != this.normalGravity)
-				this.player.setGravity(normalGravity);
+			int FaceOn = this.player.getCurrentFaceOfPlanet(planet);
+			if(FaceOn == Planet.TOP) {
+				this.player.setGravity(new Vector3f(0, -10f, 0));
+				//this.player.rotatePlayer(Planet.TOP);
+			} else if (FaceOn == Planet.BOTTOM) {
+				this.player.setGravity(new Vector3f(0, 10f, 0));
+				//this.player.rotatePlayer(Planet.BOTTOM);
+			} else if (FaceOn == Planet.NORTH) {
+				this.player.setGravity(new Vector3f(0, 0, 10f));
+				//this.player.rotatePlayer(Planet.NORTH);
+			} else if (FaceOn == Planet.SOUTH) {
+				this.player.setGravity(new Vector3f(0, 0, -10f));
+				//this.player.rotatePlayer(Planet.SOUTH);
+			} else if (FaceOn == Planet.EAST) {
+				this.player.setGravity(new Vector3f(-10f, 0, 0));
+				//this.player.rotatePlayer(Planet.EAST);
+			} else if (FaceOn == Planet.WEST) {
+				this.player.setGravity(new Vector3f(10f, 0, 0));
+				//this.player.rotatePlayer(Planet.WEST);
+			}
 		} else {
 			if(player.getGravity() != this.normalGravity)
 				this.player.setGravity(normalGravity);
