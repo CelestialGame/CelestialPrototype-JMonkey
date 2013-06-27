@@ -13,6 +13,7 @@ import com.celestial.SinglePlayer.Components.Galaxy;
 import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.SinglePlayer.Components.Player;
 import com.celestial.SinglePlayer.Components.SectorCoord;
+import com.celestial.SinglePlayer.Events.PlayerEvents;
 import com.celestial.SinglePlayer.Input.InputControl;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
 import com.celestial.SinglePlayer.Inventory.InventoryRegister;
@@ -52,8 +53,8 @@ public class SPPortal extends CelestialPortal{
 	public static final int SHADOWMAP_SIZE = 1024;
 	public static float camHeight = 2f;
 	
-	private Vector3f normalGravity = new Vector3f(0, -9.81f, 0);
-	private Vector3f zeroGravity = new Vector3f(0, 0, 0);
+	private Vector3f normalGravity = new Vector3f(0.0f, -9.81f, 0.0f);
+	private Vector3f zeroGravity = new Vector3f(0.0f, 0.0f, 0.0f);
 
 	public SPPortal(
 			Celestial parent, 
@@ -140,7 +141,8 @@ public class SPPortal extends CelestialPortal{
 		
 		/** TODO: lighting fix -_- :P **/
 		initLighting();
-
+		
+		
 		this.player = new Player(this);
 		this.player.setGalaxy(this.galaxy);
 		this.player.setSector(this.galaxy.getSectorAt(0,0,0));
@@ -222,9 +224,11 @@ public class SPPortal extends CelestialPortal{
 				this.player.setUpAxis(0);
 				this.player.rotatePlayer(planet.WEST);
 			}*/
-			this.player.setGravity(normalGravity);
+			if(player.getGravity() != this.normalGravity)
+				this.player.setGravity(normalGravity);
 		} else {
-			this.player.setGravity(zeroGravity);
+			if(player.getGravity() != this.normalGravity)
+				this.player.setGravity(normalGravity);
 		}
 	}
 	
@@ -274,17 +278,27 @@ public class SPPortal extends CelestialPortal{
 			Vector3f camDir = this.cam.getDirection().clone().multLocal(0.6f);
 			Vector3f camLeft = this.cam.getLeft().clone().multLocal(0.2f);
 			this.walkDirection.set(0, 0, 0);
-			if (this.left)  { this.walkDirection.addLocal(camLeft); }
-			if (this.right) { this.walkDirection.addLocal(camLeft.negate()); }
-			if (this.up)    { this.walkDirection.addLocal(camDir); }
-			if (this.down)  { this.walkDirection.addLocal(camDir.negate()); }
+			if (this.left)
+				if(PlayerEvents.PlayerMoveEvent(player, player.getLocation(), player.getLocation().add(this.walkDirection.add(camLeft))))
+						this.walkDirection.addLocal(camLeft); 
+			if (this.right) 
+				if(PlayerEvents.PlayerMoveEvent(player, player.getLocation(), player.getLocation().add(this.walkDirection.add(camLeft.negate()))))
+					this.walkDirection.addLocal(camLeft.negate());
+			if (this.up)    
+				if(PlayerEvents.PlayerMoveEvent(player, player.getLocation(), player.getLocation().add(this.walkDirection.add(camDir))))
+					this.walkDirection.addLocal(camDir);
+			if (this.down)  
+				if(PlayerEvents.PlayerMoveEvent(player, player.getLocation(), player.getLocation().add(this.walkDirection.add(camDir.negate()))))
+					this.walkDirection.addLocal(camDir.negate());
+			
 			this.walkDirection.y = 0;
+			
 			if(this.up || this.down) {
 				this.walkDirection.x = this.walkDirection.x/2;
 				this.walkDirection.z = this.walkDirection.z/2;
 			}
 			this.player.setWalkDirection(this.walkDirection);
-			this.cam.setLocation(new Vector3f(this.player.getNode().getWorldTranslation().getX(), this.player.getNode().getWorldTranslation().getY()+camHeight, this.player.getNode().getWorldTranslation().getZ()));
+			this.cam.setLocation(new Vector3f(this.player.getLocation().getX(), this.player.getLocation().getY()+camHeight, this.player.getLocation().getZ()));
 			
 			this.inputControl.renderBlockBorder();
 		}

@@ -106,7 +106,7 @@ public class InputControl {
 				Vector3f blockAbsLocation = (Vector3f) values[0];
 				if(blockLocation != null)
 				{
-					float dist = parent.player.getNode().getLocalTranslation().distance(blockAbsLocation);
+					float dist = parent.player.getLocation().distance(blockAbsLocation);
 					InventoryItem item;
 					if(!parent.getBulletAppState().isEnabled()) //Are they flying?
 					{
@@ -168,7 +168,7 @@ public class InputControl {
 				Vector3Int blockLocation = (Vector3Int) values[1];
 				Vector3f blockAbsLocation = (Vector3f) values[0];
 				if(blockLocation != null){
-					float dist = parent.player.getNode().getLocalTranslation().distance(blockAbsLocation);
+					float dist = parent.player.getLocation().distance(blockAbsLocation);
 					if(!parent.getBulletAppState().isEnabled()) //Are they flying?
 					{
 						BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
@@ -216,7 +216,7 @@ public class InputControl {
 					parent.setCamSpeed(100);
 				} else {
 					parent.getBulletAppState().setEnabled(true);
-					if(PlayerEvents.PlayerMoveEvent(parent.player, parent.player.getLocation(), new Vector3f(cam.getLocation().getX(), cam.getLocation().getY()-parent.getCamHeight(), cam.getLocation().getZ()).subtract(parent.player.getNode().getWorldTranslation())))
+					if(PlayerEvents.PlayerMoveEvent(parent.player, parent.player.getLocation(), new Vector3f(cam.getLocation().getX(), cam.getLocation().getY()-parent.getCamHeight(), cam.getLocation().getZ())))
 						parent.player.setLocation(new Vector3f(cam.getLocation().getX(), cam.getLocation().getY()-parent.getCamHeight(), cam.getLocation().getZ()));
 				}
 			}
@@ -268,7 +268,7 @@ public class InputControl {
 				{
 					parent.player.spawnPlayer(parent.player.getSystem().getPlanet(0), 0);
 				}
-				parent.cam.setLocation(new Vector3f(parent.player.getNode().getLocalTranslation().getX(), parent.player.getNode().getLocalTranslation().getY()+parent.getCamHeight(), parent.player.getNode().getLocalTranslation().getZ()));
+				parent.cam.setLocation(new Vector3f(parent.player.getLocation().getX(), parent.player.getLocation().getY()+parent.getCamHeight(), parent.player.getLocation().getZ()));
 			}
 			else if(binding.equals("FindFace") && !keyPressed)
 			{

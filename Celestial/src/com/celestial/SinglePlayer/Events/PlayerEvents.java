@@ -28,11 +28,19 @@ public class PlayerEvents {
 	 */
 	public static boolean PlayerMoveEvent(Player player, Vector3f previousLocation, Vector3f assumedNewLocation)
 	{
+		System.out.println("Player Moved. Previous: "+previousLocation+" New: "+assumedNewLocation);
 		Planet closest = player.getClosestPlanet();
+		System.out.println(closest.getName());
 		if(player.isWithinLoadingDistance(closest, assumedNewLocation)) //They are within range of a planet			
+		{
+			System.out.println("Player is within");
 			player.setPlanet(closest);
+		}
 		else //They are no longer within range of any planet (Deep Space)
+		{
+			System.out.println("Player is not within");
 			player.setPlanet(null);
+		}
 		return true;
 	}
 	

@@ -16,6 +16,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 
 @SuppressWarnings("deprecation")
 public class Player extends BetterCharacterControl{
@@ -24,19 +25,23 @@ public class Player extends BetterCharacterControl{
 	private Galaxy galaxy;
 	private Sector sector;
 	private SolarSystem system;
-	private Node node;
 	private Camera cam;
 	private Planet planet;
+	private Spatial playerSpatial;
+	private Node playerNode;
 
 	public Player(CelestialPortal portal)
 	{
 		super(1.5f, 6f, 1f);	
 		this.portal = portal;
 		//setCollisionGroup(COLLISION_GROUP_01);
-		this.node = new Node("Player");
-		this.node.addControl(this);
-		portal.getRootNode().attachChild(node);
 		portal.getBulletAppState().getPhysicsSpace().add(this);
+		playerSpatial = portal.getAssetManager().loadModel("Models/Ninja/Ninja.mesh.xml");
+		playerSpatial.scale(0.05f);
+		playerNode = (Node) playerSpatial;
+		playerNode.addControl(this);
+		this.setPhysicsDamping(0);
+		portal.getRootNode().attachChild(playerNode);
 		this.cam = portal.cam;
 	}
 	
@@ -47,12 +52,12 @@ public class Player extends BetterCharacterControl{
 	
 	public Vector3f getLocation()
 	{
-		return this.node.getWorldTranslation();
+		return spatial.getWorldTranslation();
 	}
 	
 	public void spawnPlayer(Planet planet, int face)
 	{
-		if(PlayerEvents.PlayerMoveEvent(this, node.getWorldTranslation(), planet.getSpawnLocation(face)))
+		if(PlayerEvents.PlayerMoveEvent(this, getLocation(), planet.getSpawnLocation(face)))
 		{
 			this.setLocation(planet.getSpawnLocation(face));
 			this.rotatePlayer(face);
@@ -104,11 +109,6 @@ public class Player extends BetterCharacterControl{
 		return planet;
 	}
 	
-	public Node getNode()
-	{
-		return node;
-	}
-	
 	public void rotatePlayer(int face) {
 		Quaternion q = new Quaternion();
 		int x=0,y=0,z=0;
@@ -128,7 +128,7 @@ public class Player extends BetterCharacterControl{
 			return;
 		}
 		q.fromAngles(x*FastMath.DEG_TO_RAD, y*FastMath.DEG_TO_RAD, z*FastMath.DEG_TO_RAD);
-		this.node.setLocalRotation(q);
+		this.spatial.setLocalRotation(q);
 	}
 
 	public Planet getClosestPlanet()
@@ -136,7 +136,7 @@ public class Player extends BetterCharacterControl{
 		float closestdist = -1;
 		Planet closestplanet = null;
 		for(Planet planet : getSystem().getPlanets()) {
-			float distance = node.getWorldTranslation().distance(planet.getPlanetNode().getWorldTranslation());
+			float distance = getLocation().distance(planet.getPlanetNode().getWorldTranslation());
 			if(distance < closestdist || closestdist == -1)
 			{
 				closestdist = distance;
@@ -150,7 +150,7 @@ public class Player extends BetterCharacterControl{
 	{
 		if(planet != null)
 		{
-			return node.getWorldTranslation().distance(planet.getPlanetNode().getWorldTranslation());
+			return getLocation().distance(planet.getPlanetNode().getWorldTranslation());
 		}
 		return -1;
 	}
@@ -193,7 +193,7 @@ public class Player extends BetterCharacterControl{
 		
 		Vector3f playerP = null;
 		if(portal.getPhysics().isEnabled())
-			playerP = this.node.getLocalTranslation();
+			playerP = getLocation();
 		else
 			playerP = portal.getCam().getLocation();
 
@@ -201,11 +201,9 @@ public class Player extends BetterCharacterControl{
 		Vector3f transP = rot1P.subtract(P1);
 		Vector3f rot2P = planet.getPlanetNode().getLocalRotation().inverse().mult(transP);
 
-		float x,y,z;
-
-		x = rot2P.x;
-		y = rot2P.y;
-		z = rot2P.z;
+		float x = rot2P.x;
+		float y = rot2P.y;
+		float z = rot2P.z;
 
 		if( Math.abs(y) > Math.abs(x) && Math.abs(y) > Math.abs(z) ) {
 			if( y < 0 ) {
@@ -234,5 +232,9 @@ public class Player extends BetterCharacterControl{
 		} else {
 			return -1;
 		}
+	}
+
+	public CelestialPortal getPortal() {
+		return portal;
 	}
 }
