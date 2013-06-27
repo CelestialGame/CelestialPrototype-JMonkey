@@ -43,7 +43,6 @@ public class PlayerEvents {
 	 */
 	public static boolean PlayerJumpEvent(Player player)
 	{
-		//never called yet
 		return true;
 	}
 	
@@ -57,7 +56,6 @@ public class PlayerEvents {
 	 */
 	public static boolean PlayerDeleteBlockEvent(Player player, Planet planet, Vector3f collisionPoint, Vector3Int blockLocation)
 	{
-		//never called yet
 		return true;
 	}
 	
@@ -71,7 +69,6 @@ public class PlayerEvents {
 	 */
 	public static boolean PlayerAddBlockEvent(Player player, Planet planet, Vector3f collisionPoint, Vector3Int blockLocation)
 	{
-		//never called yet
 		return true;
 	}
 }

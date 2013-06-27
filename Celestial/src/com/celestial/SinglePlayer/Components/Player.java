@@ -48,6 +48,11 @@ public class Player extends BetterCharacterControl{
 			this.rotatePlayer(face);
 		}
 	}
+	
+	public Vector3f getSpawnLocation(Planet planet, int face)
+	{
+		return planet.getSpawnLocation(face);
+	}
 
 	public void setGalaxy(Galaxy galaxy)
 	{

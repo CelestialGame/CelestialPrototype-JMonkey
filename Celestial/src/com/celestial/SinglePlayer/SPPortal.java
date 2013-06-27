@@ -22,9 +22,6 @@ import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.input.FlyByCamera;
@@ -167,10 +164,7 @@ public class SPPortal extends CelestialPortal{
 		updateStats(tpf);
 		updateLight(tpf);
 		updateGravity(tpf);
-		
-		/**
-		 * TODO: Rotation
-		 */
+
 		if(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0) != null)
 		{
 			if(this.timer.getTimeInSeconds()-this.lastRotation > 0)

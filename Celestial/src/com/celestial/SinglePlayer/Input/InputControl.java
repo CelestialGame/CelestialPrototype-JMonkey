@@ -112,12 +112,8 @@ public class InputControl {
 					{
 						BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 						if(chunk != null && blockLocation != null && chunk.getBlock(blockLocation) != null) {
-							/*Class<? extends Block> block = BlockManager.getClass(chunk.getBlock(blockLocation).getType());
-							item = parent.getInventoryManager().getItembyBlock(block);
-							if(item != null) {
-								parent.getInventoryManager().dropItem(item, blockAbsLocation);
-							}*/
-							chunk.removeBlock(blockLocation); //Remove the Block
+							if(PlayerEvents.PlayerDeleteBlockEvent(parent.player, parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0), blockAbsLocation, blockLocation))
+								chunk.removeBlock(blockLocation); //Remove the Block
 						}
 					
 					}
@@ -127,12 +123,15 @@ public class InputControl {
 						{
 							BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 							if(chunk != null && blockLocation != null && chunk.getBlock(blockLocation) != null) {
-								Class<? extends Block> block = BlockManager.getClass(chunk.getBlock(blockLocation).getType());
-								item = parent.getInventoryManager().getItembyBlock(block);
-								if(item != null) {
-									parent.getInventoryManager().dropItem(item, blockAbsLocation);
+								if(PlayerEvents.PlayerDeleteBlockEvent(parent.player, parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0), blockAbsLocation, blockLocation))
+								{
+									Class<? extends Block> block = BlockManager.getClass(chunk.getBlock(blockLocation).getType());
+									item = parent.getInventoryManager().getItembyBlock(block);
+									if(item != null) {
+										parent.getInventoryManager().dropItem(item, blockAbsLocation);
+									}
+									chunk.removeBlock(blockLocation); //Remove the Block
 								}
-								chunk.removeBlock(blockLocation); //Remove the Block
 							}
 						}
 					}
@@ -174,8 +173,12 @@ public class InputControl {
 					{
 						BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 						if(chunk != null && blockLocation != null && parent.getInventoryManager().getSelectedHotSlot().getItem() != null) {
-							chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock()); //Add the Block
-							parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
+							if(PlayerEvents.PlayerAddBlockEvent(parent.player, parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0), blockAbsLocation, blockLocation))
+							{
+								chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock()); //Add the Block
+								if(chunk.getBlock(blockLocation) != null)
+									parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
+							}
 						}
 					}
 					else
@@ -184,9 +187,12 @@ public class InputControl {
 						{
 							BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 							if(chunk != null && blockLocation != null && parent.getInventoryManager().getSelectedHotSlot().getItem() != null) {
-								chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock()); //Add the Block
-								if(chunk.getBlock(blockLocation) != null)
-									parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
+								if(PlayerEvents.PlayerAddBlockEvent(parent.player, parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0), blockAbsLocation, blockLocation))
+								{
+									chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock()); //Add the Block
+									if(chunk.getBlock(blockLocation) != null)
+										parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
+								}
 							}
 						}
 					}
@@ -201,7 +207,8 @@ public class InputControl {
 			} else if (binding.equals("Down")) {
 				parent.down = keyPressed;
 			} else if (binding.equals("Jump")) {
-				parent.player.jump();
+				if(PlayerEvents.PlayerJumpEvent(parent.player))
+					parent.player.jump();
 			}
 			else if(binding.equals("NoClip") && !keyPressed) {
 				if(parent.getBulletAppState().isEnabled()) {
@@ -257,7 +264,10 @@ public class InputControl {
 			}
 			else if(binding.equals("Respawn") && !keyPressed)
 			{
-				parent.player.spawnPlayer(parent.player.getSystem().getPlanet(0), 0);
+				if(PlayerEvents.PlayerMoveEvent(parent.player, parent.player.getNode().getWorldTranslation(), parent.player.getSpawnLocation(parent.player.getSystem().getPlanet(0), 0)))
+				{
+					parent.player.spawnPlayer(parent.player.getSystem().getPlanet(0), 0);
+				}
 				parent.cam.setLocation(new Vector3f(parent.player.getNode().getLocalTranslation().getX(), parent.player.getNode().getLocalTranslation().getY()+parent.getCamHeight(), parent.player.getNode().getLocalTranslation().getZ()));
 			}
 			else if(binding.equals("FindFace") && !keyPressed)
