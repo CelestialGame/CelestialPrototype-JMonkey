@@ -43,16 +43,16 @@ public class Planet implements BlockChunkListener {
 	public static final int BOTTOM = 5;
 	public float atmosphereSizeFactor;
 	private Star star;
-	protected int diameter;
+	private int diameter;
 	private String name;
 	private Vector3f location;
-	protected int centerofdiam;
+	private int centerofdiam;
 	private BlockTerrainControl terrcontrol;
 	private Node planetNode;
 	private Node terrainNode;
 	private Vector3f amountRotation;
 	private Quaternion originalRotation;
-	private Vector3f originalTranslationTerrain;
+	private Vector3f originalTerrainTranslation;
 	private CelestialPortal portal;
 	private List<PlanetCorner> cornerList;
 	private Box atmospherebox;
@@ -62,6 +62,7 @@ public class Planet implements BlockChunkListener {
 	private Vector3f amountRevolution;
 	private CollisionShape terrainCollision;
 	private RigidBodyControl terrainRigidBody;
+	private Vector3f originalPlanetTranslation;
 
 	/**
 	 * Create a new Planet
@@ -77,17 +78,17 @@ public class Planet implements BlockChunkListener {
 		this.location = location;
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
 		this.portal = star.getSolarSystem().getSector().getGalaxy().getPortal();
-		this.amountRotation = new Vector3f(0f, 0.0001f, 0f);
-		this.amountRevolution = new Vector3f(0f, 0.0001f, 0f);
+		this.amountRotation = new Vector3f(0f, 0.000f, 0f);
+		this.amountRevolution = new Vector3f(0f, 0.000f, 0f);
 		this.name = name;
 		this.atmosphereSizeFactor = 1.2f;
-		
+
 		if(diameter % 2 == 0)
 		{
 			System.err.println("Planet Diameter MUST be odd number!");
 			return;
 		}
-		
+
 		this.generatePlanet();
 	}
 
@@ -97,7 +98,7 @@ public class Planet implements BlockChunkListener {
 		starNode.attachChild(planetNode);
 		terrainNode = new Node();
 		planetNode.attachChild(terrainNode);
-		
+
 		terrcontrol = new BlockTerrainControl(portal.csettings, new Vector3Int(diameter, diameter, diameter));
 		terrcontrol.addChunkListener(this);
 
@@ -124,86 +125,88 @@ public class Planet implements BlockChunkListener {
 			}
 		}
 		terrainNode.addControl(terrcontrol);
-		
+
 		/* NODES */
-		
+
 		this.originalRotation = planetNode.getWorldRotation().clone(); 
-		
+
 		terrainNode.move(((centerofdiam*16)-8)*-3,((centerofdiam*16)-8)*-3,((centerofdiam*16)-8)*-3);
 		planetNode.move(location);
 		starNode.move(star.getStarNode().getWorldTranslation());
-		this.originalTranslationTerrain = terrainNode.getWorldTranslation().clone();
-		
+		this.originalTerrainTranslation = terrainNode.getWorldTranslation().clone();
+		this.originalPlanetTranslation = planetNode.getWorldTranslation().clone();
+
 		star.getStarNode().attachChild(starNode);
-		
+
 		/* COLLISION */
 		terrainCollision = CollisionShapeFactory.createMeshShape(terrainNode);
-		terrainRigidBody = new RigidBodyControl(terrainCollision, 0.0f);
+		terrainRigidBody = new RigidBodyControl(terrainCollision, 1.0f);
+		terrainRigidBody.setKinematic(true);
 		terrainNode.addControl(terrainRigidBody);
 		portal.getBulletAppState().getPhysicsSpace().add(terrainNode);
-		
+
 		/* LIGHTING */
 		planetNode.setShadowMode(ShadowMode.CastAndReceive);
-		
+
 		/* CORNERS */
 		this.cornerList = new ArrayList<PlanetCorner>();
-		
+
 		PlanetCorner c1 = new PlanetCorner(TOP,NORTH,EAST);
 		planetNode.attachChild(c1);
 		c1.move(((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*3);
 		this.cornerList.add(c1);
-		
+
 		PlanetCorner c2 = new PlanetCorner(TOP,EAST,SOUTH);
 		planetNode.attachChild(c2);
 		c2.move(((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*-3);
 		this.cornerList.add(c2);
-		
+
 		PlanetCorner c3 = new PlanetCorner(TOP,SOUTH,WEST);
 		planetNode.attachChild(c3);
 		c3.move(((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*-3);
 		this.cornerList.add(c3);
-		
+
 		PlanetCorner c4 = new PlanetCorner(TOP,WEST,NORTH);
 		planetNode.attachChild(c4);
 		c4.move(((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*3);
 		this.cornerList.add(c4);
-		
+
 		PlanetCorner c5 = new PlanetCorner(BOTTOM,NORTH,EAST);
 		planetNode.attachChild(c5);
 		c5.move(((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*3);
 		this.cornerList.add(c5);
-		
+
 		PlanetCorner c6 = new PlanetCorner(BOTTOM,EAST,SOUTH);
 		planetNode.attachChild(c6);
 		c6.move(((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*-3);
 		this.cornerList.add(c6);
-		
+
 		PlanetCorner c7 = new PlanetCorner(BOTTOM,SOUTH,WEST);
 		planetNode.attachChild(c7);
 		c7.move(((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*-3);
 		this.cornerList.add(c7);
-		
+
 		PlanetCorner c8 = new PlanetCorner(BOTTOM,WEST,NORTH);
 		planetNode.attachChild(c8);
 		c8.move(((centerofdiam*16)-8)*3, ((centerofdiam*16)-8)*-3, ((centerofdiam*16)-8)*3);
 		this.cornerList.add(c8);
-		
+
 		/* ATMOSPHERE */
 		this.atmospherebox = new Box(this.diameter*16*3*atmosphereSizeFactor, this.diameter*16*3*atmosphereSizeFactor, this.diameter*16*3*atmosphereSizeFactor);
 		this.atmospheregeom = new Geometry("Atmosphere", this.atmospherebox);
 		this.atmospheremat = new Material(portal.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-		
+
 		this.atmospheremat.setColor("Color", new ColorRGBA(0.3f, 0.5f, 1, 0.75f));
 		this.atmospheregeom.setMaterial(this.atmospheremat);
-		
+
 		this.atmospheremat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
 		this.atmospheremat.getAdditionalRenderState().setFaceCullMode(FaceCullMode.Off);
 		this.atmospheregeom.setQueueBucket(Bucket.Transparent);
-		
+
 		this.planetNode.attachChild(this.atmospheregeom);
-	
+
 	}
-	
+
 	public void makeChunk(int locx, int locy, int locz, BlockTerrainControl blockTerrain)
 	{
 		int diameter = 16;
@@ -311,12 +314,12 @@ public class Planet implements BlockChunkListener {
 	public PlanetCorner[] getCornersForFace(int face)
 	{
 		PlanetCorner[] values = new PlanetCorner[4];
-		
+
 		PlanetCorner c1 = null;
 		PlanetCorner c2 = null;
 		PlanetCorner c3 = null;
 		PlanetCorner c4 = null;
-		
+
 		int amt = 0;
 		for(PlanetCorner c : this.cornerList)
 			if(c.getSides().contains(face))
@@ -341,50 +344,50 @@ public class Planet implements BlockChunkListener {
 				default:
 					break;
 				}
-		
+
 		if(c1 != null && c2 != null && c3 != null && c4 != null)
 		{
-			
+
 			switch(face)
 			{
-				case TOP:
-					values[0] = c1;
-					values[1] = c2;
-					values[2] = c3;
-					values[3] = c4;
-					break;
-				case NORTH:
-					values[0] = c1;
-					values[1] = c2;
-					values[2] = c4;
-					values[3] = c3;
-					break;
-				case EAST:
-					values[0] = c2;
-					values[1] = c1;
-					values[2] = c3;
-					values[3] = c4;
-					break;
-				case SOUTH:
-					values[0] = c2;
-					values[1] = c1;
-					values[2] = c3;
-					values[3] = c4;
-					break;
-				case WEST:
-					values[0] = c1;
-					values[1] = c2;
-					values[2] = c4;
-					values[3] = c3;
-					break;
-				case BOTTOM:
-					values[0] = c1;
-					values[1] = c4;
-					values[2] = c3;
-					values[3] = c2;
-					break;
-				default:
-					return null;
+			case TOP:
+				values[0] = c1;
+				values[1] = c2;
+				values[2] = c3;
+				values[3] = c4;
+				break;
+			case NORTH:
+				values[0] = c1;
+				values[1] = c2;
+				values[2] = c4;
+				values[3] = c3;
+				break;
+			case EAST:
+				values[0] = c2;
+				values[1] = c1;
+				values[2] = c3;
+				values[3] = c4;
+				break;
+			case SOUTH:
+				values[0] = c2;
+				values[1] = c1;
+				values[2] = c3;
+				values[3] = c4;
+				break;
+			case WEST:
+				values[0] = c1;
+				values[1] = c2;
+				values[2] = c4;
+				values[3] = c3;
+				break;
+			case BOTTOM:
+				values[0] = c1;
+				values[1] = c4;
+				values[2] = c3;
+				values[3] = c2;
+				break;
+			default:
+				return null;
 			}
 		}
 		else
@@ -393,17 +396,17 @@ public class Planet implements BlockChunkListener {
 		}
 		return values;
 	}
-	
+
 	private int getTopBlock(Vector3Int location, BlockChunkControl blockTerrain2) {
-        int height = 0;
-        for (int i = 0; i < 256; i++) {
-            BlockType block = blockTerrain2.getBlock(new Vector3Int(location.getX(), i, location.getZ()));
-            if (block != null) {
-                height++;
-            }
-        }
-        return height;
-    }
+		int height = 0;
+		for (int i = 0; i < 256; i++) {
+			BlockType block = blockTerrain2.getBlock(new Vector3Int(location.getX(), i, location.getZ()));
+			if (block != null) {
+				height++;
+			}
+		}
+		return height;
+	}
 
 	@Override
 	public void onSpatialUpdated(BlockChunkControl bcc) {
@@ -440,7 +443,7 @@ public class Planet implements BlockChunkListener {
 	public Node getPlanetNode() {
 		return planetNode;
 	}
-	
+
 	public Node getTerrainNode()
 	{
 		return terrainNode;
@@ -449,11 +452,11 @@ public class Planet implements BlockChunkListener {
 	public int getDiameter() {
 		return diameter;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public float getDiameterAsFloat(boolean includeAtmosphere)
 	{
 		if(includeAtmosphere)
@@ -461,7 +464,7 @@ public class Planet implements BlockChunkListener {
 		else
 			return this.diameter*16*3;
 	}
-	
+
 	public float getRadiusAsFloat(boolean includeAtmosphere)
 	{
 		if(includeAtmosphere)
@@ -469,7 +472,7 @@ public class Planet implements BlockChunkListener {
 		else
 			return (this.centerofdiam*16-8)*3;
 	}
-	
+
 	public Vector3f getSpawnLocation(int face)
 	{
 		return new Vector3f(
@@ -481,19 +484,34 @@ public class Planet implements BlockChunkListener {
 	public void rotate() {
 		starNode.rotate(this.amountRevolution.getX()*FastMath.DEG_TO_RAD, this.amountRevolution.getY()*FastMath.DEG_TO_RAD, this.amountRevolution.getZ()*FastMath.DEG_TO_RAD);
 		planetNode.rotate(this.amountRotation.getX()*FastMath.DEG_TO_RAD, this.amountRotation.getY()*FastMath.DEG_TO_RAD, this.amountRotation.getZ()*FastMath.DEG_TO_RAD);
+		//updateCollision();
 	}
-	
+
+	public void updateCollision()
+	{
+		this.terrainNode.removeControl(terrainRigidBody);
+		this.terrainNode.addControl(terrainRigidBody);
+	}
+
+	public Vector3f getCurrentPlanetTranslation() {
+		return planetNode.getWorldTranslation();
+	}
+
+	public Vector3f getCurrentTerrainTranslation() {
+		return terrainNode.getWorldTranslation();
+	}
+
 	public Quaternion getRotation()
 	{
 		return planetNode.getWorldRotation();
 	}
 
-	public Vector3f getOriginalTranslation() {
-		return this.originalTranslationTerrain;
+	public Vector3f getOriginalTerrainTranslation() {
+		return this.originalTerrainTranslation;
 	}
 
-	public Vector3f getWantedLocation() {
-		return location;
+	public Vector3f getOriginalPlanetTranslation() {
+		return this.originalPlanetTranslation;
 	}
 
 	public Spatial getStarNode() {

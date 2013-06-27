@@ -47,12 +47,12 @@ public class Picker {
 
 			//Vector3f translatedContactPoint = collisionContactPoint.subtract(p.getWantedLocation());
 			Vector3f rotatedContactPoint = q1.mult(collisionContactPoint);
-			Vector3f translatedContactPoint = rotatedContactPoint.subtract(p.getWantedLocation());
+			Vector3f translatedContactPoint = rotatedContactPoint.subtract(p.getOriginalPlanetTranslation());
 			rotatedContactPoint = q2.mult(translatedContactPoint);
 			
 			rotatedContactPoint = smartRound(rotatedContactPoint);
 			
-			Vector3f relContactPoint = rotatedContactPoint.subtract(p.getOriginalTranslation().subtract(p.getWantedLocation()));
+			Vector3f relContactPoint = rotatedContactPoint.subtract(p.getOriginalTerrainTranslation().subtract(p.getOriginalPlanetTranslation()));
 
 			Vector3Int blockPoint = BlockNavigator.getPointedBlockLocation(terrcontrol, relContactPoint, getNeighborLocation);
 			if(blockPoint == null)

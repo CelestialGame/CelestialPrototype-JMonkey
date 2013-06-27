@@ -21,7 +21,7 @@ import com.jme3.scene.Node;
 
 public class InventoryManager {
 
-	CelestialPortal parent;
+	CelestialPortal portal;
 	
 	public HashMap<Integer, InventoryItem> items;
 
@@ -52,7 +52,7 @@ public class InventoryManager {
 	Node dropitemsnode;
 	public ArrayList<InventoryDrop> dropitems;
 	
-	public InventoryManager(CelestialPortal parent) {
+	public InventoryManager(CelestialPortal portal) {
 		this.items = new HashMap<Integer, InventoryItem>();
 		this.dropitems = new ArrayList<InventoryDrop>();
 		
@@ -81,12 +81,12 @@ public class InventoryManager {
 		
 		this.selectedhotslot = this.hotslot1;
 		
-		this.inventorygui = new InventoryGui(parent);
+		this.inventorygui = new InventoryGui(portal);
 		
 		this.dropitemsnode = new Node();
-		parent.getRootNode().attachChild(this.dropitemsnode);
+		portal.getRootNode().attachChild(this.dropitemsnode);
 		
-		this.parent = parent;
+		this.portal = portal;
 		
 		//TODO Add extended inv (stuffs not in the hotbar
 		
@@ -186,15 +186,13 @@ public class InventoryManager {
 	}
 	public void removeDropItem(InventoryDrop drop, Iterator<InventoryDrop> itr) {
 		if(this.dropitems.contains(drop)) {
+			this.portal.getBulletAppState().getPhysicsSpace().remove(drop.getCollisionBox().getUserObject());
 			this.dropitemsnode.detachChild(drop.getNode());
 			itr.remove();
 		}
 	}
 	
 	public void pickupDrop(InventoryDrop drop, int amount) {
-		for(InventorySlot slot : this.hotslots) {
-			System.out.println(slot+" "+slot.item + " " + slot.contents);
-		}
 		if(getHotSlotItems().contains(drop.getItem())) {
 			int index = getHotSlotItems().lastIndexOf(drop.getItem());
 			InventorySlot slot = this.hotslots.get(index);
@@ -223,6 +221,7 @@ public class InventoryManager {
 				this.extendedinv.add(new InventorySlot(drop.getItem(), 1, this));
 			}
 		}
+		this.getInvGui().updateHotBar();
 	}
 	
 }

@@ -11,6 +11,7 @@ import com.celestial.SinglePlayer.Events.PlayerEvents;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.bullet.objects.PhysicsRigidBody;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -37,7 +38,7 @@ public class Player extends BetterCharacterControl{
 		//setCollisionGroup(COLLISION_GROUP_01);
 		portal.getBulletAppState().getPhysicsSpace().add(this);
 		playerSpatial = portal.getAssetManager().loadModel("Models/Ninja/Ninja.mesh.xml");
-		playerSpatial.scale(0.05f);
+		playerSpatial.scale(0.0275f);
 		playerNode = (Node) playerSpatial;
 		playerNode.addControl(this);
 		this.setPhysicsDamping(0);
@@ -187,7 +188,7 @@ public class Player extends BetterCharacterControl{
 
 	public int getCurrentFaceOfPlanet(Planet planet)
 	{		
-		Vector3f P1 = planet.getWantedLocation();
+		Vector3f P1 = planet.getOriginalPlanetTranslation();
 
 		Vector3f playerP = null;
 		if(portal.getPhysics().isEnabled())
@@ -232,7 +233,16 @@ public class Player extends BetterCharacterControl{
 		}
 	}
 
+	public boolean isInSpace()
+	{
+		return this.getPlanet() == null;
+	}
+	
 	public CelestialPortal getPortal() {
 		return portal;
+	}
+
+	public PhysicsRigidBody getCollisionBox() {
+		return this.rigidBody;
 	}
 }
