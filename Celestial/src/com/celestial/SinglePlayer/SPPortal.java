@@ -225,8 +225,8 @@ public class SPPortal extends CelestialPortal{
 	}
 	
 	private void updateGravity(float tpf) {
-		if(this.player.getClosestPlanet() != null) {
-			Planet planet = this.player.getClosestPlanet();
+		if(this.player.getPlanet() != null) {
+			Planet planet = this.player.getPlanet();
 			/*int FaceOn = this.player.getCurrentFaceOfPlanet(planet);
 			if(FaceOn == planet.TOP) {
 				this.player.setGravity(50);
@@ -339,13 +339,12 @@ public class SPPortal extends CelestialPortal{
 		if(InputControl.statson) {
 			Vector3f location = this.cam.getLocation();
 			this.posText.setText("X: "+location.x + " Y: "+location.y+" Z: "+location.z);
-			if(this.player.getClosestPlanet() != null) {
-				if(this.player.getClosestPlanet().getName() == "null")
-					this.PlanetText.setText("Planet: None");
-				else
-					this.PlanetText.setText("Planet: "+this.player.getClosestPlanet().getName());
-			} else
-				this.PlanetText.setText("Planet: None");
+			if(this.player.getPlanet() != null) 
+			{
+				this.PlanetText.setText("Planet "+this.player.getPlanet().getName());
+			} 
+			else
+				this.PlanetText.setText("Deep Space");
 		} else {
 			this.posText.setText("");
 			this.PlanetText.setText("");

@@ -7,6 +7,7 @@ Date Created:
 package com.celestial.SinglePlayer.Components;
 
 import com.celestial.CelestialPortal;
+import com.celestial.SinglePlayer.Events.PlayerEvents;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.BetterCharacterControl;
@@ -25,6 +26,7 @@ public class Player extends BetterCharacterControl{
 	private SolarSystem system;
 	private Node node;
 	private Camera cam;
+	private Planet planet;
 
 	public Player(CelestialPortal portal)
 	{
@@ -34,7 +36,8 @@ public class Player extends BetterCharacterControl{
 		this.node = new Node("Player");
 		this.node.addControl(this);
 		this.cam = portal.cam;
-		this.node.setLocalTranslation(portal.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getSpawnLocation());
+		if(PlayerEvents.PlayerMoveEvent(node.getWorldTranslation(), portal.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getSpawnLocation()))
+			this.node.setLocalTranslation(portal.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getSpawnLocation());
 	}
 
 	public void setGalaxy(Galaxy galaxy)
@@ -51,6 +54,11 @@ public class Player extends BetterCharacterControl{
 	{
 		this.system = system;
 	}
+	
+	public void setPlanet(Planet planet)
+	{
+		this.planet = planet;
+	}
 
 	public Galaxy getGalaxy()
 	{
@@ -66,49 +74,69 @@ public class Player extends BetterCharacterControl{
 	{
 		return system;
 	}
+	
+	public Planet getPlanet()
+	{
+		return planet;
+	}
+	
 	public Node getNode()
 	{
 		return node;
 	}
-	@Deprecated
-	public void rotatePlayer(float xAngle, float yAngle, float zAngle) {
-		//this.cam.setRotation();
-		this.node.rotate(xAngle, yAngle, zAngle);
-	}
 	
 	public void rotatePlayer(int face) {
+		Quaternion q = new Quaternion();
+		int x=0,y=0,z=0;
 		if(face == Planet.TOP) {
-			this.node.rotate(0, 0, 0);
+			x=0;y=0;z=0;
 		} else if (face == Planet.BOTTOM) {
-			this.node.rotate(0, 180*FastMath.DEG_TO_RAD, 0);
+			x=0;y=180;z=0;
 		} else if (face == Planet.NORTH) {
-			this.node.rotate(0, 0, 90*FastMath.DEG_TO_RAD);
+			x=0;y=0;z=90;
 		} else if (face == Planet.SOUTH) {
-			this.node.rotate(0, 0, 270*FastMath.DEG_TO_RAD);
+			x=0;y=0;z=270;
 		} else if (face == Planet.EAST) {
-			this.node.rotate(90*FastMath.DEG_TO_RAD,0,0);
+			x=90;y=0;z=0;
 		} else if (face == Planet.WEST) {
-			this.node.rotate(270*FastMath.DEG_TO_RAD,0,0);
+			x=270;y=0;z=0;
 		} else {
 			return;
 		}
+		q.fromAngles(x*FastMath.DEG_TO_RAD, y*FastMath.DEG_TO_RAD, z*FastMath.DEG_TO_RAD);
+		this.node.setLocalRotation(q);
 	}
 
 	public Planet getClosestPlanet()
 	{
+		float closestdist = -1;
+		Planet closestplanet = null;
 		for(Planet planet : getSystem().getPlanets()) {
-			float distance = node.getLocalTranslation().distance(planet.getPlanetNode().getWorldTranslation());
-
-			float factor = (((planet.centerofdiam*16)-8)*3)*7;
+			float distance = node.getWorldTranslation().distance(planet.getPlanetNode().getWorldTranslation());
+			if(distance < closestdist || closestdist == -1)
+			{
+				closestdist = distance;
+				closestplanet = planet;
+			}
+			/*float factor = (((planet.centerofdiam*16)-8)*3)*7;
 			if(distance <= factor) {
 				if(planet.getName().equals("null")) {
 					return null;
 				} else {
 					return planet;
 				}
-			}
+			}*/
 		}
-		return null;
+		return closestplanet;
+	}
+	
+	public float getDistanceFromPlanet(Planet planet)
+	{
+		if(planet != null)
+		{
+			return node.getWorldTranslation().distance(planet.getPlanetNode().getWorldTranslation());
+		}
+		return -1;
 	}
 	
 	public Planet getClosestAtmosphere()

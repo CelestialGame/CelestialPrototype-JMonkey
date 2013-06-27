@@ -71,7 +71,7 @@ public class Planet implements BlockChunkListener {
 		this.location = location;
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
 		this.portal = star.getSolarSystem().getSector().getGalaxy().getPortal();
-		this.amountRotation = new Vector3f(0f, 0.1f, 0f);
+		this.amountRotation = new Vector3f(0f, 0f, 0f);
 		this.amountRevolution = new Vector3f(0f, 10f, 0f);
 		this.name = name;
 		atmospheresizefactor = this.diameter*16*3*1.2f;
@@ -450,7 +450,7 @@ public class Planet implements BlockChunkListener {
 	}
 
 	public void rotate() {
-		starNode.rotate(this.amountRevolution.getX()*FastMath.DEG_TO_RAD, this.amountRevolution.getY()*FastMath.DEG_TO_RAD, this.amountRevolution.getZ()*FastMath.DEG_TO_RAD);
+		//starNode.rotate(this.amountRevolution.getX()*FastMath.DEG_TO_RAD, this.amountRevolution.getY()*FastMath.DEG_TO_RAD, this.amountRevolution.getZ()*FastMath.DEG_TO_RAD);
 		planetNode.rotate(this.amountRotation.getX()*FastMath.DEG_TO_RAD, this.amountRotation.getY()*FastMath.DEG_TO_RAD, this.amountRotation.getZ()*FastMath.DEG_TO_RAD);
 	}
 	
