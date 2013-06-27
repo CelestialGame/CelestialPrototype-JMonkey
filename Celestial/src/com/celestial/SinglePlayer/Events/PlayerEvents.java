@@ -12,7 +12,7 @@ import com.cubes.Vector3Int;
 import com.jme3.math.Vector3f;
 
 /**
- * Player events are called right before any action. It is sort of a way of stopping it before it happens.
+ * Player events are called AFTER any action. It is sort of a way of stopping it before it happens.
  * The returned boolean is whether or not this is an allowed action. This is NOT the place to perform the action.
  * Use like this: if(PlayerJumpEvent()){ player.Jump(); }
  * 
@@ -22,16 +22,13 @@ public class PlayerEvents {
 	/**
 	 * This event is called whenever the player moves.
 	 * @param player The player moving.
-	 * @param previousLocation Where the player came from.
-	 * @param assumedNewLocation Where the player wants to end up.
-	 * @return boolean Whether or not this action is permitted.
+	 * @param newLocation Where the player wants to end up.
 	 */
-	public static boolean PlayerMoveEvent(Player player, Vector3f previousLocation, Vector3f assumedNewLocation)
+	public static void PlayerMoveEvent(Player player, Vector3f newLocation)
 	{
-		System.out.println("Player Moved. Previous: "+previousLocation+" New: "+assumedNewLocation);
 		Planet closest = player.getClosestPlanet();
 		System.out.println(closest.getName());
-		if(player.isWithinLoadingDistance(closest, assumedNewLocation)) //They are within range of a planet			
+		if(player.isWithinLoadingDistance(closest, newLocation)) //They are within range of a planet			
 		{
 			System.out.println("Player is within");
 			player.setPlanet(closest);
@@ -41,17 +38,14 @@ public class PlayerEvents {
 			System.out.println("Player is not within");
 			player.setPlanet(null);
 		}
-		return true;
 	}
 	
 	/**
 	 * This event is called whenever the player jumps.
 	 * @param player The player jumping.
-	 * @return boolean Whether or not this action is permitted.
 	 */
-	public static boolean PlayerJumpEvent(Player player)
+	public static void PlayerJumpEvent(Player player)
 	{
-		return true;
 	}
 	
 	/**
@@ -60,11 +54,9 @@ public class PlayerEvents {
 	 * @param planet The planet the block was removed from.
 	 * @param collisionPoint The point where the player clicked (null if this action was caused without clicking)
 	 * @param blockLocation The location of the block being deleted.
-	 * @return boolean Whether or not this action is permitted.
 	 */
-	public static boolean PlayerDeleteBlockEvent(Player player, Planet planet, Vector3f collisionPoint, Vector3Int blockLocation)
+	public static void PlayerDeleteBlockEvent(Player player, Planet planet, Vector3f collisionPoint, Vector3Int blockLocation)
 	{
-		return true;
 	}
 	
 	/**
@@ -73,10 +65,8 @@ public class PlayerEvents {
 	 * @param planet The planet the block was added to.
 	 * @param collisionPoint The point where the player clicked (null if this action was caused without clicking)
 	 * @param blockLocation The location of the block being added.
-	 * @return boolean Whether or not this action is permitted.
 	 */
-	public static boolean PlayerAddBlockEvent(Player player, Planet planet, Vector3f collisionPoint, Vector3Int blockLocation)
+	public static void PlayerAddBlockEvent(Player player, Planet planet, Vector3f collisionPoint, Vector3Int blockLocation)
 	{
-		return true;
 	}
 }

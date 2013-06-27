@@ -2,7 +2,7 @@
 @author	Mitch Talmadge
 Date Created:
 	Jun 2, 2013
-*/
+ */
 
 package com.celestial.SinglePlayer;
 
@@ -44,7 +44,7 @@ import com.jme3.system.Timer;
 import com.jme3.util.SkyFactory;
 
 public class SPPortal extends CelestialPortal{
-	
+
 	private BitmapFont guiFont;
 	private Timer timer;
 	private float lastRotation;
@@ -52,7 +52,7 @@ public class SPPortal extends CelestialPortal{
 	private FilterPostProcessor fpp;
 	public static final int SHADOWMAP_SIZE = 1024;
 	public static float camHeight = 2f;
-	
+
 	private Vector3f normalGravity = new Vector3f(0.0f, -9.81f, 0.0f);
 	private Vector3f zeroGravity = new Vector3f(0.0f, 0.0f, 0.0f);
 
@@ -90,7 +90,7 @@ public class SPPortal extends CelestialPortal{
 		this.csettings.setChunkSizeX(16);
 		this.csettings.setChunkSizeY(16);
 		this.csettings.setChunkSizeZ(16);
-		
+
 		/** Set up Physics **/
 		this.bulletAppState = new BulletAppState();
 		this.parent.getStateManager().attach(this.getBulletAppState());
@@ -100,9 +100,9 @@ public class SPPortal extends CelestialPortal{
 		this.guiNode.detachAllChildren();
 
 		/* Create Galaxy */
-		
+
 		this.galaxy = new Galaxy(this, 1, 1, 1);
-		
+
 		this.invmanager = new InventoryManager(this);
 
 		InventoryRegister.RegisterBlocks(this.invmanager);
@@ -138,28 +138,28 @@ public class SPPortal extends CelestialPortal{
 		Spatial sky = SkyFactory.createSky(this.assetManager, "assets/textures/nightsky.jpg", true);
 		sky.rotate(270*FastMath.DEG_TO_RAD,0,0);
 		this.rootNode.attachChild(sky);
-		
+
 		/** TODO: lighting fix -_- :P **/
 		initLighting();
-		
-		
+
+
 		this.player = new Player(this);
 		this.player.setGalaxy(this.galaxy);
 		this.player.setSector(this.galaxy.getSectorAt(0,0,0));
 		this.player.setSystem(this.player.getSector().getSystem(0));
-		
+
 		player.spawnPlayer(player.getSystem().getPlanet(0), 0);
-		
+
 		this.flyCam.setMoveSpeed(100);
 		this.cam.setFrustumFar(65000);
-		
+
 		this.rootNode.setShadowMode(ShadowMode.Off);
 
 		this.bulletAppState.getPhysicsSpace().addCollisionListener(new Listener(this));
 		//initAudio();
-		
+
 	}
-	
+
 	@Override
 	public void simpleUpdate(float tpf) {
 		updateCamera(tpf);
@@ -177,7 +177,7 @@ public class SPPortal extends CelestialPortal{
 		}
 		this.invmanager.updateAll();
 	}
-	
+
 	public void updateLight(float tpf) {
 		/*if(this.player.getClosestAtmosphere() != null) {
 			Planet planet = this.player.getClosestAtmosphere();
@@ -194,7 +194,7 @@ public class SPPortal extends CelestialPortal{
 			}	
 		}*/
 	}
-	
+
 	private void updateGravity(float tpf) {
 		if(this.player.getPlanet() != null) {
 			Planet planet = this.player.getPlanet();
@@ -231,67 +231,66 @@ public class SPPortal extends CelestialPortal{
 				this.player.setGravity(normalGravity);
 		}
 	}
-	
+
 	private void initLighting() {	  
 		AmbientLight al = new AmbientLight();
 		al.setColor(ColorRGBA.White);
 		this.rootNode.addLight(al);
-		
+
 		this.rootNode.addLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
-		
 
-//	    PointLightShadowRenderer plsr = new PointLightShadowRenderer(this.assetManager, SHADOWMAP_SIZE);
-//        plsr.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
-//        plsr.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
-        //plsr.setFlushQueues(false);
-        //plsr.displayFrustum();
-        //plsr.displayDebug();
-        //this.viewPort.addProcessor(plsr);
-        
-//        PointLightShadowFilter plsf = new PointLightShadowFilter(this.assetManager, SHADOWMAP_SIZE);
-//        plsf.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());     
-//        plsf.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
-//        plsf.setEnabled(true);
 
-        this.fpp = new FilterPostProcessor(this.assetManager);
-        BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
-        this.fpp.addFilter(bloom);
-        //fpp.addFilter(plsf);
-        
-        this.viewPort.addProcessor(this.fpp);
+		//	    PointLightShadowRenderer plsr = new PointLightShadowRenderer(this.assetManager, SHADOWMAP_SIZE);
+		//        plsr.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
+		//        plsr.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
+		//plsr.setFlushQueues(false);
+		//plsr.displayFrustum();
+		//plsr.displayDebug();
+		//this.viewPort.addProcessor(plsr);
+
+		//        PointLightShadowFilter plsf = new PointLightShadowFilter(this.assetManager, SHADOWMAP_SIZE);
+		//        plsf.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());     
+		//        plsf.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
+		//        plsf.setEnabled(true);
+
+		this.fpp = new FilterPostProcessor(this.assetManager);
+		BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
+		this.fpp.addFilter(bloom);
+		//fpp.addFilter(plsf);
+
+		this.viewPort.addProcessor(this.fpp);
 	}
-	
+
 	public void initAudio() {
 		/* nature sound - keeps playing in a loop. */
-	    AudioNode audio_ambient = new AudioNode(this.assetManager, "assets/sounds/ambient/DST-ArcOfDawn.ogg", false);
-	    audio_ambient.setLooping(true);  // activate continuous playing
-	    audio_ambient.setPositional(false);
-	    //audio_ambient.setLocalTranslation(Vector3f.ZERO.clone());
-	    audio_ambient.setVolume(3);
-	    this.rootNode.attachChild(audio_ambient);
-	    audio_ambient.play(); // play continuously!
+		AudioNode audio_ambient = new AudioNode(this.assetManager, "assets/sounds/ambient/DST-ArcOfDawn.ogg", false);
+		audio_ambient.setLooping(true);  // activate continuous playing
+		audio_ambient.setPositional(false);
+		//audio_ambient.setLocalTranslation(Vector3f.ZERO.clone());
+		audio_ambient.setVolume(3);
+		this.rootNode.attachChild(audio_ambient);
+		audio_ambient.play(); // play continuously!
 	}
-	
+
 	public void updateCamera(float tpf) {
 		//TODO modify to work with planet sides
 		if(this.bulletAppState.isEnabled()) {
-			Vector3f camDir = this.cam.getDirection().clone().multLocal(0.6f);
-			Vector3f camLeft = this.cam.getLeft().clone().multLocal(0.2f);
+			Vector3f camDir = this.cam.getDirection().clone().multLocal(16);
+			Vector3f camLeft = this.cam.getLeft().clone().multLocal(10);
 			this.walkDirection.set(0, 0, 0);
 			if (this.left)
-				if(PlayerEvents.PlayerMoveEvent(player, player.getLocation(), player.getLocation().add(this.walkDirection.add(camLeft))))
-						this.walkDirection.addLocal(camLeft); 
+				this.walkDirection.addLocal(camLeft); 
 			if (this.right) 
-				if(PlayerEvents.PlayerMoveEvent(player, player.getLocation(), player.getLocation().add(this.walkDirection.add(camLeft.negate()))))
-					this.walkDirection.addLocal(camLeft.negate());
+				this.walkDirection.addLocal(camLeft.negate());
 			if (this.up)    
-				if(PlayerEvents.PlayerMoveEvent(player, player.getLocation(), player.getLocation().add(this.walkDirection.add(camDir))))
-					this.walkDirection.addLocal(camDir);
+				this.walkDirection.addLocal(camDir);
 			if (this.down)  
-				if(PlayerEvents.PlayerMoveEvent(player, player.getLocation(), player.getLocation().add(this.walkDirection.add(camDir.negate()))))
-					this.walkDirection.addLocal(camDir.negate());
-			
+				this.walkDirection.addLocal(camDir.negate());
+
 			this.walkDirection.y = 0;
+
+			if(this.up || this.down || this.right || this.left)
+				PlayerEvents.PlayerMoveEvent(player, player.getLocation().add(this.walkDirection));
 			
 			if(this.up || this.down) {
 				this.walkDirection.x = this.walkDirection.x/2;
@@ -299,13 +298,13 @@ public class SPPortal extends CelestialPortal{
 			}
 			this.player.setWalkDirection(this.walkDirection);
 			this.cam.setLocation(new Vector3f(this.player.getLocation().getX(), this.player.getLocation().getY()+camHeight, this.player.getLocation().getZ()));
-			
+
 			this.inputControl.renderBlockBorder();
 		}
-		
+
 		this.parent.getListener().setLocation(this.cam.getLocation());
 		this.parent.getListener().setRotation(this.cam.getRotation());
-		
+
 	}
 	public void updateStats(float tpf) {
 		if(this.invmanager.getSelectedHotSlot().getItem() != null) {
@@ -330,7 +329,7 @@ public class SPPortal extends CelestialPortal{
 			this.PlanetText.setText("");
 		}
 	}
-		
+
 	protected void initCrossHairs() {
 		this.guiFont = this.parent.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
 		BitmapText ch = new BitmapText(this.guiFont, false);
@@ -354,7 +353,7 @@ public class SPPortal extends CelestialPortal{
 		this.InvText.setSize(this.guiFont.getCharSet().getRenderedSize());
 		this.InvText.setLocalTranslation(350, this.settings.getHeight() - this.InvText.getLineHeight(), 0);
 		//this.guiNode.attachChild(this.InvText);
-		
+
 		this.PlanetText = new BitmapText(this.guiFont, false);
 		this.PlanetText.setSize(this.guiFont.getCharSet().getRenderedSize());
 		this.PlanetText.setLocalTranslation(0, this.PlanetText.getLineHeight(), 0);
@@ -375,5 +374,5 @@ public class SPPortal extends CelestialPortal{
 	public float getCamHeight() {
 		return camHeight;
 	}
-	
+
 }

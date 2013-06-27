@@ -44,26 +44,24 @@ public class Player extends BetterCharacterControl{
 		portal.getRootNode().attachChild(playerNode);
 		this.cam = portal.cam;
 	}
-	
+
 	public void setLocation(Vector3f location)
 	{
 		this.warp(location);
 	}
-	
+
 	public Vector3f getLocation()
 	{
 		return spatial.getWorldTranslation();
 	}
-	
+
 	public void spawnPlayer(Planet planet, int face)
 	{
-		if(PlayerEvents.PlayerMoveEvent(this, getLocation(), planet.getSpawnLocation(face)))
-		{
-			this.setLocation(planet.getSpawnLocation(face));
-			this.rotatePlayer(face);
-		}
+		this.setLocation(planet.getSpawnLocation(face));
+		this.rotatePlayer(face);
+		PlayerEvents.PlayerMoveEvent(this, planet.getSpawnLocation(face));
 	}
-	
+
 	public Vector3f getSpawnLocation(Planet planet, int face)
 	{
 		return planet.getSpawnLocation(face);
@@ -83,7 +81,7 @@ public class Player extends BetterCharacterControl{
 	{
 		this.system = system;
 	}
-	
+
 	public void setPlanet(Planet planet)
 	{
 		this.planet = planet;
@@ -103,12 +101,12 @@ public class Player extends BetterCharacterControl{
 	{
 		return system;
 	}
-	
+
 	public Planet getPlanet()
 	{
 		return planet;
 	}
-	
+
 	public void rotatePlayer(int face) {
 		Quaternion q = new Quaternion();
 		int x=0,y=0,z=0;
@@ -145,7 +143,7 @@ public class Player extends BetterCharacterControl{
 		}
 		return closestplanet;
 	}
-	
+
 	public float getDistanceFromPlanet(Planet planet)
 	{
 		if(planet != null)
@@ -154,7 +152,7 @@ public class Player extends BetterCharacterControl{
 		}
 		return -1;
 	}
-	
+
 	public float getDistanceFromPlanet(Planet planet, Vector3f location)
 	{
 		if(planet != null)
@@ -163,14 +161,14 @@ public class Player extends BetterCharacterControl{
 		}
 		return -1;
 	}
-	
+
 	public boolean isInAtmosphere(Planet planet)
 	{
 		//do box check thing... This will require more than just a check of distance, 
 		//I'ma have to use normals and crap. Leave this here till I get the time to do it
 		return false;
 	}
-	
+
 	public boolean isWithinLoadingDistance(Planet planet)
 	{
 		if(this.getDistanceFromPlanet(planet)
@@ -178,7 +176,7 @@ public class Player extends BetterCharacterControl{
 			return true;
 		return false;
 	}
-	
+
 	public boolean isWithinLoadingDistance(Planet planet, Vector3f location)
 	{
 		if(this.getDistanceFromPlanet(planet, location)
@@ -190,7 +188,7 @@ public class Player extends BetterCharacterControl{
 	public int getCurrentFaceOfPlanet(Planet planet)
 	{		
 		Vector3f P1 = planet.getWantedLocation();
-		
+
 		Vector3f playerP = null;
 		if(portal.getPhysics().isEnabled())
 			playerP = getLocation();
