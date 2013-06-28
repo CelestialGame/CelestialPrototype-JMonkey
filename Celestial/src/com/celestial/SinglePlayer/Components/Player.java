@@ -260,4 +260,12 @@ public class Player extends BetterCharacterControl{
 	public PhysicsRigidBody getCollisionBox() {
 		return this.rigidBody;
 	}
+
+	public Node getNode() {
+		return this.playerNode;
+	}
+
+	public Spatial getSpatial() {
+		return this.playerSpatial;
+	}
 }

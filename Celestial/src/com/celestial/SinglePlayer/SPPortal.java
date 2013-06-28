@@ -148,7 +148,7 @@ public class SPPortal extends CelestialPortal{
 		this.player.setSector(this.galaxy.getSectorAt(0,0,0));
 		this.player.setSystem(this.player.getSector().getSystem(0));
 		this.player.setVisibleToClient(false);
-		
+
 		player.spawnPlayer(player.getSystem().getPlanet(0), 0);
 
 		this.flyCam.setMoveSpeed(100);
@@ -175,6 +175,22 @@ public class SPPortal extends CelestialPortal{
 			{
 				this.lastRotation = this.timer.getTimeInSeconds();
 				this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).rotate();
+				if(player.getPlanet() != null)
+				{
+					/*player.setLocation(
+							player.getLocation().add(
+									player.getPlanet().getCurrentPlanetTranslation().subtract(
+											player.getPlanet().getPreviousPlanetTranslation()
+											)
+									).add(player.getWalkDirection().divide(20).divide(60)).add(player.getGravity())
+							);*/
+					/*player.setViewDirection(
+							player.getPlanet().getRotation().subtract(
+									player.getPlanet().getPreviousPlanetRotation()).mult(
+											player.getViewDirection()
+											)
+							);*/
+				}
 			}
 		}
 		this.invmanager.updateAll();
@@ -182,10 +198,17 @@ public class SPPortal extends CelestialPortal{
 
 	private void updatePlayer(float tpf) {
 		Planet closest = player.getClosestPlanet();
-		if(player.isWithinLoadingDistance(closest, player.getLocation())) //They are within range of a planet			
-			player.setPlanet(closest);
+		if(player.isWithinLoadingDistance(closest, player.getLocation())) //They are within range of a planet	
+		{		
+			if(player.getPlanet() != closest)
+			{
+				player.setPlanet(closest);
+				closest.getPlanetNode().attachChild(player.getNode());
+			}
+		}
 		else //They are no longer within range of any planet (Deep Space)
 			player.setPlanet(null);
+			rootNode.attachChild(player.getSpatial());
 	}
 
 	public void updateLight(float tpf) {
@@ -293,7 +316,7 @@ public class SPPortal extends CelestialPortal{
 
 			if(this.up || this.down || this.right || this.left)
 				PlayerEvents.PlayerMoveEvent(player, player.getLocation().add(this.walkDirection));
-		
+
 			this.player.setWalkDirection(this.walkDirection);
 			this.cam.setLocation(new Vector3f(this.player.getLocation().getX(), this.player.getLocation().getY()+camHeight, this.player.getLocation().getZ()));
 

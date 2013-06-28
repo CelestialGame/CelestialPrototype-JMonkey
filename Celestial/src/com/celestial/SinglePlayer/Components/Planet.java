@@ -63,6 +63,8 @@ public class Planet implements BlockChunkListener {
 	private CollisionShape terrainCollision;
 	private RigidBodyControl terrainRigidBody;
 	private Vector3f originalPlanetTranslation;
+	private Vector3f previousPlanetTranslation;
+	private Quaternion previousPlanetRotation;
 
 	/**
 	 * Create a new Planet
@@ -78,8 +80,8 @@ public class Planet implements BlockChunkListener {
 		this.location = location;
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
 		this.portal = star.getSolarSystem().getSector().getGalaxy().getPortal();
-		this.amountRotation = new Vector3f(0f, 0.000f, 0f);
-		this.amountRevolution = new Vector3f(0f, 0.000f, 0f);
+		this.amountRotation = new Vector3f(0f, 0.0001f, 0f);
+		this.amountRevolution = new Vector3f(0f, 0.001f, 0f);
 		this.name = name;
 		this.atmosphereSizeFactor = 1.2f;
 
@@ -481,6 +483,8 @@ public class Planet implements BlockChunkListener {
 	}
 
 	public void rotate() {
+		this.previousPlanetRotation = planetNode.getLocalRotation().clone();
+		this.previousPlanetTranslation = planetNode.getWorldTranslation().clone();
 		starNode.rotate(this.amountRevolution.getX()*FastMath.DEG_TO_RAD, this.amountRevolution.getY()*FastMath.DEG_TO_RAD, this.amountRevolution.getZ()*FastMath.DEG_TO_RAD);
 		planetNode.rotate(this.amountRotation.getX()*FastMath.DEG_TO_RAD, this.amountRotation.getY()*FastMath.DEG_TO_RAD, this.amountRotation.getZ()*FastMath.DEG_TO_RAD);
 		//updateCollision();
@@ -511,6 +515,16 @@ public class Planet implements BlockChunkListener {
 
 	public Vector3f getOriginalPlanetTranslation() {
 		return this.originalPlanetTranslation;
+	}
+	
+	public Vector3f getPreviousPlanetTranslation()
+	{
+		return this.previousPlanetTranslation;
+	}
+	
+	public Quaternion getPreviousPlanetRotation()
+	{
+		return this.previousPlanetRotation;
 	}
 
 	public Spatial getStarNode() {
