@@ -232,31 +232,31 @@ public class InputControl {
 				}
 			}
 			else if(binding.equals("Slot1") && !keyPressed) {
-				parent.getInventoryManager().setSelectedHotSlot(1);
+				parent.getInventoryManager().setSelectedHotSlot(0);
 			}
 			else if(binding.equals("Slot2") && !keyPressed) {
-				parent.getInventoryManager().setSelectedHotSlot(2);
+				parent.getInventoryManager().setSelectedHotSlot(1);
 			}
 			else if(binding.equals("Slot3") && !keyPressed) {
-				parent.getInventoryManager().setSelectedHotSlot(3);
+				parent.getInventoryManager().setSelectedHotSlot(2);
 			}
 			else if(binding.equals("Slot4") && !keyPressed) {
-				parent.getInventoryManager().setSelectedHotSlot(4);
+				parent.getInventoryManager().setSelectedHotSlot(3);
 			}
 			else if(binding.equals("Slot5") && !keyPressed) {
-				parent.getInventoryManager().setSelectedHotSlot(5);
+				parent.getInventoryManager().setSelectedHotSlot(4);
 			}
 			else if(binding.equals("Slot6") && !keyPressed) {
-				parent.getInventoryManager().setSelectedHotSlot(6);
+				parent.getInventoryManager().setSelectedHotSlot(5);
 			}
 			else if(binding.equals("Slot7") && !keyPressed) {
-				parent.getInventoryManager().setSelectedHotSlot(7);
+				parent.getInventoryManager().setSelectedHotSlot(6);
 			}
 			else if(binding.equals("Slot8") && !keyPressed) {
-				parent.getInventoryManager().setSelectedHotSlot(8);
+				parent.getInventoryManager().setSelectedHotSlot(7);
 			}
 			else if(binding.equals("Slot9") && !keyPressed) {
-				parent.getInventoryManager().setSelectedHotSlot(9);
+				parent.getInventoryManager().setSelectedHotSlot(8);
 			}
 			else if(binding.equals("Respawn") && !keyPressed)
 			{

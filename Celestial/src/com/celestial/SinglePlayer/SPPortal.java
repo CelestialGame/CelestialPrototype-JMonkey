@@ -125,7 +125,7 @@ public class SPPortal extends CelestialPortal{
 		initCrossHairs();
 		initOtherHud();
 
-		this.invmanager.setSelectedHotSlot(1);
+		this.invmanager.setSelectedHotSlot(0);
 
 		this.walkDirection = new Vector3f();
 		this.left = false;
