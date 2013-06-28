@@ -16,6 +16,7 @@ public class InventoryManager {
 	
 	public HashMap<Integer, InventoryItem> items;
 
+	InventorySlot hotslot0;
 	InventorySlot hotslot1;
 	InventorySlot hotslot2;
 	InventorySlot hotslot3;
@@ -31,8 +32,6 @@ public class InventoryManager {
 	
 	InventorySlot selectedhotslot;
 
-	private InventorySlot hotslot10;
-
 	private InventoryGui inventorygui;
 	
 	public static int TAKE = 1;
@@ -47,6 +46,7 @@ public class InventoryManager {
 		this.items = new HashMap<Integer, InventoryItem>();
 		this.dropitems = new ArrayList<InventoryDrop>();
 		
+		this.hotslot0 = new InventorySlot(null, -2, this);
 		this.hotslot1 = new InventorySlot(null, -2, this);
 		this.hotslot2 = new InventorySlot(null, -2, this);
 		this.hotslot3 = new InventorySlot(null, -2, this);
@@ -56,9 +56,9 @@ public class InventoryManager {
 		this.hotslot7 = new InventorySlot(null, -2, this);
 		this.hotslot8 = new InventorySlot(null, -2, this);
 		this.hotslot9 = new InventorySlot(null, -2, this);
-		this.hotslot10 = new InventorySlot(null, -2, this);
 		
 		this.hotslots = new ArrayList<InventorySlot>();
+		this.hotslots.add(this.hotslot0);
 		this.hotslots.add(this.hotslot1);
 		this.hotslots.add(this.hotslot2);
 		this.hotslots.add(this.hotslot3);
@@ -68,9 +68,8 @@ public class InventoryManager {
 		this.hotslots.add(this.hotslot7);
 		this.hotslots.add(this.hotslot8);
 		this.hotslots.add(this.hotslot9);
-		this.hotslots.add(this.hotslot10);
 		
-		this.selectedhotslot = this.hotslot1;
+		this.selectedhotslot = this.hotslot0;
 		
 		this.inventorygui = new InventoryGui(portal);
 		
@@ -134,7 +133,7 @@ public class InventoryManager {
 	}
 	
 	public void setSelectedHotSlot(int hotslot) {
-		this.selectedhotslot = this.hotslots.get(hotslot-1);
+		this.selectedhotslot = this.hotslots.get(hotslot);
 		this.inventorygui.setHotBarSelection(hotslot);
 	}
 	

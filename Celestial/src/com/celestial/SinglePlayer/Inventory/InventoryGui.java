@@ -56,7 +56,7 @@ public class InventoryGui {
 				pic.setImage(this.parent.getAssetManager(), slot.getItem().getIcon(), true);
 				pic.setWidth(38);
 				pic.setHeight(38);
-				pic.setPosition((slots.indexOf(slot)-1)*38, this.parent.getSettings().getHeight() - 63);
+				pic.setPosition((slots.indexOf(slot))*38, this.parent.getSettings().getHeight() - 63);
 				this.hotbaricons.attachChild(pic);
 			}
 		}
@@ -64,26 +64,38 @@ public class InventoryGui {
 	}
 	
 	public void setHotBarSelection(int slot) {
-		if(slot == 1) {
+		switch(slot)
+		{
+		case 0:
 			this.hotbarsel.setPosition(0, this.parent.getSettings().getHeight() - 63);
-		} else if(slot == 2) {
+			break;
+		case 1:
 			this.hotbarsel.setPosition(39, this.parent.getSettings().getHeight() - 63);
-		} else if(slot == 3) {
+			break;
+		case 2:
 			this.hotbarsel.setPosition(77, this.parent.getSettings().getHeight() - 63);
-		} else if(slot == 4) {
+			break;
+		case 3:
 			this.hotbarsel.setPosition(115, this.parent.getSettings().getHeight() - 63);
-		} else if(slot == 5) {
+			break;
+		case 4:
 			this.hotbarsel.setPosition(153, this.parent.getSettings().getHeight() - 63);
-		} else if(slot == 6) {
+			break;
+		case 5:
 			this.hotbarsel.setPosition(191, this.parent.getSettings().getHeight() - 63);
-		} else if(slot == 7) {
+			break;
+		case 6:
 			this.hotbarsel.setPosition(229, this.parent.getSettings().getHeight() - 63);
-		} else if(slot == 8) {
+			break;
+		case 7:
 			this.hotbarsel.setPosition(267, this.parent.getSettings().getHeight() - 63);
-		} else if(slot == 9) {
+			break;
+		case 8:
 			this.hotbarsel.setPosition(305, this.parent.getSettings().getHeight() - 63);
-		} else {
+			break;
+		default:
 			this.hotbarsel.setPosition(0, this.parent.getSettings().getHeight() - 63);
+			break;
 		}
 	}
 } 
