@@ -80,8 +80,8 @@ public class Planet implements BlockChunkListener {
 		this.location = location;
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
 		this.portal = star.getSolarSystem().getSector().getGalaxy().getPortal();
-		this.amountRotation = new Vector3f(0f, 0.0001f, 0f);
-		this.amountRevolution = new Vector3f(0f, 0.001f, 0f);
+		this.amountRotation = new Vector3f(0f, 0f, 0f);
+		this.amountRevolution = new Vector3f(0f, 0f, 0f);
 		this.name = name;
 		this.atmosphereSizeFactor = 1.2f;
 
