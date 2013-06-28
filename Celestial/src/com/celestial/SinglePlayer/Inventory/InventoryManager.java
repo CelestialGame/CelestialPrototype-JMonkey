@@ -1,21 +1,12 @@
 package com.celestial.SinglePlayer.Inventory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
-import com.celestial.util.FixedHashMap;
 import com.celestial.util.InventoryException;
 import com.cubes.Block;
-import com.cubes.BlockSkin;
-import com.cubes.BlockType;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 
