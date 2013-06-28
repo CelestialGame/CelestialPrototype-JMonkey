@@ -143,7 +143,7 @@ public class InventoryManager {
 	}
 	
 	public void setSelectedHotSlot(int hotslot) {
-		this.selectedhotslot = this.hotslots.get(hotslot);
+		this.selectedhotslot = this.hotslots.get(hotslot-1);
 		this.inventorygui.setHotBarSelection(hotslot);
 	}
 	
