@@ -2,6 +2,7 @@ package com.celestial.SinglePlayer.Inventory;
 
 import com.celestial.Celestial;
 import com.celestial.SinglePlayer.SPPortal;
+import com.cubes.BlockManager;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;

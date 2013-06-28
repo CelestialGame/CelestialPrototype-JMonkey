@@ -18,7 +18,6 @@ public class InventoryGui {
 	CelestialPortal parent;
 	
 	private Picture hotbarsel;
-	
 	Node hotbaricons = new Node();
 	
 	public InventoryGui(CelestialPortal parent) {
