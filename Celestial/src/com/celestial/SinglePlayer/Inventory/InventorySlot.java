@@ -29,6 +29,8 @@ public class InventorySlot {
 		this.contents = contents;
 		if(item != null)
 			this.invmanager.getInvGui().setHotBarIcon(hotslot, item.getBlock());
+		else
+			this.invmanager.getInvGui().setHotBarIcon(hotslot, null);
 	}
 	
 	public void modifyNumberContents(boolean decrease, int inc) {
