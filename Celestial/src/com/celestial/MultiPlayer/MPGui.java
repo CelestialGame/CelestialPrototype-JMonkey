@@ -6,6 +6,6 @@ Date Created:
 
 package com.celestial.MultiPlayer;
 
-public class Gui {
+public class MPGui {
 
 }

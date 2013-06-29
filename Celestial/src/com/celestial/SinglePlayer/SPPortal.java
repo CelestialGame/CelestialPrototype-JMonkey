@@ -10,6 +10,7 @@ import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
 import com.celestial.Blocks.Blocks;
 import com.celestial.Blocks.BlocksEnum;
+import com.celestial.Gui.Gui;
 import com.celestial.SinglePlayer.Components.Galaxy;
 import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.SinglePlayer.Components.Player;
@@ -69,7 +70,8 @@ public class SPPortal extends CelestialPortal{
 			InputManager inputManager, 
 			AppSettings settings, 
 			Application app,
-			Timer timer)
+			Timer timer, 
+			Gui gui)
 	{
 		this.parent = parent;
 		this.rootNode = rootNode;
@@ -82,6 +84,7 @@ public class SPPortal extends CelestialPortal{
 		this.settings = settings;
 		this.app = app;
 		this.timer = timer;
+		this.gui = gui;
 	}
 
 	@Override

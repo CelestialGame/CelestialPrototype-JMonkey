@@ -6,6 +6,7 @@ package com.celestial.SinglePlayer.Input;
 
 import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
+import com.celestial.Blocks.BlocksEnum;
 import com.celestial.SinglePlayer.Components.SectorCoord;
 import com.celestial.SinglePlayer.Events.PlayerEvents;
 import com.celestial.SinglePlayer.Inventory.InventoryItem;
@@ -127,7 +128,7 @@ public class InputControl {
 							if(chunk != null && blockLocation != null && chunk.getBlock(blockLocation) != null) {
 								PlayerEvents.PlayerDeleteBlockEvent(parent.player, parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0), blockAbsLocation, blockLocation);	
 								Class<? extends Block> block = BlockManager.getClass(chunk.getBlock(blockLocation).getType());
-								item = parent.getInventoryManager().getItembyBlock(block);
+								item = parent.getInventoryManager().getItembyBlock(BlocksEnum.getBlockByClass(block));
 								if(item != null) {
 									parent.getInventoryManager().dropItem(item, blockAbsLocation);
 								}
@@ -174,7 +175,7 @@ public class InputControl {
 						BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 						if(chunk != null && blockLocation != null && parent.getInventoryManager().getSelectedHotSlot().getItem() != null) {
 							PlayerEvents.PlayerAddBlockEvent(parent.player, parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0), blockAbsLocation, blockLocation);
-							chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock()); //Add the Block
+							chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock().getBClass()); //Add the Block
 							if(chunk.getBlock(blockLocation) != null)
 								parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
 						}
@@ -185,7 +186,7 @@ public class InputControl {
 						{
 							BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 							if(chunk != null && blockLocation != null && parent.getInventoryManager().getSelectedHotSlot().getItem() != null) {
-								chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock()); //Add the Block
+								chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock().getBClass()); //Add the Block
 								PlayerEvents.PlayerAddBlockEvent(parent.player, parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0), blockAbsLocation, blockLocation);
 								if(chunk.getBlock(blockLocation) != null)
 									parent.getInventoryManager().getSelectedHotSlot().updateContents(true);

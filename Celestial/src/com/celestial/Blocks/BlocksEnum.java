@@ -78,4 +78,13 @@ public enum BlocksEnum {
 		this.id = id;
 		this.iconpath = iconpath;
 	}
+	public static BlocksEnum getBlockByClass(Class<? extends Block> blockClass)
+	{
+		for(BlocksEnum b : values())
+		{
+			if(b.getBClass().equals(blockClass))
+				return b;
+		}
+		return null;
+	}
 }

@@ -24,9 +24,10 @@ public class InventorySlot {
 		return this;
 	}
 	
-	public void setItem(InventoryItem item, int contents) {
+	public void setItem(InventoryItem item, int contents, int hotslot) {
 		this.item = item;
 		this.contents = contents;
+		this.invmanager.getInvGui().setHotBarIcon(hotslot, item.getBlock());
 	}
 	
 	public void modifyNumberContents(boolean decrease, int inc) {

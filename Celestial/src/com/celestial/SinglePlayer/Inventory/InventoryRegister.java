@@ -1,13 +1,6 @@
 package com.celestial.SinglePlayer.Inventory;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.imageio.ImageIO;
-
-import com.celestial.Celestial;
 import com.celestial.Blocks.*;
 import com.celestial.util.InventoryException;
 import com.jme3.asset.AssetNotFoundException;
@@ -27,8 +20,7 @@ public class InventoryRegister {
 					RegBlankIconBlock(block, IM);
 					continue;
 				}
-				IM.registerItem(new InventoryItem(block.getBClass(), block.getName(), 
-						block.getIconPath()), block.getID());
+				IM.registerItem(new InventoryItem(block), block.getID());
 			} catch (InventoryException e) {
 				if(e.getMessage().equalsIgnoreCase("AlreadyRegistered")) {
 					//pass...w/e bro
@@ -46,8 +38,7 @@ public class InventoryRegister {
 	private static void RegBlankIconBlock(BlocksEnum block, InventoryManager IM) {
 			String path = "/assets/textures/inventory/icons/blank.png";
 			try {
-				IM.registerItem(new InventoryItem(block.getBClass(), block.getName(), 
-						path), block.getID());
+				IM.registerItem(new InventoryItem(block), block.getID());
 			} catch (InventoryException e) {
 				e.printStackTrace();
 			}

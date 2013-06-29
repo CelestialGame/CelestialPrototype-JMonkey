@@ -117,37 +117,37 @@
 			<panel id="spacer0" width="100%" height="*"></panel>
 			<panel id="bottom" width="455px" height="50px" childLayout="horizontal"
 				backgroundColor="#c6c6c6" valign="bottom" align="center">
-				<panel id="hotspotbar" width="445px" height="50px" childLayout="horizontal"
+				<panel id="hotslotbar" width="445px" height="50px" childLayout="horizontal"
 					valign="center" align="center">
 					<panel id="spacer1" width="5px" height="*"></panel>
-					<panel id="hotspot0" width="40px" height="40px"
+					<panel id="hotslot0" width="40px" height="40px"
 						backgroundColor="#a0a0a0" valign="center"></panel>
 					<panel id="spacerh0" width="5px" height="*"></panel>
-					<panel id="hotspot1" width="40px" height="40px"
+					<panel id="hotslot1" width="40px" height="40px"
 						backgroundColor="#a0a0a0" valign="center"></panel>
 					<panel id="spacerh1" width="5px" height="*"></panel>
-					<panel id="hotspot2" width="40px" height="40px"
+					<panel id="hotslot2" width="40px" height="40px"
 						backgroundColor="#a0a0a0" valign="center"></panel>
 					<panel id="spacerh2" width="5px" height="*"></panel>
-					<panel id="hotspot3" width="40px" height="40px"
+					<panel id="hotslot3" width="40px" height="40px"
 						backgroundColor="#a0a0a0" valign="center"></panel>
 					<panel id="spacerh3" width="5px" height="*"></panel>
-					<panel id="hotspot4" width="40px" height="40px"
+					<panel id="hotslot4" width="40px" height="40px"
 						backgroundColor="#a0a0a0" valign="center"></panel>
 					<panel id="spacerh4" width="5px" height="*"></panel>
-					<panel id="hotspot5" width="40px" height="40px"
+					<panel id="hotslot5" width="40px" height="40px"
 						backgroundColor="#a0a0a0" valign="center"></panel>
 					<panel id="spacerh5" width="5px" height="*"></panel>
-					<panel id="hotspot6" width="40px" height="40px"
+					<panel id="hotslot6" width="40px" height="40px"
 						backgroundColor="#a0a0a0" valign="center"></panel>
 					<panel id="spacerh6" width="5px" height="*"></panel>
-					<panel id="hotspot7" width="40px" height="40px"
+					<panel id="hotslot7" width="40px" height="40px"
 						backgroundColor="#a0a0a0" valign="center"></panel>
 					<panel id="spacerh7" width="5px" height="*"></panel>
-					<panel id="hotspot8" width="40px" height="40px"
+					<panel id="hotslot8" width="40px" height="40px"
 						backgroundColor="#a0a0a0" valign="center"></panel>
 					<panel id="spacerh8" width="5px" height="*"></panel>
-					<panel id="hotspot9" width="40px" height="40px"
+					<panel id="hotslot9" width="40px" height="40px"
 						backgroundColor="#a0a0a0" valign="center"></panel>
 				</panel>
 			</panel>

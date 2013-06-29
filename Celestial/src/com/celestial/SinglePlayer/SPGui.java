@@ -6,6 +6,6 @@ Date Created:
 
 package com.celestial.SinglePlayer;
 
-public class Gui {
+public class SPGui {
 
 }

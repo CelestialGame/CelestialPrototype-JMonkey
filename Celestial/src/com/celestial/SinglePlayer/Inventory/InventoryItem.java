@@ -1,25 +1,31 @@
 package com.celestial.SinglePlayer.Inventory;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
-import com.cubes.Block;
+import com.celestial.Celestial;
+import com.celestial.Blocks.BlocksEnum;
+import com.jme3.asset.AssetNotFoundException;
 
 public class InventoryItem {
 
-	Class<? extends Block> block;
-	String name;
-	String icon;
+	private BlocksEnum block;
+	private String name;
+	private String icon;
 	
-	public InventoryItem(Class<? extends Block> block, String name, String icon) {
+	public InventoryItem(BlocksEnum block) {
 		this.block = block;
-		this.name = name;
-		this.icon = icon;
+		this.name = block.getName();
+		this.icon = block.getIconPath();
+		try
+		{
+			Celestial.app.getAssetManager().loadTexture(icon);
+		}
+		catch(AssetNotFoundException e)
+		{
+			this.icon = "assets/textures/inventory/icons/blank.png";
+		}
+				
 	}
 	
-	public Class<? extends Block> getBlock() {
+	public BlocksEnum getBlock() {
 		return block;
 	}
 	
