@@ -9,6 +9,7 @@ package com.celestial.SinglePlayer;
 import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
 import com.celestial.Blocks.Blocks;
+import com.celestial.Blocks.BlocksEnum;
 import com.celestial.SinglePlayer.Components.Galaxy;
 import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.SinglePlayer.Components.Player;
@@ -18,6 +19,7 @@ import com.celestial.SinglePlayer.Input.InputControl;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
 import com.celestial.SinglePlayer.Inventory.InventoryRegister;
 import com.celestial.SinglePlayer.Physics.Listener;
+import com.celestial.util.InventoryException;
 import com.cubes.CubesSettings;
 import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
@@ -108,16 +110,7 @@ public class SPPortal extends CelestialPortal{
 		InventoryRegister.RegisterBlocks(this.invmanager);
 
 		/*try {
-			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.DIRT.getID()), -1, 1);
-			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.STONE.getID()), -1, 2);
-
-			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.COAL_ORE.getID()), -1, 3);
-			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.IRON_ORE.getID()), -1, 4);
-			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.COPPER_ORE.getID()), -1, 5);
-			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.TIN_ORE.getID()), -1, 6);
-			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.RAW_DIAMOND.getID()), -1, 7);
-			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.GOLD_ORE.getID()), -1, 8);
-			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.GRASS.getID()), -1, 9);
+			this.invmanager.setHotSlot(this.invmanager.items.get(BlocksEnum.LEAVES.getID()), -1, 1);
 		} catch (InventoryException e) {
 			//pass
 		}*/
@@ -151,7 +144,7 @@ public class SPPortal extends CelestialPortal{
 
 		player.spawnPlayer(player.getSystem().getPlanet(0), 0);
 
-		this.flyCam.setMoveSpeed(100);
+		this.flyCam.setMoveSpeed(25);
 		this.cam.setFrustumFar(65000);
 
 		this.rootNode.setShadowMode(ShadowMode.Off);

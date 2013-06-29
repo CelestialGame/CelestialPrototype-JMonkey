@@ -29,7 +29,8 @@ public enum BlocksEnum {
 	COPPER_ORE(Block_CopperOre.class, "Copper Ore", 10, "/assets/textures/inventory/icons/CopperOre.png"),
 	TIN_ORE(Block_TinOre.class, "Tin Ore", 11, "/assets/textures/inventory/icons/TinOre.png"),
 	RAW_DIAMOND(Block_RawDiamond.class, "Raw Diamond", 12, "/assets/textures/inventory/icons/RawDiamond.png"),
-	GOLD_ORE(Block_GoldOre.class, "Gold Ore", 13, "/assets/textures/inventory/icons/GoldOre.png");
+	GOLD_ORE(Block_GoldOre.class, "Gold Ore", 13, "/assets/textures/inventory/icons/GoldOre.png"),
+	SUBSTRATUS(Block_Substratus.class, "Substratus", 14, "/assets/textures/inventory/icons/Substratus.png");
 	
 	/** END CLASSES **/
 	

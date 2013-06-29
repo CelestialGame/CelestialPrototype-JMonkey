@@ -40,6 +40,8 @@ public class Player extends BetterCharacterControl{
 		portal.getBulletAppState().getPhysicsSpace().add(this);
 		playerSpatial = portal.getAssetManager().loadModel("assets/models/player/simpleplayer.mesh.xml");
 		//playerSpatial.scale(0.0275f);
+		playerSpatial.scale(0.5f, 1.5f, 1);
+		playerSpatial.scale(0.5f);
 		playerNode = (Node) playerSpatial;
 		playerNode.addControl(this);
 		this.setJumpForce(new Vector3f(0, 8f, 0));

@@ -54,7 +54,7 @@ public class Blocks {
     		    }
     		});
         BlockManager.register(BlocksEnum.DIRT.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(2, 0), false));
-        BlockManager.register(BlocksEnum.LEAVES.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(7, 0), false));
+        BlockManager.register(BlocksEnum.LEAVES.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(7, 0), true));
         BlockManager.register(BlocksEnum.WOOD.getBClass(), new BlockSkin(new BlockSkin_TextureLocation[]{
         	    new BlockSkin_TextureLocation(4, 0),
         	    new BlockSkin_TextureLocation(4, 0),
@@ -81,7 +81,7 @@ public class Blocks {
         BlockManager.register(BlocksEnum.TIN_ORE.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(7, 1), false));
         BlockManager.register(BlocksEnum.GOLD_ORE.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(6, 1), false));
         BlockManager.register(BlocksEnum.IRON_ORE.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(5, 1), false));
-        
+        BlockManager.register(BlocksEnum.SUBSTRATUS.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(9, 0), false));
         
     }
     
