@@ -100,7 +100,7 @@ public class InputControl {
 
 			if (binding.equals("Block_Del") && !keyPressed) 
 			{
-				Object[] values = Picker.getCurrentPointedBlockLocation(false, parent, cam);
+				Object[] values = Picker.getCurrentPointedBlock(false, parent, cam);
 				if(values == null || values[0] == null || values[1] == null) //Check to see if they clicked the sky...
 				{
 					return;
@@ -140,7 +140,7 @@ public class InputControl {
 			}
 			if (binding.equals("Block_Pick") && !keyPressed) 
 			{
-				Object[] values = Picker.getCurrentPointedBlockLocation(false, parent, cam);
+				Object[] values = Picker.getCurrentPointedBlock(false, parent, cam);
 				if(values == null || values[0] == null || values[1] == null) //Check to see if they clicked the sky...
 				{
 					return;
@@ -161,7 +161,7 @@ public class InputControl {
 				}
 			}
 			if (binding.equals("Block_Add") && !keyPressed) {
-				Object[] values = Picker.getCurrentPointedBlockLocation(true, parent, cam);
+				Object[] values = Picker.getCurrentPointedBlock(true, parent, cam);
 				if(values == null || values[0] == null || values[1] == null) //Check to see if they clicked the sky...
 				{
 					return;
@@ -277,17 +277,6 @@ public class InputControl {
 			}
 		}
 	};
-
-	public void renderBlockBorder()
-	{
-		//TODO: Render Block Borders
-		// NOT DONE -- It'll turn the entire thing blue if you do use this.... xD
-		/*BlockChunkControl block = Picker.getCurrentPointedBlock(false, parent, cam);
-		if(block != null) {
-			block.getOptimizedGeometry_Opaque().getMaterial().setColor("Color", new ColorRGBA(0f,0f,0.5f, 1f));
-		}*/
-
-	}
 
 
 }
