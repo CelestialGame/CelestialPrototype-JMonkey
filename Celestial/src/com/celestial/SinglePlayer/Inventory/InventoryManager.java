@@ -4,10 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
+import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
 import com.celestial.util.InventoryException;
 import com.cubes.Block;
+import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioRenderer;
+import com.jme3.input.FlyByCamera;
+import com.jme3.input.InputManager;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 
 public class InventoryManager {
@@ -212,6 +219,11 @@ public class InventoryManager {
 			}
 		}
 		this.getInvGui().updateHotBar();
+	}
+	
+	public void openExtendedInv() {
+		Celestial.gui.getNifty().gotoScreen("extendedinv");
+		Celestial.gui.disableControl();
 	}
 	
 }

@@ -119,4 +119,7 @@ public abstract class CelestialPortal {
 		return cam;
 	}
 
+	public abstract InputManager getInputManager();
+	public abstract Object[] getNiftyUtils();
+
 }

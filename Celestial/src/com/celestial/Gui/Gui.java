@@ -25,6 +25,9 @@ public class Gui implements ScreenController {
 
 	private Nifty nifty;
 	private Celestial parent;
+	
+	private FlyByCamera flyCam;
+	private InputManager inputManager;
 
 	public Gui(Celestial parent, AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort, FlyByCamera flyCam)
 	{
@@ -33,6 +36,9 @@ public class Gui implements ScreenController {
                 audioRenderer,
                 guiViewPort);
 
+		this.flyCam = flyCam;
+		this.inputManager = inputManager;
+		
 		// disable the fly cam
         flyCam.setEnabled(false);
         flyCam.setDragToRotate(true);
@@ -54,31 +60,47 @@ public class Gui implements ScreenController {
 	public void bind(Nifty arg0, Screen arg1) {}
 
 	@Override
-	public void onEndScreen() {}
+	public void onEndScreen() {
+	}
 
 	@Override
-	public void onStartScreen() {}
+	public void onStartScreen() {
+		/*if(nifty.getScreen("extendedinv").equals(nifty.getCurrentScreen())) {
+			Element label = nifty.getCurrentScreen().findElementByName("inventorytitle");
+	        TextRenderer textRenderer = label.getRenderer(TextRenderer.class);
+	        textRenderer.setText(this.parent.player.getName() + "'s Inventory");
+		}*/
+	}
 	
-	public void actionPerformed(String id)
+	public void actionPerformed(String id, String mainPane)
 	{
-		switch(Integer.parseInt(id))
-		{
-		case 1: //SP
-			this.startGame(Celestial.SINGLEPLAYER);
-			break;
-		case 2: //MP
-			this.startGame(Celestial.MULTIPLAYER);
-			break;
-		case 3: //Options
-			break;
-		case 4: //Credits
-			break;
-		case 5: //Quit
-			Celestial.app.stop();
-			break;
-		default:
-			break;
-		}
+		if(mainPane.equalsIgnoreCase("MainMenu"))
+			switch(Integer.parseInt(id))
+			{
+			case 1: //SP
+				this.startGame(Celestial.SINGLEPLAYER);
+				break;
+			case 2: //MP
+				this.startGame(Celestial.MULTIPLAYER);
+				break;
+			case 3: //Options
+				break;
+			case 4: //Credits
+				break;
+			case 5: //Quit
+				Celestial.app.stop();
+				break;
+			default:
+				break;
+			}
+		else if(mainPane.equalsIgnoreCase("ExtendedInv"))
+			switch(Integer.parseInt(id))
+			{
+			case 1:
+				break;
+			default:
+				break;
+			}
 	}
 	
 	private void startGame(final int type) {
@@ -86,23 +108,50 @@ public class Gui implements ScreenController {
 		parent.startGame(type);
 	}
 
-	public void hoverPerformed(String id)
+	public void hoverPerformed(String id, String mainPane)
 	{
-		switch(Integer.parseInt(id))
-		{
-		case 1: //SP
-			break;
-		case 2: //MP
-			break;
-		case 3: //Options
-			break;
-		case 4: //Credits
-			break;
-		case 5: //Quit
-			break;
-		default:
-			break;
-		}
+		if(mainPane.equalsIgnoreCase("MainMenu"))
+			switch(Integer.parseInt(id))
+			{
+			case 1: //SP
+				break;
+			case 2: //MP
+				break;
+			case 3: //Options
+				break;
+			case 4: //Credits
+				break;
+			case 5: //Quit
+				break;
+			default:
+				break;
+			}
+		else if(mainPane.equalsIgnoreCase("ExtendedInv"))
+			switch(Integer.parseInt(id))
+			{
+			case 1:
+				break;
+			default:
+				break;
+			}
 	}
 	
+	public void disable() {
+		nifty.exit();
+	}
+	
+	public Nifty getNifty() {
+		return nifty;
+	}
+	
+	public void disableControl() {
+		flyCam.setEnabled(false);
+		flyCam.setDragToRotate(true);
+		inputManager.setCursorVisible(true);
+	}
+	public void enableControl() {
+		flyCam.setEnabled(true);
+		flyCam.setDragToRotate(false);
+		inputManager.setCursorVisible(false);
+	}
 }

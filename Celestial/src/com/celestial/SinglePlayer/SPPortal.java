@@ -143,7 +143,7 @@ public class SPPortal extends CelestialPortal{
 		initLighting();
 
 
-		this.player = new Player(this);
+		this.player = new Player(this, "John Doe");
 		this.player.setGalaxy(this.galaxy);
 		this.player.setSector(this.galaxy.getSectorAt(0,0,0));
 		this.player.setSystem(this.player.getSector().getSystem(0));
@@ -394,6 +394,22 @@ public class SPPortal extends CelestialPortal{
 	@Override
 	public float getCamHeight() {
 		return camHeight;
+	}
+	
+	@Override
+	public InputManager getInputManager() {
+		return this.inputManager;
+	}
+	
+	public Object[] getNiftyUtils() {
+		return new Object[]{
+				this,
+				this.assetManager,
+				this.inputManager,
+				this.parent.getAudioRenderer(),
+				this.viewPort,
+				this.flyCam
+				};
 	}
 
 }

@@ -32,7 +32,7 @@
 						<control name="label" font="assets/fonts/visitor.fnt"
 							text="Singleplayer" id="Singleplayer" align="center" valign="center"
 							visibleToMouse="true" width="100%" height="100%">
-							<interact onClick="actionPerformed(1)" onMouseOver="hoverPerformed(1)" />
+							<interact onClick="actionPerformed(1,MainMenu)" onMouseOver="hoverPerformed(1,MainMenu)" />
 						</control>
 						<effect>
 							<onStartScreen name="move" mode="in" direction="left"
@@ -49,7 +49,7 @@
 						<control name="label" font="assets/fonts/visitor.fnt"
 							text="Multiplayer" id="Multiplayer" align="center" valign="center"
 							visibleToMouse="true" width="100%" height="100%">
-							<interact onClick="actionPerformed(2)" onMouseOver="hoverPerformed(2)" />
+							<interact onClick="actionPerformed(2,MainMenu)" onMouseOver="hoverPerformed(2,MainMenu)" />
 						</control>
 						<effect>
 							<onStartScreen name="move" mode="in" direction="left"
@@ -66,7 +66,7 @@
 						<control name="label" font="assets/fonts/visitor.fnt"
 							text="Options" id="Options" align="center" valign="center"
 							visibleToMouse="true" width="100%" height="100%">
-							<interact onClick="actionPerformed(3)" onMouseOver="hoverPerformed(3)" />
+							<interact onClick="actionPerformed(3,MainMenu)" onMouseOver="hoverPerformed(3,MainMenu)" />
 						</control>
 						<effect>
 							<onStartScreen name="move" mode="in" direction="left"
@@ -83,7 +83,7 @@
 						<control name="label" font="assets/fonts/visitor.fnt"
 							text="Credits" id="Credits" align="center" valign="center"
 							visibleToMouse="true" width="100%" height="100%">
-							<interact onClick="actionPerformed(4)" onMouseOver="hoverPerformed(4)" />
+							<interact onClick="actionPerformed(4,MainMenu)" onMouseOver="hoverPerformed(4,MainMenu)" />
 						</control>
 						<effect>
 							<onStartScreen name="move" mode="in" direction="left"
@@ -100,7 +100,7 @@
 						<control name="label" font="assets/fonts/visitor.fnt"
 							text="Quit Game" id="Quit" align="center" valign="center"
 							visibleToMouse="true" width="100%" height="100%">
-							<interact onClick="actionPerformed(5)" onMouseOver="hoverPerformed(5)" />
+							<interact onClick="actionPerformed(5,MainMenu)" onMouseOver="hoverPerformed(5,MainMenu)" />
 						</control>
 						<effect>
 							<onStartScreen name="move" mode="in" direction="left"
@@ -129,6 +129,32 @@
 		</layer>
 		<layer id="foreground" childLayout="vertical">
 
+		</layer>
+	</screen>
+	<screen id="end">
+	</screen>
+	<screen id="extendedinv" controller="com.celestial.Gui.Gui">
+	    <layer id="background" childLayout="center">
+
+		</layer>
+		<layer id="foreground" childLayout="horizontal">
+		    <panel id="mainPane" height="55%" width="75%" align="center" valign="center" backgroundColor="#c6c6c6" childLayout="center" visibleToMouse="true">
+			 	<panel id="header" childLayout="center">
+			        <panel id="title" height="10%" width="90%" align="left" backgroundColor="#c6c6c6" childLayout="center">
+			            <control name="label" font="assets/fonts/visitor.fnt"
+							text="Inventory" id="inventorytitle" align="center" valign="center"
+							visibleToMouse="true" width="100%" height="100%">
+						</control>
+			        </panel>
+			        <panel id="exitpane" height="10%" width="10%" align="left"backgroundColor="#c6c6c6" childLayout="center">
+			            <control name="label" font="assets/fonts/visitor.fnt"
+							text="X" id="exitbutton" align="center" valign="center"
+							visibleToMouse="true" width="100%" height="100%">
+							<interact onClick="actionPerformed(1,ExtendedInv)" onMouseOver="hoverPerformed(1,ExtendedInv)" />
+						</control>
+			        </panel>
+			    </panel>
+		    </panel>
 		</layer>
 	</screen>
 </nifty>

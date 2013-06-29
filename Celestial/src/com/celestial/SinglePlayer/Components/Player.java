@@ -31,8 +31,9 @@ public class Player extends BetterCharacterControl{
 	private Planet planet;
 	private Spatial playerSpatial;
 	private Node playerNode;
+	private String name;
 
-	public Player(CelestialPortal portal)
+	public Player(CelestialPortal portal, String name)
 	{
 		super(1.2f, 5.8f, 1f);	
 		this.portal = portal;
@@ -45,6 +46,7 @@ public class Player extends BetterCharacterControl{
 		this.setPhysicsDamping(0.9f);
 		portal.getRootNode().attachChild(playerNode);
 		this.cam = portal.cam;
+		this.name = name;
 	}
 
 	public void setVisibleToClient(boolean visible)
@@ -267,5 +269,9 @@ public class Player extends BetterCharacterControl{
 
 	public Spatial getSpatial() {
 		return this.playerSpatial;
+	}
+	
+	public String getName() {
+		return this.name;
 	}
 }

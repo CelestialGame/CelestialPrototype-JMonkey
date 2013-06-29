@@ -10,6 +10,7 @@ import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.CharacterControl;
+import com.jme3.input.InputManager;
 import com.jme3.renderer.RenderManager;
 
 @SuppressWarnings("deprecation")
@@ -40,6 +41,16 @@ public class MPPortal extends CelestialPortal {
 	@Override
 	public float getCamHeight() {
 		return 0;
+	}
+
+	@Override
+	public InputManager getInputManager() {
+		return null;
+	}
+
+	@Override
+	public Object[] getNiftyUtils() {
+		return null;
 	}
 
 }
