@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
+import com.celestial.Blocks.BlocksEnum;
+import com.celestial.Gui.Gui;
 import com.celestial.util.InventoryException;
 import com.cubes.Block;
 import com.jme3.asset.AssetManager;
@@ -39,7 +41,7 @@ public class InventoryManager {
 	
 	InventorySlot selectedhotslot;
 
-	private InventoryGui inventorygui;
+	private Gui gui;
 	
 	public static int TAKE = 1;
 	public static int GIVE = 2;
@@ -78,7 +80,7 @@ public class InventoryManager {
 		
 		this.selectedhotslot = this.hotslot0;
 		
-		this.inventorygui = new InventoryGui(portal);
+		this.gui = portal.getGui();
 		
 		this.dropitemsnode = new Node();
 		portal.getRootNode().attachChild(this.dropitemsnode);
@@ -100,13 +102,13 @@ public class InventoryManager {
 	public InventoryItem getItembyID(int id) {
 		return this.items.get(id);
 	}
-	public InventoryItem getItembyBlock(Class<? extends Block> block) {
+	public InventoryItem getItembyBlock(BlocksEnum block) {
 		for(InventoryItem item : this.items.values()) {
 			if(item.getBlock().equals(block)) {
 				return item;
 			}
 		}
-		System.out.println("Can't find " + block.getSimpleName()+" in this.items");
+		System.out.println("Can't find " + block.getName()+" in this.items");
 		return null;
 	}
 	
@@ -118,7 +120,7 @@ public class InventoryManager {
 	private void setHotSlot(InventoryItem item, int contents, int hotslot) throws InventoryException {
 		if(this.items.containsValue(item)) {
 			if(hotslot <= 9) {
-				this.hotslots.get(hotslot).setItem(item, contents);
+				this.hotslots.get(hotslot).setItem(item, contents, hotslot);
 			} else {
 				throw new InventoryException("OutOfBounds");
 			}
@@ -128,20 +130,17 @@ public class InventoryManager {
 	}
 	
 	public void refreshHotSlots() {
-		boolean updateHotbar = false;
-		for(InventorySlot hotslot : this.hotslots) {
+		for(int i = 0; i< this.hotslots.size(); i++) {
+			InventorySlot hotslot = this.hotslots.get(i);
 			if(hotslot.getNumberContents() == 0 && hotslot.getItem() != null) {
-				hotslot.setItem(null, 0);
-				updateHotbar = true;
+				hotslot.setItem(null, 0, i);
 			}
 		}
-		if(updateHotbar)
-			getInvGui().updateHotBar();
 	}
 	
 	public void setSelectedHotSlot(int hotslot) {
 		this.selectedhotslot = this.hotslots.get(hotslot);
-		this.inventorygui.setHotBarSelection(hotslot);
+		this.getInvGui().setHotBarSelection(hotslot);
 	}
 	
 	private int getNextEmptySlot() {
@@ -160,8 +159,8 @@ public class InventoryManager {
 	public List<InventorySlot> getAllHotSlots() {
 		return this.hotslots;
 	}
-	public InventoryGui getInvGui() {
-		return this.inventorygui;
+	public Gui getInvGui() {
+		return this.gui;
 	}
 	public List<InventoryDrop> getDropItems() {
 		return this.dropitems;
@@ -218,7 +217,6 @@ public class InventoryManager {
 				this.extendedinv.add(new InventorySlot(drop.getItem(), 1, this));
 			}
 		}
-		this.getInvGui().updateHotBar();
 	}
 	
 	public void openExtendedInv(boolean bool) {

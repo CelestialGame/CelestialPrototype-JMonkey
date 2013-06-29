@@ -122,7 +122,8 @@ public class Celestial extends SimpleApplication{
 					inputManager, 
 					settings, 
 					app, 
-					timer);
+					timer,
+					gui);
 		}
 		else
 		{
@@ -153,5 +154,9 @@ public class Celestial extends SimpleApplication{
 	public static void toggleStats(boolean state) {
 		cel.setDisplayFps(state);
 		cel.setDisplayStatView(state);
+	}
+
+	public CelestialPortal getPortal() {
+		return portal;
 	}
 }

@@ -8,6 +8,7 @@ package com.celestial;
 
 import java.util.List;
 
+import com.celestial.Gui.Gui;
 import com.celestial.SinglePlayer.Components.Galaxy;
 import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.SinglePlayer.Components.Player;
@@ -53,6 +54,7 @@ public abstract class CelestialPortal {
 	public BitmapText PlanetText;
 	public CubesSettings csettings;
 	public Galaxy galaxy;
+	protected Gui gui;
 	
 	public abstract void startGame();
 	
@@ -121,5 +123,9 @@ public abstract class CelestialPortal {
 
 	public abstract InputManager getInputManager();
 	public abstract Object[] getNiftyUtils();
+
+	public Gui getGui() {
+		return this.gui;
+	}
 
 }

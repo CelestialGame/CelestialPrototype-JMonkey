@@ -6,6 +6,7 @@ package com.celestial.SinglePlayer.Input;
 
 import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
+import com.celestial.Blocks.BlocksEnum;
 import com.celestial.SinglePlayer.Components.SectorCoord;
 import com.celestial.SinglePlayer.Events.PlayerEvents;
 import com.celestial.SinglePlayer.Inventory.InventoryItem;
@@ -100,7 +101,7 @@ public class InputControl {
 
 			if (binding.equals("Block_Del") && !keyPressed) 
 			{
-				Object[] values = Picker.getCurrentPointedBlockLocation(false, parent, cam);
+				Object[] values = Picker.getCurrentPointedBlock(false, parent, cam);
 				if(values == null || values[0] == null || values[1] == null) //Check to see if they clicked the sky...
 				{
 					return;
@@ -116,6 +117,12 @@ public class InputControl {
 						{
 							BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 							if(chunk != null && blockLocation != null && chunk.getBlock(blockLocation) != null) {
+								PlayerEvents.PlayerDeleteBlockEvent(parent.player, parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0), blockAbsLocation, blockLocation);	
+								Class<? extends Block> block = BlockManager.getClass(chunk.getBlock(blockLocation).getType());
+								item = parent.getInventoryManager().getItembyBlock(BlocksEnum.getBlockByClass(block));
+								if(item != null) {
+									parent.getInventoryManager().dropItem(item, blockAbsLocation);
+								}
 								chunk.removeBlock(blockLocation); //Remove the Block
 								PlayerEvents.PlayerDeleteBlockEvent(parent.player, parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0), blockAbsLocation, blockLocation);
 							}
@@ -129,7 +136,7 @@ public class InputControl {
 								if(chunk != null && blockLocation != null && chunk.getBlock(blockLocation) != null) {
 									PlayerEvents.PlayerDeleteBlockEvent(parent.player, parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0), blockAbsLocation, blockLocation);	
 									Class<? extends Block> block = BlockManager.getClass(chunk.getBlock(blockLocation).getType());
-									item = parent.getInventoryManager().getItembyBlock(block);
+									item = parent.getInventoryManager().getItembyBlock(BlocksEnum.getBlockByClass(block));
 									if(item != null) {
 										parent.getInventoryManager().dropItem(item, blockAbsLocation);
 									}
@@ -142,7 +149,7 @@ public class InputControl {
 			}
 			if (binding.equals("Block_Pick") && !keyPressed) 
 			{
-				Object[] values = Picker.getCurrentPointedBlockLocation(false, parent, cam);
+				Object[] values = Picker.getCurrentPointedBlock(false, parent, cam);
 				if(values == null || values[0] == null || values[1] == null) //Check to see if they clicked the sky...
 				{
 					return;
@@ -163,7 +170,7 @@ public class InputControl {
 				}
 			}
 			if (binding.equals("Block_Add") && !keyPressed) {
-				Object[] values = Picker.getCurrentPointedBlockLocation(true, parent, cam);
+				Object[] values = Picker.getCurrentPointedBlock(true, parent, cam);
 				if(values == null || values[0] == null || values[1] == null) //Check to see if they clicked the sky...
 				{
 					return;
@@ -172,13 +179,25 @@ public class InputControl {
 				Vector3f blockAbsLocation = (Vector3f) values[0];
 				if(blockLocation != null){
 					float dist = parent.player.getLocation().distance(blockAbsLocation);
-					if(!this.extendedinvopen) {
-						if(!parent.getBulletAppState().isEnabled()) //Are they flying?
+					if(!parent.getBulletAppState().isEnabled()) //Are they flying?
+					{
+						BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
+						if(chunk != null && blockLocation != null && parent.getInventoryManager().getSelectedHotSlot().getItem() != null) {
+							PlayerEvents.PlayerAddBlockEvent(parent.player, parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0), blockAbsLocation, blockLocation);
+							chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock().getBClass()); //Add the Block
+							if(chunk.getBlock(blockLocation) != null)
+								parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
+						}
+					}
+					else
+					{
+						if(dist <= 15F) //Is the block nearby?
 						{
 							BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 							if(chunk != null && blockLocation != null && parent.getInventoryManager().getSelectedHotSlot().getItem() != null) {
+								chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock().getBClass()); //Add the Block
 								PlayerEvents.PlayerAddBlockEvent(parent.player, parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0), blockAbsLocation, blockLocation);
-								chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock()); //Add the Block
+								chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock().getBClass()); //Add the Block
 								if(chunk.getBlock(blockLocation) != null)
 									parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
 							}
@@ -189,7 +208,7 @@ public class InputControl {
 							{
 								BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 								if(chunk != null && blockLocation != null && parent.getInventoryManager().getSelectedHotSlot().getItem() != null) {
-									chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock()); //Add the Block
+									chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock().getBClass()); //Add the Block
 									PlayerEvents.PlayerAddBlockEvent(parent.player, parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0), blockAbsLocation, blockLocation);
 									if(chunk.getBlock(blockLocation) != null)
 										parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
@@ -287,17 +306,6 @@ public class InputControl {
 			}
 		}
 	};
-
-	public void renderBlockBorder()
-	{
-		//TODO: Render Block Borders
-		// NOT DONE -- It'll turn the entire thing blue if you do use this.... xD
-		/*BlockChunkControl block = Picker.getCurrentPointedBlock(false, parent, cam);
-		if(block != null) {
-			block.getOptimizedGeometry_Opaque().getMaterial().setColor("Color", new ColorRGBA(0f,0f,0.5f, 1f));
-		}*/
-
-	}
 
 
 }

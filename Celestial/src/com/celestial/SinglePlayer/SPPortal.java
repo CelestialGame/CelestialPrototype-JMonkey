@@ -10,6 +10,7 @@ import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
 import com.celestial.Blocks.Blocks;
 import com.celestial.Blocks.BlocksEnum;
+import com.celestial.Gui.Gui;
 import com.celestial.SinglePlayer.Components.Galaxy;
 import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.SinglePlayer.Components.Player;
@@ -19,7 +20,9 @@ import com.celestial.SinglePlayer.Input.InputControl;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
 import com.celestial.SinglePlayer.Inventory.InventoryRegister;
 import com.celestial.SinglePlayer.Physics.Listener;
+import com.celestial.World.Picker;
 import com.celestial.util.InventoryException;
+import com.cubes.BlockChunkControl;
 import com.cubes.CubesSettings;
 import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
@@ -30,6 +33,9 @@ import com.jme3.font.BitmapText;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.light.AmbientLight;
+import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
+import com.jme3.material.RenderState.FaceCullMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
@@ -38,9 +44,12 @@ import com.jme3.post.filters.BloomFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
 import com.jme3.system.Timer;
 import com.jme3.util.SkyFactory;
@@ -57,6 +66,9 @@ public class SPPortal extends CelestialPortal{
 
 	private Vector3f normalGravity = new Vector3f(0.0f, -9.81f, 0.0f);
 	private Vector3f zeroGravity = new Vector3f(0.0f, 0.0f, 0.0f);
+	private Box blockHighlight;
+	private Geometry blockHighlightGeom;
+	private Material blockHighlightMat;
 
 	public SPPortal(
 			Celestial parent, 
@@ -69,7 +81,8 @@ public class SPPortal extends CelestialPortal{
 			InputManager inputManager, 
 			AppSettings settings, 
 			Application app,
-			Timer timer)
+			Timer timer, 
+			Gui gui)
 	{
 		this.parent = parent;
 		this.rootNode = rootNode;
@@ -82,6 +95,7 @@ public class SPPortal extends CelestialPortal{
 		this.settings = settings;
 		this.app = app;
 		this.timer = timer;
+		this.gui = gui;
 	}
 
 	@Override
@@ -151,6 +165,17 @@ public class SPPortal extends CelestialPortal{
 
 		this.bulletAppState.getPhysicsSpace().addCollisionListener(new Listener(this));
 		//initAudio();
+		
+		/* BLOCK HIGHLIGHT */		
+		blockHighlight = new Box(3,3,3);
+		blockHighlightGeom = new Geometry("blockHighlight", this.blockHighlight);
+		blockHighlightMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+
+		blockHighlightMat.setColor("Color", new ColorRGBA(0.3f, 0.5f, 1, 0.75f));
+		blockHighlightGeom.setMaterial(blockHighlightMat);
+
+		blockHighlightMat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+		blockHighlightGeom.setQueueBucket(Bucket.Transparent);
 
 	}
 
@@ -162,6 +187,9 @@ public class SPPortal extends CelestialPortal{
 		updateLight(tpf);
 		updateGravity(tpf);
 
+		if(player.getPlanet() != null)
+			this.renderBlockBorders();
+		
 		if(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0) != null)
 		{
 			if(this.timer.getTimeInSeconds()-this.lastRotation > 0)
@@ -312,14 +340,28 @@ public class SPPortal extends CelestialPortal{
 
 			this.player.setWalkDirection(this.walkDirection);
 			this.cam.setLocation(new Vector3f(this.player.getLocation().getX(), this.player.getLocation().getY()+camHeight, this.player.getLocation().getZ()));
-
-			this.inputControl.renderBlockBorder();
 		}
 
 		this.parent.getListener().setLocation(this.cam.getLocation());
 		this.parent.getListener().setRotation(this.cam.getRotation());
 
 	}
+	private void renderBlockBorders() {
+		Object[] values = Picker.getCurrentPointedBlock(false, this, cam);
+		if(values != null)
+		{
+			BlockChunkControl block = (BlockChunkControl) values[2];
+			if(block != null) {
+				player.getPlanet().getTerrainNode().attachChild(this.blockHighlightGeom);
+				this.blockHighlightGeom.setLocalTranslation(block.getBlockLocation().getX(), block.getBlockLocation().getY(), block.getBlockLocation().getZ());
+			}
+		}
+		else
+		{	
+			this.blockHighlightGeom.removeFromParent();
+		}
+	}
+
 	public void updateStats(float tpf) {
 		if(this.invmanager.getSelectedHotSlot().getItem() != null) {
 			int number = this.invmanager.getSelectedHotSlot().getNumberContents();

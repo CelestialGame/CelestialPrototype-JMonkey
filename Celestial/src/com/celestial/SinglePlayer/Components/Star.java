@@ -6,7 +6,6 @@ Date Created:
 
 package com.celestial.SinglePlayer.Components;
 
-import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
 import com.jme3.light.PointLight;
 import com.jme3.material.Material;

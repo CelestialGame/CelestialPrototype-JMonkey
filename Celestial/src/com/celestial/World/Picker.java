@@ -26,8 +26,8 @@ public class Picker {
 		node.collideWith(ray, results);
 		return results;
 	}
-	public static Object[] getCurrentPointedBlockLocation(boolean getNeighborLocation, CelestialPortal parent, Camera cam){
-		Object[] values = new Object[2];
+	public static Object[] getCurrentPointedBlock(boolean getNeighborLocation, CelestialPortal parent, Camera cam){
+		Object[] values = new Object[3];
 		Node terrNode = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrainNode();
 		BlockTerrainControl terrcontrol = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 		CollisionResults results = getRayCastingResults(terrNode, parent, cam);
@@ -58,7 +58,9 @@ public class Picker {
 			if(blockPoint == null)
 				return null;
 			values[1] = blockPoint;
-
+			
+			values[2] = p.getTerrControl().getChunk(blockPoint);
+			
 			return values;
 		}
 		return null;
@@ -204,5 +206,4 @@ public class Picker {
 		
 		return newvec;
 	}
-
 }
