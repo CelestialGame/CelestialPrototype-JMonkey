@@ -48,11 +48,7 @@ public class Gui implements ScreenController {
 		
 		nifty = niftyDisplay.getNifty();
         nifty.fromXml("assets/gui/Gui.xml", "start", this);
-        /*Element label = nifty.getCurrentScreen().findElementByName("Singleplayer");
-        TextRenderer textRenderer = label.getRenderer(TextRenderer.class);
-        textRenderer.setText("New Text brosef");*/
-
-        // attach the nifty display to the gui view port as a processor
+        
         guiViewPort.addProcessor(niftyDisplay);
 	}
 
@@ -65,16 +61,11 @@ public class Gui implements ScreenController {
 
 	@Override
 	public void onStartScreen() {
-		/*if(nifty.getScreen("extendedinv").equals(nifty.getCurrentScreen())) {
-			Element label = nifty.getCurrentScreen().findElementByName("inventorytitle");
-	        TextRenderer textRenderer = label.getRenderer(TextRenderer.class);
-	        textRenderer.setText(this.parent.player.getName() + "'s Inventory");
-		}*/
 	}
 	
-	public void actionPerformed(String id, String mainPane)
+	public void actionPerformed(String id)
 	{
-		if(mainPane.equalsIgnoreCase("MainMenu"))
+		if(this.nifty.getCurrentScreen().getScreenId().equals("start"))
 			switch(Integer.parseInt(id))
 			{
 			case 1: //SP
@@ -93,7 +84,7 @@ public class Gui implements ScreenController {
 			default:
 				break;
 			}
-		else if(mainPane.equalsIgnoreCase("ExtendedInv"))
+		else if(this.nifty.getCurrentScreen().getScreenId().equals("hud"))
 			switch(Integer.parseInt(id))
 			{
 			case 1:
@@ -108,9 +99,9 @@ public class Gui implements ScreenController {
 		parent.startGame(type);
 	}
 
-	public void hoverPerformed(String id, String mainPane)
+	public void hoverPerformed(String id)
 	{
-		if(mainPane.equalsIgnoreCase("MainMenu"))
+		if(this.nifty.getCurrentScreen().getScreenId().equals("start"))
 			switch(Integer.parseInt(id))
 			{
 			case 1: //SP
@@ -126,7 +117,7 @@ public class Gui implements ScreenController {
 			default:
 				break;
 			}
-		else if(mainPane.equalsIgnoreCase("ExtendedInv"))
+		else if(this.nifty.getCurrentScreen().getScreenId().equals("hud"))
 			switch(Integer.parseInt(id))
 			{
 			case 1:
@@ -149,9 +140,17 @@ public class Gui implements ScreenController {
 		flyCam.setDragToRotate(true);
 		inputManager.setCursorVisible(true);
 	}
+	
 	public void enableControl() {
 		flyCam.setEnabled(true);
 		flyCam.setDragToRotate(false);
 		inputManager.setCursorVisible(false);
+	}
+	
+	public void setHotBarSelection(int slot) {
+		/*for(int i = 0; i<=10; i++)
+		{
+			
+		}*/
 	}
 }

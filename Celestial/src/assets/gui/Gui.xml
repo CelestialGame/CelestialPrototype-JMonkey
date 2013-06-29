@@ -2,6 +2,7 @@
 <nifty>
 	<useStyles filename="nifty-default-styles.xml" />
 	<useControls filename="nifty-default-controls.xml" />
+
 	<screen id="start" controller="com.celestial.Gui.Gui">
 		<layer id="background" childLayout="center">
 
@@ -24,15 +25,13 @@
 				</panel>
 				<panel id="panel_right_buttons" width="100%" height="250"
 					childLayout="vertical">
-					<panel id="panel_right_buttons_s0" width="100%" height="*">
-
-					</panel>
+					<panel id="panel_right_buttons_s0" width="100%" height="*"></panel>
 					<panel id="panel_right_buttons_1" width="100%" height="40px"
 						backgroundColor="#c6c6c6" childLayout="center">
 						<control name="label" font="assets/fonts/visitor.fnt"
 							text="Singleplayer" id="Singleplayer" align="center" valign="center"
 							visibleToMouse="true" width="100%" height="100%">
-							<interact onClick="actionPerformed(1,MainMenu)" onMouseOver="hoverPerformed(1,MainMenu)" />
+							<interact onClick="actionPerformed(1)" onMouseOver="hoverPerformed(1)" />
 						</control>
 						<effect>
 							<onStartScreen name="move" mode="in" direction="left"
@@ -41,15 +40,13 @@
 								length="300" startDelay="200" inherit="true" />
 						</effect>
 					</panel>
-					<panel id="panel_right_buttons_s1" width="100%" height="*">
-
-					</panel>
+					<panel id="panel_right_buttons_s1" width="100%" height="*"></panel>
 					<panel id="panel_right_buttons_2" width="100%" height="40px"
 						backgroundColor="#c6c6c6" childLayout="center">
 						<control name="label" font="assets/fonts/visitor.fnt"
 							text="Multiplayer" id="Multiplayer" align="center" valign="center"
 							visibleToMouse="true" width="100%" height="100%">
-							<interact onClick="actionPerformed(2,MainMenu)" onMouseOver="hoverPerformed(2,MainMenu)" />
+							<interact onClick="actionPerformed(2)" onMouseOver="hoverPerformed(2)" />
 						</control>
 						<effect>
 							<onStartScreen name="move" mode="in" direction="left"
@@ -58,15 +55,13 @@
 								length="300" startDelay="300" inherit="true" />
 						</effect>
 					</panel>
-					<panel id="panel_right_buttons_s2" width="100%" height="*">
-
-					</panel>
+					<panel id="panel_right_buttons_s2" width="100%" height="*"></panel>
 					<panel id="panel_right_buttons_3" width="100%" height="40px"
 						backgroundColor="#c6c6c6" childLayout="center">
 						<control name="label" font="assets/fonts/visitor.fnt"
 							text="Options" id="Options" align="center" valign="center"
 							visibleToMouse="true" width="100%" height="100%">
-							<interact onClick="actionPerformed(3,MainMenu)" onMouseOver="hoverPerformed(3,MainMenu)" />
+							<interact onClick="actionPerformed(3)" onMouseOver="hoverPerformed(3)" />
 						</control>
 						<effect>
 							<onStartScreen name="move" mode="in" direction="left"
@@ -75,15 +70,13 @@
 								length="300" startDelay="400" inherit="true" />
 						</effect>
 					</panel>
-					<panel id="panel_right_buttons_s3" width="100%" height="*">
-
-					</panel>
+					<panel id="panel_right_buttons_s3" width="100%" height="*"></panel>
 					<panel id="panel_right_buttons_4" width="100%" height="40px"
 						backgroundColor="#c6c6c6" childLayout="center">
 						<control name="label" font="assets/fonts/visitor.fnt"
 							text="Credits" id="Credits" align="center" valign="center"
 							visibleToMouse="true" width="100%" height="100%">
-							<interact onClick="actionPerformed(4,MainMenu)" onMouseOver="hoverPerformed(4,MainMenu)" />
+							<interact onClick="actionPerformed(4)" onMouseOver="hoverPerformed(4)" />
 						</control>
 						<effect>
 							<onStartScreen name="move" mode="in" direction="left"
@@ -92,15 +85,13 @@
 								length="300" startDelay="500" inherit="true" />
 						</effect>
 					</panel>
-					<panel id="panel_right_buttons_s4" width="100%" height="*">
-
-					</panel>
+					<panel id="panel_right_buttons_s4" width="100%" height="*"></panel>
 					<panel id="panel_right_buttons_5" width="100%" height="40px"
 						backgroundColor="#c6c6c6" childLayout="center">
 						<control name="label" font="assets/fonts/visitor.fnt"
 							text="Quit Game" id="Quit" align="center" valign="center"
 							visibleToMouse="true" width="100%" height="100%">
-							<interact onClick="actionPerformed(5,MainMenu)" onMouseOver="hoverPerformed(5,MainMenu)" />
+							<interact onClick="actionPerformed(5)" onMouseOver="hoverPerformed(5)" />
 						</control>
 						<effect>
 							<onStartScreen name="move" mode="in" direction="left"
@@ -109,9 +100,7 @@
 								length="300" startDelay="600" inherit="true" />
 						</effect>
 					</panel>
-					<panel id="panel_right_buttons_s5" width="100%" height="*">
-
-					</panel>
+					<panel id="panel_right_buttons_s5" width="100%" height="*"></panel>
 				</panel>
 				<panel id="panel_right_bottom" width="100%" height="20%"
 					valign="center" backgroundColor="#c6c6c6">
@@ -119,42 +108,50 @@
 			</panel>
 			<panel id="panel_footer" width="*" height="20%" childLayout="vertical"
 				backgroundColor="#c6c6c6" valign="bottom">
-
 			</panel>
 		</layer>
 	</screen>
+
 	<screen id="hud" controller="com.celestial.Gui.Gui">
-		<layer id="background" childLayout="center">
-
-		</layer>
 		<layer id="foreground" childLayout="vertical">
+			<panel id="spacer0" width="100%" height="*"></panel>
+			<panel id="bottom" width="455px" height="50px" childLayout="horizontal"
+				backgroundColor="#c6c6c6" valign="bottom" align="center">
+				<panel id="hotspotbar" width="445px" height="50px" childLayout="horizontal"
+					valign="center" align="center">
+					<panel id="spacer1" width="5px" height="*"></panel>
+					<panel id="hotspot0" width="40px" height="40px"
+						backgroundColor="#a0a0a0" valign="center"></panel>
+					<panel id="spacerh0" width="5px" height="*"></panel>
+					<panel id="hotspot1" width="40px" height="40px"
+						backgroundColor="#a0a0a0" valign="center"></panel>
+					<panel id="spacerh1" width="5px" height="*"></panel>
+					<panel id="hotspot2" width="40px" height="40px"
+						backgroundColor="#a0a0a0" valign="center"></panel>
+					<panel id="spacerh2" width="5px" height="*"></panel>
+					<panel id="hotspot3" width="40px" height="40px"
+						backgroundColor="#a0a0a0" valign="center"></panel>
+					<panel id="spacerh3" width="5px" height="*"></panel>
+					<panel id="hotspot4" width="40px" height="40px"
+						backgroundColor="#a0a0a0" valign="center"></panel>
+					<panel id="spacerh4" width="5px" height="*"></panel>
+					<panel id="hotspot5" width="40px" height="40px"
+						backgroundColor="#a0a0a0" valign="center"></panel>
+					<panel id="spacerh5" width="5px" height="*"></panel>
+					<panel id="hotspot6" width="40px" height="40px"
+						backgroundColor="#a0a0a0" valign="center"></panel>
+					<panel id="spacerh6" width="5px" height="*"></panel>
+					<panel id="hotspot7" width="40px" height="40px"
+						backgroundColor="#a0a0a0" valign="center"></panel>
+					<panel id="spacerh7" width="5px" height="*"></panel>
+					<panel id="hotspot8" width="40px" height="40px"
+						backgroundColor="#a0a0a0" valign="center"></panel>
+					<panel id="spacerh8" width="5px" height="*"></panel>
+					<panel id="hotspot9" width="40px" height="40px"
+						backgroundColor="#a0a0a0" valign="center"></panel>
+				</panel>
+			</panel>
+		</layer>
+	</screen>
 
-		</layer>
-	</screen>
-	<screen id="end">
-	</screen>
-	<screen id="extendedinv" controller="com.celestial.Gui.Gui">
-	    <layer id="background" childLayout="center">
-
-		</layer>
-		<layer id="foreground" childLayout="horizontal">
-		    <panel id="mainPane" height="55%" width="75%" align="center" valign="center" backgroundColor="#c6c6c6" childLayout="center" visibleToMouse="true">
-			 	<panel id="header" childLayout="center">
-			        <panel id="title" height="10%" width="90%" align="left" backgroundColor="#c6c6c6" childLayout="center">
-			            <control name="label" font="assets/fonts/visitor.fnt"
-							text="Inventory" id="inventorytitle" align="center" valign="center"
-							visibleToMouse="true" width="100%" height="100%">
-						</control>
-			        </panel>
-			        <panel id="exitpane" height="10%" width="10%" align="left"backgroundColor="#c6c6c6" childLayout="center">
-			            <control name="label" font="assets/fonts/visitor.fnt"
-							text="X" id="exitbutton" align="center" valign="center"
-							visibleToMouse="true" width="100%" height="100%">
-							<interact onClick="actionPerformed(1,ExtendedInv)" onMouseOver="hoverPerformed(1,ExtendedInv)" />
-						</control>
-			        </panel>
-			    </panel>
-		    </panel>
-		</layer>
-	</screen>
 </nifty>
