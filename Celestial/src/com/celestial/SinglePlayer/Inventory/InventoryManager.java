@@ -221,9 +221,14 @@ public class InventoryManager {
 		this.getInvGui().updateHotBar();
 	}
 	
-	public void openExtendedInv() {
-		Celestial.gui.getNifty().gotoScreen("extendedinv");
-		Celestial.gui.disableControl();
+	public void openExtendedInv(boolean bool) {
+		if(bool) {
+			Celestial.gui.getNifty().gotoScreen("extendedinv");
+			Celestial.gui.disableControl();
+		} else {
+			Celestial.gui.getNifty().gotoScreen("end");
+			Celestial.gui.enableControl();
+		}
 	}
 	
 }

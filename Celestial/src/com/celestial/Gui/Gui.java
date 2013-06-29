@@ -48,9 +48,6 @@ public class Gui implements ScreenController {
 		
 		nifty = niftyDisplay.getNifty();
         nifty.fromXml("assets/gui/Gui.xml", "start", this);
-        /*Element label = nifty.getCurrentScreen().findElementByName("Singleplayer");
-        TextRenderer textRenderer = label.getRenderer(TextRenderer.class);
-        textRenderer.setText("New Text brosef");*/
 
         // attach the nifty display to the gui view port as a processor
         guiViewPort.addProcessor(niftyDisplay);
