@@ -30,7 +30,9 @@ public enum BlocksEnum {
 	TIN_ORE(Block_TinOre.class, "Tin Ore", 11, "/assets/textures/inventory/icons/TinOre.png"),
 	RAW_DIAMOND(Block_RawDiamond.class, "Raw Diamond", 12, "/assets/textures/inventory/icons/RawDiamond.png"),
 	GOLD_ORE(Block_GoldOre.class, "Gold Ore", 13, "/assets/textures/inventory/icons/GoldOre.png"),
-	SUBSTRATUS(Block_Substratus.class, "Substratus", 14, "/assets/textures/inventory/icons/Substratus.png");
+	SUBSTRATUS(Block_Substratus.class, "Substratus", 14, "/assets/textures/inventory/icons/Substratus.png"),
+	DARKSTONE(Block_DarkStone.class, "Dark Stone", 13, "/assets/textures/inventory/icons/DarkStone.png"),
+	ICE(Block_Ice.class, "Ice", 13, "/assets/textures/inventory/icons/Ice.png");
 	
 	/** END CLASSES **/
 	
