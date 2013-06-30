@@ -20,6 +20,7 @@ import com.jme3.scene.Spatial.CullHint;
 import com.jme3.ui.Picture;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -44,7 +45,11 @@ public class Gui implements ScreenController {
 	private Picture invhotslot7;
 	private Picture invhotslot8;
 	private Picture invhotslot9;
+	private Element inventoryPopup;
 
+	public final static int INVENTORY = 0;
+	
+	
 	public Gui(Celestial parent, AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort, FlyByCamera flyCam)
 	{
 		NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(assetManager,
@@ -132,6 +137,9 @@ public class Gui implements ScreenController {
 				p.setPosition(this.nifty.getCurrentScreen().findElementByName("hotslot"+i).getX(), 5);
 			}
 			this.setHotBarSelection(0);
+			
+			inventoryPopup = this.nifty.createPopup("Inventory");
+			
 		}
 	}
 
@@ -244,6 +252,18 @@ public class Gui implements ScreenController {
 			{
 				p.setImage(assetManager, "assets/textures/inventory/icons/blank.png", true);
 			}
+		}
+	}
+	
+	public void showPopup(int type)
+	{
+		switch(type)
+		{
+		case INVENTORY:
+			nifty.showPopup(nifty.getCurrentScreen(), inventoryPopup.getId(), null);
+			break;
+		default:
+			return;
 		}
 	}
 }

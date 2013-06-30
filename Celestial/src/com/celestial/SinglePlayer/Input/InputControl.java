@@ -7,6 +7,7 @@ package com.celestial.SinglePlayer.Input;
 import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
 import com.celestial.Blocks.BlocksEnum;
+import com.celestial.Gui.Gui;
 import com.celestial.SinglePlayer.Components.SectorCoord;
 import com.celestial.SinglePlayer.Events.PlayerEvents;
 import com.celestial.SinglePlayer.Inventory.InventoryItem;
@@ -68,7 +69,7 @@ public class InputControl {
 		inputManager.addMapping("Slot9", new KeyTrigger(KeyInput.KEY_9));
 		inputManager.addMapping("Respawn", new KeyTrigger(KeyInput.KEY_R));
 		inputManager.addMapping("FindFace", new KeyTrigger(KeyInput.KEY_F));
-		inputManager.addMapping("ExtendedInv", new KeyTrigger(KeyInput.KEY_E));
+		inputManager.addMapping("Inventory", new KeyTrigger(KeyInput.KEY_E));
 		inputManager.addListener(actionListener, "Left");
 		inputManager.addListener(actionListener, "Right");
 		inputManager.addListener(actionListener, "Up");
@@ -88,14 +89,14 @@ public class InputControl {
 		inputManager.addListener(actionListener, "Slot9");
 		inputManager.addListener(actionListener, "Respawn");
 		inputManager.addListener(actionListener, "FindFace");
-		inputManager.addListener(actionListener, "ExtendedInv");
+		inputManager.addListener(actionListener, "Inventory");
 	}
 
 	private ActionListener actionListener = new ActionListener() {
 
 		private Vector3f lastabs;
 		private Vector3Int last;
-		private boolean extendedinvopen;
+		private boolean inventoryopen;
 
 		public void onAction(String binding, boolean keyPressed, float tpf) {
 
@@ -112,7 +113,7 @@ public class InputControl {
 				{
 					float dist = parent.player.getLocation().distance(blockAbsLocation);
 					InventoryItem item;
-					if(!this.extendedinvopen) {
+					if(!this.inventoryopen) {
 						if(!parent.getBulletAppState().isEnabled()) //Are they flying?
 						{
 							BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
@@ -295,13 +296,12 @@ public class InputControl {
 			{
 				System.out.println(parent.player.getCurrentFaceOfPlanet(parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0)));
 			}
-			else if(binding.equals("ExtendedInv") && !keyPressed) {
-				if(!this.extendedinvopen) {
-					parent.getInventoryManager().openExtendedInv(true);
-					this.extendedinvopen = true;
+			else if(binding.equals("Inventory") && !keyPressed) {
+				if(!this.inventoryopen) {
+					parent.getGui().showPopup(Gui.INVENTORY);
+					this.inventoryopen = true;
 				} else {
-					parent.getInventoryManager().openExtendedInv(false);
-					this.extendedinvopen = false;
+					this.inventoryopen = false;
 				}
 			}
 		}
