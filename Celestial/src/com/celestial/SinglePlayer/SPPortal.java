@@ -24,6 +24,7 @@ import com.celestial.World.Picker;
 import com.celestial.util.InventoryException;
 import com.cubes.BlockChunkControl;
 import com.cubes.CubesSettings;
+import com.cubes.Vector3Int;
 import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
@@ -171,11 +172,11 @@ public class SPPortal extends CelestialPortal{
 		//initAudio();
 		
 		/* BLOCK HIGHLIGHT */		
-		blockHighlight = new Box(3,3,3);
+		blockHighlight = new Box(1.5f,1.5f,1.5f);
 		blockHighlightGeom = new Geometry("blockHighlight", this.blockHighlight);
 		blockHighlightMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
 
-		blockHighlightMat.setColor("Color", new ColorRGBA(0.3f, 0.5f, 1, 0.75f));
+		blockHighlightMat.setColor("Color", new ColorRGBA(0f, 0f, 0f, 0.25f));
 		blockHighlightGeom.setMaterial(blockHighlightMat);
 
 		blockHighlightMat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
@@ -354,9 +355,11 @@ public class SPPortal extends CelestialPortal{
 		if(values != null)
 		{
 			BlockChunkControl block = (BlockChunkControl) values[2];
+			Vector3Int blockLocation = (Vector3Int) values[1];
 			if(block != null) {
 				player.getPlanet().getTerrainNode().attachChild(this.blockHighlightGeom);
-				this.blockHighlightGeom.setLocalTranslation(block.getBlockLocation().getX(), block.getBlockLocation().getY(), block.getBlockLocation().getZ());
+				this.blockHighlightGeom.setLocalTranslation(blockLocation.getX()*3+1.5f, blockLocation.getY()*3+1.5f, blockLocation.getZ()*3+1.5f);
+				
 			}
 		}
 		else

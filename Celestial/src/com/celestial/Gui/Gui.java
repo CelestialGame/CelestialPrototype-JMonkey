@@ -46,6 +46,7 @@ public class Gui implements ScreenController {
 	private Picture invhotslot8;
 	private Picture invhotslot9;
 	private Element inventoryPopup;
+	private int gameToStart;
 
 	public final static int INVENTORY = 0;
 	
@@ -141,6 +142,12 @@ public class Gui implements ScreenController {
 			inventoryPopup = this.nifty.createPopup("Inventory");
 			
 		}
+		else if(this.nifty.getCurrentScreen().getScreenId().equals("loadgame"))
+		{
+			parent.startGame(gameToStart);
+			nifty.gotoScreen("hud");
+		}
+		
 	}
 
 	public void actionPerformed(String id)
@@ -175,8 +182,8 @@ public class Gui implements ScreenController {
 	}
 
 	private void startGame(final int type) {
-		nifty.gotoScreen("hud");
-		parent.startGame(type);
+		nifty.gotoScreen("loadgame");
+		this.gameToStart = type;
 	}
 
 	public void hoverPerformed(String id)
