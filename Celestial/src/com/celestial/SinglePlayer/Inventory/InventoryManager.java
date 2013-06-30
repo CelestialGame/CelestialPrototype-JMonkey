@@ -224,7 +224,7 @@ public class InventoryManager {
 			Celestial.gui.getNifty().gotoScreen("extendedinv");
 			Celestial.gui.disableControl();
 		} else {
-			Celestial.gui.getNifty().gotoScreen("end");
+			Celestial.gui.getNifty().gotoScreen("hud");
 			Celestial.gui.enableControl();
 		}
 	}

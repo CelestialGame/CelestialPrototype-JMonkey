@@ -261,6 +261,7 @@ public class Gui implements ScreenController {
 		{
 		case INVENTORY:
 			nifty.showPopup(nifty.getCurrentScreen(), inventoryPopup.getId(), null);
+			this.disableControl();
 			break;
 		default:
 			return;
@@ -273,6 +274,7 @@ public class Gui implements ScreenController {
 		{
 		case INVENTORY:
 			nifty.closePopup(inventoryPopup.getId());
+			this.enableControl();
 			break;
 		default:
 			return;
