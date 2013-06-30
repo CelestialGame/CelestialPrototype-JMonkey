@@ -153,6 +153,22 @@
 			</panel>
 		</layer>
 	</screen>
+	
+	<screen id="loadgame" controller="com.celestial.Gui.Gui">
+		<layer id="background" childLayout="vertical">
+			<panel id="bgimage">
+			    
+			</panel>
+		</layer>
+		<layer id="foreground" childLayout="vertical">
+			<panel id="text" childLayout="vertical">
+			    <control name="label" font="assets/fonts/visitor.fnt"
+							text="Loading Game..." id="label" align="center" valign="center"
+							visibleToMouse="true" width="100%" height="100%" />
+			</panel>
+		</layer>
+	</screen>
+	
 	<popup id="Inventory" controller="com.celestial.Gui.Gui"
 		childLayout="center">
 		<panel id="mainPane" height="55%" width="75%" align="center"
