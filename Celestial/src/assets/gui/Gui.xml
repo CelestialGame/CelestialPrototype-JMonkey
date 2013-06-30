@@ -336,6 +336,81 @@
 						</control>
 					</panel>
 				</panel>
+				<panel id="row3" height="20%" width="100%" align="center" valign="center"
+				    backgroundColor="#c6c6c6" childLayout="horizontal">
+					<panel id="space19" padding="10px" width="48px" height="48px" align="center" valign="top" childLayout="center">
+					    <control id="space-19" name="droppable">
+						  <effect>
+						    <onActive name="border" post="true" color="#222f" border="1px" />
+						  </effect>
+						  <text text="19" font="assets/fonts/visitor.fnt" color="#eeef" valign="center" width="100%" />
+						</control>
+					</panel>
+					<panel id="space20" padding="10px" width="48px" height="48px" align="center" valign="top" childLayout="center">
+					    <control id="space-20" name="droppable">
+						  <effect>
+						    <onActive name="border" post="true" color="#222f" border="1px" />
+						  </effect>
+						  <text text="20" font="assets/fonts/visitor.fnt" color="#eeef" valign="center" width="100%" />
+						</control>
+					</panel>
+					<panel id="space21" padding="10px" width="48px" height="48px" align="center" valign="top" childLayout="center">
+					    <control id="space-21" name="droppable">
+						  <effect>
+						    <onActive name="border" post="true" color="#222f" border="1px" />
+						  </effect>
+						  <text text="12" font="assets/fonts/visitor.fnt" color="#eeef" valign="center" width="100%" />
+						</control>
+					</panel>
+					<panel id="space22" padding="10px" width="48px" height="48px" align="center" valign="top" childLayout="center">
+					    <control id="space-22" name="droppable">
+						  <effect>
+						    <onActive name="border" post="true" color="#222f" border="1px" />
+						  </effect>
+						  <text text="22" font="assets/fonts/visitor.fnt" color="#eeef" valign="center" width="100%" />
+						</control>
+					</panel>
+					<panel id="space23" padding="10px" width="48px" height="48px" align="center" valign="top" childLayout="center">
+					    <control id="space-23" name="droppable">
+						  <effect>
+						    <onActive name="border" post="true" color="#222f" border="1px" />
+						  </effect>
+						  <text text="23" font="assets/fonts/visitor.fnt" color="#eeef" valign="center" width="100%" />
+						</control>
+					</panel>
+					<panel id="space24" padding="10px" width="48px" height="48px" align="center" valign="top" childLayout="center">
+					    <control id="space-24" name="droppable">
+						  <effect>
+						    <onActive name="border" post="true" color="#222f" border="1px" />
+						  </effect>
+						  <text text="24" font="assets/fonts/visitor.fnt" color="#eeef" valign="center" width="100%" />
+						</control>
+					</panel>
+					<panel id="space25" padding="10px" width="48px" height="48px" align="center" valign="top" childLayout="center">
+					    <control id="space-25" name="droppable">
+						  <effect>
+						    <onActive name="border" post="true" color="#222f" border="1px" />
+						  </effect>
+						  <text text="25" font="assets/fonts/visitor.fnt" color="#eeef" valign="center" width="100%" />
+						</control>
+					</panel>
+					<panel id="space26" padding="10px" width="48px" height="48px" align="center" valign="top" childLayout="center">
+					    <control id="space-26" name="droppable">
+						  <effect>
+						    <onActive name="border" post="true" color="#222f" border="1px" />
+						  </effect>
+						  <text text="26" font="assets/fonts/visitor.fnt" color="#eeef" valign="center" width="100%" />
+						</control>
+					</panel>
+					<panel id="space27" padding="10px" width="48px" height="48px" align="center" valign="top" childLayout="center">
+					    <control id="space-27" name="droppable">
+						  <effect>
+						    <onActive name="border" post="true" color="#222f" border="1px" />
+						  </effect>
+						  <text text="27" font="assets/fonts/visitor.fnt" color="#eeef" valign="center" width="100%" />
+						</control>
+					</panel>
+				</panel>
 			</panel>
 		</panel>
 	</popup>
