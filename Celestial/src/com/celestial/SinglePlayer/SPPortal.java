@@ -356,6 +356,7 @@ public class SPPortal extends CelestialPortal{
 			if(block != null) {
 				player.getPlanet().getTerrainNode().attachChild(this.blockHighlightGeom);
 				this.blockHighlightGeom.setLocalTranslation(blockLocation.getX()*3+1.5f, blockLocation.getY()*3+1.5f, blockLocation.getZ()*3+1.5f);
+				
 			}
 		}
 		else
