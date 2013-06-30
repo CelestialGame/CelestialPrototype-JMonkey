@@ -301,6 +301,7 @@ public class InputControl {
 					parent.getGui().showPopup(Gui.INVENTORY);
 					this.inventoryopen = true;
 				} else {
+					parent.getGui().closePopup(Gui.INVENTORY);
 					this.inventoryopen = false;
 				}
 			}

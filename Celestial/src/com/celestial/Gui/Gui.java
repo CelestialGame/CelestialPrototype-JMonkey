@@ -266,4 +266,16 @@ public class Gui implements ScreenController {
 			return;
 		}
 	}
+	
+	public void closePopup(int type)
+	{
+		switch(type)
+		{
+		case INVENTORY:
+			nifty.closePopup(inventoryPopup.getId());
+			break;
+		default:
+			return;
+		}
+	}
 }
