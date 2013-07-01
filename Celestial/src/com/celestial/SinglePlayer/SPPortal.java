@@ -386,9 +386,11 @@ public class SPPortal extends CelestialPortal{
 			} 
 			else
 				this.PlanetText.setText("Deep Space");
+			this.Vector3IntPosText.setText(Vector3Int.convert3f(location).toString());
 		} else {
 			this.posText.setText("");
 			this.PlanetText.setText("");
+			this.Vector3IntPosText.setText("");
 		}
 	}
 
@@ -413,7 +415,7 @@ public class SPPortal extends CelestialPortal{
 
 		this.InvText = new BitmapText(this.guiFont, false);
 		this.InvText.setSize(this.guiFont.getCharSet().getRenderedSize());
-		this.InvText.setLocalTranslation(this.settings.getWidth() - this.InvText.getLineWidth(), this.settings.getHeight() - this.InvText.getLineHeight(), 0);
+		this.InvText.setLocalTranslation(this.InvText.getLineWidth()+this.posText.getLineHeight()+10, this.settings.getHeight() - this.InvText.getLineHeight(), 0);
 		//this.guiNode.attachChild(this.InvText);
 
 		this.PlanetText = new BitmapText(this.guiFont, false);
@@ -421,7 +423,10 @@ public class SPPortal extends CelestialPortal{
 		this.PlanetText.setLocalTranslation(0, this.PlanetText.getLineHeight(), 0);
 		this.guiNode.attachChild(this.PlanetText);
 
-
+		this.Vector3IntPosText = new BitmapText(this.guiFont, false);
+		this.Vector3IntPosText.setSize(this.guiFont.getCharSet().getRenderedSize());
+		this.Vector3IntPosText.setLocalTranslation(0, this.Vector3IntPosText.getLineHeight() + 50, 0);
+		this.guiNode.attachChild(this.Vector3IntPosText);
 	}
 
 	@Override

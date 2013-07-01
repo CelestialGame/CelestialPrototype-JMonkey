@@ -4,6 +4,8 @@
  */
 package com.cubes;
 
+import com.jme3.math.Vector3f;
+
 /**
  *
  * @author Carl
@@ -143,6 +145,18 @@ public class Vector3Int{
             return ((x == vector3Int.getX()) && (y == vector3Int.getY()) && (z == vector3Int.getZ()));
         }
         return false;
+    }
+    
+    public int distance(Vector3Int pointb) {
+    	double distance = (x*pointb.x)+(y*pointb.y)+(z*pointb.z);
+    	return (int) Math.abs(Math.sqrt(distance));
+    }
+    
+    public static Vector3Int convert3f(Vector3f vector) {
+    	int x = (int) vector.getX();
+    	int y = (int) vector.getY();
+    	int z = (int) vector.getZ();
+    	return new Vector3Int(x,y,z);
     }
 
     @Override
