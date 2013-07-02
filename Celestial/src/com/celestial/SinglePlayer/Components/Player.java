@@ -8,6 +8,7 @@ package com.celestial.SinglePlayer.Components;
 
 import com.celestial.CelestialPortal;
 import com.celestial.SinglePlayer.Events.PlayerEvents;
+import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.BetterCharacterControl;
@@ -68,7 +69,29 @@ public class Player extends BetterCharacterControl{
 	{
 		return spatial.getWorldTranslation();
 	}
+	
+	@Override 
+	public void update(float tpf)
+	{
+		super.update(tpf);
+		if(getPlanet() != null)
+		{
+			setLocation(
+			getLocation().add(
+					getPlanet().getCurrentPlanetTranslation().subtract(
+							getPlanet().getPreviousPlanetTranslation()
+							)
+					).add(getWalkDirection().divide(20).divide(60))
+			);
+		}
+	}
 
+	@Override 
+	public void physicsTick(PhysicsSpace space, float tpf)
+	{
+		super.physicsTick(space, tpf);
+	}
+	
 	public void spawnPlayer(Planet planet, int face)
 	{
 		this.setLocation(planet.getSpawnLocation(face));

@@ -38,7 +38,7 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
     private Node node = new Node();
     private Geometry optimizedGeometry_Opaque;
     private Geometry optimizedGeometry_Transparent;
-    private boolean needsMeshUpdate;
+    public boolean needsMeshUpdate;
 
     @Override
     public void setSpatial(Spatial spatial){

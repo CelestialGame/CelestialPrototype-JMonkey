@@ -9,7 +9,6 @@ package com.celestial.SinglePlayer;
 import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
 import com.celestial.Blocks.Blocks;
-import com.celestial.Blocks.BlocksEnum;
 import com.celestial.Gui.Gui;
 import com.celestial.SinglePlayer.Components.Galaxy;
 import com.celestial.SinglePlayer.Components.Planet;
@@ -21,7 +20,6 @@ import com.celestial.SinglePlayer.Inventory.InventoryManager;
 import com.celestial.SinglePlayer.Inventory.InventoryRegister;
 import com.celestial.SinglePlayer.Physics.Listener;
 import com.celestial.World.Picker;
-import com.celestial.util.InventoryException;
 import com.cubes.BlockChunkControl;
 import com.cubes.CubesSettings;
 import com.cubes.Vector3Int;
@@ -36,7 +34,6 @@ import com.jme3.input.InputManager;
 import com.jme3.light.AmbientLight;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
-import com.jme3.material.RenderState.FaceCullMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
@@ -197,22 +194,6 @@ public class SPPortal extends CelestialPortal{
 			{
 				this.lastRotation = this.timer.getTimeInSeconds();
 				this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).rotate();
-				if(player.getPlanet() != null)
-				{
-					/*player.setLocation(
-							player.getLocation().add(
-									player.getPlanet().getCurrentPlanetTranslation().subtract(
-											player.getPlanet().getPreviousPlanetTranslation()
-											)
-									).add(player.getWalkDirection().divide(20).divide(60)).add(player.getGravity())
-							);*/
-					/*player.setViewDirection(
-							player.getPlanet().getRotation().subtract(
-									player.getPlanet().getPreviousPlanetRotation()).mult(
-											player.getViewDirection()
-											)
-							);*/
-				}
 			}
 		}
 		this.invmanager.updateAll();
@@ -225,12 +206,10 @@ public class SPPortal extends CelestialPortal{
 			if(player.getPlanet() != closest)
 			{
 				player.setPlanet(closest);
-				closest.getPlanetNode().attachChild(player.getNode());
 			}
 		}
 		else //They are no longer within range of any planet (Deep Space)
 			player.setPlanet(null);
-			rootNode.attachChild(player.getSpatial());
 	}
 
 	public void updateLight(float tpf) {
@@ -256,22 +235,16 @@ public class SPPortal extends CelestialPortal{
 			int FaceOn = this.player.getCurrentFaceOfPlanet(planet);
 			if(FaceOn == Planet.TOP) {
 				this.player.setGravity(new Vector3f(0, -10f, 0));
-				//this.player.rotatePlayer(Planet.TOP);
 			} else if (FaceOn == Planet.BOTTOM) {
 				this.player.setGravity(new Vector3f(0, 10f, 0));
-				//this.player.rotatePlayer(Planet.BOTTOM);
 			} else if (FaceOn == Planet.NORTH) {
 				this.player.setGravity(new Vector3f(0, 0, 10f));
-				//this.player.rotatePlayer(Planet.NORTH);
 			} else if (FaceOn == Planet.SOUTH) {
 				this.player.setGravity(new Vector3f(0, 0, -10f));
-				//this.player.rotatePlayer(Planet.SOUTH);
 			} else if (FaceOn == Planet.EAST) {
 				this.player.setGravity(new Vector3f(-10f, 0, 0));
-				//this.player.rotatePlayer(Planet.EAST);
 			} else if (FaceOn == Planet.WEST) {
 				this.player.setGravity(new Vector3f(10f, 0, 0));
-				//this.player.rotatePlayer(Planet.WEST);
 			}
 		} else {
 			if(player.getGravity() != this.normalGravity)

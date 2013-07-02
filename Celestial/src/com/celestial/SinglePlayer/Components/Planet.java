@@ -80,8 +80,8 @@ public class Planet implements BlockChunkListener {
 		this.location = location;
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
 		this.portal = star.getSolarSystem().getSector().getGalaxy().getPortal();
-		this.amountRotation = new Vector3f(0f, 0f, 0f);
-		this.amountRevolution = new Vector3f(0f, 0f, 0f);
+		this.amountRotation = new Vector3f(0f, 0.01f, 0f);
+		this.amountRevolution = new Vector3f(0f, 0.0001f, 0f);
 		this.name = name;
 		this.atmosphereSizeFactor = 1.2f;
 
@@ -487,13 +487,22 @@ public class Planet implements BlockChunkListener {
 		this.previousPlanetTranslation = planetNode.getWorldTranslation().clone();
 		starNode.rotate(this.amountRevolution.getX()*FastMath.DEG_TO_RAD, this.amountRevolution.getY()*FastMath.DEG_TO_RAD, this.amountRevolution.getZ()*FastMath.DEG_TO_RAD);
 		planetNode.rotate(this.amountRotation.getX()*FastMath.DEG_TO_RAD, this.amountRotation.getY()*FastMath.DEG_TO_RAD, this.amountRotation.getZ()*FastMath.DEG_TO_RAD);
-		//updateCollision();
+		updateCollision();
 	}
 
 	public void updateCollision()
 	{
-		this.terrainNode.removeControl(terrainRigidBody);
-		this.terrainNode.addControl(terrainRigidBody);
+		BlockChunkControl[][][] chunks = this.terrcontrol.getChunks();
+		for(int x = 0; x<this.getDiameter(); x++)
+		{
+			for(int y = 0; y<this.getDiameter(); y++)
+			{
+				for(int z = 0; z<this.getDiameter(); z++)
+				{
+					chunks[x][y][z].needsMeshUpdate = true;
+				}
+			}
+		}
 	}
 
 	public Vector3f getCurrentPlanetTranslation() {
