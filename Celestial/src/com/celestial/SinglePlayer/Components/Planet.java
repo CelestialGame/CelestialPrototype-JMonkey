@@ -591,17 +591,8 @@ public class Planet implements BlockChunkListener {
 
 	public void updateCollision()
 	{
-		BlockChunkControl[][][] chunks = this.terrcontrol.getChunks();
-		for(int x = 0; x<this.getDiameter(); x++)
-		{
-			for(int y = 0; y<this.getDiameter(); y++)
-			{
-				for(int z = 0; z<this.getDiameter(); z++)
-				{
-					chunks[x][y][z].needsMeshUpdate = true;
-				}
-			}
-		}
+		this.terrainRigidBody.setPhysicsLocation(getCurrentPlanetTranslation());
+		this.terrainRigidBody.setPhysicsRotation(getRotation());
 	}
 
 	public Vector3f getCurrentPlanetTranslation() {
