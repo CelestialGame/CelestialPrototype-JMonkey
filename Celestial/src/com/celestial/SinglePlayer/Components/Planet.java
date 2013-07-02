@@ -179,12 +179,6 @@ public class Planet implements BlockChunkListener {
 		}
 		terrainNode.addControl(terrcontrol);
 
-		/* COLLISION */
-		terrainCollision = CollisionShapeFactory.createMeshShape(terrainNode);
-		terrainRigidBody = new RigidBodyControl(terrainCollision, 0.0f);
-		terrainNode.addControl(terrainRigidBody);
-		portal.getBulletAppState().getPhysicsSpace().add(terrainNode);
-
 		/* LIGHTING */
 		planetNode.setShadowMode(ShadowMode.CastAndReceive);
 
@@ -591,8 +585,49 @@ public class Planet implements BlockChunkListener {
 
 	public void updateCollision()
 	{
-		this.terrainRigidBody.setPhysicsLocation(getCurrentPlanetTranslation());
-		this.terrainRigidBody.setPhysicsRotation(getRotation());
+		/*this.terrcontrol.getChunk(new Vector3Int(0,0,0)).needsMeshUpdate = true;
+		this.terrcontrol.updateSpatial();		*/
+		for(int x = 0; x<this.diameter; x++)
+		{
+			for(int y = 0; y<this.diameter; y++)
+			{
+				for(int z = 0; z<this.diameter; z++)
+				{
+					BlockChunkControl chunk = this.terrcontrol.getChunks()[x][y][z];
+					if(chunk.getOptimizedGeometry_Opaque() != null)
+					{
+						if(chunk.getOptimizedGeometry_Opaque().getControl(RigidBodyControl.class) != null)
+						{
+							RigidBodyControl r = chunk.getOptimizedGeometry_Opaque().getControl(RigidBodyControl.class);
+							chunk.getOptimizedGeometry_Opaque().removeControl(r);
+							portal.getBulletAppState().getPhysicsSpace().remove(r);
+							chunk.getOptimizedGeometry_Opaque().addControl(r);
+							portal.getBulletAppState().getPhysicsSpace().add(r);
+						}
+					}
+					if(chunk.getOptimizedGeometry_Transparent() != null)
+					{
+						if(chunk.getOptimizedGeometry_Transparent().getControl(RigidBodyControl.class) != null)
+						{
+							RigidBodyControl r = chunk.getOptimizedGeometry_Transparent().getControl(RigidBodyControl.class);
+							chunk.getOptimizedGeometry_Transparent().removeControl(r);
+							portal.getBulletAppState().getPhysicsSpace().remove(r);
+							chunk.getOptimizedGeometry_Transparent().addControl(r);
+							portal.getBulletAppState().getPhysicsSpace().add(r);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	private Vector3f getUpdatedChunkLocation(int x, int y, int z)
+	{
+		Vector3f terrainloc = this.getCurrentTerrainTranslation().clone();
+		float scalarx = (x*16*3)+(8*3);
+		float scalary = (y*16*3)+(8*3);
+		float scalarz = (z*16*3)+(8*3);
+		return terrainloc.add(scalarx, scalary, scalarz);
 	}
 
 	public Vector3f getCurrentPlanetTranslation() {

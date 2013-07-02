@@ -166,6 +166,7 @@ public class SPPortal extends CelestialPortal{
 		this.player.getNode().setShadowMode(ShadowMode.CastAndReceive);
 
 		this.bulletAppState.getPhysicsSpace().addCollisionListener(new Listener(this));
+		this.bulletAppState.setDebugEnabled(true);
 		//initAudio();
 		
 		/* BLOCK HIGHLIGHT */		
