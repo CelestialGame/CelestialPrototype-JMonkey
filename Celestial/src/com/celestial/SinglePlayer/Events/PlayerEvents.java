@@ -6,6 +6,7 @@ Date Created:
 
 package com.celestial.SinglePlayer.Events;
 
+import com.celestial.Celestial;
 import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.SinglePlayer.Components.Player;
 import com.cubes.Vector3Int;
@@ -46,6 +47,7 @@ public class PlayerEvents {
 	 */
 	public static void PlayerDeleteBlockEvent(Player player, Planet planet, Vector3f collisionPoint, Vector3Int blockLocation)
 	{
+		Celestial.getPortal().hideHighlight();
 	}
 	
 	/**
@@ -57,5 +59,6 @@ public class PlayerEvents {
 	 */
 	public static void PlayerAddBlockEvent(Player player, Planet planet, Vector3f collisionPoint, Vector3Int blockLocation)
 	{
+		Celestial.getPortal().hideHighlight();
 	}
 }

@@ -203,19 +203,6 @@ public class InputControl {
 									parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
 							}
 						}
-						else
-						{
-							if(dist <= 15F) //Is the block nearby?
-							{
-								BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
-								if(chunk != null && blockLocation != null && parent.getInventoryManager().getSelectedHotSlot().getItem() != null) {
-									chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock().getBClass()); //Add the Block
-									PlayerEvents.PlayerAddBlockEvent(parent.player, parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0), blockAbsLocation, blockLocation);
-									if(chunk.getBlock(blockLocation) != null)
-										parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
-								}
-							}
-						}
 					}
 				}
 			}

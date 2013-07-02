@@ -129,4 +129,6 @@ public abstract class CelestialPortal {
 		return this.gui;
 	}
 
+	public abstract void hideHighlight();
+
 }

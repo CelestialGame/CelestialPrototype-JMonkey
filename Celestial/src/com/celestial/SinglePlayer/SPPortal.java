@@ -36,6 +36,7 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.BloomFilter;
@@ -47,6 +48,7 @@ import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Box;
 import com.jme3.shadow.EdgeFilteringMode;
 import com.jme3.shadow.PointLightShadowFilter;
@@ -166,7 +168,7 @@ public class SPPortal extends CelestialPortal{
 		this.player.getNode().setShadowMode(ShadowMode.CastAndReceive);
 
 		this.bulletAppState.getPhysicsSpace().addCollisionListener(new Listener(this));
-		this.bulletAppState.setDebugEnabled(true);
+		//this.bulletAppState.setDebugEnabled(true);
 		//initAudio();
 		
 		/* BLOCK HIGHLIGHT */		
@@ -330,15 +332,21 @@ public class SPPortal extends CelestialPortal{
 		{
 			BlockChunkControl block = (BlockChunkControl) values[2];
 			Vector3Int blockLocation = (Vector3Int) values[1];
-			if(block != null) {
-				player.getPlanet().getTerrainNode().attachChild(this.blockHighlightGeom);
+			Vector3f blockLocationAbs = (Vector3f) values[0];
+			float dist = blockLocationAbs.distance(player.getLocation());
+			if(block != null && (dist <= 15F || !this.bulletAppState.isEnabled())) {
+				this.blockHighlightGeom.setCullHint(CullHint.Never);
 				this.blockHighlightGeom.setLocalTranslation(blockLocation.getX()*3+1.5f, blockLocation.getY()*3+1.5f, blockLocation.getZ()*3+1.5f);
-				
+				player.getPlanet().getTerrainNode().attachChild(this.blockHighlightGeom);
+			}
+			else
+			{
+				this.hideHighlight();
 			}
 		}
 		else
 		{	
-			this.blockHighlightGeom.removeFromParent();
+			this.hideHighlight();
 		}
 	}
 
@@ -384,22 +392,22 @@ public class SPPortal extends CelestialPortal{
 		this.posText = new BitmapText(this.guiFont, false);
 		this.posText.setSize(this.guiFont.getCharSet().getRenderedSize());
 		this.posText.setText("");
-		this.posText.setLocalTranslation(0, this.settings.getHeight() - this.posText.getLineHeight()+10, 0);
+		this.posText.setLocalTranslation(10, this.settings.getHeight()-10, 0);
 		this.guiNode.attachChild(this.posText);
 
 		this.InvText = new BitmapText(this.guiFont, false);
 		this.InvText.setSize(this.guiFont.getCharSet().getRenderedSize());
-		this.InvText.setLocalTranslation(this.InvText.getLineWidth()+this.posText.getLineHeight()+10, this.settings.getHeight() - this.InvText.getLineHeight(), 0);
+		this.InvText.setLocalTranslation(10, this.settings.getHeight()-70, 0);
 		//this.guiNode.attachChild(this.InvText);
 
 		this.PlanetText = new BitmapText(this.guiFont, false);
 		this.PlanetText.setSize(this.guiFont.getCharSet().getRenderedSize());
-		this.PlanetText.setLocalTranslation(0, this.PlanetText.getLineHeight(), 0);
+		this.PlanetText.setLocalTranslation(10, this.settings.getHeight()-50, 0);
 		this.guiNode.attachChild(this.PlanetText);
 
 		this.Vector3IntPosText = new BitmapText(this.guiFont, false);
 		this.Vector3IntPosText.setSize(this.guiFont.getCharSet().getRenderedSize());
-		this.Vector3IntPosText.setLocalTranslation(0, this.Vector3IntPosText.getLineHeight() + 50, 0);
+		this.Vector3IntPosText.setLocalTranslation(10, this.settings.getHeight()-30, 0);
 		this.guiNode.attachChild(this.Vector3IntPosText);
 	}
 
@@ -430,6 +438,17 @@ public class SPPortal extends CelestialPortal{
 				this.viewPort,
 				this.flyCam
 				};
+	}
+
+	@Override
+	public void hideHighlight() {
+		this.blockHighlightGeom.setCullHint(CullHint.Always);
+		this.blockHighlightGeom.setLocalTranslation(new Vector3f(0,0,0));
+		this.blockHighlightGeom.removeFromParent();
+	}
+	
+	public void showHighlight() {
+		this.blockHighlightGeom.setCullHint(CullHint.Never);
 	}
 
 }

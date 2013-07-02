@@ -156,7 +156,7 @@ public class Celestial extends SimpleApplication{
 		cel.setDisplayStatView(state);
 	}
 
-	public CelestialPortal getPortal() {
+	public static CelestialPortal getPortal() {
 		return portal;
 	}
 }

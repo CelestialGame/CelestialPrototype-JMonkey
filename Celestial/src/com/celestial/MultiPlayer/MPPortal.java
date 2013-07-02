@@ -53,4 +53,10 @@ public class MPPortal extends CelestialPortal {
 		return null;
 	}
 
+	@Override
+	public void hideHighlight() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

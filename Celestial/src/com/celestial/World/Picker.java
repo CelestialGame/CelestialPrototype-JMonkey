@@ -31,7 +31,8 @@ public class Picker {
 		Node terrNode = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrainNode();
 		BlockTerrainControl terrcontrol = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 		CollisionResults results = getRayCastingResults(terrNode, parent, cam);
-		if(results.size() > 0){
+		if(results.size() > 0)
+		{
 
 			Vector3f collisionContactPoint = results.getClosestCollision().getContactPoint();
 
@@ -45,7 +46,6 @@ public class Picker {
 			Quaternion q1 = p.getStarNode().getLocalRotation().inverse();
 			Quaternion q2 = p.getPlanetNode().getLocalRotation().inverse();
 
-			//Vector3f translatedContactPoint = collisionContactPoint.subtract(p.getWantedLocation());
 			Vector3f rotatedContactPoint = q1.mult(collisionContactPoint);
 			Vector3f translatedContactPoint = rotatedContactPoint.subtract(p.getOriginalPlanetTranslation());
 			rotatedContactPoint = q2.mult(translatedContactPoint);
