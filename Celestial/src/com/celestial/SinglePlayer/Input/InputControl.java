@@ -257,6 +257,7 @@ public class InputControl {
 					parent.getGuiNode().attachChild(parent.InvText);
 					statson = true;
 				}
+			
 			}
 			else if(binding.equals("Slot1") && !keyPressed) {
 				parent.getInventoryManager().setSelectedHotSlot(0);
@@ -295,6 +296,7 @@ public class InputControl {
 			else if(binding.equals("FindFace") && !keyPressed)
 			{
 				System.out.println(parent.player.getCurrentFaceOfPlanet(parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0)));
+				System.out.println(parent.player.getPlanet().getPlanetNode().getWorldTranslation().distance(parent.player.getPlanet().getStar().getStarNode().getWorldTranslation()));
 			}
 			else if(binding.equals("Inventory") && !keyPressed) {
 				if(!this.inventoryopen) {

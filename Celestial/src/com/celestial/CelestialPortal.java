@@ -52,6 +52,7 @@ public abstract class CelestialPortal {
 	public BitmapText posText;
 	public BitmapText InvText;
 	public BitmapText PlanetText;
+	public BitmapText Vector3IntPosText;
 	public CubesSettings csettings;
 	public Galaxy galaxy;
 	protected Gui gui;

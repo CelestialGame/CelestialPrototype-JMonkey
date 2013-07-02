@@ -48,6 +48,9 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+import com.jme3.shadow.EdgeFilteringMode;
+import com.jme3.shadow.PointLightShadowFilter;
+import com.jme3.shadow.PointLightShadowRenderer;
 import com.jme3.system.AppSettings;
 import com.jme3.system.Timer;
 import com.jme3.util.SkyFactory;
@@ -160,6 +163,7 @@ public class SPPortal extends CelestialPortal{
 		this.cam.setFrustumFar(65000);
 
 		this.rootNode.setShadowMode(ShadowMode.Off);
+		this.player.getNode().setShadowMode(ShadowMode.CastAndReceive);
 
 		this.bulletAppState.getPhysicsSpace().addCollisionListener(new Listener(this));
 		//initAudio();
@@ -234,21 +238,20 @@ public class SPPortal extends CelestialPortal{
 			Planet planet = this.player.getPlanet();
 			int FaceOn = this.player.getCurrentFaceOfPlanet(planet);
 			if(FaceOn == Planet.TOP) {
-				this.player.setGravity(new Vector3f(0, -10f, 0));
+				this.player.setGravity(new Vector3f(0, -15f, 0));
 			} else if (FaceOn == Planet.BOTTOM) {
-				this.player.setGravity(new Vector3f(0, 10f, 0));
+				this.player.setGravity(new Vector3f(0, 15f, 0));
 			} else if (FaceOn == Planet.NORTH) {
-				this.player.setGravity(new Vector3f(0, 0, 10f));
+				this.player.setGravity(new Vector3f(0, 0, 15f));
 			} else if (FaceOn == Planet.SOUTH) {
-				this.player.setGravity(new Vector3f(0, 0, -10f));
+				this.player.setGravity(new Vector3f(0, 0, -15f));
 			} else if (FaceOn == Planet.EAST) {
-				this.player.setGravity(new Vector3f(-10f, 0, 0));
+				this.player.setGravity(new Vector3f(-15f, 0, 0));
 			} else if (FaceOn == Planet.WEST) {
-				this.player.setGravity(new Vector3f(10f, 0, 0));
+				this.player.setGravity(new Vector3f(15f, 0, 0));
 			}
 		} else {
-			if(player.getGravity() != this.normalGravity)
-				this.player.setGravity(normalGravity);
+			this.player.setGravity(zeroGravity);
 		}
 	}
 
@@ -260,19 +263,19 @@ public class SPPortal extends CelestialPortal{
 		this.rootNode.addLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
 
 
-		//	    PointLightShadowRenderer plsr = new PointLightShadowRenderer(this.assetManager, SHADOWMAP_SIZE);
-		//        plsr.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
-		//        plsr.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
+		/*	    PointLightShadowRenderer plsr = new PointLightShadowRenderer(this.assetManager, SHADOWMAP_SIZE);
+		        plsr.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
+		        plsr.setEdgeFilteringMode(EdgeFilteringMode.Bilinear);
 		//plsr.setFlushQueues(false);
 		//plsr.displayFrustum();
 		//plsr.displayDebug();
-		//this.viewPort.addProcessor(plsr);
+		this.viewPort.addProcessor(plsr);
 
-		//        PointLightShadowFilter plsf = new PointLightShadowFilter(this.assetManager, SHADOWMAP_SIZE);
-		//        plsf.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());     
-		//        plsf.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
-		//        plsf.setEnabled(true);
-
+		        PointLightShadowFilter plsf = new PointLightShadowFilter(this.assetManager, SHADOWMAP_SIZE);
+		        plsf.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());     
+		        plsf.setEdgeFilteringMode(EdgeFilteringMode.Bilinear);
+		        plsf.setEnabled(true);
+		*/
 		this.fpp = new FilterPostProcessor(this.assetManager);
 		BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
 		this.fpp.addFilter(bloom);
@@ -356,9 +359,11 @@ public class SPPortal extends CelestialPortal{
 			} 
 			else
 				this.PlanetText.setText("Deep Space");
+			this.Vector3IntPosText.setText(Vector3Int.convert3f(location).toString());
 		} else {
 			this.posText.setText("");
 			this.PlanetText.setText("");
+			this.Vector3IntPosText.setText("");
 		}
 	}
 
@@ -378,12 +383,12 @@ public class SPPortal extends CelestialPortal{
 		this.posText = new BitmapText(this.guiFont, false);
 		this.posText.setSize(this.guiFont.getCharSet().getRenderedSize());
 		this.posText.setText("");
-		this.posText.setLocalTranslation(450, this.posText.getLineHeight(), 0);
+		this.posText.setLocalTranslation(0, this.settings.getHeight() - this.posText.getLineHeight()+10, 0);
 		this.guiNode.attachChild(this.posText);
 
 		this.InvText = new BitmapText(this.guiFont, false);
 		this.InvText.setSize(this.guiFont.getCharSet().getRenderedSize());
-		this.InvText.setLocalTranslation(350, this.settings.getHeight() - this.InvText.getLineHeight(), 0);
+		this.InvText.setLocalTranslation(this.InvText.getLineWidth()+this.posText.getLineHeight()+10, this.settings.getHeight() - this.InvText.getLineHeight(), 0);
 		//this.guiNode.attachChild(this.InvText);
 
 		this.PlanetText = new BitmapText(this.guiFont, false);
@@ -391,7 +396,10 @@ public class SPPortal extends CelestialPortal{
 		this.PlanetText.setLocalTranslation(0, this.PlanetText.getLineHeight(), 0);
 		this.guiNode.attachChild(this.PlanetText);
 
-
+		this.Vector3IntPosText = new BitmapText(this.guiFont, false);
+		this.Vector3IntPosText.setSize(this.guiFont.getCharSet().getRenderedSize());
+		this.Vector3IntPosText.setLocalTranslation(0, this.Vector3IntPosText.getLineHeight() + 50, 0);
+		this.guiNode.attachChild(this.Vector3IntPosText);
 	}
 
 	@Override
