@@ -72,13 +72,10 @@ public class CameraControl {
 	
 	public void updateCamera(float tpf) {
 		if(this.parent.getBulletAppState().isEnabled()) {
-			//rotate cam
+			//this.cam.setAxes(this.parent.player.getLocalLeft(), this.parent.player.getLocalUp(), this.parent.player.getLocalForward());
 			
-			
-			//walk direction
-			
-			Vector3f camDir = this.cam.getDirection().clone().multLocal(20);
-			Vector3f camLeft = this.cam.getLeft().clone().multLocal(20);
+			Vector3f camDir = this.cam.getDirection().clone().divide(32);
+			Vector3f camLeft = this.cam.getLeft().clone().divide(32);
 			this.parent.walkDirection.set(0, 0, 0);
 			if (this.parent.left)
 				this.parent.walkDirection.addLocal(camLeft); 
@@ -95,7 +92,8 @@ public class CameraControl {
 				PlayerEvents.PlayerMoveEvent(parent.player, parent.player.getLocation().add(this.parent.walkDirection));
 
 			this.parent.player.setWalkDirection(this.parent.walkDirection);
-			this.cam.setLocation(new Vector3f(this.parent.player.getLocation().getX(), this.parent.player.getLocation().getY()+parent.getCamHeight(), this.parent.player.getLocation().getZ()));
+			this.cam.setLocation(new Vector3f(this.parent.player.getLocation().getX(), this.parent.player.getLocation().getY(), this.parent.player.getLocation().getZ()));
+			this.cam.setLocation(cam.getLocation().add(this.parent.player.getLocalUp().mult(this.parent.getCamHeight())));
 		}
 
 		this.parent.getParent().getListener().setLocation(this.cam.getLocation());

@@ -33,6 +33,7 @@ public class Player extends BetterCharacterControl{
 	private Spatial playerSpatial;
 	private Node playerNode;
 	private String name;
+	private Vector3f translationUpdate = null;
 
 	public Player(CelestialPortal portal, String name)
 	{
@@ -49,6 +50,7 @@ public class Player extends BetterCharacterControl{
 		portal.getRootNode().attachChild(playerNode);
 		this.cam = portal.cam;
 		this.name = name;
+		this.translationUpdate = null;
 	}
 
 	public void setVisibleToClient(boolean visible)
@@ -66,7 +68,7 @@ public class Player extends BetterCharacterControl{
 
 	public Vector3f getLocation()
 	{
-		return spatial.getWorldTranslation();
+		return this.location;
 	}
 	
 	public Quaternion getRotation()
@@ -93,15 +95,23 @@ public class Player extends BetterCharacterControl{
 	public void update(float tpf)
 	{
 		super.update(tpf);
+		
 		if(getPlanet() != null)
 		{
 			this.setLocation(
 			getLocation().add(
-					getPlanet().getCurrentPlanetTranslation().subtract(
-							getPlanet().getPreviousPlanetTranslation()
-							)
-					).add(getWalkDirection().divide(120))
+					walkDirection
+					)
 			);
+			
+			if(this.translationUpdate != null)
+			{
+				this.setLocation(
+						getLocation().add(translationUpdate)
+						);				
+				this.translationUpdate = null;
+			}
+			
 		}
 	}
 
@@ -114,7 +124,6 @@ public class Player extends BetterCharacterControl{
 	public void spawnPlayer(Planet planet, int face)
 	{
 		this.setLocation(planet.getSpawnLocation(face));
-		this.rotatePlayer(face);
 		PlayerEvents.PlayerMoveEvent(this, planet.getSpawnLocation(face));
 	}
 
@@ -163,6 +172,10 @@ public class Player extends BetterCharacterControl{
 		return planet;
 	}
 
+	/**
+	 * Used if we ever switch back from BetterCharacterControl. Currently this is handled by BetterCharacterControl.
+	 * @param face
+	 */
 	public void rotatePlayer(int face) {
 		Quaternion q = new Quaternion();
 		int x=0,y=0,z=0;
@@ -317,5 +330,9 @@ public class Player extends BetterCharacterControl{
 	
 	public String getName() {
 		return this.name;
+	}
+
+	public void setTranslationUpdate(Vector3f translation) {
+		this.translationUpdate  = translation;
 	}
 }

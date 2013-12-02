@@ -66,7 +66,7 @@ public class Sector {
 		return null;
 	}
 	
-	public SolarSystem getSystem(int index)
+	public SolarSystem getSolarSystem(int index)
 	{
 		if(this.systemList.get(index) != null)
 			return this.systemList.get(index);
@@ -78,5 +78,9 @@ public class Sector {
 
 	public Galaxy getGalaxy() {
 		return galaxy;
+	}
+
+	public List<SolarSystem> getSolarSystems() {
+		return this.systemList;
 	}
 }

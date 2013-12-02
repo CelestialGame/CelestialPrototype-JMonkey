@@ -6,6 +6,7 @@ Date Created:
 
 package com.celestial.SinglePlayer.Components;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -95,10 +96,15 @@ public class Galaxy {
 		return this.sectorMap.get(coord);
 	}
 	
+	public ArrayList<Sector> getSectors()
+	{
+		return new ArrayList<Sector>(this.sectorMap.values());
+	}
+	
 	public Planet getPlanet(SectorCoord coord, int index, int index2)
 	{
 		if(this.getSectorAt(coord) != null)
-			return this.getSectorAt(coord).getSystem(index).getPlanet(index2);
+			return this.getSectorAt(coord).getSolarSystem(index).getPlanet(index2);
 		else
 		{
 			return null;

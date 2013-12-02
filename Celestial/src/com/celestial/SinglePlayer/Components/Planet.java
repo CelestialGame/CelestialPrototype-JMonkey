@@ -581,6 +581,45 @@ public class Planet implements BlockChunkListener {
 		planetNode.rotate(this.amountRotation.getX()*FastMath.DEG_TO_RAD, this.amountRotation.getY()*FastMath.DEG_TO_RAD, this.amountRotation.getZ()*FastMath.DEG_TO_RAD);
 		updateCollision();
 	}
+	
+	public Vector3f getUpVector()
+	{
+		float x = this.planetNode.getLocalRotation().getX();
+		float y = this.planetNode.getLocalRotation().getY();
+		float z = this.planetNode.getLocalRotation().getZ();
+		float w = this.planetNode.getLocalRotation().getW();
+		
+		return new Vector3f(
+				2 * (x * y - w * z), 
+                1 - 2 * (x * x + z * z),
+                2 * (y * z + w * x));
+	}
+	
+	public Vector3f getForwardVector()
+	{
+		float x = this.planetNode.getLocalRotation().getX();
+		float y = this.planetNode.getLocalRotation().getY();
+		float z = this.planetNode.getLocalRotation().getZ();
+		float w = this.planetNode.getLocalRotation().getW();
+		
+		return new Vector3f(
+				2 * (x * z + w * y), 
+                2 * (y * x - w * x),
+                1 - 2 * (x * x + y * y));
+	}
+	
+	public Vector3f getLeftVector()
+	{
+		float x = this.planetNode.getLocalRotation().getX();
+		float y = this.planetNode.getLocalRotation().getY();
+		float z = this.planetNode.getLocalRotation().getZ();
+		float w = this.planetNode.getLocalRotation().getW();
+		
+		return new Vector3f(
+				(1 - 2 * (y * y + z * z)) * -1,
+                2 * (x * y + w * z),
+                2 * (x * z - w * y));
+	}
 
 	public void updateCollision()
 	{
