@@ -74,18 +74,33 @@ public class Player extends BetterCharacterControl{
 		return this.rotation;
 	}
 	
+	public Vector3f getLocalUp()
+	{
+		return this.localUp;
+	}
+	
+	public Vector3f getLocalLeft()
+	{
+		return this.localLeft;
+	}
+	
+	public Vector3f getLocalForward()
+	{
+		return this.localForward;
+	}
+	
 	@Override 
 	public void update(float tpf)
 	{
 		super.update(tpf);
 		if(getPlanet() != null)
 		{
-			setLocation(
+			this.setLocation(
 			getLocation().add(
 					getPlanet().getCurrentPlanetTranslation().subtract(
 							getPlanet().getPreviousPlanetTranslation()
 							)
-					).add(getWalkDirection().divide(20).divide(60))
+					).add(getWalkDirection().divide(120))
 			);
 		}
 	}
