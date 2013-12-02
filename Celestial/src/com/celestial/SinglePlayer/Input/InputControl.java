@@ -71,6 +71,7 @@ public class InputControl {
 		inputManager.addMapping("Respawn", new KeyTrigger(KeyInput.KEY_R));
 		inputManager.addMapping("FindFace", new KeyTrigger(KeyInput.KEY_F));
 		inputManager.addMapping("Inventory", new KeyTrigger(KeyInput.KEY_E));
+		inputManager.addMapping("*", new KeyTrigger(KeyInput.KEY_Q));
 		inputManager.addListener(actionListener, "Left");
 		inputManager.addListener(actionListener, "Right");
 		inputManager.addListener(actionListener, "Up");
@@ -91,6 +92,7 @@ public class InputControl {
 		inputManager.addListener(actionListener, "Respawn");
 		inputManager.addListener(actionListener, "FindFace");
 		inputManager.addListener(actionListener, "Inventory");
+		inputManager.addListener(actionListener, "*");
 	}
 
 	private ActionListener actionListener = new ActionListener() {
@@ -296,7 +298,7 @@ public class InputControl {
 				}
 			}
 			else if(binding.equals("*") && !keyPressed) {
-				SPPortal.self.getCameraControl().onAnalog("MOUSE_AXIS_LEFT",90, tpf);
+				SPPortal.self.getCameraControl().onAnalog("MOUSE_AXIS_UP",(float) Math.toRadians(90), tpf);
 			}
 		}
 	};

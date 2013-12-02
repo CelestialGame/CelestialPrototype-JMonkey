@@ -46,7 +46,7 @@ public class CameraControl {
 		float rotationSpeed = 1000;
 
 		Matrix3f mat = new Matrix3f();
-		mat.fromAngleNormalAxis(rotationSpeed * value * tpf, axis);
+		mat.fromAngleNormalAxis(value, axis);
 
 		Vector3f upDir = this.parent.getCam().getUp();
 		Vector3f leftDir = this.parent.getCam().getLeft();
