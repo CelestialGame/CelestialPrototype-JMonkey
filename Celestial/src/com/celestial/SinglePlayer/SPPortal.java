@@ -358,7 +358,7 @@ public class SPPortal extends CelestialPortal{
 			this.posText.setText("X: "+location.x + " Y: "+location.y+" Z: "+location.z);
 			if(this.player.getPlanet() != null) 
 			{
-				this.PlanetText.setText("Planet "+this.player.getPlanet().getName()+"\n\rFace: "+this.player.getCurrentFaceOfPlanet(this.player.getPlanet()));
+				this.PlanetText.setText("Planet "+this.player.getPlanet().getName()+"\n\rFace: "+this.player.getCurrentFaceOfPlanet(this.player.getPlanet())+"\n\rInside Atmosphere: "+this.player.isInAtmosphere(player.getPlanet()));
 			} 
 			else
 				this.PlanetText.setText("Deep Space");

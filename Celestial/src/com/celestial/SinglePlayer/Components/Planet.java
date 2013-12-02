@@ -276,6 +276,12 @@ public class Planet implements BlockChunkListener {
 
 	}
 
+	public float getAtmosphereDiameter()
+	{
+		return this.atmospherebox.getXExtent()*2;
+		//return this.diameter*16*3*atmosphereSizeFactor;
+	}
+	
 	public void makeChunk(int locx, int locy, int locz, BlockTerrainControl blockTerrain)
 	{
 		int diameter = 16;

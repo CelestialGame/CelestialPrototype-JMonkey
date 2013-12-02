@@ -60,7 +60,7 @@ public class Player extends BetterCharacterControl{
 		else
 			this.playerSpatial.setCullHint(CullHint.Always);
 	}
-	
+
 	public void setLocation(Vector3f location)
 	{
 		this.warp(location);
@@ -70,40 +70,40 @@ public class Player extends BetterCharacterControl{
 	{
 		return this.location;
 	}
-	
+
 	public Quaternion getRotation()
 	{
 		return this.rotation;
 	}
-	
+
 	public Vector3f getLocalUp()
 	{
 		return this.localUp;
 	}
-	
+
 	public Vector3f getLocalLeft()
 	{
 		return this.localLeft;
 	}
-	
+
 	public Vector3f getLocalForward()
 	{
 		return this.localForward;
 	}
-	
+
 	@Override 
 	public void update(float tpf)
 	{
 		super.update(tpf);
-		
+
 		if(getPlanet() != null)
 		{
 			this.setLocation(
-			getLocation().add(
-					walkDirection
-					)
-			);
-			
+					getLocation().add(
+							walkDirection
+							)
+					);
+
 			if(this.translationUpdate != null)
 			{
 				this.setLocation(
@@ -111,7 +111,7 @@ public class Player extends BetterCharacterControl{
 						);				
 				this.translationUpdate = null;
 			}
-			
+
 		}
 	}
 
@@ -120,7 +120,7 @@ public class Player extends BetterCharacterControl{
 	{
 		super.physicsTick(space, tpf);
 	}
-	
+
 	public void spawnPlayer(Planet planet, int face)
 	{
 		this.setLocation(planet.getSpawnLocation(face));
@@ -239,9 +239,18 @@ public class Player extends BetterCharacterControl{
 
 	public boolean isInAtmosphere(Planet planet)
 	{
-		//do box check thing... This will require more than just a check of distance, 
-		//I'ma have to use normals and crap. Leave this here till I get the time to do it
-		return false;
+		Vector3f difference = this.getLocation().subtract(planet.getCurrentPlanetTranslation());
+		if(
+				difference.getX() > -1 * (planet.getAtmosphereDiameter()/2) 
+				&& difference.getX() < (planet.getAtmosphereDiameter()/2)
+				&& difference.getY() > -1 * (planet.getAtmosphereDiameter()/2) 
+				&& difference.getY() < (planet.getAtmosphereDiameter()/2)
+				&& difference.getZ() > -1 * (planet.getAtmosphereDiameter()/2) 
+				&& difference.getZ() < (planet.getAtmosphereDiameter()/2)
+				)
+			return true;
+		else
+			return false;
 	}
 
 	public boolean isWithinLoadingDistance(Planet planet)
@@ -311,7 +320,7 @@ public class Player extends BetterCharacterControl{
 	{
 		return this.getPlanet() == null;
 	}
-	
+
 	public CelestialPortal getPortal() {
 		return portal;
 	}
@@ -327,7 +336,7 @@ public class Player extends BetterCharacterControl{
 	public Spatial getSpatial() {
 		return this.playerSpatial;
 	}
-	
+
 	public String getName() {
 		return this.name;
 	}
