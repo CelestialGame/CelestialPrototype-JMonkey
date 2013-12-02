@@ -36,7 +36,6 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.BloomFilter;
@@ -50,9 +49,6 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Box;
-import com.jme3.shadow.EdgeFilteringMode;
-import com.jme3.shadow.PointLightShadowFilter;
-import com.jme3.shadow.PointLightShadowRenderer;
 import com.jme3.system.AppSettings;
 import com.jme3.system.Timer;
 import com.jme3.util.SkyFactory;
@@ -72,6 +68,7 @@ public class SPPortal extends CelestialPortal{
 	private Box blockHighlight;
 	private Geometry blockHighlightGeom;
 	private Material blockHighlightMat;
+	public static SPPortal self;
 
 	public SPPortal(
 			Celestial parent, 
@@ -99,6 +96,7 @@ public class SPPortal extends CelestialPortal{
 		this.app = app;
 		this.timer = timer;
 		this.gui = gui;
+		self = this;
 	}
 
 	@Override
@@ -151,7 +149,6 @@ public class SPPortal extends CelestialPortal{
 
 		/** TODO: lighting fix -_- :P **/
 		initLighting();
-
 
 		this.player = new Player(this, "John Doe");
 		this.player.setGalaxy(this.galaxy);

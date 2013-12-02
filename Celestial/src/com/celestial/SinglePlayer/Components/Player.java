@@ -40,7 +40,6 @@ public class Player extends BetterCharacterControl{
 		this.portal = portal;
 		portal.getBulletAppState().getPhysicsSpace().add(this);
 		playerSpatial = portal.getAssetManager().loadModel("assets/models/player/simpleplayer.mesh.xml");
-		//playerSpatial.scale(0.0275f);
 		playerSpatial.scale(0.5f, 1.5f, 1);
 		playerSpatial.scale(0.5f);
 		playerNode = (Node) playerSpatial;
@@ -68,6 +67,11 @@ public class Player extends BetterCharacterControl{
 	public Vector3f getLocation()
 	{
 		return spatial.getWorldTranslation();
+	}
+	
+	public Quaternion getRotation()
+	{
+		return this.rotation;
 	}
 	
 	@Override 
