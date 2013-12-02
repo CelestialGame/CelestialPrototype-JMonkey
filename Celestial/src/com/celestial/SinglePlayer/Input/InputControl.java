@@ -8,6 +8,7 @@ import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
 import com.celestial.Blocks.BlocksEnum;
 import com.celestial.Gui.Gui;
+import com.celestial.SinglePlayer.SPPortal;
 import com.celestial.SinglePlayer.Components.SectorCoord;
 import com.celestial.SinglePlayer.Events.PlayerEvents;
 import com.celestial.SinglePlayer.Inventory.InventoryItem;
@@ -295,7 +296,7 @@ public class InputControl {
 				}
 			}
 			else if(binding.equals("*") && !keyPressed) {
-				parent.getCameraControl().onAnalog("MOUSE_AXIS_LEFT",90, tpf);
+				SPPortal.self.getCameraControl().onAnalog("MOUSE_AXIS_LEFT",90, tpf);
 			}
 		}
 	};

@@ -37,11 +37,8 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
-<<<<<<< HEAD
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
-=======
->>>>>>> branch 'master' of ssh://git@centos62:2277/home/git/Celestial.git
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.BloomFilter;
