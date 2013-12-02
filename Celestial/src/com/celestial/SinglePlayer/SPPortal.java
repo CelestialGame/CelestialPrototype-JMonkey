@@ -10,6 +10,7 @@ import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
 import com.celestial.Blocks.Blocks;
 import com.celestial.Gui.Gui;
+import com.celestial.SinglePlayer.Camera.CameraControl;
 import com.celestial.SinglePlayer.Components.Galaxy;
 import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.SinglePlayer.Components.Player;
@@ -36,6 +37,7 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
@@ -72,6 +74,7 @@ public class SPPortal extends CelestialPortal{
 	private Box blockHighlight;
 	private Geometry blockHighlightGeom;
 	private Material blockHighlightMat;
+	private CameraControl cameraControl;
 
 	public SPPortal(
 			Celestial parent, 
@@ -87,7 +90,7 @@ public class SPPortal extends CelestialPortal{
 			Timer timer, 
 			Gui gui)
 	{
-		this.parent = parent;
+		this.setParent(parent);
 		this.rootNode = rootNode;
 		this.guiNode = guiNode;
 		this.cam = cam;
@@ -112,7 +115,7 @@ public class SPPortal extends CelestialPortal{
 
 		/** Set up Physics **/
 		this.bulletAppState = new BulletAppState();
-		this.parent.getStateManager().attach(this.getBulletAppState());
+		this.getParent().getStateManager().attach(this.getBulletAppState());
 
 		Blocks.init();
 
@@ -137,13 +140,12 @@ public class SPPortal extends CelestialPortal{
 
 		this.invmanager.setSelectedHotSlot(0);
 
-		this.walkDirection = new Vector3f();
-		this.left = false;
-		this.right = false;
-		this.up = false;
-		this.down = false;
 
 		this.inputControl = new InputControl(this, this.cam, this.inputManager);
+		
+		this.cameraControl = new CameraControl(this, this.cam, this.inputManager);
+		this.cameraControl.init();
+		
 
 		Spatial sky = SkyFactory.createSky(this.assetManager, "assets/textures/nightsky.jpg", true);
 		sky.rotate(270*FastMath.DEG_TO_RAD,0,0);
@@ -299,31 +301,8 @@ public class SPPortal extends CelestialPortal{
 	}
 
 	public void updateCamera(float tpf) {
-		//TODO modify to work with planet sides
-		if(this.bulletAppState.isEnabled()) {
-			Vector3f camDir = this.cam.getDirection().clone().multLocal(20);
-			Vector3f camLeft = this.cam.getLeft().clone().multLocal(20);
-			this.walkDirection.set(0, 0, 0);
-			if (this.left)
-				this.walkDirection.addLocal(camLeft); 
-			if (this.right) 
-				this.walkDirection.addLocal(camLeft.negate());
-			if (this.up)    
-				this.walkDirection.addLocal(camDir);
-			if (this.down)  
-				this.walkDirection.addLocal(camDir.negate());
-
-			this.walkDirection.y = 0;
-
-			if(this.up || this.down || this.right || this.left)
-				PlayerEvents.PlayerMoveEvent(player, player.getLocation().add(this.walkDirection));
-
-			this.player.setWalkDirection(this.walkDirection);
-			this.cam.setLocation(new Vector3f(this.player.getLocation().getX(), this.player.getLocation().getY()+camHeight, this.player.getLocation().getZ()));
-		}
-
-		this.parent.getListener().setLocation(this.cam.getLocation());
-		this.parent.getListener().setRotation(this.cam.getRotation());
+		//TODO modify to work with planet sides -- WIP
+		this.cameraControl.updateCamera(tpf);
 
 	}
 	private void renderBlockBorders() {
@@ -377,7 +356,7 @@ public class SPPortal extends CelestialPortal{
 	}
 
 	protected void initCrossHairs() {
-		this.guiFont = this.parent.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
+		this.guiFont = this.getParent().getAssetManager().loadFont("Interface/Fonts/Default.fnt");
 		BitmapText ch = new BitmapText(this.guiFont, false);
 		ch.setSize(this.guiFont.getCharSet().getRenderedSize() * 2);
 		ch.setText("+"); // crosshairs
@@ -434,10 +413,14 @@ public class SPPortal extends CelestialPortal{
 				this,
 				this.assetManager,
 				this.inputManager,
-				this.parent.getAudioRenderer(),
+				this.getParent().getAudioRenderer(),
 				this.viewPort,
 				this.flyCam
 				};
+	}
+	
+	public CameraControl getCameraControl() {
+		return this.cameraControl;
 	}
 
 	@Override

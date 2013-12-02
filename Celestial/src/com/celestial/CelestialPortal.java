@@ -33,7 +33,7 @@ import com.jme3.system.AppSettings;
 @SuppressWarnings("deprecation")
 public abstract class CelestialPortal {
 	
-	protected Celestial parent;
+	private Celestial parent;
 	protected BulletAppState bulletAppState;
 	protected InventoryManager invmanager;
 	protected Node rootNode;
@@ -91,11 +91,11 @@ public abstract class CelestialPortal {
 	}
 
 	public void setDisplayFps(boolean b) {
-		parent.setDisplayFps(b);
+		getParent().setDisplayFps(b);
 	}
 
 	public void setDisplayStatView(boolean b) {
-		parent.setDisplayStatView(b);
+		getParent().setDisplayStatView(b);
 	}
 
 	public AppSettings getSettings() {
@@ -130,5 +130,21 @@ public abstract class CelestialPortal {
 	}
 
 	public abstract void hideHighlight();
+
+	/**
+	 * Returns the value of the field called 'parent'.
+	 * @return Returns the parent.
+	 */
+	public Celestial getParent() {
+		return parent;
+	}
+
+	/**
+	 * Sets the field called 'parent' to the given value.
+	 * @param parent The parent to set.
+	 */
+	public void setParent(Celestial parent) {
+		this.parent = parent;
+	}
 
 }

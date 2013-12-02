@@ -294,6 +294,9 @@ public class InputControl {
 					this.inventoryopen = false;
 				}
 			}
+			else if(binding.equals("*") && !keyPressed) {
+				parent.getCameraControl().onAnalog("MOUSE_AXIS_LEFT",90, tpf);
+			}
 		}
 	};
 
