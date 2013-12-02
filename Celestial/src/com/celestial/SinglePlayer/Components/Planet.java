@@ -71,7 +71,7 @@ public class Planet implements BlockChunkListener {
 	private BlockTerrainControl terrcontrol;
 	private Node planetNode;
 	private Node terrainNode;
-	private Vector3f amountRotation;
+	public Vector3f amountRotation;
 	private Quaternion originalRotation;
 	private Vector3f originalTerrainTranslation;
 	private CelestialPortal portal;
@@ -80,7 +80,7 @@ public class Planet implements BlockChunkListener {
 	private Geometry atmospheregeom;
 	private Material atmospheremat;
 	private Node starNode;
-	private Vector3f amountRevolution;
+	public Vector3f amountRevolution;
 	private CollisionShape terrainCollision;
 	private RigidBodyControl terrainRigidBody;
 	private Vector3f originalPlanetTranslation;
@@ -575,7 +575,7 @@ public class Planet implements BlockChunkListener {
 	}
 
 	public void rotate() {
-		this.previousPlanetRotation = planetNode.getLocalRotation().clone();
+		this.previousPlanetRotation = planetNode.getWorldRotation().clone();
 		this.previousPlanetTranslation = planetNode.getWorldTranslation().clone();
 		starNode.rotate(this.amountRevolution.getX()*FastMath.DEG_TO_RAD, this.amountRevolution.getY()*FastMath.DEG_TO_RAD, this.amountRevolution.getZ()*FastMath.DEG_TO_RAD);
 		planetNode.rotate(this.amountRotation.getX()*FastMath.DEG_TO_RAD, this.amountRotation.getY()*FastMath.DEG_TO_RAD, this.amountRotation.getZ()*FastMath.DEG_TO_RAD);
@@ -616,7 +616,7 @@ public class Planet implements BlockChunkListener {
 		float w = this.planetNode.getLocalRotation().getW();
 		
 		return new Vector3f(
-				(1 - 2 * (y * y + z * z)) * -1,
+				(1 - 2 * (y * y + z * z)),
                 2 * (x * y + w * z),
                 2 * (x * z - w * y));
 	}
@@ -699,5 +699,9 @@ public class Planet implements BlockChunkListener {
 
 	public Spatial getStarNode() {
 		return starNode;
+	}
+
+	public Quaternion getCurrentPlanetRotation() {
+		return this.planetNode.getWorldRotation();
 	}
 }

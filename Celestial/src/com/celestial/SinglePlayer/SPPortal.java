@@ -214,7 +214,9 @@ public class SPPortal extends CelestialPortal{
 						p.rotate();
 						if(player.getPlanet() != null)
 							if(player.getPlanet() == p)
+							{
 								player.setTranslationUpdate(p.getCurrentPlanetTranslation().subtract(p.getPreviousPlanetTranslation()));
+							}
 					}
 			this.lastRotation = this.timer.getTimeInSeconds();
 		}
@@ -255,17 +257,17 @@ public class SPPortal extends CelestialPortal{
 			Planet planet = this.player.getPlanet();
 			int FaceOn = this.player.getCurrentFaceOfPlanet(planet);
 			if(FaceOn == Planet.TOP) {
-				this.player.setGravity(new Vector3f(0, -15f, 0));
+				this.player.setGravity(this.player.getPlanet().getUpVector().mult(-15));
 			} else if (FaceOn == Planet.BOTTOM) {
-				this.player.setGravity(new Vector3f(0, 15f, 0));
+				this.player.setGravity(this.player.getPlanet().getUpVector().mult(15));
 			} else if (FaceOn == Planet.NORTH) {
-				this.player.setGravity(new Vector3f(0, 0, 15f));
+				this.player.setGravity(this.player.getPlanet().getForwardVector().mult(15));
 			} else if (FaceOn == Planet.SOUTH) {
-				this.player.setGravity(new Vector3f(0, 0, -15f));
+				this.player.setGravity(this.player.getPlanet().getForwardVector().mult(-15));
 			} else if (FaceOn == Planet.EAST) {
-				this.player.setGravity(new Vector3f(-15f, 0, 0));
+				this.player.setGravity(this.player.getPlanet().getLeftVector().mult(-15));
 			} else if (FaceOn == Planet.WEST) {
-				this.player.setGravity(new Vector3f(15f, 0, 0));
+				this.player.setGravity(this.player.getPlanet().getLeftVector().mult(15));
 			}
 			//this.player.setLocation(this.player.getLocation().add(this.player.getWalkDirection()));
 		} else {
