@@ -6,6 +6,8 @@ Date Created:
 
 package com.celestial.SinglePlayer;
 
+import java.util.ListIterator;
+
 import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
 import com.celestial.Blocks.Blocks;
@@ -19,6 +21,7 @@ import com.celestial.SinglePlayer.Components.SectorCoord;
 import com.celestial.SinglePlayer.Components.SolarSystem;
 import com.celestial.SinglePlayer.Events.PlayerEvents;
 import com.celestial.SinglePlayer.Input.InputControl;
+import com.celestial.SinglePlayer.Inventory.InventoryDrop;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
 import com.celestial.SinglePlayer.Inventory.InventoryRegister;
 import com.celestial.SinglePlayer.Physics.Listener;
@@ -273,6 +276,30 @@ public class SPPortal extends CelestialPortal{
 		} else {
 			this.player.setGravity(zeroGravity);
 		}
+		ListIterator<InventoryDrop> it = invmanager.getDropItems().listIterator();    
+        if(it.hasNext()) {  
+            InventoryDrop item = it.next();
+            if(item.getPlanet() != null) {
+    			Planet planet = item.getPlanet();
+    			int FaceOn = item.getCurrentFaceOfPlanet(planet);
+    			if(FaceOn == Planet.TOP) {
+    				item.getCollisionBox().setGravity(item.getPlanet().getUpVector().mult(-15));
+    			} else if (FaceOn == Planet.BOTTOM) {
+    				item.getCollisionBox().setGravity(item.getPlanet().getUpVector().mult(15));
+    			} else if (FaceOn == Planet.NORTH) {
+    				item.getCollisionBox().setGravity(item.getPlanet().getForwardVector().mult(15));
+    			} else if (FaceOn == Planet.SOUTH) {
+    				item.getCollisionBox().setGravity(item.getPlanet().getForwardVector().mult(-15));
+    			} else if (FaceOn == Planet.EAST) {
+    				item.getCollisionBox().setGravity(item.getPlanet().getLeftVector().mult(-15));
+    			} else if (FaceOn == Planet.WEST) {
+    				item.getCollisionBox().setGravity(item.getPlanet().getLeftVector().mult(15));
+    			}
+    			//item.setLocation(item.getLocation().add(item.getWalkDirection()));
+    		} else {
+    			item.getCollisionBox().setGravity(zeroGravity);
+    		}
+        }  
 	}
 
 	private void initLighting() {	  

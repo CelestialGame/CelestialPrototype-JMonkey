@@ -9,6 +9,7 @@ import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
 import com.celestial.Blocks.BlocksEnum;
 import com.celestial.Gui.Gui;
+import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.util.InventoryException;
 import com.cubes.Block;
 import com.jme3.asset.AssetManager;
@@ -174,8 +175,8 @@ public class InventoryManager {
 	}
 	
 	// Drop Items
-	public void dropItem(InventoryItem item, Vector3f location) {
-		InventoryDrop drop = new InventoryDrop(item, location);
+	public void dropItem(InventoryItem item, Vector3f location, Planet planet) {
+		InventoryDrop drop = new InventoryDrop(item, location, planet);
 		this.dropitemsnode.attachChild(drop.getNode());
 		this.dropitems.add(drop);
 		drop.getNode().setLocalTranslation(location);
@@ -219,8 +220,8 @@ public class InventoryManager {
 		}
 	}
 	
-	public void openExtendedInv(boolean bool) {
-		if(bool) {
+	public void openExtendedInv(boolean yes) {
+		if(yes) {
 			Celestial.gui.getNifty().gotoScreen("extendedinv");
 			Celestial.gui.disableControl();
 		} else {

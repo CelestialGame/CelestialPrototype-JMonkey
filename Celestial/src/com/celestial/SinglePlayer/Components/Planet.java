@@ -292,7 +292,17 @@ public class Planet implements BlockChunkListener {
 			{
 				for(int k=0;k<diameter;k++)
 				{
-					if(j==15)
+					if(j==15 || j == 0)
+					{
+						if(this.type.equals(planetType.HABITABLE))
+							makeCubeAt(locx+i,locy+j,locz+k, BlocksEnum.GRASS, blockTerrain);
+					}
+					else if(k==15 || k==0)
+					{
+						if(this.type.equals(planetType.HABITABLE))
+							makeCubeAt(locx+i,locy+j,locz+k, BlocksEnum.GRASS, blockTerrain);
+					}
+					else if(i==15 || i==0)
 					{
 						if(this.type.equals(planetType.HABITABLE))
 							makeCubeAt(locx+i,locy+j,locz+k, BlocksEnum.GRASS, blockTerrain);

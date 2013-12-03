@@ -86,7 +86,7 @@ public class CameraControl {
 			if (this.parent.down)  
 				this.parent.walkDirection.addLocal(camDir.negate());
 
-			this.parent.walkDirection.y = 0;
+			//this.parent.walkDirection.y = 0;
 
 			if(this.parent.up || this.parent.down || this.parent.right || this.parent.left)
 				PlayerEvents.PlayerMoveEvent(parent.player, parent.player.getLocation().add(this.parent.walkDirection));

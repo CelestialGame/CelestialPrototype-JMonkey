@@ -125,7 +125,7 @@ public class InputControl {
 								Class<? extends Block> block = BlockManager.getClass(chunk.getBlock(blockLocation).getType());
 								item = parent.getInventoryManager().getItembyBlock(BlocksEnum.getBlockByClass(block));
 								if(item != null) {
-									parent.getInventoryManager().dropItem(item, blockAbsLocation);
+									parent.getInventoryManager().dropItem(item, blockAbsLocation, parent.player.getPlanet());
 								}
 								chunk.removeBlock(blockLocation); //Remove the Block
 								PlayerEvents.PlayerDeleteBlockEvent(parent.player, parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0), blockAbsLocation, blockLocation);
@@ -142,7 +142,7 @@ public class InputControl {
 									Class<? extends Block> block = BlockManager.getClass(chunk.getBlock(blockLocation).getType());
 									item = parent.getInventoryManager().getItembyBlock(BlocksEnum.getBlockByClass(block));
 									if(item != null) {
-										parent.getInventoryManager().dropItem(item, blockAbsLocation);
+										parent.getInventoryManager().dropItem(item, blockAbsLocation, parent.player.getPlanet());
 									}
 									chunk.removeBlock(blockLocation); //Remove the Block
 								}
