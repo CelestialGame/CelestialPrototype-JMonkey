@@ -18,10 +18,6 @@ import com.jme3.util.JmeFormatter;
 
 import de.lessvoid.nifty.Nifty;
 
-/**
- * test
- * @author kevint
- */
 public class Celestial extends SimpleApplication{
 
 	public static Application app;
@@ -127,7 +123,7 @@ public class Celestial extends SimpleApplication{
 		}
 		else
 		{
-			Celestial.portal = null;//new MPPortal(this);
+			Celestial.portal = null;
 		}
 		
 		if(portal != null)

@@ -19,7 +19,6 @@ import com.celestial.SinglePlayer.Components.Player;
 import com.celestial.SinglePlayer.Components.Sector;
 import com.celestial.SinglePlayer.Components.SectorCoord;
 import com.celestial.SinglePlayer.Components.SolarSystem;
-import com.celestial.SinglePlayer.Events.PlayerEvents;
 import com.celestial.SinglePlayer.Input.InputControl;
 import com.celestial.SinglePlayer.Inventory.InventoryDrop;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
@@ -42,8 +41,6 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
-import com.jme3.math.Matrix3f;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.BloomFilter;
@@ -57,6 +54,9 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Box;
+import com.jme3.shadow.EdgeFilteringMode;
+import com.jme3.shadow.PointLightShadowFilter;
+import com.jme3.shadow.PointLightShadowRenderer;
 import com.jme3.system.AppSettings;
 import com.jme3.system.Timer;
 import com.jme3.util.SkyFactory;
@@ -310,9 +310,9 @@ public class SPPortal extends CelestialPortal{
 		this.rootNode.addLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
 
 
-		/*	    PointLightShadowRenderer plsr = new PointLightShadowRenderer(this.assetManager, SHADOWMAP_SIZE);
+			    PointLightShadowRenderer plsr = new PointLightShadowRenderer(this.assetManager, SHADOWMAP_SIZE);
 		        plsr.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
-		        plsr.setEdgeFilteringMode(EdgeFilteringMode.Bilinear);
+		        plsr.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
 		//plsr.setFlushQueues(false);
 		//plsr.displayFrustum();
 		//plsr.displayDebug();
@@ -320,13 +320,13 @@ public class SPPortal extends CelestialPortal{
 
 		        PointLightShadowFilter plsf = new PointLightShadowFilter(this.assetManager, SHADOWMAP_SIZE);
 		        plsf.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());     
-		        plsf.setEdgeFilteringMode(EdgeFilteringMode.Bilinear);
+		        plsf.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
 		        plsf.setEnabled(true);
-		*/
+		
 		this.fpp = new FilterPostProcessor(this.assetManager);
 		BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
 		this.fpp.addFilter(bloom);
-		//fpp.addFilter(plsf);
+		fpp.addFilter(plsf);
 
 		this.viewPort.addProcessor(this.fpp);
 	}
@@ -389,7 +389,7 @@ public class SPPortal extends CelestialPortal{
 			} 
 			else
 				this.PlanetText.setText("Deep Space");
-			this.Vector3IntPosText.setText(Vector3Int.convert3f(location).toString());
+			this.Vector3IntPosText.setText(location.toString());
 		} else {
 			this.posText.setText("");
 			this.PlanetText.setText("");
