@@ -7,6 +7,7 @@ Date Created:
 package com.celestial.SinglePlayer.Components;
 
 import com.celestial.CelestialPortal;
+import com.jme3.light.DirectionalLight;
 import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -21,9 +22,59 @@ public class Star {
 	private SolarSystem system;
 	private Vector3f location;
 	private Node StarNode;
-	private PointLight light;
+	private LightMap lightMap;
 	private Geometry StarGeometry;
 	private CelestialPortal portal;
+	
+	public class LightMap {
+		DirectionalLight top;
+		DirectionalLight bottom;
+		DirectionalLight front;
+		DirectionalLight back;
+		DirectionalLight left;
+		DirectionalLight right;
+		
+		public LightMap() {
+			top = new DirectionalLight();
+			top.setDirection(new Vector3f(0f, 1f, 0f).normalizeLocal());
+			top.setColor(ColorRGBA.White);
+			
+			bottom = new DirectionalLight();
+			bottom.setDirection(new Vector3f(0f, -1f, 0f).normalizeLocal());
+			bottom.setColor(ColorRGBA.White);
+			
+			front = new DirectionalLight();
+			front.setDirection(new Vector3f(0f, 0f, 1f).normalizeLocal());
+			front.setColor(ColorRGBA.White);
+			
+			back = new DirectionalLight();
+			back.setDirection(new Vector3f(0f, 0f, -1f).normalizeLocal());
+			back.setColor(ColorRGBA.White);
+			
+			left = new DirectionalLight();
+			left.setDirection(new Vector3f(-1f, 0f, -0f).normalizeLocal());
+			left.setColor(ColorRGBA.White);
+			
+			right = new DirectionalLight();
+			right.setDirection(new Vector3f(1f, 0f, 0f).normalizeLocal());
+			right.setColor(ColorRGBA.White);
+		}
+		
+		public LightMap(DirectionalLight top, DirectionalLight bottom,
+				DirectionalLight front, DirectionalLight back,
+				DirectionalLight left, DirectionalLight right) {
+			this.top = top;
+			this.bottom = bottom;
+			this.front = front;
+			this.back = back;
+			this.left = left;
+			this.right = right;
+		}
+		
+		public DirectionalLight[] getLights() {
+			return new DirectionalLight[]{top,bottom,front,back,left,right};
+		}
+	}
 
 	/**
 	 * Generates a star at given location	
@@ -71,12 +122,12 @@ public class Star {
 		
 		this.StarNode.setQueueBucket(Bucket.Opaque);
 		
-		light = new PointLight();
-		light.setPosition(location);
-		light.setColor(ColorRGBA.White);
-		light.setRadius(65000f);
+		this.lightMap = new LightMap();
 		
-		this.StarNode.addLight(light);
+		for(DirectionalLight light : this.lightMap.getLights()) {
+			this.StarNode.addLight(light);
+		}
+		
 		this.StarNode.move(location);
 	}
 	
@@ -85,8 +136,8 @@ public class Star {
 		return StarNode;
 	}
 	
-	public PointLight getLight() {
-		return light;
+	public LightMap getLightMap() {
+		return lightMap;
 	}
 	
 	public Vector3f getLocation()

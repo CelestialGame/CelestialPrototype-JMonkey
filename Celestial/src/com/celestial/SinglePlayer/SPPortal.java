@@ -37,6 +37,7 @@ import com.jme3.font.BitmapText;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.light.AmbientLight;
+import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
@@ -47,6 +48,7 @@ import com.jme3.post.filters.BloomFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
@@ -54,6 +56,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Box;
+import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.shadow.EdgeFilteringMode;
 import com.jme3.shadow.PointLightShadowFilter;
 import com.jme3.shadow.PointLightShadowRenderer;
@@ -68,7 +71,7 @@ public class SPPortal extends CelestialPortal{
 	private float lastRotation;
 	private boolean rotated = false;
 	private FilterPostProcessor fpp;
-	public static final int SHADOWMAP_SIZE = 1024;
+	public static final int SHADOWMAP_SIZE = 512;
 	public static float camHeight = 4.9f;
 
 	private Vector3f normalGravity = new Vector3f(0.0f, -9.81f, 0.0f);
@@ -171,7 +174,7 @@ public class SPPortal extends CelestialPortal{
 		this.cam.setFrustumFar(65000);
 
 		this.rootNode.setShadowMode(ShadowMode.Off);
-		this.player.getNode().setShadowMode(ShadowMode.CastAndReceive);
+		this.player.getNode().setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
 
 		this.bulletAppState.getPhysicsSpace().addCollisionListener(new Listener(this));
 		//this.bulletAppState.setDebugEnabled(true);
@@ -307,26 +310,17 @@ public class SPPortal extends CelestialPortal{
 		al.setColor(ColorRGBA.White);
 		this.rootNode.addLight(al);
 
-		this.rootNode.addLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
-
-
-			    PointLightShadowRenderer plsr = new PointLightShadowRenderer(this.assetManager, SHADOWMAP_SIZE);
-		        plsr.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
-		        plsr.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
-		//plsr.setFlushQueues(false);
-		//plsr.displayFrustum();
-		//plsr.displayDebug();
-		this.viewPort.addProcessor(plsr);
-
-		        PointLightShadowFilter plsf = new PointLightShadowFilter(this.assetManager, SHADOWMAP_SIZE);
-		        plsf.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());     
-		        plsf.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
-		        plsf.setEnabled(true);
+		for(DirectionalLight light : this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLightMap().getLights()) {
+			this.rootNode.addLight(light);
+			DirectionalLightShadowRenderer directionalLightShadowRenderer = new DirectionalLightShadowRenderer(getAssetManager(), 2048, 3);
+	        directionalLightShadowRenderer.setLight(light);
+	        directionalLightShadowRenderer.setShadowIntensity(0.3f);
+	        this.viewPort.addProcessor(directionalLightShadowRenderer);
+		}
 		
 		this.fpp = new FilterPostProcessor(this.assetManager);
 		BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
 		this.fpp.addFilter(bloom);
-		fpp.addFilter(plsf);
 
 		this.viewPort.addProcessor(this.fpp);
 	}

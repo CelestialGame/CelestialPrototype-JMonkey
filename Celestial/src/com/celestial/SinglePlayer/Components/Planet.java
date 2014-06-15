@@ -27,6 +27,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
@@ -179,7 +180,7 @@ public class Planet implements BlockChunkListener {
 		terrainNode.addControl(terrcontrol);
 
 		/* LIGHTING */
-		planetNode.setShadowMode(ShadowMode.CastAndReceive);
+		planetNode.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
 
 		/* CORNERS */
 		this.cornerList = new ArrayList<PlanetCorner>();
