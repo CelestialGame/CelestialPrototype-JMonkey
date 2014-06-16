@@ -17,6 +17,7 @@ import java.util.Random;
 
 import com.celestial.CelestialPortal;
 import com.celestial.Blocks.BlocksEnum;
+import com.cubes.Block;
 import com.cubes.BlockChunkControl;
 import com.cubes.BlockChunkListener;
 import com.cubes.BlockTerrainControl;
@@ -37,6 +38,7 @@ import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Box;
 
 public class Planet implements BlockChunkListener {
@@ -174,7 +176,6 @@ public class Planet implements BlockChunkListener {
 					}
 				}
 			}
-			System.out.println("Chunk created");
 			loaded = true;
 			generated = true;
 		}
@@ -211,6 +212,10 @@ public class Planet implements BlockChunkListener {
 		@Override
 		public boolean isGenerated() {
 			return generated;
+		}
+		@Override
+		public HashMap<Vector3Int, Object> getBlockMap() {
+			return blocks;
 		}
 		
 	}
@@ -508,6 +513,35 @@ public class Planet implements BlockChunkListener {
 
 	}
 	
+	public void removeBlock(Vector3Int blockLocation) {
+		for(com.cubes.BlockTerrainControl.Chunk chunk : this.terrcontrol.getMalleableChunks()) {
+			Iterator<Vector3Int> it = chunk.getBlockMap().keySet().iterator();
+		    while (it.hasNext()) {
+		        Vector3Int blockLoc = it.next();
+		        if(blockLocation.equals(blockLoc)) {
+		        	chunk.getBlockMap().remove(blockLoc);
+		        	it.remove();
+		        }
+		    }
+		}
+		this.terrcontrol.removeBlock(blockLocation);
+	}
+	
+	public void addBlock(Vector3Int blockLocation, Class<? extends Block> blockClass) {
+		HashMap<Float, com.cubes.BlockTerrainControl.Chunk> map = new HashMap<Float, com.cubes.BlockTerrainControl.Chunk>();
+		for(com.cubes.BlockTerrainControl.Chunk chunk : this.terrcontrol.getMalleableChunks()) {
+			float distance = chunk.getLocation().distance(blockLocation);
+			map.put(distance, chunk);
+		}
+		float min = (Float) map.keySet().toArray()[0];
+		for(float distance : map.keySet()) {
+			if(distance < min) {
+				min = distance;
+			}
+		}
+		map.get(min).getBlockMap().put(blockLocation, blockClass);
+		this.terrcontrol.setBlock(blockLocation, blockClass);
+	}
 	
 
 	public PlanetCorner[] getCornersForFace(int face)

@@ -34,6 +34,7 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
 		protected boolean loaded;
 		protected boolean generated;
 		public abstract Vector3Int getLocation();
+		public abstract HashMap<Vector3Int, Object> getBlockMap();
 		public abstract void generate();
 		public abstract void unload();
 		public abstract void load();

@@ -4,6 +4,7 @@
  */
 package com.cubes;
 
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 
 /**
@@ -159,5 +160,15 @@ public class Vector3Int{
     @Override
     public String toString(){
         return "[Vector3Int x=" + x + " y=" + y + " z=" + z + "]";
+    }
+    
+    public float distanceSquared(Vector3Int v) {
+    	double dx = x - v.x;
+        double dy = y - v.y;
+        double dz = z - v.z;
+        return (float) (dx * dx + dy * dy + dz * dz);
+    }
+    public float distance(Vector3Int v) {
+        return FastMath.sqr(distanceSquared(v));
     }
 }
