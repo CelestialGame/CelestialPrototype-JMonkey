@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.celestial.CelestialPortal;
 import com.celestial.Blocks.BlocksEnum;
@@ -23,6 +24,7 @@ import com.cubes.BlockChunkListener;
 import com.cubes.BlockTerrainControl;
 import com.cubes.BlockType;
 import com.cubes.Vector3Int;
+import com.cubes.test.blocks.Block_Grass;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
@@ -70,7 +72,7 @@ public class Planet implements BlockChunkListener {
  	}
 	public planetType type;
 	
-	private int CHUNK_SIZE = 16;
+	private int CHUNK_SIZE = 8;
 	private float VIEW_DISTANCE = 128;
 	
 	private Star star;
@@ -119,9 +121,9 @@ public class Planet implements BlockChunkListener {
 			{
 				for(int j=0;j<diameter;j++)
 				{
-					for(int k=0;k<diameter;k++)
+					for(int k=0;k<diameter-5;k++)
 					{
-						if(j==diameter-1 || j == 0)
+						/*if(j==diameter-1 || j == 0)
 						{
 							if(planet.type.equals(planetType.HABITABLE))
 								blocks.put(makeCubeAt(locx+i,locy+j,locz+k, BlocksEnum.GRASS, blockTerrain), BlocksEnum.GRASS);
@@ -137,7 +139,7 @@ public class Planet implements BlockChunkListener {
 								blocks.put(makeCubeAt(locx+i,locy+j,locz+k, BlocksEnum.GRASS, blockTerrain), BlocksEnum.GRASS);
 						}
 						else
-						{
+						{*/
 							if(planet.type.hasAtmosphere()) {
 								Random randomGenerator = new Random();
 								for (int idx = 1; idx <= 10; ++idx){
@@ -172,12 +174,15 @@ public class Planet implements BlockChunkListener {
 									}
 								}
 							}
-						}
+						//}
 					}
 				}
 			}
+			//blockTerrain.setBlocksFromNoise(new Vector3Int(0, diameter*planet.diameter, 0), new Vector3Int(diameter, 5, diameter), 0.3f, BlocksEnum.GRASS.getBClass());
+			
 			loaded = true;
 			generated = true;
+			updateCollision();
 		}
 
 		@Override
@@ -198,6 +203,7 @@ public class Planet implements BlockChunkListener {
 		        it.remove(); // avoids a ConcurrentModificationException
 		    }
 		    loaded = true;
+		    updateCollision();
 		}
 
 		@Override
@@ -214,7 +220,7 @@ public class Planet implements BlockChunkListener {
 			return generated;
 		}
 		@Override
-		public HashMap<Vector3Int, Object> getBlockMap() {
+		public ConcurrentHashMap<Vector3Int, Object> getBlockMap() {
 			return blocks;
 		}
 		
@@ -234,8 +240,10 @@ public class Planet implements BlockChunkListener {
 		this.location = location;
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
 		this.portal = star.getSolarSystem().getSector().getGalaxy().getPortal();
-		this.amountRotation = new Vector3f(0f, 0.0001f, 0f);
-		this.amountRevolution = new Vector3f(0f, 0.0001f, 0f);
+		//this.amountRotation = new Vector3f(0f, 0.0001f, 0f);
+		//this.amountRevolution = new Vector3f(0f, 0.0001f, 0f);
+		this.amountRotation = new Vector3f(0f, 0f, 0f);
+		this.amountRevolution = new Vector3f(0f, 0f, 0f);
 		this.name = name;
 		this.atmosphereSizeFactor = 1.2f;
 
@@ -259,7 +267,7 @@ public class Planet implements BlockChunkListener {
 
 		this.originalRotation = planetNode.getWorldRotation().clone(); 
 
-		terrainNode.move(((centerofdiam*16)-8)*-3,((centerofdiam*16)-8)*-3,((centerofdiam*16)-8)*-3);
+		terrainNode.move(((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*-3,((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*-3,((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*-3);
 		planetNode.move(location);
 		starNode.move(star.getStarNode().getWorldTranslation());
 		this.originalTerrainTranslation = terrainNode.getWorldTranslation().clone();
@@ -309,7 +317,7 @@ public class Planet implements BlockChunkListener {
 			for(int j=0; j<diameter*2; j++)
 			{
 				int x1 = (int) (i*8);
-				int y1 = (int) diameter*16*3;
+				int y1 = (int) diameter*CHUNK_SIZE*3;
 				int z1 = (int) (j*8);
 				makeTreeAt(new Vector3Int(x1, y1, z1), terrcontrol);
 			}
@@ -525,6 +533,7 @@ public class Planet implements BlockChunkListener {
 		    }
 		}
 		this.terrcontrol.removeBlock(blockLocation);
+		updateCollision();
 	}
 	
 	public void addBlock(Vector3Int blockLocation, Class<? extends Block> blockClass) {
@@ -712,7 +721,7 @@ public class Planet implements BlockChunkListener {
 	{
 		return new Vector3f(
 				this.planetNode.getWorldTranslation().getX()+1.5f,
-				this.planetNode.getWorldTranslation().getY() + this.diameter*16*3+3f,
+				this.planetNode.getWorldTranslation().getY() + this.diameter*CHUNK_SIZE*3+3f,
 				this.planetNode.getWorldTranslation().getZ()+1.5f);
 	}
 
@@ -721,6 +730,9 @@ public class Planet implements BlockChunkListener {
 		this.previousPlanetTranslation = planetNode.getWorldTranslation().clone();
 		starNode.rotate(this.amountRevolution.getX()*FastMath.DEG_TO_RAD, this.amountRevolution.getY()*FastMath.DEG_TO_RAD, this.amountRevolution.getZ()*FastMath.DEG_TO_RAD);
 		planetNode.rotate(this.amountRotation.getX()*FastMath.DEG_TO_RAD, this.amountRotation.getY()*FastMath.DEG_TO_RAD, this.amountRotation.getZ()*FastMath.DEG_TO_RAD);
+		for(com.cubes.BlockTerrainControl.Chunk chunk : this.terrcontrol.getMalleableChunks()) {
+			//move chunk locations to new locations
+		}
 		updateCollision();
 	}
 	

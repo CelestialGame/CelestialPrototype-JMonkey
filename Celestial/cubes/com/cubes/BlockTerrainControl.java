@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -30,11 +31,11 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
 	public abstract class Chunk {
 		protected BlockTerrainControl blockTerrain;
 		protected Vector3Int blockLocation;
-		protected HashMap<Vector3Int, Object> blocks = new HashMap<Vector3Int, Object>();
+		protected ConcurrentHashMap<Vector3Int, Object> blocks = new ConcurrentHashMap<Vector3Int, Object>();
 		protected boolean loaded;
 		protected boolean generated;
 		public abstract Vector3Int getLocation();
-		public abstract HashMap<Vector3Int, Object> getBlockMap();
+		public abstract ConcurrentHashMap<Vector3Int, Object> getBlockMap();
 		public abstract void generate();
 		public abstract void unload();
 		public abstract void load();
