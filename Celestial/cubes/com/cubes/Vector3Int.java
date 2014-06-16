@@ -137,6 +137,10 @@ public class Vector3Int{
     {
     	return new Vector3Int((int)vector.getX(), (int)vector.getY(), (int)vector.getZ());
     }
+    public static Vector3f convert3Int(Vector3Int vector)
+    {
+    	return new Vector3f(vector.getX(), vector.getY(), vector.getZ());
+    }
     
     @Override
     public Vector3Int clone(){

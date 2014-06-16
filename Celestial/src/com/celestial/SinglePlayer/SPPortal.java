@@ -201,7 +201,7 @@ public class SPPortal extends CelestialPortal{
 		updateLight(tpf);
 		updateGravity(tpf);
 
-		rotatePlanets();
+		updatePlanets();
 		
 		if(player.getPlanet() != null)
 			this.renderBlockBorders();
@@ -209,7 +209,7 @@ public class SPPortal extends CelestialPortal{
 		this.invmanager.updateAll();
 	}
 
-	private void rotatePlanets() {
+	private void updatePlanets() {
 	
 		if(this.timer.getTimeInSeconds()-this.lastRotation > 0)
 		{
@@ -226,6 +226,11 @@ public class SPPortal extends CelestialPortal{
 					}
 			this.lastRotation = this.timer.getTimeInSeconds();
 		}
+		for(Sector s : this.galaxy.getSectors())
+			for(SolarSystem sys : s.getSolarSystems())
+				for(Planet p : sys.getPlanets())
+					p.updateChunks(this.cam.getLocation());
+		
 	}
 
 	private void updatePlayer(float tpf) {
@@ -312,9 +317,9 @@ public class SPPortal extends CelestialPortal{
 
 		for(DirectionalLight light : this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLightMap().getLights()) {
 			this.rootNode.addLight(light);
-			DirectionalLightShadowRenderer directionalLightShadowRenderer = new DirectionalLightShadowRenderer(getAssetManager(), 2048, 3);
+			DirectionalLightShadowRenderer directionalLightShadowRenderer = new DirectionalLightShadowRenderer(getAssetManager(), 512, 3);
 	        directionalLightShadowRenderer.setLight(light);
-	        directionalLightShadowRenderer.setShadowIntensity(0.3f);
+	        directionalLightShadowRenderer.setShadowIntensity(0.5f);
 	        this.viewPort.addProcessor(directionalLightShadowRenderer);
 		}
 		
