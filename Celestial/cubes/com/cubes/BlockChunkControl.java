@@ -5,6 +5,11 @@
 package com.cubes;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
@@ -18,9 +23,30 @@ import com.cubes.network.*;
 
 /**
  *
- * @author Carl
+ * @author Carl<br>
+ * Modified by Kevin Thorne
  */
 public class BlockChunkControl extends AbstractControl implements BitSerializable{
+	
+	public class CachedBlock {
+		private byte data;
+		private int x;
+		private int y;
+		private int z;
+		public CachedBlock(byte data, int x, int y, int z) {
+			this.data = data;
+			this.x = x;
+			this.y = y;
+			this.z = z;
+		}
+		public CachedBlock(byte data2, byte[][] x2, byte[] y2, byte z2) {
+			// TODO Auto-generated constructor stub
+		}
+		public byte getByteData() { return data; }
+		public int getX() { return x; }
+		public int getY() { return y; }
+		public int getZ() { return z; }
+	}
 
     public BlockChunkControl(BlockTerrainControl terrain, int x, int y, int z){
         this.terrain = terrain;
@@ -34,11 +60,13 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
     private Vector3Int location = new Vector3Int();
     private Vector3Int blockLocation = new Vector3Int();
     private byte[][][] blockTypes;
+    private List<CachedBlock> savedBlockTypes = new ArrayList<CachedBlock>();
     private boolean[][][] blocks_IsOnSurface;
     private Node node = new Node();
     private Geometry optimizedGeometry_Opaque;
     private Geometry optimizedGeometry_Transparent;
     private boolean needsMeshUpdate;
+    private boolean loaded;
 
     @Override
     public void setSpatial(Spatial spatial){
@@ -107,6 +135,32 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
             updateBlockState(location);
             needsMeshUpdate = true;
         }
+    }
+    
+    public void unloadChunk() {
+    	if(!loaded) {
+    		return;
+    	}
+    	this.savedBlockTypes.clear();
+    	for (int x = 0; x < blockTypes.length; x++)
+    	    for (int y = 0; y < blockTypes[x].length; y++)
+    	    	for(int z = 0; z < blockTypes[x][y].length; z++) {
+    	    		this.savedBlockTypes.add(new CachedBlock(blockTypes[x][y][z], x, y, z));
+    	    		removeBlock(new Vector3Int(x,y,z));
+    	    	}
+    	loaded = false;
+    }
+    
+    public void loadChunk() {
+    	if(loaded) {
+    		return;
+    	}
+    	for(CachedBlock block : this.savedBlockTypes) {
+    		blockTypes[block.x][block.y][block.z] = block.data;
+    		updateBlockState(new Vector3Int(block.x,block.y,block.z));
+    		needsMeshUpdate = true;
+    	}
+    	loaded = true;
     }
     
     private boolean isValidBlockLocation(Vector3Int location){

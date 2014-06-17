@@ -229,8 +229,9 @@ public class SPPortal extends CelestialPortal{
 		for(Sector s : this.galaxy.getSectors())
 			for(SolarSystem sys : s.getSolarSystems())
 				for(Planet p : sys.getPlanets())
+				{
 					p.updateChunks(this.cam.getLocation());
-		
+				}
 	}
 
 	private void updatePlayer(float tpf) {
@@ -317,9 +318,9 @@ public class SPPortal extends CelestialPortal{
 
 		for(DirectionalLight light : this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLightMap().getLights()) {
 			this.rootNode.addLight(light);
-			DirectionalLightShadowRenderer directionalLightShadowRenderer = new DirectionalLightShadowRenderer(getAssetManager(), 512, 3);
+			DirectionalLightShadowRenderer directionalLightShadowRenderer = new DirectionalLightShadowRenderer(getAssetManager(), 2048, 3);
 	        directionalLightShadowRenderer.setLight(light);
-	        directionalLightShadowRenderer.setShadowIntensity(0.5f);
+	        directionalLightShadowRenderer.setShadowIntensity(0.3f);
 	        this.viewPort.addProcessor(directionalLightShadowRenderer);
 		}
 		

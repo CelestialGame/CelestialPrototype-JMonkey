@@ -6,10 +6,6 @@ package com.cubes;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
@@ -17,31 +13,13 @@ import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import com.jme3.terrain.heightmap.ImageBasedHeightMap;
 import com.jme3.texture.Texture;
-import com.celestial.Blocks.BlocksEnum;
 import com.cubes.network.*;
 
 /**
  *
  * @author Carl
- * Modified by Kevin Thorne
  */
 public class BlockTerrainControl extends AbstractControl implements BitSerializable{
-	
-	 /** MODIFICATION **/
-	public abstract class Chunk {
-		protected BlockTerrainControl blockTerrain;
-		protected Vector3Int blockLocation;
-		protected ConcurrentHashMap<Vector3Int, Object> blocks = new ConcurrentHashMap<Vector3Int, Object>();
-		protected boolean loaded;
-		protected boolean generated;
-		public abstract Vector3Int getLocation();
-		public abstract ConcurrentHashMap<Vector3Int, Object> getBlockMap();
-		public abstract void generate();
-		public abstract void unload();
-		public abstract void load();
-		public abstract boolean isLoaded();
-		public abstract boolean isGenerated();
-	}
 
     public BlockTerrainControl(CubesSettings settings, Vector3Int chunksCount){
         this.settings = settings;
@@ -49,8 +27,6 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
     }
     private CubesSettings settings;
     private BlockChunkControl[][][] chunks;
-    /** MODIFICATION **/
-    private List<Chunk> malleableChunks = new ArrayList<Chunk>();
     private ArrayList<BlockChunkListener> chunkListeners = new ArrayList<BlockChunkListener>();
     
     private void initializeChunks(Vector3Int chunksCount){
@@ -63,15 +39,6 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
                 }
             }
         }
-    }
-    
-    /** MODIFICATION **/
-    public void addChunk(Chunk chunk) {
-    	malleableChunks.add(chunk);
-    }
-    
-    public List<Chunk> getMalleableChunks() {
-    	return malleableChunks;
     }
 
     @Override

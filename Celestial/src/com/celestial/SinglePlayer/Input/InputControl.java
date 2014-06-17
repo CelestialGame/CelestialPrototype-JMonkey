@@ -127,7 +127,7 @@ public class InputControl {
 								if(item != null) {
 									parent.getInventoryManager().dropItem(item, blockAbsLocation, parent.player.getPlanet());
 								}
-								parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).removeBlock(blockLocation); //Remove the Block
+								chunk.removeBlock(blockLocation); //Remove the Block
 								PlayerEvents.PlayerDeleteBlockEvent(parent.player, parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0), blockAbsLocation, blockLocation);
 							}
 	
@@ -144,7 +144,7 @@ public class InputControl {
 									if(item != null) {
 										parent.getInventoryManager().dropItem(item, blockAbsLocation, parent.player.getPlanet());
 									}
-									parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).removeBlock(blockLocation); //Remove the Block
+									chunk.removeBlock(blockLocation); //Remove the Block
 								}
 							}
 						}
@@ -188,7 +188,7 @@ public class InputControl {
 						BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 						if(chunk != null && blockLocation != null && parent.getInventoryManager().getSelectedHotSlot().getItem() != null) {
 							PlayerEvents.PlayerAddBlockEvent(parent.player, parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0), blockAbsLocation, blockLocation);
-							parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).addBlock(blockLocation,parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock().getBClass()); //Add the Block
+							chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock().getBClass()); //Add the Block
 							if(chunk.getBlock(blockLocation) != null)
 								parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
 						}
@@ -201,7 +201,7 @@ public class InputControl {
 							if(chunk != null && blockLocation != null && parent.getInventoryManager().getSelectedHotSlot().getItem() != null) {
 								chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock().getBClass()); //Add the Block
 								PlayerEvents.PlayerAddBlockEvent(parent.player, parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0), blockAbsLocation, blockLocation);
-								parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).addBlock(blockLocation,parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock().getBClass()); //Add the Block
+								chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock().getBClass()); //Add the Block
 								if(chunk.getBlock(blockLocation) != null)
 									parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
 							}
