@@ -28,9 +28,9 @@ public class Picker {
 	}
 	public static Object[] getCurrentPointedBlock(boolean getNeighborLocation, CelestialPortal parent, Camera cam){
 		Object[] values = new Object[3];
-		Node terrNode = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrainNode();
-		BlockTerrainControl terrcontrol = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
-		CollisionResults results = getRayCastingResults(terrNode, parent, cam);
+		Node terrainNode = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrainNode();
+		BlockTerrainControl terrainControl = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
+		CollisionResults results = getRayCastingResults(terrainNode, parent, cam);
 		if(results.size() > 0)
 		{
 
@@ -54,7 +54,7 @@ public class Picker {
 			
 			Vector3f relContactPoint = rotatedContactPoint.subtract(p.getOriginalTerrainTranslation().subtract(p.getOriginalPlanetTranslation()));
 
-			Vector3Int blockPoint = BlockNavigator.getPointedBlockLocation(terrcontrol, relContactPoint, getNeighborLocation);
+			Vector3Int blockPoint = BlockNavigator.getPointedBlockLocation(terrainControl, relContactPoint, getNeighborLocation);
 			if(blockPoint == null)
 				return null;
 			values[1] = blockPoint;

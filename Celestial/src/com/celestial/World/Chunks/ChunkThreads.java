@@ -42,7 +42,7 @@ public class ChunkThreads {
 		}
 		
 	}
-	public static class GenerateChunkThread {
+	public static class GenerateChunkThread extends Thread{
 		BlockTerrainControl blockTerrain;
 		int x;
 		int y;
@@ -56,7 +56,7 @@ public class ChunkThreads {
 			this.preChunk = preChunk;
 		}
 		
-		public void generateChunks() {
+		public void run() {
 			int chunkSize = Planet.CHUNK_SIZE;
 
 			for(int i=0;i<chunkSize;i++)
@@ -133,6 +133,42 @@ public class ChunkThreads {
 				return;
 			chunk.setBlock(new Vector3Int(x, y, z), BlockType.getBClass());
 
+		}
+	}
+	
+	public static class LoadChunkThread extends Thread{
+		BlockTerrainControl terrainControl;
+		int x;
+		int y;
+		int z;
+		public LoadChunkThread(BlockTerrainControl terrainControl, int locx, int locy, int locz) {
+			this.terrainControl = terrainControl;
+			x = locx;
+			y = locy;
+			z = locz;
+		}
+		
+		public void run() 
+		{
+			this.terrainControl.getChunks()[x][y][z].loadChunk();
+		}
+	}
+	
+	public static class UnLoadChunkThread extends Thread{
+		BlockTerrainControl terrainControl;
+		int x;
+		int y;
+		int z;
+		public UnLoadChunkThread(BlockTerrainControl terrainControl, int locx, int locy, int locz) {
+			this.terrainControl = terrainControl;
+			x = locx;
+			y = locy;
+			z = locz;
+		}
+		
+		public void run() 
+		{
+			this.terrainControl.getChunks()[x][y][z].unloadChunk();
 		}
 	}
 

@@ -31,7 +31,7 @@ public class BlockChunkManager {
 			this.planet = planet;
 		}
 		public void generate() {
-			new ChunkThreads.GenerateChunkThread(terrainControl, (x*Planet.CHUNK_SIZE), (y*Planet.CHUNK_SIZE), (z*Planet.CHUNK_SIZE), this).generateChunks();
+			new ChunkThreads.GenerateChunkThread(terrainControl, (x*Planet.CHUNK_SIZE), (y*Planet.CHUNK_SIZE), (z*Planet.CHUNK_SIZE), this).start();
 		}
 		public Vector3Int getLocation() {
 			return new Vector3Int(x,y,z);

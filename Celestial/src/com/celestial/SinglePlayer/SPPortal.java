@@ -55,11 +55,9 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
+import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.shape.Box;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
-import com.jme3.shadow.EdgeFilteringMode;
-import com.jme3.shadow.PointLightShadowFilter;
-import com.jme3.shadow.PointLightShadowRenderer;
 import com.jme3.system.AppSettings;
 import com.jme3.system.Timer;
 import com.jme3.util.SkyFactory;
@@ -80,7 +78,7 @@ public class SPPortal extends CelestialPortal{
 	private Geometry blockHighlightGeom;
 	private Material blockHighlightMat;
 	private CameraControl cameraControl;
-	
+
 	public static SPPortal self;
 
 	public SPPortal(
@@ -150,10 +148,10 @@ public class SPPortal extends CelestialPortal{
 
 
 		this.inputControl = new InputControl(this, this.cam, this.inputManager);
-		
+
 		this.cameraControl = new CameraControl(this, this.cam, this.inputManager);
 		this.cameraControl.init();
-		
+
 
 		Spatial sky = SkyFactory.createSky(this.assetManager, "assets/textures/nightsky.jpg", true);
 		sky.rotate(270*FastMath.DEG_TO_RAD,0,0);
@@ -179,20 +177,22 @@ public class SPPortal extends CelestialPortal{
 		this.bulletAppState.getPhysicsSpace().addCollisionListener(new Listener(this));
 		//this.bulletAppState.setDebugEnabled(true);
 		//initAudio();
-		
+
 		/* BLOCK HIGHLIGHT */		
-		blockHighlight = new Box(1.5f,1.5f,1.5f);
+		blockHighlight = new Box(1.51f,1.51f,1.51f);
+		blockHighlight.setLineWidth(5f);
 		blockHighlightGeom = new Geometry("blockHighlight", this.blockHighlight);
 		blockHighlightMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-
-		blockHighlightMat.setColor("Color", new ColorRGBA(0f, 0f, 0f, 0.25f));
+		blockHighlightMat.getAdditionalRenderState().setWireframe(true);
+		
+		blockHighlightMat.setColor("Color", new ColorRGBA(0f, 0f, 0f, 1f));
 		blockHighlightGeom.setMaterial(blockHighlightMat);
 
 		blockHighlightMat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
 		blockHighlightGeom.setQueueBucket(Bucket.Transparent);
 
 	}
-	
+
 	public void stopGame() {
 		this.app.stop();
 	}
@@ -206,15 +206,15 @@ public class SPPortal extends CelestialPortal{
 		updateGravity(tpf);
 
 		updatePlanets();
-		
+
 		if(player.getPlanet() != null)
 			this.renderBlockBorders();
-		
+
 		this.invmanager.updateAll();
 	}
 
 	private void updatePlanets() {
-	
+
 		if(this.timer.getTimeInSeconds()-this.lastRotation > 0)
 		{
 			for(Sector s : this.galaxy.getSectors())
@@ -290,29 +290,29 @@ public class SPPortal extends CelestialPortal{
 			this.player.setGravity(zeroGravity);
 		}
 		ListIterator<InventoryDrop> it = invmanager.getDropItems().listIterator();    
-        if(it.hasNext()) {  
-            InventoryDrop item = it.next();
-            if(item.getPlanet() != null) {
-    			Planet planet = item.getPlanet();
-    			int FaceOn = item.getCurrentFaceOfPlanet(planet);
-    			if(FaceOn == Planet.TOP) {
-    				item.getCollisionBox().setGravity(item.getPlanet().getUpVector().mult(-15));
-    			} else if (FaceOn == Planet.BOTTOM) {
-    				item.getCollisionBox().setGravity(item.getPlanet().getUpVector().mult(15));
-    			} else if (FaceOn == Planet.NORTH) {
-    				item.getCollisionBox().setGravity(item.getPlanet().getForwardVector().mult(15));
-    			} else if (FaceOn == Planet.SOUTH) {
-    				item.getCollisionBox().setGravity(item.getPlanet().getForwardVector().mult(-15));
-    			} else if (FaceOn == Planet.EAST) {
-    				item.getCollisionBox().setGravity(item.getPlanet().getLeftVector().mult(-15));
-    			} else if (FaceOn == Planet.WEST) {
-    				item.getCollisionBox().setGravity(item.getPlanet().getLeftVector().mult(15));
-    			}
-    			//item.setLocation(item.getLocation().add(item.getWalkDirection()));
-    		} else {
-    			item.getCollisionBox().setGravity(zeroGravity);
-    		}
-        }  
+		if(it.hasNext()) {  
+			InventoryDrop item = it.next();
+			if(item.getPlanet() != null) {
+				Planet planet = item.getPlanet();
+				int FaceOn = item.getCurrentFaceOfPlanet(planet);
+				if(FaceOn == Planet.TOP) {
+					item.getCollisionBox().setGravity(item.getPlanet().getUpVector().mult(-15));
+				} else if (FaceOn == Planet.BOTTOM) {
+					item.getCollisionBox().setGravity(item.getPlanet().getUpVector().mult(15));
+				} else if (FaceOn == Planet.NORTH) {
+					item.getCollisionBox().setGravity(item.getPlanet().getForwardVector().mult(15));
+				} else if (FaceOn == Planet.SOUTH) {
+					item.getCollisionBox().setGravity(item.getPlanet().getForwardVector().mult(-15));
+				} else if (FaceOn == Planet.EAST) {
+					item.getCollisionBox().setGravity(item.getPlanet().getLeftVector().mult(-15));
+				} else if (FaceOn == Planet.WEST) {
+					item.getCollisionBox().setGravity(item.getPlanet().getLeftVector().mult(15));
+				}
+				//item.setLocation(item.getLocation().add(item.getWalkDirection()));
+			} else {
+				item.getCollisionBox().setGravity(zeroGravity);
+			}
+		}  
 	}
 
 	private void initLighting() {	  
@@ -323,11 +323,11 @@ public class SPPortal extends CelestialPortal{
 		for(DirectionalLight light : this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLightMap().getLights()) {
 			this.rootNode.addLight(light);
 			DirectionalLightShadowRenderer directionalLightShadowRenderer = new DirectionalLightShadowRenderer(getAssetManager(), 2048, 3);
-	        directionalLightShadowRenderer.setLight(light);
-	        directionalLightShadowRenderer.setShadowIntensity(0.3f);
-	        this.viewPort.addProcessor(directionalLightShadowRenderer);
+			directionalLightShadowRenderer.setLight(light);
+			directionalLightShadowRenderer.setShadowIntensity(0.3f);
+			this.viewPort.addProcessor(directionalLightShadowRenderer);
 		}
-		
+
 		this.fpp = new FilterPostProcessor(this.assetManager);
 		BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
 		this.fpp.addFilter(bloom);
@@ -355,12 +355,21 @@ public class SPPortal extends CelestialPortal{
 		Object[] values = Picker.getCurrentPointedBlock(false, this, cam);
 		if(values != null)
 		{
+			if(!(values[2] instanceof BlockChunkControl))
+			{
+				return;
+			}
 			BlockChunkControl block = (BlockChunkControl) values[2];
 			Vector3Int blockLocation = (Vector3Int) values[1];
+			if(player.getPlanet().getTerrControl().getBlock(blockLocation) == null)
+			{
+				this.hideHighlight();
+				return;
+			}
 			Vector3f blockLocationAbs = (Vector3f) values[0];
 			float dist = blockLocationAbs.distance(player.getLocation());
 			if(block != null && (dist <= 15F || !this.bulletAppState.isEnabled())) {
-				this.blockHighlightGeom.setCullHint(CullHint.Never);
+				this.showHighlight();
 				this.blockHighlightGeom.setLocalTranslation(blockLocation.getX()*3+1.5f, blockLocation.getY()*3+1.5f, blockLocation.getZ()*3+1.5f);
 				player.getPlanet().getTerrainNode().attachChild(this.blockHighlightGeom);
 			}
@@ -371,7 +380,7 @@ public class SPPortal extends CelestialPortal{
 		}
 		else
 		{	
-			this.hideHighlight();
+			return;
 		}
 	}
 
@@ -448,12 +457,12 @@ public class SPPortal extends CelestialPortal{
 	public float getCamHeight() {
 		return camHeight;
 	}
-	
+
 	@Override
 	public InputManager getInputManager() {
 		return this.inputManager;
 	}
-	
+
 	public Object[] getNiftyUtils() {
 		return new Object[]{
 				this,
@@ -462,24 +471,30 @@ public class SPPortal extends CelestialPortal{
 				this.getParent().getAudioRenderer(),
 				this.viewPort,
 				this.flyCam
-				};
+		};
 	}
-	
+
 	public CameraControl getCameraControl() {
 		return this.cameraControl;
 	}
 
 	@Override
 	public void hideHighlight() {
-		System.out.println("Hiding Highlight.");
-		this.blockHighlightGeom.setCullHint(CullHint.Always);
-		this.blockHighlightGeom.setLocalTranslation(new Vector3f(0,0,0));
-		this.blockHighlightGeom.removeFromParent();
+		if(this.blockHighlightGeom.getParent() != null)
+		{
+			System.out.println("Hiding Highlight.");
+			this.blockHighlightGeom.setCullHint(CullHint.Always);
+			this.blockHighlightGeom.setLocalTranslation(new Vector3f(0,0,0));
+			this.blockHighlightGeom.removeFromParent();
+		}
 	}
-	
+
 	public void showHighlight() {
-		System.out.println("Showing Highlight.");
-		this.blockHighlightGeom.setCullHint(CullHint.Never);
+		if(this.blockHighlightGeom.getParent() == null)
+		{
+			System.out.println("Showing Highlight.");
+			this.blockHighlightGeom.setCullHint(CullHint.Never);
+		}
 	}
 
 }
