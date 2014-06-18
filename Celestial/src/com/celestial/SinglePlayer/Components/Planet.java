@@ -278,8 +278,12 @@ public class Planet implements BlockChunkListener {
 
 	public float getAtmosphereDiameter()
 	{
-		return this.atmospherebox.getXExtent()*2;
-		//return this.diameter*16*3*atmosphereSizeFactor;
+		try {
+			return this.atmospherebox.getXExtent()*2;
+		} catch (NullPointerException e){
+			//The silly planet may not have an atmosphere, so calculate one
+			return this.diameter*16*3*atmosphereSizeFactor;
+		}
 	}
 	
 	public void updateChunks(Vector3f camLocation) {
