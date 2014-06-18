@@ -163,7 +163,7 @@ public class Planet implements BlockChunkListener {
 
 		terrcontrol.setBlockChunkManager(new BlockChunkManager(terrcontrol, this));
 		terrcontrol.getBlockChunkManager().preGenerateChunks();
-
+		
 		/*//Post-terrain generation here
 		for(int i=0; i<diameter*2; i++)
 		{    
@@ -175,8 +175,8 @@ public class Planet implements BlockChunkListener {
 				makeTreeAt(new Vector3Int(x1, y1, z1), terrcontrol);
 			}
 		}*/
-		terrainNode.addControl(terrcontrol);
 
+		terrainNode.addControl(terrcontrol);
 		/* LIGHTING */
 		planetNode.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
 
@@ -223,7 +223,8 @@ public class Planet implements BlockChunkListener {
 		c8.move(((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*3, ((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*-3, ((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*3);
 		this.cornerList.add(c8);
 		
-		/* CORNER BEDROCK */
+		
+		/*// CORNER BEDROCK
 		Vector3Int c1Int = Vector3Int.convert3f(c1.getWorldTranslation());
 		terrcontrol.setBlock(new Vector3Int(c1Int.getX(), c1Int.getY(), c1Int.getZ()), BlocksEnum.SUBSTRATUS.getBClass());
 		
@@ -249,7 +250,7 @@ public class Planet implements BlockChunkListener {
 		terrcontrol.setBlock(new Vector3Int(c8Int.getX(), c8Int.getY(), c8Int.getZ()), BlocksEnum.SUBSTRATUS.getBClass());
 		
 		System.out.println(c1.getWorldTranslation());
-		System.out.println(c1Int.toString());
+		System.out.println(c1Int.toString());/*
 		
 		/* ATMOSPHERE */
 		if(this.type.hasAtmosphere()) {

@@ -18,20 +18,21 @@ import com.jme3.math.Vector3f;
 public class BlockChunkManager {
 
 	public static class PreGeneratedChunk {
-		private BlockTerrainControl bTC;
+		private BlockTerrainControl terrainControl;
 		private int x;
 		private int y;
 		private int z;
 		private Planet planet;
-		public PreGeneratedChunk(BlockTerrainControl terr, int locx, int locy, int locz, Planet planet) {
-			bTC = terr;
+		public PreGeneratedChunk(BlockTerrainControl terrainControl, int locx, int locy, int locz, Planet planet) {
+			this.terrainControl = terrainControl;
 			x = locx;
 			y = locy;
 			z = locz;
 			this.planet = planet;
 		}
 		public void generate() {
-			new ChunkThreads.GenerateChunkThread(bTC, (x*Planet.CHUNK_SIZE), (y*Planet.CHUNK_SIZE), (z*Planet.CHUNK_SIZE), this).run();
+			System.out.println(getLocation());
+			new ChunkThreads.GenerateChunkThread(terrainControl, (x*Planet.CHUNK_SIZE), (y*Planet.CHUNK_SIZE), (z*Planet.CHUNK_SIZE), this).generateChunks();
 		}
 		public Vector3Int getLocation() {
 			return new Vector3Int(x,y,z);
@@ -43,6 +44,8 @@ public class BlockChunkManager {
 
 
 
+	int debug1 = 0;
+	int debug2 = 0;
 	Planet planet;
 	BlockTerrainControl terrControl;
 	private ExecutorService preGeneratedChunkService;
@@ -53,6 +56,7 @@ public class BlockChunkManager {
 	public BlockChunkManager(BlockTerrainControl terrControl, Planet planet) {
 		this.planet = planet;
 		this.terrControl = terrControl;
+		debug2 = planet.getDiameter() * planet.getDiameter() * planet.getDiameter();
 	}
 
 	public void preGenerateChunks() 
@@ -93,11 +97,12 @@ public class BlockChunkManager {
 			while (iterator.hasNext()) {
 				PreGeneratedChunk preGenChunk = (PreGeneratedChunk) iterator.next();
 				float distance = camLocation.distance(Vector3Int.convert3Int(preGenChunk.getLocation()).add(planetLocation));
-				if(distance < Planet.VIEW_DISTANCE) {
-					System.out.println("Generating preGenChunk at "+preGenChunk.getLocation());
+				//if(distance < Planet.VIEW_DISTANCE) {
+				debug1++;
+				System.out.println("Generating Chunk "+debug1+" of "+debug2);
 					preGenChunk.generate();
 					iterator.remove();
-				}
+				//}
 			}
 		}
 		/*for (int x = 0; x < this.terrControl.getChunks().length; x++)

@@ -7,6 +7,11 @@ package com.cubes;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.celestial.World.BlockChunkManager;
+import com.cubes.network.BitInputStream;
+import com.cubes.network.BitOutputStream;
+import com.cubes.network.BitSerializable;
+import com.cubes.network.CubesSerializer;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
@@ -14,13 +19,10 @@ import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import com.jme3.terrain.heightmap.ImageBasedHeightMap;
 import com.jme3.texture.Texture;
-import com.celestial.World.BlockChunkManager;
-import com.cubes.network.*;
 
 /**
  *
  * @author Carl
- * Modified by Kevin Thorne
  */
 public class BlockTerrainControl extends AbstractControl implements BitSerializable{
 
@@ -30,9 +32,16 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
     }
     private CubesSettings settings;
     private BlockChunkControl[][][] chunks;
-    private BlockChunkManager blockChunkManager;
     private ArrayList<BlockChunkListener> chunkListeners = new ArrayList<BlockChunkListener>();
+	private BlockChunkManager blockChunkManager;
     
+    public void setBlockChunkManager(BlockChunkManager bcm) {
+    	this.blockChunkManager = bcm;
+    }
+    public BlockChunkManager getBlockChunkManager() {
+    	return blockChunkManager;
+    }
+
     private void initializeChunks(Vector3Int chunksCount){
         chunks = new BlockChunkControl[chunksCount.getX()][chunksCount.getY()][chunksCount.getZ()];
         for(int x=0;x<chunks.length;x++){
@@ -43,13 +52,6 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
                 }
             }
         }
-    }
-    
-    public void setBlockChunkManager(BlockChunkManager bcm) {
-    	this.blockChunkManager = bcm;
-    }
-    public BlockChunkManager getBlockChunkManager() {
-    	return blockChunkManager;
     }
 
     @Override

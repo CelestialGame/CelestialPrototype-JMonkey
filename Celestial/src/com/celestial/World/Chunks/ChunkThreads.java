@@ -33,7 +33,8 @@ public class ChunkThreads {
 				{
 					for(int k=0; k<diameter; k++) //z
 					{
-						this.preGenChunkList.add(new PreGeneratedChunk(terrControl, (j*Planet.CHUNK_SIZE), (i*Planet.CHUNK_SIZE), (k*Planet.CHUNK_SIZE), planet));
+						PreGeneratedChunk chunk = new PreGeneratedChunk(terrControl, j, i, k, planet);
+						this.preGenChunkList.add(chunk);
 					}                
 				}
 			}
@@ -41,7 +42,7 @@ public class ChunkThreads {
 		}
 		
 	}
-	public static class GenerateChunkThread extends Thread {
+	public static class GenerateChunkThread {
 		BlockTerrainControl blockTerrain;
 		int x;
 		int y;
@@ -53,28 +54,29 @@ public class ChunkThreads {
 			y = locy;
 			z = locz;
 			this.preChunk = preChunk;
+			System.out.println("x = "+x+"\ny = "+y+"\nz = "+z);
 		}
 		
-		public void run() {
-			int diameter = Planet.CHUNK_SIZE;
+		public void generateChunks() {
+			int chunkSize = Planet.CHUNK_SIZE;
 
-			for(int i=0;i<diameter;i++)
+			for(int i=0;i<chunkSize;i++)
 			{
-				for(int j=0;j<diameter;j++)
+				for(int j=0;j<chunkSize;j++)
 				{
-					for(int k=0;k<diameter;k++)
+					for(int k=0;k<chunkSize;k++)
 					{
-						if(j==diameter-1 || j == 0)
+						if(j==chunkSize-1 || j == 0)
 						{
 							if(preChunk.getPlanet().getType().equals(planetType.HABITABLE))
 								makeCubeAt(x+i,y+j,z+k, BlocksEnum.GRASS, blockTerrain);
 						}
-						else if(k==diameter-1 || k==0)
+						else if(k==chunkSize-1 || k==0)
 						{
 							if(preChunk.getPlanet().getType().equals(planetType.HABITABLE))
 								makeCubeAt(x+i,y+j,z+k, BlocksEnum.GRASS, blockTerrain);
 						}
-						else if(i==diameter-1 || i==0)
+						else if(i==chunkSize-1 || i==0)
 						{
 							if(preChunk.getPlanet().getType().equals(planetType.HABITABLE))
 								makeCubeAt(x+i,y+j,z+k, BlocksEnum.GRASS, blockTerrain);
@@ -119,9 +121,6 @@ public class ChunkThreads {
 					}
 				}
 			}
-			try {
-				this.join();
-			} catch (InterruptedException e) {;}
 		}
 		public void makeCubeAt(double dx, double dy, double dz, BlocksEnum BlockType, BlockTerrainControl chunk) {
 			//make ground
@@ -130,7 +129,7 @@ public class ChunkThreads {
 			int x = (int) dx;
 			int y = (int) dy;
 			int z = (int) dz;
-
+			
 			if(BlockType.getBClass() == null)
 				return;
 			chunk.setBlock(new Vector3Int(x, y, z), BlockType.getBClass());
