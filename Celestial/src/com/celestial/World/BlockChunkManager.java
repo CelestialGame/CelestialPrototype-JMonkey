@@ -31,7 +31,6 @@ public class BlockChunkManager {
 			this.planet = planet;
 		}
 		public void generate() {
-			System.out.println(getLocation());
 			new ChunkThreads.GenerateChunkThread(terrainControl, (x*Planet.CHUNK_SIZE), (y*Planet.CHUNK_SIZE), (z*Planet.CHUNK_SIZE), this).generateChunks();
 		}
 		public Vector3Int getLocation() {
@@ -44,8 +43,6 @@ public class BlockChunkManager {
 
 
 
-	int debug1 = 0;
-	int debug2 = 0;
 	Planet planet;
 	BlockTerrainControl terrControl;
 	private ExecutorService preGeneratedChunkService;
@@ -56,7 +53,6 @@ public class BlockChunkManager {
 	public BlockChunkManager(BlockTerrainControl terrControl, Planet planet) {
 		this.planet = planet;
 		this.terrControl = terrControl;
-		debug2 = planet.getDiameter() * planet.getDiameter() * planet.getDiameter();
 	}
 
 	public void preGenerateChunks() 
@@ -97,26 +93,22 @@ public class BlockChunkManager {
 			while (iterator.hasNext()) {
 				PreGeneratedChunk preGenChunk = (PreGeneratedChunk) iterator.next();
 				float distance = camLocation.distance(Vector3Int.convert3Int(preGenChunk.getLocation()).add(planetLocation));
-				//if(distance < Planet.VIEW_DISTANCE) {
-				debug1++;
-				System.out.println("Generating Chunk "+debug1+" of "+debug2);
+				if(distance < Planet.VIEW_DISTANCE) {
 					preGenChunk.generate();
 					iterator.remove();
-				//}
+				}
 			}
 		}
-		/*for (int x = 0; x < this.terrControl.getChunks().length; x++)
-			for (int y = 0; y < this.terrControl.getChunks()[x].length; y++)
-				for(int z = 0; z < this.terrControl.getChunks()[x][y].length; z++) {
+		for (int x = 0; x < this.planet.getDiameter(); x++)
+			for (int y = 0; y < this.planet.getDiameter(); y++)
+				for(int z = 0; z < this.planet.getDiameter(); z++) {
 					float distance = camLocation.distance(new Vector3f(x,y,z).add(planetLocation));
 					if(distance > Planet.VIEW_DISTANCE) {
 						this.terrControl.getChunks()[x][y][z].unloadChunk();
-						System.out.println("Unloading chunk "+x+" "+y+" "+z);
 					} else {
 						this.terrControl.getChunks()[x][y][z].loadChunk();
-						System.out.println("Loading chunk "+x+" "+y+" "+z);
 					}
-				}*/
+				}
 	}
 
 }

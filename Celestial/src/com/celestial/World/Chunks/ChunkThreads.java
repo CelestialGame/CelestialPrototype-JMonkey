@@ -54,7 +54,6 @@ public class ChunkThreads {
 			y = locy;
 			z = locz;
 			this.preChunk = preChunk;
-			System.out.println("x = "+x+"\ny = "+y+"\nz = "+z);
 		}
 		
 		public void generateChunks() {

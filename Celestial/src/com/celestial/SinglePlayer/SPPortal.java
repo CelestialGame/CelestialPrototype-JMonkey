@@ -471,12 +471,14 @@ public class SPPortal extends CelestialPortal{
 
 	@Override
 	public void hideHighlight() {
+		System.out.println("Hiding Highlight.");
 		this.blockHighlightGeom.setCullHint(CullHint.Always);
 		this.blockHighlightGeom.setLocalTranslation(new Vector3f(0,0,0));
 		this.blockHighlightGeom.removeFromParent();
 	}
 	
 	public void showHighlight() {
+		System.out.println("Showing Highlight.");
 		this.blockHighlightGeom.setCullHint(CullHint.Never);
 	}
 
