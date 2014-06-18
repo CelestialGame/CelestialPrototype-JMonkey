@@ -235,7 +235,7 @@ public class InputControl {
 			}
 			else if(binding.equals("ESC"))
 			{
-				parent.app.stop();
+				parent.stopGame();
 			}
 			else if(binding.equals("SeeStats") && !keyPressed) {
 				if(statson) {

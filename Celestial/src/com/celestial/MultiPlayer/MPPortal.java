@@ -29,6 +29,8 @@ public class MPPortal extends CelestialPortal {
 
 	@Override
 	public void startGame() {}
+	@Override
+	public void stopGame() {}
 
 	@Override
 	public BetterCharacterControl getPlayer() {

@@ -14,6 +14,7 @@ import java.util.Random;
 
 import com.celestial.CelestialPortal;
 import com.celestial.Blocks.BlocksEnum;
+import com.celestial.World.BlockChunkManager;
 import com.cubes.BlockChunkControl;
 import com.cubes.BlockChunkListener;
 import com.cubes.BlockTerrainControl;
@@ -65,10 +66,9 @@ public class Planet implements BlockChunkListener {
  	}
 	public planetType type;
 	
-	private int CHUNK_SIZE = 16;
-	private int VIEW_DISTANCE = 128;
+	public static int CHUNK_SIZE = 16;
+	public static int VIEW_DISTANCE = 128;
 	
-	private List<PreGeneratedChunk> preGenChunks = new ArrayList<PreGeneratedChunk>();
 	
 	private Star star;
 	private int diameter;
@@ -94,24 +94,7 @@ public class Planet implements BlockChunkListener {
 	private Vector3f previousPlanetTranslation;
 	private Quaternion previousPlanetRotation;
 	
-	public class PreGeneratedChunk {
-		private BlockTerrainControl bTC;
-		private int x;
-		private int y;
-		private int z;
-		public PreGeneratedChunk(BlockTerrainControl terr, int locx, int locy, int locz) {
-			bTC = terr;
-			x = locx;
-			y = locy;
-			z = locz;
-		}
-		public void generate() {
-			makeChunk((x*CHUNK_SIZE), (y*CHUNK_SIZE), (z*CHUNK_SIZE), bTC);
-		}
-		public Vector3Int getLocation() {
-			return new Vector3Int(x,y,z);
-		}
-	}
+	
 
 	/**
 	 * Create a new Planet
@@ -180,16 +163,9 @@ public class Planet implements BlockChunkListener {
 		terrcontrol = new BlockTerrainControl(portal.csettings, new Vector3Int(diameter, diameter, diameter));
 		terrcontrol.addChunkListener(this);
 
-		for(int i=0; i<diameter; i++) //y
-		{    
-			for(int j=0; j<diameter; j++) //x
-			{
-				for(int k=0; k<diameter; k++) //z
-				{
-					this.preGenChunks.add(new PreGeneratedChunk(terrcontrol, (j*CHUNK_SIZE), (i*CHUNK_SIZE), (k*CHUNK_SIZE)));
-				}                
-			}
-		}
+		terrcontrol.setBlockChunkManager(new BlockChunkManager(terrcontrol, this));
+		terrcontrol.getBlockChunkManager().preGenerateChunks();
+		terrcontrol.getBlockChunkManager().start();
 
 		/*//Post-terrain generation here
 		for(int i=0; i<diameter*2; i++)
@@ -252,28 +228,28 @@ public class Planet implements BlockChunkListener {
 		
 		/* CORNER BEDROCK */
 		Vector3Int c1Int = Vector3Int.convert3f(c1.getWorldTranslation());
-		makeCubeAt(c1Int.getX(), c1Int.getY(), c1Int.getZ(), BlocksEnum.SUBSTRATUS, terrcontrol);
+		terrcontrol.setBlock(new Vector3Int(c1Int.getX(), c1Int.getY(), c1Int.getZ()), BlocksEnum.SUBSTRATUS.getBClass());
 		
 		Vector3Int c2Int = Vector3Int.convert3f(c2.getWorldTranslation());
-		makeCubeAt(c2Int.getX(), c2Int.getY(), c2Int.getZ(), BlocksEnum.SUBSTRATUS, terrcontrol);
+		terrcontrol.setBlock(new Vector3Int(c2Int.getX(), c2Int.getY(), c2Int.getZ()), BlocksEnum.SUBSTRATUS.getBClass());
 
 		Vector3Int c3Int = Vector3Int.convert3f(c3.getWorldTranslation());
-		makeCubeAt(c3Int.getX(), c3Int.getY(), c3Int.getZ(), BlocksEnum.SUBSTRATUS, terrcontrol);
+		terrcontrol.setBlock(new Vector3Int(c3Int.getX(), c3Int.getY(), c3Int.getZ()), BlocksEnum.SUBSTRATUS.getBClass());
 		
 		Vector3Int c4Int = Vector3Int.convert3f(c4.getWorldTranslation());
-		makeCubeAt(c4Int.getX(), c4Int.getY(), c4Int.getZ(), BlocksEnum.SUBSTRATUS, terrcontrol);
+		terrcontrol.setBlock(new Vector3Int(c4Int.getX(), c4Int.getY(), c4Int.getZ()), BlocksEnum.SUBSTRATUS.getBClass());
 
 		Vector3Int c5Int = Vector3Int.convert3f(c5.getWorldTranslation());
-		makeCubeAt(c5Int.getX(), c5Int.getY(), c5Int.getZ(), BlocksEnum.SUBSTRATUS, terrcontrol);
-
+		terrcontrol.setBlock(new Vector3Int(c5Int.getX(), c5Int.getY(), c5Int.getZ()), BlocksEnum.SUBSTRATUS.getBClass());
+		
 		Vector3Int c6Int = Vector3Int.convert3f(c6.getWorldTranslation());
-		makeCubeAt(c6Int.getX(), c6Int.getY(), c6Int.getZ(), BlocksEnum.SUBSTRATUS, terrcontrol);
+		terrcontrol.setBlock(new Vector3Int(c6Int.getX(), c6Int.getY(), c6Int.getZ()), BlocksEnum.SUBSTRATUS.getBClass());
 
 		Vector3Int c7Int = Vector3Int.convert3f(c7.getWorldTranslation());
-		makeCubeAt(c7Int.getX(), c7Int.getY(), c7Int.getZ(), BlocksEnum.SUBSTRATUS, terrcontrol);
+		terrcontrol.setBlock(new Vector3Int(c7Int.getX(), c7Int.getY(), c7Int.getZ()), BlocksEnum.SUBSTRATUS.getBClass());
 
 		Vector3Int c8Int = Vector3Int.convert3f(c8.getWorldTranslation());
-		makeCubeAt(c8Int.getX(), c8Int.getY(), c8Int.getZ(), BlocksEnum.SUBSTRATUS, terrcontrol);
+		terrcontrol.setBlock(new Vector3Int(c8Int.getX(), c8Int.getY(), c8Int.getZ()), BlocksEnum.SUBSTRATUS.getBClass());
 		
 		System.out.println(c1.getWorldTranslation());
 		System.out.println(c1Int.toString());
@@ -309,94 +285,7 @@ public class Planet implements BlockChunkListener {
 	}
 	
 	public void updateChunks(Vector3f camLocation) {
-		if(!this.preGenChunks.isEmpty()) {
-			Iterator iterator = this.preGenChunks.iterator();
-			while (iterator.hasNext()) {
-				PreGeneratedChunk preGenChunk = (PreGeneratedChunk) iterator.next();
-				float distance = camLocation.distance(Vector3Int.convert3Int(preGenChunk.getLocation()).add(this.planetNode.getLocalTranslation()));
-	    		if(distance < VIEW_DISTANCE) {
-	    			preGenChunk.generate();
-	    			iterator.remove();
-	    		}
-			}
-		}
-		for (int x = 0; x < this.terrcontrol.getChunks().length; x++)
-    	    for (int y = 0; y < this.terrcontrol.getChunks()[0].length; y++)
-    	    	for(int z = 0; z < this.terrcontrol.getChunks()[0][0].length; z++) {
-    	    		float distance = camLocation.distance(new Vector3f(x,y,z).add(this.planetNode.getLocalTranslation()));
-    	    		if(distance > VIEW_DISTANCE) {
-    	    			this.terrcontrol.getChunks()[x][y][z].unloadChunk();
-    	    		} else {
-    	    			this.terrcontrol.getChunks()[x][y][z].loadChunk();
-    	    		}
-    	    	}
-	}
-	
-	public void makeChunk(int locx, int locy, int locz, BlockTerrainControl blockTerrain)
-	{
-		int diameter = CHUNK_SIZE;
-
-		for(int i=0;i<diameter;i++)
-		{
-			for(int j=0;j<diameter;j++)
-			{
-				for(int k=0;k<diameter;k++)
-				{
-					if(j==diameter-1 || j == 0)
-					{
-						if(this.type.equals(planetType.HABITABLE))
-							makeCubeAt(locx+i,locy+j,locz+k, BlocksEnum.GRASS, blockTerrain);
-					}
-					else if(k==diameter-1 || k==0)
-					{
-						if(this.type.equals(planetType.HABITABLE))
-							makeCubeAt(locx+i,locy+j,locz+k, BlocksEnum.GRASS, blockTerrain);
-					}
-					else if(i==diameter-1 || i==0)
-					{
-						if(this.type.equals(planetType.HABITABLE))
-							makeCubeAt(locx+i,locy+j,locz+k, BlocksEnum.GRASS, blockTerrain);
-					}
-					else
-					{
-						if(this.type.hasAtmosphere()) {
-							Random randomGenerator = new Random();
-							for (int idx = 1; idx <= 10; ++idx){
-								int rInt = randomGenerator.nextInt(10);
-								if(rInt == 2 || rInt == 5) {
-									makeCubeAt(locx+i,locy+j,locz+k, BlocksEnum.DIRT, blockTerrain);
-								} else if (rInt == 3 || rInt == 6) {
-									makeCubeAt(locx+i,locy+j,locz+k, BlocksEnum.STONE, blockTerrain);
-								} else if (rInt == 4 || rInt == 7) {
-									makeCubeAt(locx+i,locy+j,locz+k, BlocksEnum.DIRT, blockTerrain);
-								}
-								else
-								{
-									makeCubeAt(locx+i,locy+j,locz+k, BlocksEnum.STONE, blockTerrain);
-								}
-							}
-						} else {
-							//TODO update with better detail
-							if(this.type.equals(planetType.INFERNO)) {
-								makeCubeAt(locx+i,locy+j,locz+k, BlocksEnum.DARKSTONE, blockTerrain);
-							}
-							else if(this.type.equals(planetType.FRIGID)) {
-								//Block_Ice && Block_BlackStone
-								Random randomGenerator = new Random();
-								for (int idx = 1; idx <= 2; ++idx){
-									int rInt = randomGenerator.nextInt(2);
-									if(rInt == 1){
-										makeCubeAt(locx+i,locy+j,locz+k, BlocksEnum.ICE, blockTerrain);
-									} else {
-										makeCubeAt(locx+i,locy+j,locz+k, BlocksEnum.DARKSTONE, blockTerrain);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+		terrcontrol.getBlockChunkManager().update(camLocation, this.planetNode.getLocalTranslation());
 	}
 
 	public void makeTreeAt(Vector3Int loc, BlockTerrainControl blockTerrain) {
@@ -449,20 +338,6 @@ public class Planet implements BlockChunkListener {
 		blockTerrain.setBlock(new Vector3Int(x+1, y+3, z-1), BlocksEnum.LEAVES.getBClass());
 		blockTerrain.setBlock(new Vector3Int(x-1, y+3, z+1), BlocksEnum.LEAVES.getBClass());
 		blockTerrain.setBlock(new Vector3Int(x, y+4, z), BlocksEnum.LEAVES.getBClass());
-
-	}
-
-	public void makeCubeAt(double dx, double dy, double dz, BlocksEnum BlockType, BlockTerrainControl chunk) {
-		//make ground
-		//To set a block, just specify the location and the block object
-		//(Existing blocks will be replaced)
-		int x = (int) dx;
-		int y = (int) dy;
-		int z = (int) dz;
-
-		if(BlockType.getBClass() == null)
-			return;
-		chunk.setBlock(new Vector3Int(x, y, z), BlockType.getBClass());
 
 	}
 	
@@ -769,5 +644,10 @@ public class Planet implements BlockChunkListener {
 
 	public Quaternion getCurrentPlanetRotation() {
 		return this.planetNode.getWorldRotation();
+	}
+	public planetType getType() {
+		if(this.type == null)
+			return null;
+		return this.type;
 	}
 }

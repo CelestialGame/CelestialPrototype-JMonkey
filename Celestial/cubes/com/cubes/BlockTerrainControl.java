@@ -6,6 +6,7 @@ package com.cubes;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
@@ -13,11 +14,13 @@ import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import com.jme3.terrain.heightmap.ImageBasedHeightMap;
 import com.jme3.texture.Texture;
+import com.celestial.World.BlockChunkManager;
 import com.cubes.network.*;
 
 /**
  *
  * @author Carl
+ * Modified by Kevin Thorne
  */
 public class BlockTerrainControl extends AbstractControl implements BitSerializable{
 
@@ -27,6 +30,7 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
     }
     private CubesSettings settings;
     private BlockChunkControl[][][] chunks;
+    private BlockChunkManager blockChunkManager;
     private ArrayList<BlockChunkListener> chunkListeners = new ArrayList<BlockChunkListener>();
     
     private void initializeChunks(Vector3Int chunksCount){
@@ -39,6 +43,13 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
                 }
             }
         }
+    }
+    
+    public void setBlockChunkManager(BlockChunkManager bcm) {
+    	this.blockChunkManager = bcm;
+    }
+    public BlockChunkManager getBlockChunkManager() {
+    	return blockChunkManager;
     }
 
     @Override

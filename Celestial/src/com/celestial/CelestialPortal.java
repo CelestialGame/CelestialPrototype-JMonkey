@@ -58,6 +58,7 @@ public abstract class CelestialPortal {
 	protected Gui gui;
 	
 	public abstract void startGame();
+	public abstract void stopGame();
 	
 	public abstract void simpleUpdate(float tpf);
 	

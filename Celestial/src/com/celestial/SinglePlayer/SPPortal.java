@@ -192,6 +192,16 @@ public class SPPortal extends CelestialPortal{
 		blockHighlightGeom.setQueueBucket(Bucket.Transparent);
 
 	}
+	
+	public void stopGame() {
+		for(Sector s : this.galaxy.getSectors())
+			for(SolarSystem sys : s.getSolarSystems())
+				for(Planet p : sys.getPlanets())
+				{
+					p.getTerrControl().getBlockChunkManager().interrupt();
+				}
+		this.app.stop();
+	}
 
 	@Override
 	public void simpleUpdate(float tpf) {
