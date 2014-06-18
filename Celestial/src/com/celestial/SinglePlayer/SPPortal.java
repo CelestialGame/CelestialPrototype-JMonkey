@@ -194,12 +194,6 @@ public class SPPortal extends CelestialPortal{
 	}
 	
 	public void stopGame() {
-		for(Sector s : this.galaxy.getSectors())
-			for(SolarSystem sys : s.getSolarSystems())
-				for(Planet p : sys.getPlanets())
-				{
-					p.getTerrControl().getBlockChunkManager().interrupt();
-				}
 		this.app.stop();
 	}
 
