@@ -1,7 +1,6 @@
 package com.celestial.SinglePlayer.Camera;
 
 import com.celestial.CelestialPortal;
-import com.celestial.SinglePlayer.Events.PlayerEvents;
 import com.jme3.input.InputManager;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
@@ -87,9 +86,6 @@ public class CameraControl {
 				this.parent.walkDirection.addLocal(camDir.negate());
 
 			//this.parent.walkDirection.y = 0;
-
-			if(this.parent.up || this.parent.down || this.parent.right || this.parent.left)
-				PlayerEvents.PlayerMoveEvent(parent.player, parent.player.getLocation().add(this.parent.walkDirection));
 
 			this.parent.player.setWalkDirection(this.parent.walkDirection);
 			this.cam.setLocation(new Vector3f(this.parent.player.getLocation().getX(), this.parent.player.getLocation().getY(), this.parent.player.getLocation().getZ()));

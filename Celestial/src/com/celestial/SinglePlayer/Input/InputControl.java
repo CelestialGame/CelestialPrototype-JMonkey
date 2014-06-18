@@ -10,7 +10,6 @@ import com.celestial.Blocks.BlocksEnum;
 import com.celestial.Gui.Gui;
 import com.celestial.SinglePlayer.SPPortal;
 import com.celestial.SinglePlayer.Components.SectorCoord;
-import com.celestial.SinglePlayer.Events.PlayerEvents;
 import com.celestial.SinglePlayer.Inventory.InventoryItem;
 import com.celestial.World.Picker;
 import com.cubes.Block;
@@ -217,7 +216,6 @@ public class InputControl {
 				parent.down = keyPressed;
 			} else if (binding.equals("Jump")) {
 				parent.player.jump();
-				PlayerEvents.PlayerJumpEvent(parent.player);
 			}
 			else if(binding.equals("NoClip") && !keyPressed) {
 				if(parent.getBulletAppState().isEnabled()) {
@@ -227,7 +225,6 @@ public class InputControl {
 				} else {
 					parent.getBulletAppState().setEnabled(true);
 					parent.player.setLocation(new Vector3f(cam.getLocation().getX(), cam.getLocation().getY()-parent.getCamHeight(), cam.getLocation().getZ()));
-					PlayerEvents.PlayerMoveEvent(parent.player, new Vector3f(cam.getLocation().getX(), cam.getLocation().getY()-parent.getCamHeight(), cam.getLocation().getZ()));
 					parent.player.setVisibleToClient(false);
 				}
 			}
@@ -278,7 +275,6 @@ public class InputControl {
 			{
 
 				parent.player.spawnPlayer(parent.player.getSystem().getPlanet(0), 0);
-				PlayerEvents.PlayerMoveEvent(parent.player, parent.player.getSpawnLocation(parent.player.getSystem().getPlanet(0), 0));
 				parent.cam.setLocation(new Vector3f(parent.player.getLocation().getX(), parent.player.getLocation().getY()+parent.getCamHeight(), parent.player.getLocation().getZ()));
 			}
 			else if(binding.equals("FindFace") && !keyPressed)

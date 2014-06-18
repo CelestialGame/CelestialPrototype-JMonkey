@@ -7,7 +7,6 @@ Date Created:
 package com.celestial.SinglePlayer.Components;
 
 import com.celestial.CelestialPortal;
-import com.celestial.SinglePlayer.Events.PlayerEvents;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
@@ -124,7 +123,6 @@ public class Player extends BetterCharacterControl{
 	public void spawnPlayer(Planet planet, int face)
 	{
 		this.setLocation(planet.getSpawnLocation(face));
-		PlayerEvents.PlayerMoveEvent(this, planet.getSpawnLocation(face));
 	}
 
 	public Vector3f getSpawnLocation(Planet planet, int face)
