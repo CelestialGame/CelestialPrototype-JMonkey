@@ -50,7 +50,7 @@ public class BlockChunkManager {
 
 
 	Planet planet;
-	BlockTerrainControl terrControl;
+	BlockTerrainControl terrainControl;
 	private ExecutorService preGeneratedChunkService;
 	private Future<List<PreGeneratedChunk>> preGeneratedChunkFutureTask;
 	private boolean did = false;
@@ -59,16 +59,16 @@ public class BlockChunkManager {
 
 	public BlockChunkManager(BlockTerrainControl terrControl, Planet planet) {
 		this.planet = planet;
-		this.terrControl = terrControl;
+		this.terrainControl = terrControl;
 	}
 
 	public void preGenerateChunks() 
 	{
 		this.preGeneratedChunkService = Executors.newFixedThreadPool(1);        
-		this.preGeneratedChunkFutureTask = this.preGeneratedChunkService.submit(new ChunkThreads.PreGenChunksThread(planet.getDiameter(), this.terrControl, preGenChunks, planet));
+		this.preGeneratedChunkFutureTask = this.preGeneratedChunkService.submit(new ChunkThreads.PreGenChunksThread(planet.getDiameter(), this.terrainControl, preGenChunks, planet));
 	}
 
-	public void checkChunks(Vector3f camLocation, Vector3f planetLocation) {
+	public void checkChunks(Vector3f camLocation) {
 		if(!this.preGeneratedChunkService.isShutdown())
 		{
 			if(this.preGeneratedChunkFutureTask.isDone())
@@ -99,7 +99,15 @@ public class BlockChunkManager {
 			Iterator<PreGeneratedChunk> iterator = this.preGenChunks.iterator();
 			while (iterator.hasNext()) {
 				PreGeneratedChunk preGenChunk = (PreGeneratedChunk) iterator.next();
-				float distance = camLocation.distance(new Vector3f(((preGenChunk.getLocation().getX()*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((preGenChunk.getLocation().getY()*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((preGenChunk.getLocation().getZ()*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3)).add(planet.getCurrentTerrainTranslation()));
+				Vector3f P1 = planet.getOriginalPlanetTranslation();
+				Vector3f rot1P = planet.getStarNode().getLocalRotation().inverse().mult(new Vector3f(((preGenChunk.getLocation().getX()*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((preGenChunk.getLocation().getY()*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((preGenChunk.getLocation().getZ()*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3)).add(planet.getCurrentTerrainTranslation()));
+				Vector3f trans1P = rot1P.subtract(P1);
+				rot1P = planet.getPlanetNode().getLocalRotation().inverse().mult(trans1P);
+			
+				Vector3f rot2P = planet.getStarNode().getLocalRotation().inverse().mult(camLocation);
+				Vector3f trans2P = rot2P.subtract(P1);
+				rot2P = planet.getPlanetNode().getLocalRotation().inverse().mult(trans2P);
+				float distance = rot2P.distance(rot1P);
 				if(distance < Planet.VIEW_DISTANCE) {
 					preGenChunk.generate();
 					iterator.remove();
@@ -109,11 +117,21 @@ public class BlockChunkManager {
 		for (int x = 0; x < this.planet.getDiameter(); x++)
 			for (int y = 0; y < this.planet.getDiameter(); y++)
 				for(int z = 0; z < this.planet.getDiameter(); z++) {
-					float distance = camLocation.distance(new Vector3f(((x*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((y*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((z*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3)).add(planet.getCurrentTerrainTranslation()));
-					if(distance > Planet.VIEW_DISTANCE) {
-						this.terrControl.getChunks()[x][y][z].unloadChunk();
+					Vector3f P1 = planet.getOriginalPlanetTranslation();
+					Vector3f rot1P = planet.getStarNode().getLocalRotation().inverse().mult(new Vector3f(((x*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((y*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((z*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3)).add(planet.getCurrentTerrainTranslation()));
+					Vector3f trans1P = rot1P.subtract(P1);
+					rot1P = planet.getPlanetNode().getLocalRotation().inverse().mult(trans1P);
+				
+					Vector3f rot2P = planet.getStarNode().getLocalRotation().inverse().mult(camLocation);
+					Vector3f trans2P = rot2P.subtract(P1);
+					rot2P = planet.getPlanetNode().getLocalRotation().inverse().mult(trans2P);
+					
+					float distance = rot2P.distance(rot1P);
+					if(distance > Planet.VIEW_DISTANCE) 
+					{
+						this.terrainControl.getChunks()[x][y][z].unloadChunk();
 					} else {
-						this.terrControl.getChunks()[x][y][z].loadChunk();
+						this.terrainControl.getChunks()[x][y][z].loadChunk();
 					}
 				}
 		did = true;

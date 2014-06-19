@@ -75,7 +75,7 @@ public class Planet implements BlockChunkListener {
 	private String name;
 	private Vector3f location;
 	private int centerofdiam;
-	private BlockTerrainControl terrcontrol;
+	private BlockTerrainControl terrainControl;
 	private Node planetNode;
 	private Node terrainNode;
 	public Vector3f amountRotation;
@@ -108,8 +108,8 @@ public class Planet implements BlockChunkListener {
 		this.location = location;
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
 		this.portal = star.getSolarSystem().getSector().getGalaxy().getPortal();
-		this.amountRotation = new Vector3f(0f, 0f, 0f);
-		this.amountRevolution = new Vector3f(0f, 0f, 0f);
+		this.amountRotation = new Vector3f(0f, 0.001f, 0f);
+		this.amountRevolution = new Vector3f(0f, 0.001f, 0f);
 		this.name = name;
 		this.atmosphereSizeFactor = 1.2f;
 
@@ -158,11 +158,11 @@ public class Planet implements BlockChunkListener {
 			this.type = planetType.FRIGID;
 		}
 
-		terrcontrol = new BlockTerrainControl(portal.csettings, new Vector3Int(diameter, diameter, diameter));
-		terrcontrol.addChunkListener(this);
+		terrainControl = new BlockTerrainControl(portal.csettings, new Vector3Int(diameter, diameter, diameter));
+		terrainControl.addChunkListener(this);
 
-		terrcontrol.setBlockChunkManager(new BlockChunkManager(terrcontrol, this));
-		terrcontrol.getBlockChunkManager().preGenerateChunks();
+		terrainControl.setBlockChunkManager(new BlockChunkManager(terrainControl, this));
+		terrainControl.getBlockChunkManager().preGenerateChunks();
 		
 		/*//Post-terrain generation here
 		for(int i=0; i<diameter*2; i++)
@@ -176,7 +176,7 @@ public class Planet implements BlockChunkListener {
 			}
 		}*/
 
-		terrainNode.addControl(terrcontrol);
+		terrainNode.addControl(terrainControl);
 		/* LIGHTING */
 		planetNode.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
 
@@ -287,7 +287,7 @@ public class Planet implements BlockChunkListener {
 	}
 	
 	public void updateChunks(Vector3f camLocation) {
-		terrcontrol.getBlockChunkManager().checkChunks(camLocation, this.planetNode.getLocalTranslation());
+		terrainControl.getBlockChunkManager().checkChunks(camLocation);
 	}
 
 	public void makeTreeAt(Vector3Int loc, BlockTerrainControl blockTerrain) {
@@ -470,7 +470,7 @@ public class Planet implements BlockChunkListener {
 	}
 
 	public BlockTerrainControl getTerrControl() {
-		return terrcontrol;
+		return terrainControl;
 	}
 	public Star getStar() {
 		return this.star;
@@ -572,7 +572,7 @@ public class Planet implements BlockChunkListener {
 			{
 				for(int z = 0; z<this.diameter; z++)
 				{
-					BlockChunkControl chunk = this.terrcontrol.getChunks()[x][y][z];
+					BlockChunkControl chunk = this.terrainControl.getChunks()[x][y][z];
 					if(chunk.getOptimizedGeometry_Opaque() != null)
 					{
 						if(chunk.getOptimizedGeometry_Opaque().getControl(RigidBodyControl.class) != null)
@@ -600,15 +600,6 @@ public class Planet implements BlockChunkListener {
 		}
 	}
 	
-	private Vector3f getUpdatedChunkLocation(int x, int y, int z)
-	{
-		Vector3f terrainloc = this.getCurrentTerrainTranslation().clone();
-		float scalarx = (x*16*3)+(8*3);
-		float scalary = (y*16*3)+(8*3);
-		float scalarz = (z*16*3)+(8*3);
-		return terrainloc.add(scalarx, scalary, scalarz);
-	}
-
 	public Vector3f getCurrentPlanetTranslation() {
 		return planetNode.getWorldTranslation();
 	}
