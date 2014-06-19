@@ -329,7 +329,7 @@ public class SPPortal extends CelestialPortal{
 		}
 
 		this.fpp = new FilterPostProcessor(this.assetManager);
-		BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
+		BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.SceneAndObjects);
 		this.fpp.addFilter(bloom);
 
 		this.viewPort.addProcessor(this.fpp);
@@ -402,7 +402,7 @@ public class SPPortal extends CelestialPortal{
 			} 
 			else
 				this.PlanetText.setText("Deep Space");
-			this.Vector3IntPosText.setText(location.toString());
+			this.Vector3IntPosText.setText(Vector3Int.convert3f(location).toString());
 		} else {
 			this.posText.setText("");
 			this.PlanetText.setText("");
