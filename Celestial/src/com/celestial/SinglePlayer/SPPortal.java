@@ -482,7 +482,6 @@ public class SPPortal extends CelestialPortal{
 	public void hideHighlight() {
 		if(this.blockHighlightGeom.getParent() != null)
 		{
-			System.out.println("Hiding Highlight.");
 			this.blockHighlightGeom.setCullHint(CullHint.Always);
 			this.blockHighlightGeom.setLocalTranslation(new Vector3f(0,0,0));
 			this.blockHighlightGeom.removeFromParent();
@@ -492,7 +491,6 @@ public class SPPortal extends CelestialPortal{
 	public void showHighlight() {
 		if(this.blockHighlightGeom.getParent() == null)
 		{
-			System.out.println("Showing Highlight.");
 			this.blockHighlightGeom.setCullHint(CullHint.Never);
 		}
 	}

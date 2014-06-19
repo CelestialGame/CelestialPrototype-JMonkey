@@ -13,7 +13,13 @@ import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.World.Chunks.ChunkThreads;
 import com.cubes.BlockTerrainControl;
 import com.cubes.Vector3Int;
+import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.shape.Box;
 
 public class BlockChunkManager {
 
@@ -47,6 +53,7 @@ public class BlockChunkManager {
 	BlockTerrainControl terrControl;
 	private ExecutorService preGeneratedChunkService;
 	private Future<List<PreGeneratedChunk>> preGeneratedChunkFutureTask;
+	private boolean did = false;
 
 	private List<PreGeneratedChunk> preGenChunks = new ArrayList<PreGeneratedChunk>();
 
@@ -85,14 +92,14 @@ public class BlockChunkManager {
 					System.out.println("preGenChunk List was null!\nAt line: "+Thread.currentThread().getStackTrace()[2].getLineNumber()+"\nIn BlockChunkManager.");
 					SPPortal.self.stopGame();
 				}
-
+				
 			}
 		}
 		if(!this.preGenChunks.isEmpty()) {
 			Iterator<PreGeneratedChunk> iterator = this.preGenChunks.iterator();
 			while (iterator.hasNext()) {
 				PreGeneratedChunk preGenChunk = (PreGeneratedChunk) iterator.next();
-				float distance = camLocation.distance(Vector3Int.convert3Int(preGenChunk.getLocation()).add(planetLocation));
+				float distance = camLocation.distance(new Vector3f(((preGenChunk.getLocation().getX()*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((preGenChunk.getLocation().getY()*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((preGenChunk.getLocation().getZ()*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3)).add(planet.getCurrentTerrainTranslation()));
 				if(distance < Planet.VIEW_DISTANCE) {
 					preGenChunk.generate();
 					iterator.remove();
@@ -102,13 +109,14 @@ public class BlockChunkManager {
 		for (int x = 0; x < this.planet.getDiameter(); x++)
 			for (int y = 0; y < this.planet.getDiameter(); y++)
 				for(int z = 0; z < this.planet.getDiameter(); z++) {
-					float distance = camLocation.distance(new Vector3f((x*Planet.CHUNK_SIZE)+(Planet.CHUNK_SIZE/2),(y*Planet.CHUNK_SIZE)+(Planet.CHUNK_SIZE/2),(z*Planet.CHUNK_SIZE)+(Planet.CHUNK_SIZE/2)).add(planetLocation));
+					float distance = camLocation.distance(new Vector3f(((x*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((y*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((z*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3)).add(planet.getCurrentTerrainTranslation()));
 					if(distance > Planet.VIEW_DISTANCE) {
 						this.terrControl.getChunks()[x][y][z].unloadChunk();
 					} else {
 						this.terrControl.getChunks()[x][y][z].loadChunk();
 					}
 				}
+		did = true;
 	}
 
 }
