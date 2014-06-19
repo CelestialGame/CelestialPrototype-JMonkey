@@ -290,59 +290,6 @@ public class Planet implements BlockChunkListener {
 	public void updateChunks(Vector3f camLocation) {
 		terrainControl.getBlockChunkManager().checkChunks(camLocation);
 	}
-
-	public void makeTreeAt(Vector3Int loc, BlockTerrainControl blockTerrain) {
-		int y = loc.getY();
-		int x = 0;
-		int z = 0;
-		boolean birchwood = false;
-		Random randomGenerator = new Random();
-		for (int idx = 1; idx <= 10; ++idx){
-			int rInt = randomGenerator.nextInt(10);
-			if(rInt == 2 || rInt == 5) {
-				x = loc.getX() + 13;
-				z = loc.getZ() + 16;
-				birchwood = false;
-			} else if (rInt == 3 || rInt == 6) {
-				x = loc.getX() + 5;
-				z = loc.getZ() + 7;
-				birchwood = true;
-			} else if (rInt == 4 || rInt == 1) {
-				x = loc.getX() + 8;
-				z = loc.getZ() + 2;
-				birchwood = false;
-			} else if (rInt == 8 || rInt == 9 || rInt == 7) {
-				x = loc.getX() + 2;
-				z = loc.getZ() + 8;
-				birchwood = true;
-			} else {
-				return;
-			}
-		}
-		//int y = getTopBlock(loc,blockTerrain);
-
-		if(birchwood) {
-			blockTerrain.setBlock(new Vector3Int(x, y, z), BlocksEnum.BIRCHWOOD.getBClass());
-			blockTerrain.setBlock(new Vector3Int(x, y+1, z), BlocksEnum.BIRCHWOOD.getBClass());
-			blockTerrain.setBlock(new Vector3Int(x, y+2, z), BlocksEnum.BIRCHWOOD.getBClass());
-			blockTerrain.setBlock(new Vector3Int(x, y+3, z), BlocksEnum.BIRCHWOOD.getBClass());
-		} else {
-			blockTerrain.setBlock(new Vector3Int(x, y, z), BlocksEnum.WOOD.getBClass());
-			blockTerrain.setBlock(new Vector3Int(x, y+1, z), BlocksEnum.WOOD.getBClass());
-			blockTerrain.setBlock(new Vector3Int(x, y+2, z), BlocksEnum.WOOD.getBClass());
-			blockTerrain.setBlock(new Vector3Int(x, y+3, z), BlocksEnum.WOOD.getBClass());
-		}
-		blockTerrain.setBlock(new Vector3Int(x+1, y+3, z), BlocksEnum.LEAVES.getBClass());
-		blockTerrain.setBlock(new Vector3Int(x, y+3, z+1), BlocksEnum.LEAVES.getBClass());
-		blockTerrain.setBlock(new Vector3Int(x+1, y+3, z+1), BlocksEnum.LEAVES.getBClass());
-		blockTerrain.setBlock(new Vector3Int(x-1, y+3, z), BlocksEnum.LEAVES.getBClass());
-		blockTerrain.setBlock(new Vector3Int(x, y+3, z-1), BlocksEnum.LEAVES.getBClass());
-		blockTerrain.setBlock(new Vector3Int(x-1, y+3, z-1), BlocksEnum.LEAVES.getBClass());
-		blockTerrain.setBlock(new Vector3Int(x+1, y+3, z-1), BlocksEnum.LEAVES.getBClass());
-		blockTerrain.setBlock(new Vector3Int(x-1, y+3, z+1), BlocksEnum.LEAVES.getBClass());
-		blockTerrain.setBlock(new Vector3Int(x, y+4, z), BlocksEnum.LEAVES.getBClass());
-
-	}
 	
 	
 
@@ -430,17 +377,6 @@ public class Planet implements BlockChunkListener {
 			return null;
 		}
 		return values;
-	}
-
-	private int getTopBlock(Vector3Int location, BlockChunkControl blockTerrain2) {
-		int height = 0;
-		for (int i = 0; i < 256; i++) {
-			BlockType block = blockTerrain2.getBlock(new Vector3Int(location.getX(), i, location.getZ()));
-			if (block != null) {
-				height++;
-			}
-		}
-		return height;
 	}
 
 	@Override
