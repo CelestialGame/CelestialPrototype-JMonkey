@@ -102,7 +102,7 @@ public class BlockChunkManager {
 		for (int x = 0; x < this.planet.getDiameter(); x++)
 			for (int y = 0; y < this.planet.getDiameter(); y++)
 				for(int z = 0; z < this.planet.getDiameter(); z++) {
-					float distance = camLocation.distance(new Vector3f(x,y,z).add(planetLocation));
+					float distance = camLocation.distance(new Vector3f((x*Planet.CHUNK_SIZE)+(Planet.CHUNK_SIZE/2),(y*Planet.CHUNK_SIZE)+(Planet.CHUNK_SIZE/2),(z*Planet.CHUNK_SIZE)+(Planet.CHUNK_SIZE/2)).add(planetLocation));
 					if(distance > Planet.VIEW_DISTANCE) {
 						this.terrControl.getChunks()[x][y][z].unloadChunk();
 					} else {

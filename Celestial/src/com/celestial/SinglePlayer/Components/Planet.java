@@ -513,7 +513,7 @@ public class Planet implements BlockChunkListener {
 	{
 		return new Vector3f(
 				this.planetNode.getWorldTranslation().getX()+1.5f,
-				this.planetNode.getWorldTranslation().getY() + this.diameter*16*3+3f,
+				this.planetNode.getWorldTranslation().getY() + (this.diameter*CHUNK_SIZE*3)/2+3f,
 				this.planetNode.getWorldTranslation().getZ()+1.5f);
 	}
 
