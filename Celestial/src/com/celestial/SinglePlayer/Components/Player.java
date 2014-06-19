@@ -284,6 +284,7 @@ public class Player extends BetterCharacterControl{
 		float x = rot2P.x;
 		float y = rot2P.y;
 		float z = rot2P.z;
+		//System.out.println("x "+x+" y "+y+" z "+z);
 
 		if( Math.abs(y) > Math.abs(x) && Math.abs(y) > Math.abs(z) ) {
 			if( y < 0 ) {

@@ -53,13 +53,28 @@ public class BlockChunkManager {
 	BlockTerrainControl terrainControl;
 	private ExecutorService preGeneratedChunkService;
 	private Future<List<PreGeneratedChunk>> preGeneratedChunkFutureTask;
-	private boolean did = false;
 
 	private List<PreGeneratedChunk> preGenChunks = new ArrayList<PreGeneratedChunk>();
+	private Box blockHighlight;
+	private Geometry blockHighlightGeom;
+	private Material blockHighlightMat;
 
 	public BlockChunkManager(BlockTerrainControl terrControl, Planet planet) {
 		this.planet = planet;
 		this.terrainControl = terrControl;
+		
+		this.blockHighlight = new Box(8*3+0.2f,8*3+0.2f,8*3+0.2f);
+		blockHighlight.setLineWidth(10f);
+		blockHighlightGeom = new Geometry("blockHighlight", this.blockHighlight);
+		blockHighlightMat = new Material(SPPortal.self.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+		blockHighlightMat.getAdditionalRenderState().setWireframe(true);
+		
+		blockHighlightMat.setColor("Color", new ColorRGBA(0f, 0f, 0f, 1f));
+		blockHighlightGeom.setMaterial(blockHighlightMat);
+
+		blockHighlightMat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+		blockHighlightGeom.setQueueBucket(Bucket.Transparent);
+		SPPortal.self.getRootNode().attachChild(blockHighlightGeom);
 	}
 
 	public void preGenerateChunks() 
@@ -99,15 +114,13 @@ public class BlockChunkManager {
 			Iterator<PreGeneratedChunk> iterator = this.preGenChunks.iterator();
 			while (iterator.hasNext()) {
 				PreGeneratedChunk preGenChunk = (PreGeneratedChunk) iterator.next();
-				Vector3f P1 = planet.getOriginalPlanetTranslation();
-				Vector3f rot1P = planet.getStarNode().getLocalRotation().inverse().mult(new Vector3f(((preGenChunk.getLocation().getX()*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((preGenChunk.getLocation().getY()*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((preGenChunk.getLocation().getZ()*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3)).add(planet.getCurrentTerrainTranslation()));
-				Vector3f trans1P = rot1P.subtract(P1);
-				rot1P = planet.getPlanetNode().getLocalRotation().inverse().mult(trans1P);
-			
-				Vector3f rot2P = planet.getStarNode().getLocalRotation().inverse().mult(camLocation);
-				Vector3f trans2P = rot2P.subtract(P1);
-				rot2P = planet.getPlanetNode().getLocalRotation().inverse().mult(trans2P);
-				float distance = rot2P.distance(rot1P);
+				Vector3f centerOfChunk = new Vector3f(((preGenChunk.x*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((preGenChunk.y*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((preGenChunk.z*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3)).add(planet.getOriginalTerrainTranslation());
+
+				Vector3f currentPlanetTranslation = planet.getCurrentPlanetTranslation();
+				Vector3f planetToCamera = camLocation.subtract(currentPlanetTranslation);
+				Vector3f rotatedCameraTranslation = planet.getOriginalPlanetTranslation().add(planet.getStarNode().getWorldRotation().inverse().mult(planetToCamera));
+									
+				float distance = rotatedCameraTranslation.distance(centerOfChunk);
 				if(distance < Planet.VIEW_DISTANCE) {
 					preGenChunk.generate();
 					iterator.remove();
@@ -117,16 +130,13 @@ public class BlockChunkManager {
 		for (int x = 0; x < this.planet.getDiameter(); x++)
 			for (int y = 0; y < this.planet.getDiameter(); y++)
 				for(int z = 0; z < this.planet.getDiameter(); z++) {
-					Vector3f P1 = planet.getOriginalPlanetTranslation();
-					Vector3f rot1P = planet.getStarNode().getLocalRotation().inverse().mult(new Vector3f(((x*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((y*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((z*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3)).add(planet.getCurrentTerrainTranslation()));
-					Vector3f trans1P = rot1P.subtract(P1);
-					rot1P = planet.getPlanetNode().getLocalRotation().inverse().mult(trans1P);
-				
-					Vector3f rot2P = planet.getStarNode().getLocalRotation().inverse().mult(camLocation);
-					Vector3f trans2P = rot2P.subtract(P1);
-					rot2P = planet.getPlanetNode().getLocalRotation().inverse().mult(trans2P);
-					
-					float distance = rot2P.distance(rot1P);
+					Vector3f centerOfChunk = new Vector3f(((x*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((y*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((z*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3)).add(planet.getOriginalTerrainTranslation());
+
+					Vector3f currentPlanetTranslation = planet.getCurrentPlanetTranslation();
+					Vector3f planetToCamera = camLocation.subtract(currentPlanetTranslation);
+					Vector3f rotatedCameraTranslation = planet.getOriginalPlanetTranslation().add(planet.getStarNode().getWorldRotation().inverse().mult(planetToCamera));
+										
+					float distance = rotatedCameraTranslation.distance(centerOfChunk);
 					if(distance > Planet.VIEW_DISTANCE) 
 					{
 						this.terrainControl.getChunks()[x][y][z].unloadChunk();
@@ -134,7 +144,6 @@ public class BlockChunkManager {
 						this.terrainControl.getChunks()[x][y][z].loadChunk();
 					}
 				}
-		did = true;
 	}
 
 }
