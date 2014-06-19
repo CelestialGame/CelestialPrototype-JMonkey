@@ -118,7 +118,7 @@ public class BlockChunkManager {
 
 				Vector3f currentPlanetTranslation = planet.getCurrentPlanetTranslation();
 				Vector3f planetToCamera = camLocation.subtract(currentPlanetTranslation);
-				Vector3f rotatedCameraTranslation = planet.getOriginalPlanetTranslation().add(planet.getStarNode().getWorldRotation().inverse().mult(planetToCamera));
+				Vector3f rotatedCameraTranslation = planet.getOriginalPlanetTranslation().add(planet.getPlanetNode().getLocalRotation().inverse().mult(planet.getStarNode().getWorldRotation().inverse().mult(planetToCamera)));
 									
 				float distance = rotatedCameraTranslation.distance(centerOfChunk);
 				if(distance < Planet.VIEW_DISTANCE) {
@@ -134,8 +134,8 @@ public class BlockChunkManager {
 
 					Vector3f currentPlanetTranslation = planet.getCurrentPlanetTranslation();
 					Vector3f planetToCamera = camLocation.subtract(currentPlanetTranslation);
-					Vector3f rotatedCameraTranslation = planet.getOriginalPlanetTranslation().add(planet.getStarNode().getWorldRotation().inverse().mult(planetToCamera));
-										
+					Vector3f rotatedCameraTranslation = planet.getOriginalPlanetTranslation().add(planet.getPlanetNode().getLocalRotation().inverse().mult(planet.getStarNode().getWorldRotation().inverse().mult(planetToCamera)));
+					
 					float distance = rotatedCameraTranslation.distance(centerOfChunk);
 					if(distance > Planet.VIEW_DISTANCE) 
 					{
