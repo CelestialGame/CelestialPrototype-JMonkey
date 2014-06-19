@@ -151,6 +151,16 @@ public class ChunkThreads {
 					}
 				}
 			}
+			/*//Post-terrain generation here
+			for(int i=0; i<chunkSize; i++)
+			{    
+				for(int j=0; j<chunkSize; j++)
+				{
+					int x1 = (int) (x+i);
+					int z1 = (int) (z+j);
+					makeTreeAt(new Vector3Int(x1, 0, z1), blockTerrain);
+				}
+			}*/
 		}
 		public void makeCubeAt(double dx, double dy, double dz, BlocksEnum BlockType, BlockTerrainControl chunk) {
 			//make ground
@@ -171,7 +181,6 @@ public class ChunkThreads {
 			chunk.setBlocksFromNoise(location, size, roughness, BlockType.getBClass());
 		}
 		public void makeTreeAt(Vector3Int loc, BlockTerrainControl blockTerrain) {
-			int y = loc.getY();
 			int x = 0;
 			int z = 0;
 			boolean birchwood = false;
@@ -198,7 +207,7 @@ public class ChunkThreads {
 					return;
 				}
 			}
-			//int y = getTopBlock(loc,blockTerrain);
+			int y = getTopBlock(x,z,blockTerrain);
 
 			if(birchwood) {
 				blockTerrain.setBlock(new Vector3Int(x, y, z), BlocksEnum.BIRCHWOOD.getBClass());
@@ -221,6 +230,19 @@ public class ChunkThreads {
 			blockTerrain.setBlock(new Vector3Int(x-1, y+3, z+1), BlocksEnum.LEAVES.getBClass());
 			blockTerrain.setBlock(new Vector3Int(x, y+4, z), BlocksEnum.LEAVES.getBClass());
 
+		}
+		
+		public int getTopBlock(int x, int z, BlockTerrainControl terrain)
+		{
+			int height = 0;
+			for(int i = 0; i < Planet.CHUNK_SIZE; i++)
+			{
+				if(terrain.getBlock(new Vector3Int(x, i, z)) != null)
+				{
+					height++;
+				}
+			}
+			return height;
 		}
 	}
 	
