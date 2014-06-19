@@ -91,6 +91,7 @@ public class Planet implements BlockChunkListener {
 	private Vector3f originalPlanetTranslation;
 	private Vector3f previousPlanetTranslation;
 	private Quaternion previousPlanetRotation;
+	private Quaternion previousStarNodeRotation;
 	
 	
 
@@ -108,8 +109,8 @@ public class Planet implements BlockChunkListener {
 		this.location = location;
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
 		this.portal = star.getSolarSystem().getSector().getGalaxy().getPortal();
-		this.amountRotation = new Vector3f(0f, 0.05f, 0f);
-		this.amountRevolution = new Vector3f(0f, 0.05f, 0f);
+		this.amountRotation = new Vector3f(0f, 0.01f, 0f);
+		this.amountRevolution = new Vector3f(0f, 0.01f, 0f);
 		this.name = name;
 		this.atmosphereSizeFactor = 1.2f;
 
@@ -520,6 +521,7 @@ public class Planet implements BlockChunkListener {
 	public void rotate() {
 		this.previousPlanetRotation = planetNode.getWorldRotation().clone();
 		this.previousPlanetTranslation = planetNode.getWorldTranslation().clone();
+		this.previousStarNodeRotation = starNode.getWorldRotation().clone();
 		starNode.rotate(this.amountRevolution.getX()*FastMath.DEG_TO_RAD, this.amountRevolution.getY()*FastMath.DEG_TO_RAD, this.amountRevolution.getZ()*FastMath.DEG_TO_RAD);
 		planetNode.rotate(this.amountRotation.getX()*FastMath.DEG_TO_RAD, this.amountRotation.getY()*FastMath.DEG_TO_RAD, this.amountRotation.getZ()*FastMath.DEG_TO_RAD);
 		updateCollision();
@@ -608,11 +610,6 @@ public class Planet implements BlockChunkListener {
 		return terrainNode.getWorldTranslation();
 	}
 
-	public Quaternion getRotation()
-	{
-		return planetNode.getWorldRotation();
-	}
-
 	public Vector3f getOriginalTerrainTranslation() {
 		return this.originalTerrainTranslation;
 	}
@@ -634,10 +631,20 @@ public class Planet implements BlockChunkListener {
 	public Spatial getStarNode() {
 		return starNode;
 	}
+	
+	public Quaternion getPreviousStarNodeRotation()
+	{
+		return this.previousStarNodeRotation;
+	}
 
 	public Quaternion getCurrentPlanetRotation() {
 		return this.planetNode.getWorldRotation();
 	}
+	
+	public Quaternion getCurrentStarNodeRotation() {
+		return this.starNode.getWorldRotation();
+	}
+	
 	public planetType getType() {
 		if(this.type == null)
 			return null;

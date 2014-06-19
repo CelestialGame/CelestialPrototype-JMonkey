@@ -62,7 +62,7 @@ public class Player extends BetterCharacterControl{
 
 	public void setLocation(Vector3f location)
 	{
-		this.warp(location);
+		this.setPhysicsLocation(location);
 	}
 
 	public Vector3f getLocation()
@@ -97,20 +97,18 @@ public class Player extends BetterCharacterControl{
 
 		if(getPlanet() != null)
 		{
-			this.setLocation(
-					getLocation().add(
-							walkDirection
-							)
-					);
+
+			Vector3f translation = getLocation();
+			
 
 			if(this.translationUpdate != null)
 			{
-				this.setLocation(
-						getLocation().add(translationUpdate)
-						);				
+				translation.addLocal(translationUpdate);	
 				this.translationUpdate = null;
 			}
-
+			translation.addLocal(walkDirection);
+			
+			this.setLocation(translation);
 		}
 	}
 

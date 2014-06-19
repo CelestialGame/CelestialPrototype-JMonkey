@@ -42,6 +42,7 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.BloomFilter;
@@ -55,7 +56,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
-import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.shape.Box;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.system.AppSettings;
@@ -225,7 +225,15 @@ public class SPPortal extends CelestialPortal{
 						if(player.getPlanet() != null)
 							if(player.getPlanet() == p)
 							{
-								player.setTranslationUpdate(p.getCurrentPlanetTranslation().subtract(p.getPreviousPlanetTranslation()));
+								Quaternion planetRotationAmount = new Quaternion().fromAngles(p.amountRotation.getX()*FastMath.DEG_TO_RAD, p.amountRotation.getY()*FastMath.DEG_TO_RAD, p.amountRotation.getZ()*FastMath.DEG_TO_RAD);
+								Quaternion starRotationAmount = new Quaternion().fromAngles(p.amountRevolution.getX()*FastMath.DEG_TO_RAD, p.amountRevolution.getY()*FastMath.DEG_TO_RAD, p.amountRevolution.getZ()*FastMath.DEG_TO_RAD);
+								
+								Vector3f playerRotatedByStar = starRotationAmount.mult(player.getLocation());
+								Vector3f playerToPlanet = playerRotatedByStar.subtract(p.getCurrentPlanetTranslation());
+								Vector3f playerRotatedByPlanet = planetRotationAmount.mult(playerToPlanet);
+								Vector3f finalDifference = (playerRotatedByPlanet.add(p.getCurrentPlanetTranslation())).subtract(player.getLocation());
+								
+								player.setTranslationUpdate(finalDifference);
 							}
 					}
 			this.lastRotation = this.timer.getTimeInSeconds();
