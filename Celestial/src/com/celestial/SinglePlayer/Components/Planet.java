@@ -378,17 +378,6 @@ public class Planet implements BlockChunkListener {
 		return values;
 	}
 
-	private int getTopBlock(Vector3Int location, BlockChunkControl blockTerrain2) {
-		int height = 0;
-		for (int i = 0; i < 256; i++) {
-			BlockType block = blockTerrain2.getBlock(new Vector3Int(location.getX(), i, location.getZ()));
-			if (block != null) {
-				height++;
-			}
-		}
-		return height;
-	}
-
 	@Override
 	public void onSpatialUpdated(BlockChunkControl bcc) {
 		bcc.getOptimizedGeometry_Opaque().setQueueBucket(Bucket.Opaque);
