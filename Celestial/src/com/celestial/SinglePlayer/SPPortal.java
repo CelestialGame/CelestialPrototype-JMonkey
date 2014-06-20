@@ -29,6 +29,7 @@ import com.cubes.BlockChunkControl;
 import com.cubes.CubesSettings;
 import com.cubes.Vector3Int;
 import com.jme3.app.Application;
+import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
@@ -92,7 +93,7 @@ public class SPPortal extends CelestialPortal{
 			AssetManager assetManager, 
 			InputManager inputManager, 
 			AppSettings settings, 
-			Application app,
+			SimpleApplication app,
 			Timer timer, 
 			Gui gui)
 	{
@@ -423,10 +424,24 @@ public class SPPortal extends CelestialPortal{
 			else
 				this.PlanetText.setText("Deep Space");
 			this.Vector3IntPosText.setText(Vector3Int.convert3f(location).toString());
+			int blocks = 0;
+			int liveBlocks = 0;
+			for (int x = 0; x < this.player.getPlanet().getDiameter(); x++)
+				for (int y = 0; y < this.player.getPlanet().getDiameter(); y++)
+					for(int z = 0; z < this.player.getPlanet().getDiameter(); z++) {
+						blocks = blocks + this.player.getPlanet().getTerrControl().getChunks()[x][y][z].getBlockAmount(false);
+						liveBlocks = liveBlocks + this.player.getPlanet().getTerrControl().getChunks()[x][y][z].getBlockAmount(true);
+					}
+			this.blocksLiveText.setText("Blocks [Cached, Live]: [" + blocks + ", " + liveBlocks + "]");
+			setDisplayFps(true);
+			setDisplayStatView(true); 
 		} else {
 			this.posText.setText("");
 			this.PlanetText.setText("");
 			this.Vector3IntPosText.setText("");
+			this.blocksLiveText.setText("");
+			setDisplayFps(false);
+			setDisplayStatView(false);
 		}
 	}
 
@@ -451,7 +466,7 @@ public class SPPortal extends CelestialPortal{
 
 		this.InvText = new BitmapText(this.guiFont, false);
 		this.InvText.setSize(this.guiFont.getCharSet().getRenderedSize());
-		this.InvText.setLocalTranslation(10, this.settings.getHeight()-90, 0);
+		this.InvText.setLocalTranslation(10, this.settings.getHeight()-120, 0);
 		//this.guiNode.attachChild(this.InvText);
 
 		this.PlanetText = new BitmapText(this.guiFont, false);
@@ -463,6 +478,11 @@ public class SPPortal extends CelestialPortal{
 		this.Vector3IntPosText.setSize(this.guiFont.getCharSet().getRenderedSize());
 		this.Vector3IntPosText.setLocalTranslation(10, this.settings.getHeight()-30, 0);
 		this.guiNode.attachChild(this.Vector3IntPosText);
+		
+		this.blocksLiveText = new BitmapText(this.guiFont, false);
+		this.blocksLiveText.setSize(this.guiFont.getCharSet().getRenderedSize());
+		this.blocksLiveText.setLocalTranslation(10, this.settings.getHeight()-150, 0);
+		this.guiNode.attachChild(this.blocksLiveText);
 	}
 
 	@Override

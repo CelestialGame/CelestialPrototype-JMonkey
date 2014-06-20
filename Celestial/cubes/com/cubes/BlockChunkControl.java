@@ -67,6 +67,7 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
     private Geometry optimizedGeometry_Transparent;
     private boolean needsMeshUpdate;
     private boolean loaded;
+    private int blocks;
 
     @Override
     public void setSpatial(Spatial spatial){
@@ -126,6 +127,7 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
             blockTypes[location.getX()][location.getY()][location.getZ()] = blockType.getType();
             updateBlockState(location);
             needsMeshUpdate = true;
+            blocks++;
         }
     }
     
@@ -134,6 +136,7 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
             blockTypes[location.getX()][location.getY()][location.getZ()] = 0;
             updateBlockState(location);
             needsMeshUpdate = true;
+            blocks--;
         }
     }
     
@@ -161,6 +164,16 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
     		needsMeshUpdate = true;
     	}
     	loaded = true;
+    }
+    
+    public int getBlockAmount(boolean live) {
+    	if(!live)
+	    	if(loaded) 
+	    		return blocks;
+	    	else
+	    		return this.savedBlockTypes.size();
+    	else
+    		return blocks;
     }
     
     private boolean isValidBlockLocation(Vector3Int location){

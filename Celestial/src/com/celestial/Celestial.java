@@ -19,7 +19,7 @@ import de.lessvoid.nifty.Nifty;
 
 public class Celestial extends SimpleApplication{
 
-	public static Application app;
+	public static SimpleApplication app;
 	private static JmeCanvasContext context;
 	public static int width;
 	public static int height;
@@ -47,8 +47,8 @@ public class Celestial extends SimpleApplication{
 		Celestial.height = 500;
 		Celestial.title = "Celestial";
 
-		cel.setDisplayFps(false);
-		cel.setDisplayStatView(false);
+		cel.setDisplayFps(true);
+		cel.setDisplayStatView(true);
 		
 		createNewCanvas();
 		app.start();
