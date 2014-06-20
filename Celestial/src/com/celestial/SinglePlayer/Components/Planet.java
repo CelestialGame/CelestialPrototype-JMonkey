@@ -9,6 +9,7 @@ package com.celestial.SinglePlayer.Components;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Random;
 
 import com.celestial.CelestialPortal;
 import com.celestial.SinglePlayer.Physics.Listener;
@@ -17,6 +18,7 @@ import com.cubes.BlockChunkControl;
 import com.cubes.BlockChunkListener;
 import com.cubes.BlockTerrainControl;
 import com.cubes.Vector3Int;
+import com.cubes.render.GreedyMesher;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
@@ -91,7 +93,7 @@ public class Planet implements BlockChunkListener {
 	private Quaternion previousPlanetRotation;
 	private Quaternion previousStarNodeRotation;
 	private BulletAppState bulletAppState;
-	
+	private long seed;
 	
 
 	/**
@@ -103,6 +105,9 @@ public class Planet implements BlockChunkListener {
 	 */
 	public Planet(Star star, int diameter, Vector3f location, String name)
 	{
+		this(star, diameter, location, name,new Random().nextLong());
+	}
+	public Planet(Star star, int diameter, Vector3f location, String name, long seed) {
 		this.star = star;
 		this.diameter = diameter;
 		this.location = location;
@@ -115,6 +120,7 @@ public class Planet implements BlockChunkListener {
 		this.bulletAppState = new BulletAppState();
 		this.portal.getParent().getStateManager().attach(bulletAppState);
 		this.bulletAppState.getPhysicsSpace().addCollisionListener(new Listener());
+		this.seed = seed;
 
 		if(diameter % 2 == 0)
 		{
@@ -162,7 +168,7 @@ public class Planet implements BlockChunkListener {
 			this.type = planetType.FRIGID;
 		}
 
-		terrainControl = new BlockTerrainControl(portal.csettings, new Vector3Int(diameter, diameter, diameter));
+		terrainControl = new BlockTerrainControl(portal.csettings, new Vector3Int(diameter, diameter, diameter), new GreedyMesher());
 		terrainControl.addChunkListener(this);
 
 		terrainControl.setBlockChunkManager(new BlockChunkManager(terrainControl, this));
@@ -551,5 +557,8 @@ public class Planet implements BlockChunkListener {
 		if(this.type == null)
 			return null;
 		return this.type;
+	}
+	public long getSeed() {
+		return this.seed;
 	}
 }

@@ -14,7 +14,7 @@ import com.celestial.SinglePlayer.Components.Planet.planetType;
 import com.celestial.World.BlockChunkManager.PreGeneratedChunk;
 import com.cubes.Block;
 import com.cubes.BlockTerrainControl;
-import com.cubes.Noise;
+import com.cubes.RandomDisplacementFractal;
 import com.cubes.Vector3Int;
 import com.jme3.scene.Geometry;
 
@@ -88,13 +88,17 @@ public class ChunkThreads {
 		List<Vector3Int> randomTerrainGeneration2Y = new ArrayList<Vector3Int>();
 		List<Vector3Int> randomTerrainGenerationZ = new ArrayList<Vector3Int>();
 		List<Vector3Int> randomTerrainGeneration2Z = new ArrayList<Vector3Int>();
-		public GenerateChunkThread(BlockTerrainControl bTC, int locx, int locy, int locz, PreGeneratedChunk preChunk) {
+		public GenerateChunkThread(BlockTerrainControl bTC, int locx, int locy, int locz, PreGeneratedChunk preChunk, long seed) {
 			blockTerrain = bTC;
 			x = locx;
 			y = locy;
 			z = locz;
 			this.preChunk = preChunk;
+			this.seed = seed;
+			randomSeed = new Random(seed);
 		}
+		long seed;
+		Random randomSeed;
 		
 		public void run() {
 			int chunkSize = Planet.CHUNK_SIZE;
@@ -294,7 +298,7 @@ public class ChunkThreads {
 		
 		public void setBlocksFromNoise(Vector3Int location, Vector3Int size, float roughness, Class<? extends Block> blockClass, PlanetSide side, BlockTerrainControl terrain){
 	        if(side == PlanetSide.TOP) {
-	        	Noise noise = new Noise(null, roughness, size.getX(), size.getZ());
+	        	RandomDisplacementFractal noise = new RandomDisplacementFractal(randomSeed, roughness, size.getX(), size.getZ());
 		        noise.initialise();
 		        float gridMinimum = noise.getMinimum();
 		        float gridLargestDifference = (noise.getMaximum() - gridMinimum);
@@ -311,7 +315,7 @@ public class ChunkThreads {
 		            }
 		        }
 	        } else if(side == PlanetSide.BOTTOM) {
-	        	Noise noise = new Noise(null, roughness, size.getX(), size.getZ());
+	        	RandomDisplacementFractal noise = new RandomDisplacementFractal(randomSeed, roughness, size.getX(), size.getZ());
 		        noise.initialise();
 		        float gridMinimum = noise.getMinimum();
 		        float gridLargestDifference = (noise.getMaximum() - gridMinimum);
@@ -328,7 +332,7 @@ public class ChunkThreads {
 		            }
 		        }
 	        } else if(side == PlanetSide.LEFT) {
-	        	Noise noise = new Noise(null, roughness, size.getY(), size.getZ());
+	        	RandomDisplacementFractal noise = new RandomDisplacementFractal(randomSeed, roughness, size.getY(), size.getZ());
 		        noise.initialise();
 		        float gridMinimum = noise.getMinimum();
 		        float gridLargestDifference = (noise.getMaximum() - gridMinimum);
@@ -346,7 +350,7 @@ public class ChunkThreads {
 		        }
 	        }
 	        else if(side == PlanetSide.RIGHT) {
-	        	Noise noise = new Noise(null, roughness, size.getY(), size.getZ());
+	        	RandomDisplacementFractal noise = new RandomDisplacementFractal(randomSeed, roughness, size.getY(), size.getZ());
 		        noise.initialise();
 		        float gridMinimum = noise.getMinimum();
 		        float gridLargestDifference = (noise.getMaximum() - gridMinimum);
@@ -364,7 +368,7 @@ public class ChunkThreads {
 		        }
 	        }
 	        else if(side == PlanetSide.FRONT) {
-	        	Noise noise = new Noise(null, roughness, size.getX(), size.getY());
+	        	RandomDisplacementFractal noise = new RandomDisplacementFractal(randomSeed, roughness, size.getX(), size.getY());
 		        noise.initialise();
 		        float gridMinimum = noise.getMinimum();
 		        float gridLargestDifference = (noise.getMaximum() - gridMinimum);
@@ -382,7 +386,7 @@ public class ChunkThreads {
 		        }
 	        }
 	        else if(side == PlanetSide.BACK) {
-	        	Noise noise = new Noise(null, roughness, size.getX(), size.getY());
+	        	RandomDisplacementFractal noise = new RandomDisplacementFractal(randomSeed, roughness, size.getX(), size.getY());
 		        noise.initialise();
 		        float gridMinimum = noise.getMinimum();
 		        float gridLargestDifference = (noise.getMaximum() - gridMinimum);

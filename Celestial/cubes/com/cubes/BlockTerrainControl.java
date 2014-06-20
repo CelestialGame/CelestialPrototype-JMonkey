@@ -12,6 +12,7 @@ import com.cubes.network.BitInputStream;
 import com.cubes.network.BitOutputStream;
 import com.cubes.network.BitSerializable;
 import com.cubes.network.CubesSerializer;
+import com.cubes.render.VoxelMesher;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
@@ -26,14 +27,16 @@ import com.jme3.texture.Texture;
  */
 public class BlockTerrainControl extends AbstractControl implements BitSerializable{
 
-    public BlockTerrainControl(CubesSettings settings, Vector3Int chunksCount){
+    public BlockTerrainControl(CubesSettings settings, Vector3Int chunksCount, VoxelMesher mesher){
         this.settings = settings;
+        this.mesher = mesher;
         initializeChunks(chunksCount);
     }
     private CubesSettings settings;
     private BlockChunkControl[][][] chunks;
     private ArrayList<BlockChunkListener> chunkListeners = new ArrayList<BlockChunkListener>();
 	private BlockChunkManager blockChunkManager;
+	private VoxelMesher mesher;
     
     public void setBlockChunkManager(BlockChunkManager bcm) {
     	this.blockChunkManager = bcm;
@@ -277,7 +280,7 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
     }
     
     public void setBlocksFromNoise(Vector3Int location, Vector3Int size, float roughness, Class<? extends Block> blockClass){
-        Noise noise = new Noise(null, roughness, size.getX(), size.getZ());
+        RandomDisplacementFractal noise = new RandomDisplacementFractal(null, roughness, size.getX(), size.getZ());
         noise.initialise();
         float gridMinimum = noise.getMinimum();
         float gridLargestDifference = (noise.getMaximum() - gridMinimum);
@@ -316,9 +319,13 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
 
     @Override
     public BlockTerrainControl clone(){
-        BlockTerrainControl blockTerrain = new BlockTerrainControl(settings, new Vector3Int());
+        BlockTerrainControl blockTerrain = new BlockTerrainControl(settings, new Vector3Int(), this.mesher);
         blockTerrain.setBlocksFromTerrain(this);
         return blockTerrain;
+    }
+    
+    public VoxelMesher getMesher() {
+    	return this.mesher;
     }
     
     public void setBlocksFromTerrain(BlockTerrainControl blockTerrain){

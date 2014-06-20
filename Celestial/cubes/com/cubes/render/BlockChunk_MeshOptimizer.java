@@ -2,10 +2,18 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.cubes;
+package com.cubes.render;
 
 import java.util.ArrayList;
 
+import com.cubes.Block;
+import com.cubes.BlockChunkControl;
+import com.cubes.BlockSkin;
+import com.cubes.BlockSkin_TextureLocation;
+import com.cubes.BlockTerrainControl;
+import com.cubes.BlockType;
+import com.cubes.Vector3Int;
+import com.cubes.Block.Face;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Mesh;

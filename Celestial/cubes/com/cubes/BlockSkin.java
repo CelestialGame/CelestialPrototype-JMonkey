@@ -4,11 +4,16 @@
  */
 package com.cubes;
 
+import com.cubes.Block.Face;
+
 /**
  *
- * @author Carl
+ * @author Carl <br>
+ * Modified by Kevin Thorne
  */
 public class BlockSkin{
+	
+	private int textureOffset = 0;
 
     public BlockSkin(BlockSkin_TextureLocation textureLocation, boolean isTransparent){
         this(new BlockSkin_TextureLocation[]{textureLocation}, isTransparent);
@@ -34,5 +39,15 @@ public class BlockSkin{
 
     public boolean isTransparent(){
         return isTransparent;
+    }
+    
+    public int getTextureOffset(BlockChunkControl terrain, Vector3Int blockLoc, Face face) {
+        if(textureLocations.length == 6) {
+            return face.ordinal() + textureOffset;
+        }
+        return textureOffset;
+    }
+    public void setTextureOffset(int offset) {
+        this.textureOffset = offset;
     }
 }

@@ -10,9 +10,13 @@ import java.util.List;
 import java.util.concurrent.Executors;
 
 import com.celestial.World.Chunks.ChunkThreads;
+import com.cubes.Block.Face;
 import com.cubes.network.BitInputStream;
 import com.cubes.network.BitOutputStream;
 import com.cubes.network.BitSerializable;
+import com.cubes.render.GreedyMesher;
+import com.cubes.render.BlockChunk_MeshOptimizer;
+import com.cubes.render.BlockChunk_TransparencyMerger;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -125,14 +129,14 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
     public BlockType getBlock(Vector3Int location){
         if(isValidBlockLocation(location)){
             byte blockType = blockTypes[location.getX()][location.getY()][location.getZ()];
-            return BlockManager.getType(blockType);
+            return BlockManager.getInstance().getType(blockType);
         }
         return null;
     }
     
     public void setBlock(Vector3Int location, Class<? extends Block> blockClass){
         if(isValidBlockLocation(location)){
-            BlockType blockType = BlockManager.getType(blockClass);
+            BlockType blockType = BlockManager.getInstance().getType(blockClass);
             blockTypes[location.getX()][location.getY()][location.getZ()] = blockType.getType();
             updateBlockState(location);
             needsMeshUpdate = true;
@@ -205,9 +209,10 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
     		}
     		optimizedGeometry_Opaque.setMesh(BlockChunk_MeshOptimizer.generateOptimizedMesh(this, BlockChunk_TransparencyMerger.OPAQUE));
     		optimizedGeometry_Transparent.setMesh(BlockChunk_MeshOptimizer.generateOptimizedMesh(this, BlockChunk_TransparencyMerger.TRANSPARENT));
-    		//terrain.getBlockChunkManager().generateLODBake(optimizedGeometry_Opaque);
+    		//optimizedGeometry_Opaque.setMesh(terrain.getMesher().generateMesh(this, terrain.getSettings().getChunkSizeX()));
+    		//optimizedGeometry_Transparent.setMesh(terrain.getMesher().generateMesh(this, terrain.getSettings().getChunkSizeX()));
     		LodGenerator lod = new LodGenerator(optimizedGeometry_Opaque);
-    		lod.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.5f);
+    		lod.bakeLods(LodGenerator.TriangleReductionMethod.COLLAPSE_COST, 0.5f);
     		optimizedGeometry_Opaque.addControl(lc_Opaque);
     		//optimizedGeometry_Transparent.addControl(lc);
     		needsMeshUpdate = false;
@@ -306,5 +311,16 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
         int chunksCountY = (int) Math.ceil(((float) blocksCount.getY()) / terrain.getSettings().getChunkSizeY());
         int chunksCountZ = (int) Math.ceil(((float) blocksCount.getZ()) / terrain.getSettings().getChunkSizeZ());
         return new Vector3Int(chunksCountX, chunksCountY, chunksCountZ);
+    }
+
+    public boolean isFaceVisible(Vector3Int loc, Face face) {
+    	Vector3Int vec = loc.add(face.getOffsetVector());
+    	BlockType type;
+    	if (!isValidBlockLocation(vec)) {
+    		type = terrain.getBlock(vec.add(blockLocation));
+    	} else {
+    		type = getBlock(loc.add(face.getOffsetVector()));
+    	}
+    	return type.getType() == 0 || BlockManager.getInstance().getType(type.getType()).getSkin().isTransparent();
     }
 }

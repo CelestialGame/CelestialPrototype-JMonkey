@@ -121,7 +121,7 @@ public class InputControl {
 							BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 							if(chunk != null && blockLocation != null && chunk.getBlock(blockLocation) != null) {
 								SPPortal.self.hideHighlight();
-								Class<? extends Block> block = BlockManager.getClass(chunk.getBlock(blockLocation).getType());
+								Class<? extends Block> block = BlockManager.getInstance().getClass(chunk.getBlock(blockLocation).getType());
 								item = parent.getInventoryManager().getItembyBlock(BlocksEnum.getBlockByClass(block));
 								if(item != null) {
 									parent.getInventoryManager().dropItem(item, blockAbsLocation, parent.player.getPlanet());
@@ -137,7 +137,7 @@ public class InputControl {
 								BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 								if(chunk != null && blockLocation != null && chunk.getBlock(blockLocation) != null) {
 									SPPortal.self.hideHighlight();
-									Class<? extends Block> block = BlockManager.getClass(chunk.getBlock(blockLocation).getType());
+									Class<? extends Block> block = BlockManager.getInstance().getClass(chunk.getBlock(blockLocation).getType());
 									item = parent.getInventoryManager().getItembyBlock(BlocksEnum.getBlockByClass(block));
 									if(item != null) {
 										parent.getInventoryManager().dropItem(item, blockAbsLocation, parent.player.getPlanet());

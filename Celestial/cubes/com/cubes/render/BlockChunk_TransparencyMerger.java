@@ -2,8 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.cubes;
+package com.cubes.render;
 
+import com.cubes.Block;
+import com.cubes.BlockChunkControl;
+import com.cubes.BlockType;
+import com.cubes.Vector3Int;
 import com.cubes.Block.Face;
 
 /**
