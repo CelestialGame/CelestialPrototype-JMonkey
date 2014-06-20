@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.celestial.CelestialPortal;
-import com.celestial.SinglePlayer.SPPortal;
-import com.jme3.math.Vector3f;
 
 public class Galaxy {
 

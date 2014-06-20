@@ -1,7 +1,8 @@
 package com.celestial.SinglePlayer.Inventory;
 
 import java.awt.image.BufferedImage;
-import com.celestial.Blocks.*;
+
+import com.celestial.Blocks.BlocksEnum;
 import com.celestial.util.InventoryException;
 import com.jme3.asset.AssetNotFoundException;
 

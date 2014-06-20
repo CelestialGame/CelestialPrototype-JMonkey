@@ -2,12 +2,15 @@ package com.cubes.test;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.cubes.BlockTerrainControl;
+import com.cubes.Vector3Int;
+import com.cubes.test.blocks.Block_Grass;
+import com.cubes.test.blocks.Block_Stone;
 import com.jme3.app.SimpleApplication;
 import com.jme3.math.Vector3f;
-import com.jme3.system.AppSettings;
-import com.cubes.*;
-import com.cubes.test.blocks.*;
 import com.jme3.scene.Node;
+import com.jme3.system.AppSettings;
 
 public class TestHeightmap extends SimpleApplication{
 

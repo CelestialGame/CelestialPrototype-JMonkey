@@ -7,7 +7,9 @@ package com.cubes.network;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import com.cubes.*;
+
+import com.cubes.BlockChunkControl;
+import com.cubes.BlockTerrainControl;
 
 /**
  *

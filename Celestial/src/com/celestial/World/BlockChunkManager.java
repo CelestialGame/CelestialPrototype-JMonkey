@@ -13,13 +13,7 @@ import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.World.Chunks.ChunkThreads;
 import com.cubes.BlockTerrainControl;
 import com.cubes.Vector3Int;
-import com.jme3.material.Material;
-import com.jme3.material.RenderState.BlendMode;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.queue.RenderQueue.Bucket;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.shape.Box;
 
 public class BlockChunkManager {
 
@@ -55,26 +49,11 @@ public class BlockChunkManager {
 	private Future<List<PreGeneratedChunk>> preGeneratedChunkFutureTask;
 
 	private List<PreGeneratedChunk> preGenChunks = new ArrayList<PreGeneratedChunk>();
-	private Box blockHighlight;
-	private Geometry blockHighlightGeom;
-	private Material blockHighlightMat;
 
 	public BlockChunkManager(BlockTerrainControl terrControl, Planet planet) {
 		this.planet = planet;
 		this.terrainControl = terrControl;
 		
-		this.blockHighlight = new Box(8*3+0.2f,8*3+0.2f,8*3+0.2f);
-		blockHighlight.setLineWidth(10f);
-		blockHighlightGeom = new Geometry("blockHighlight", this.blockHighlight);
-		blockHighlightMat = new Material(SPPortal.self.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-		blockHighlightMat.getAdditionalRenderState().setWireframe(true);
-		
-		blockHighlightMat.setColor("Color", new ColorRGBA(0f, 0f, 0f, 1f));
-		blockHighlightGeom.setMaterial(blockHighlightMat);
-
-		blockHighlightMat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-		blockHighlightGeom.setQueueBucket(Bucket.Transparent);
-		SPPortal.self.getRootNode().attachChild(blockHighlightGeom);
 	}
 
 	public void preGenerateChunks() 
@@ -139,7 +118,7 @@ public class BlockChunkManager {
 					float distance = rotatedCameraTranslation.distance(centerOfChunk);
 					if(distance > Planet.VIEW_DISTANCE) 
 					{
-						//this.terrainControl.getChunks()[x][y][z].unloadChunk();
+						this.terrainControl.getChunks()[x][y][z].unloadChunk();
 					} else {
 						this.terrainControl.getChunks()[x][y][z].loadChunk();
 					}

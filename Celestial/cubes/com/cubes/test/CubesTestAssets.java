@@ -5,6 +5,19 @@
 package com.cubes.test;
 
 import java.util.List;
+
+import com.cubes.Block;
+import com.cubes.BlockChunkControl;
+import com.cubes.BlockManager;
+import com.cubes.BlockSkin;
+import com.cubes.BlockSkin_TextureLocation;
+import com.cubes.CubesSettings;
+import com.cubes.Vector3Int;
+import com.cubes.test.blocks.Block_Brick;
+import com.cubes.test.blocks.Block_Grass;
+import com.cubes.test.blocks.Block_Stone;
+import com.cubes.test.blocks.Block_Water;
+import com.cubes.test.blocks.Block_Wood;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.light.DirectionalLight;
@@ -15,8 +28,6 @@ import com.jme3.post.SceneProcessor;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.util.SkyFactory;
 import com.jme3.water.WaterFilter;
-import com.cubes.*;
-import com.cubes.test.blocks.*;
 
 /**
  *

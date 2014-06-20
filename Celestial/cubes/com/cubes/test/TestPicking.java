@@ -2,19 +2,24 @@ package com.cubes.test;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.cubes.BlockNavigator;
+import com.cubes.BlockTerrainControl;
+import com.cubes.Vector3Int;
+import com.cubes.test.blocks.Block_Grass;
+import com.cubes.test.blocks.Block_Stone;
+import com.cubes.test.blocks.Block_Wood;
 import com.jme3.app.SimpleApplication;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.MouseButtonTrigger;
-import com.jme3.math.Vector3f;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
-import com.jme3.system.AppSettings;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import com.cubes.*;
-import com.cubes.test.blocks.*;
+import com.jme3.system.AppSettings;
 
 public class TestPicking extends SimpleApplication implements ActionListener{
 

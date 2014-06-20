@@ -4,7 +4,7 @@
  */
 package com.cubes.test.blocks;
 
-import com.cubes.*;
+import com.cubes.Block;
 
 /**
  *

@@ -9,7 +9,6 @@ package com.celestial.MultiPlayer;
 import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
 import com.jme3.bullet.control.BetterCharacterControl;
-import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.InputManager;
 import com.jme3.renderer.RenderManager;
 

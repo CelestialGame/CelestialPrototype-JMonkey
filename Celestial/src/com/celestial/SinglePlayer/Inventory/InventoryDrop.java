@@ -3,7 +3,6 @@ package com.celestial.SinglePlayer.Inventory;
 import com.celestial.Celestial;
 import com.celestial.SinglePlayer.SPPortal;
 import com.celestial.SinglePlayer.Components.Planet;
-import com.cubes.BlockManager;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
@@ -15,8 +14,6 @@ import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
-import com.jme3.scene.shape.Quad;
-import com.jme3.texture.Texture.WrapMode;
 
 /**
  * Inventory Drop Items

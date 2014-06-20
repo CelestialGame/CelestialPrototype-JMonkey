@@ -1,12 +1,13 @@
 package com.celestial.util;
 
+import java.awt.Color;
+import java.awt.Font;
+
 import com.jme3.asset.AssetInfo;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetLocator;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.ClasspathLocator;
-import java.awt.Color;
-import java.awt.Font;
 
 /**
 * Enables truetype fonts to be loaded using a location string.
