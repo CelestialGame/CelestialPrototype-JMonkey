@@ -8,8 +8,6 @@ package com.celestial.SinglePlayer.Components;
 
 import com.celestial.CelestialPortal;
 import com.jme3.bullet.PhysicsSpace;
-import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
-import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.objects.PhysicsRigidBody;
 import com.jme3.math.FastMath;
@@ -20,7 +18,6 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 
-@SuppressWarnings("deprecation")
 public class Player extends BetterCharacterControl{
 
 	private CelestialPortal portal;
@@ -44,8 +41,8 @@ public class Player extends BetterCharacterControl{
 		playerSpatial.scale(0.5f);
 		playerNode = (Node) playerSpatial;
 		playerNode.addControl(this);
-		this.setJumpForce(new Vector3f(0, 8f, 0));
-		this.setPhysicsDamping(0.9f);
+		this.setJumpForce(new Vector3f(0, 15f, 0));
+		this.setPhysicsDamping(1f);
 		portal.getRootNode().attachChild(playerNode);
 		this.cam = portal.cam;
 		this.name = name;

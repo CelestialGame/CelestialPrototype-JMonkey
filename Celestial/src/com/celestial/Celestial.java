@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 
 import com.celestial.Gui.Gui;
 import com.celestial.SinglePlayer.SPPortal;
-import com.celestial.util.FontLocator;
 import com.celestial.util.TTFFontLoader;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;

@@ -5,7 +5,6 @@ import java.util.Iterator;
 import com.celestial.CelestialPortal;
 import com.celestial.SinglePlayer.Inventory.InventoryDrop;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
-import com.celestial.util.InventoryException;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;
 
