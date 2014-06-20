@@ -302,7 +302,7 @@ public class ChunkThreads {
 		                int blockHeight = (((int) (((((row[z] - gridMinimum) * 100) / gridLargestDifference) / 100) * size.getY())) + 1);
 		                Vector3Int tmpLocation = new Vector3Int();
 		                for(int y=0;y<blockHeight;y++){
-		                    tmpLocation.set(location.getX() + x, location.getY() - y, location.getZ() + z);
+		                    tmpLocation.set(location.getX() + x, location.getY() - y + Planet.CHUNK_SIZE, location.getZ() + z);
 		                    terrain.setBlock(tmpLocation, blockClass);
 		                }
 		            }
@@ -319,7 +319,7 @@ public class ChunkThreads {
 		                int blockHeight = (((int) (((((row[z] - gridMinimum) * 100) / gridLargestDifference) / 100) * size.getX())) + 1);
 		                Vector3Int tmpLocation = new Vector3Int();
 		                for(int x=0;x<blockHeight;x++){
-		                    tmpLocation.set(location.getX() - x, location.getY() + y, location.getZ() + z);
+		                    tmpLocation.set(location.getX() - x + Planet.CHUNK_SIZE, location.getY() + y, location.getZ() + z);
 		                    terrain.setBlock(tmpLocation, blockClass);
 		                }
 		            }
@@ -373,7 +373,7 @@ public class ChunkThreads {
 		                int blockHeight = (((int) (((((row[y] - gridMinimum) * 100) / gridLargestDifference) / 100) * size.getZ())) + 1);
 		                Vector3Int tmpLocation = new Vector3Int();
 		                for(int z=0;z<blockHeight;z++){
-		                    tmpLocation.set(location.getX() + x, location.getY() + y, location.getZ() - z);
+		                    tmpLocation.set(location.getX() + x, location.getY() + y, location.getZ() - z + Planet.CHUNK_SIZE);
 		                    terrain.setBlock(tmpLocation, blockClass);
 		                }
 		            }
