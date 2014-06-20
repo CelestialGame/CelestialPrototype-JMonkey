@@ -116,7 +116,7 @@ public class InputControl {
 					float dist = parent.player.getLocation().distance(blockAbsLocation);
 					InventoryItem item;
 					if(!this.inventoryopen) {
-						if(!parent.getBulletAppState().isEnabled()) //Are they flying?
+						if(!parent.player.getBulletAppState().isEnabled()) //Are they flying?
 						{
 							BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 							if(chunk != null && blockLocation != null && chunk.getBlock(blockLocation) != null) {
@@ -181,7 +181,7 @@ public class InputControl {
 				Vector3f blockAbsLocation = (Vector3f) values[0];
 				if(blockLocation != null){
 					float dist = parent.player.getLocation().distance(blockAbsLocation);
-					if(!parent.getBulletAppState().isEnabled()) //Are they flying?
+					if(!parent.player.getBulletAppState().isEnabled()) //Are they flying?
 					{
 						BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 						if(chunk != null && blockLocation != null && parent.getInventoryManager().getSelectedHotSlot().getItem() != null) {
@@ -218,12 +218,12 @@ public class InputControl {
 				parent.player.jump();
 			}
 			else if(binding.equals("NoClip") && !keyPressed) {
-				if(parent.getBulletAppState().isEnabled()) {
-					parent.getBulletAppState().setEnabled(false);
+				if(parent.player.getBulletAppState().isEnabled()) {
+					parent.player.getBulletAppState().setEnabled(false);
 					parent.setCamSpeed(100);
 					parent.player.setVisibleToClient(true);
 				} else {
-					parent.getBulletAppState().setEnabled(true);
+					parent.player.getBulletAppState().setEnabled(true);
 					parent.player.setLocation(new Vector3f(cam.getLocation().getX(), cam.getLocation().getY()-parent.getCamHeight(), cam.getLocation().getZ()));
 					parent.player.setVisibleToClient(false);
 				}

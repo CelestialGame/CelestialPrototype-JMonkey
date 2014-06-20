@@ -11,11 +11,13 @@ import java.util.EnumSet;
 import java.util.List;
 
 import com.celestial.CelestialPortal;
+import com.celestial.SinglePlayer.Physics.Listener;
 import com.celestial.World.BlockChunkManager;
 import com.cubes.BlockChunkControl;
 import com.cubes.BlockChunkListener;
 import com.cubes.BlockTerrainControl;
 import com.cubes.Vector3Int;
+import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
@@ -87,6 +89,7 @@ public class Planet implements BlockChunkListener {
 	private Vector3f previousPlanetTranslation;
 	private Quaternion previousPlanetRotation;
 	private Quaternion previousStarNodeRotation;
+	private BulletAppState bulletAppState;
 	
 	
 
@@ -104,10 +107,13 @@ public class Planet implements BlockChunkListener {
 		this.location = location;
 		this.centerofdiam = (int)Math.ceil((float)diameter/2);
 		this.portal = star.getSolarSystem().getSector().getGalaxy().getPortal();
-		this.amountRotation = new Vector3f(0f, 0.0f, 0f);
-		this.amountRevolution = new Vector3f(0f, 0.0f, 0f);
+		this.amountRotation = new Vector3f(0f, 0.001f, 0f);
+		this.amountRevolution = new Vector3f(0f, 0.001f, 0f);
 		this.name = name;
 		this.atmosphereSizeFactor = 1.2f;
+		this.bulletAppState = new BulletAppState();
+		this.portal.getParent().getStateManager().attach(bulletAppState);
+		this.bulletAppState.getPhysicsSpace().addCollisionListener(new Listener());
 
 		if(diameter % 2 == 0)
 		{
@@ -137,6 +143,7 @@ public class Planet implements BlockChunkListener {
 
 		star.getStarNode().attachChild(starNode);
 		
+		
 		/* PLANET TYPE DETERMINATION */
 		
 		if(this.starNode.getWorldTranslation().distance(this.planetNode.getWorldTranslation()) >= 3500F && 
@@ -160,18 +167,6 @@ public class Planet implements BlockChunkListener {
 		terrainControl.setBlockChunkManager(new BlockChunkManager(terrainControl, this));
 		terrainControl.getBlockChunkManager().preGenerateChunks();
 		
-		/*//Post-terrain generation here
-		for(int i=0; i<diameter*2; i++)
-		{    
-			for(int j=0; j<diameter*2; j++)
-			{
-				int x1 = (int) (i*(CHUNK_SIZE/2));
-				int y1 = (int) diameter*CHUNK_SIZE*3;
-				int z1 = (int) (j*(CHUNK_SIZE/2));
-				makeTreeAt(new Vector3Int(x1, y1, z1), terrcontrol);
-			}
-		}*/
-
 		terrainNode.addControl(terrainControl);
 		/* LIGHTING */
 		planetNode.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
@@ -219,35 +214,6 @@ public class Planet implements BlockChunkListener {
 		c8.move(((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*3, ((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*-3, ((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*3);
 		this.cornerList.add(c8);
 		
-		
-		/*// CORNER BEDROCK
-		Vector3Int c1Int = Vector3Int.convert3f(c1.getWorldTranslation());
-		terrcontrol.setBlock(new Vector3Int(c1Int.getX(), c1Int.getY(), c1Int.getZ()), BlocksEnum.SUBSTRATUS.getBClass());
-		
-		Vector3Int c2Int = Vector3Int.convert3f(c2.getWorldTranslation());
-		terrcontrol.setBlock(new Vector3Int(c2Int.getX(), c2Int.getY(), c2Int.getZ()), BlocksEnum.SUBSTRATUS.getBClass());
-
-		Vector3Int c3Int = Vector3Int.convert3f(c3.getWorldTranslation());
-		terrcontrol.setBlock(new Vector3Int(c3Int.getX(), c3Int.getY(), c3Int.getZ()), BlocksEnum.SUBSTRATUS.getBClass());
-		
-		Vector3Int c4Int = Vector3Int.convert3f(c4.getWorldTranslation());
-		terrcontrol.setBlock(new Vector3Int(c4Int.getX(), c4Int.getY(), c4Int.getZ()), BlocksEnum.SUBSTRATUS.getBClass());
-
-		Vector3Int c5Int = Vector3Int.convert3f(c5.getWorldTranslation());
-		terrcontrol.setBlock(new Vector3Int(c5Int.getX(), c5Int.getY(), c5Int.getZ()), BlocksEnum.SUBSTRATUS.getBClass());
-		
-		Vector3Int c6Int = Vector3Int.convert3f(c6.getWorldTranslation());
-		terrcontrol.setBlock(new Vector3Int(c6Int.getX(), c6Int.getY(), c6Int.getZ()), BlocksEnum.SUBSTRATUS.getBClass());
-
-		Vector3Int c7Int = Vector3Int.convert3f(c7.getWorldTranslation());
-		terrcontrol.setBlock(new Vector3Int(c7Int.getX(), c7Int.getY(), c7Int.getZ()), BlocksEnum.SUBSTRATUS.getBClass());
-
-		Vector3Int c8Int = Vector3Int.convert3f(c8.getWorldTranslation());
-		terrcontrol.setBlock(new Vector3Int(c8Int.getX(), c8Int.getY(), c8Int.getZ()), BlocksEnum.SUBSTRATUS.getBClass());
-		
-		System.out.println(c1.getWorldTranslation());
-		System.out.println(c1Int.toString());/*
-		
 		/* ATMOSPHERE */
 		if(this.type.hasAtmosphere()) {
 			this.atmospherebox = new Box(this.diameter*CHUNK_SIZE*3*atmosphereSizeFactor, this.diameter*CHUNK_SIZE*3*atmosphereSizeFactor, this.diameter*CHUNK_SIZE*3*atmosphereSizeFactor);
@@ -286,8 +252,11 @@ public class Planet implements BlockChunkListener {
 		terrainControl.getBlockChunkManager().checkChunks(camLocation);
 	}
 	
+	public BulletAppState getBulletAppState()
+	{
+		return this.bulletAppState;
+	}
 	
-
 	public PlanetCorner[] getCornersForFace(int face)
 	{
 		PlanetCorner[] values = new PlanetCorner[4];
@@ -388,11 +357,11 @@ public class Planet implements BlockChunkListener {
 		if(chunkGeometry.getTriangleCount() > 0){
 			if(rigidBodyControl != null){
 				chunkGeometry.removeControl(rigidBodyControl);
-				portal.getBulletAppState().getPhysicsSpace().remove(rigidBodyControl);
+				this.getBulletAppState().getPhysicsSpace().remove(rigidBodyControl);
 			}
 			rigidBodyControl = new RigidBodyControl(0);
 			chunkGeometry.addControl(rigidBodyControl);
-			portal.getBulletAppState().getPhysicsSpace().add(rigidBodyControl);
+			this.getBulletAppState().getPhysicsSpace().add(rigidBodyControl);
 		}
 		else{
 			if(rigidBodyControl != null){
@@ -512,9 +481,9 @@ public class Planet implements BlockChunkListener {
 						{
 							RigidBodyControl r = chunk.getOptimizedGeometry_Opaque().getControl(RigidBodyControl.class);
 							chunk.getOptimizedGeometry_Opaque().removeControl(r);
-							portal.getBulletAppState().getPhysicsSpace().remove(r);
+							this.getBulletAppState().getPhysicsSpace().remove(r);
 							chunk.getOptimizedGeometry_Opaque().addControl(r);
-							portal.getBulletAppState().getPhysicsSpace().add(r);
+							this.getBulletAppState().getPhysicsSpace().add(r);
 						}
 					}
 					if(chunk.getOptimizedGeometry_Transparent() != null)
@@ -523,9 +492,9 @@ public class Planet implements BlockChunkListener {
 						{
 							RigidBodyControl r = chunk.getOptimizedGeometry_Transparent().getControl(RigidBodyControl.class);
 							chunk.getOptimizedGeometry_Transparent().removeControl(r);
-							portal.getBulletAppState().getPhysicsSpace().remove(r);
+							this.getBulletAppState().getPhysicsSpace().remove(r);
 							chunk.getOptimizedGeometry_Transparent().addControl(r);
-							portal.getBulletAppState().getPhysicsSpace().add(r);
+							this.getBulletAppState().getPhysicsSpace().add(r);
 						}
 					}
 				}

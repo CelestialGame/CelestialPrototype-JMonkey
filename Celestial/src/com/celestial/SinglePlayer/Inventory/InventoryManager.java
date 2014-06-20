@@ -177,7 +177,7 @@ public class InventoryManager {
 	}
 	public void removeDropItem(InventoryDrop drop, Iterator<InventoryDrop> itr) {
 		if(this.dropitems.contains(drop)) {
-			this.portal.getBulletAppState().getPhysicsSpace().remove(drop.getCollisionBox().getUserObject());
+			drop.getPlanet().getBulletAppState().getPhysicsSpace().remove(drop.getCollisionBox().getUserObject());
 			this.dropitemsnode.detachChild(drop.getNode());
 			itr.remove();
 		}
