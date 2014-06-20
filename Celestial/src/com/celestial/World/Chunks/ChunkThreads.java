@@ -2,6 +2,7 @@ package com.celestial.World.Chunks;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
@@ -10,7 +11,9 @@ import com.celestial.Blocks.BlocksEnum;
 import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.SinglePlayer.Components.Planet.planetType;
 import com.celestial.World.BlockChunkManager.PreGeneratedChunk;
+import com.cubes.Block;
 import com.cubes.BlockTerrainControl;
+import com.cubes.Noise;
 import com.cubes.Vector3Int;
 
 public class ChunkThreads {
@@ -45,6 +48,17 @@ public class ChunkThreads {
 		
 	}
 	public static class GenerateChunkThread extends Thread{
+		
+		public static enum PlanetSide {
+			TOP, BOTTOM, LEFT, RIGHT, FRONT, BACK;
+			
+			public static final EnumSet<PlanetSide> PLANETSIDES = EnumSet.range(TOP, BACK);
+			
+			public final boolean isPlanetSide() {
+	 			return PLANETSIDES.contains(this);
+	 		}
+		}
+		
 		BlockTerrainControl blockTerrain;
 		int x;
 		int y;
@@ -102,17 +116,31 @@ public class ChunkThreads {
 									preChunk.getLocation().getZ() == 0) {
 								return;
 							}
-							if(preChunk.getLocation().getX() == preChunk.getPlanet().getDiameter()-2 || 
-									preChunk.getLocation().getX() == 1) {
-								generateRandomTerrain(new Vector3Int(x,y,z), new Vector3Int(chunkSize, chunkSize, chunkSize), 5, BlocksEnum.GRASS, blockTerrain);
+							if(preChunk.getLocation().getX() == preChunk.getPlanet().getDiameter()-2) {
+								generateRandomTerrain(new Vector3Int(x,y,z), 
+										new Vector3Int(chunkSize, chunkSize, chunkSize), 5, BlocksEnum.GRASS, PlanetSide.RIGHT, blockTerrain);
 								return;
-							} else if (preChunk.getLocation().getY() == preChunk.getPlanet().getDiameter()-2 || 
-									preChunk.getLocation().getY() == 1) {
-								generateRandomTerrain(new Vector3Int(x,y,z), new Vector3Int(chunkSize, chunkSize, chunkSize), 5, BlocksEnum.GRASS, blockTerrain);
+							} else if(preChunk.getLocation().getX() == 1) {
+								generateRandomTerrain(new Vector3Int(x,y,z), 
+										new Vector3Int(chunkSize, chunkSize, chunkSize), 5, BlocksEnum.GRASS, PlanetSide.LEFT, blockTerrain);
 								return;
-							} else if (preChunk.getLocation().getZ() == preChunk.getPlanet().getDiameter()-2 || 
-									preChunk.getLocation().getZ() == 1) {
-								generateRandomTerrain(new Vector3Int(x,y,z), new Vector3Int(chunkSize, chunkSize, chunkSize), 5, BlocksEnum.GRASS, blockTerrain);
+							}
+							else if (preChunk.getLocation().getY() == preChunk.getPlanet().getDiameter()-2) {
+								generateRandomTerrain(new Vector3Int(x,y,z), 
+										new Vector3Int(chunkSize, chunkSize, chunkSize), 5, BlocksEnum.GRASS, PlanetSide.TOP, blockTerrain);
+								return;
+							} else if(preChunk.getLocation().getY() == 1) {
+								generateRandomTerrain(new Vector3Int(x,y,z), 
+										new Vector3Int(chunkSize, chunkSize, chunkSize), 5, BlocksEnum.GRASS, PlanetSide.BOTTOM, blockTerrain);
+								return;
+							}
+							else if (preChunk.getLocation().getZ() == preChunk.getPlanet().getDiameter()-2) {
+								generateRandomTerrain(new Vector3Int(x,y,z), 
+										new Vector3Int(chunkSize, chunkSize, chunkSize), 5, BlocksEnum.GRASS, PlanetSide.FRONT, blockTerrain);
+								return;
+							} else if (preChunk.getLocation().getZ() == 1) {
+								generateRandomTerrain(new Vector3Int(x,y,z), 
+										new Vector3Int(chunkSize, chunkSize, chunkSize), 5, BlocksEnum.GRASS, PlanetSide.BACK, blockTerrain);
 								return;
 							}
 							Random randomGenerator = new Random();
@@ -175,10 +203,10 @@ public class ChunkThreads {
 			chunk.setBlock(new Vector3Int(x, y, z), BlockType.getBClass());
 
 		}
-		public void generateRandomTerrain(Vector3Int location, Vector3Int size, float roughness, BlocksEnum BlockType, BlockTerrainControl chunk) {
+		public void generateRandomTerrain(Vector3Int location, Vector3Int size, float roughness, BlocksEnum BlockType, PlanetSide side, BlockTerrainControl chunk) {
 			if(BlockType.getBClass() == null)
 				return;
-			chunk.setBlocksFromNoise(location, size, roughness, BlockType.getBClass());
+			setBlocksFromNoise(location, size, roughness, BlockType.getBClass(), side, chunk);
 		}
 		public void makeTreeAt(Vector3Int loc, BlockTerrainControl blockTerrain) {
 			int x = 0;
@@ -244,6 +272,115 @@ public class ChunkThreads {
 			}
 			return height;
 		}
+		
+		public void setBlocksFromNoise(Vector3Int location, Vector3Int size, float roughness, Class<? extends Block> blockClass, PlanetSide side, BlockTerrainControl terrain){
+	        if(side == PlanetSide.TOP) {
+	        	Noise noise = new Noise(null, roughness, size.getX(), size.getZ());
+		        noise.initialise();
+		        float gridMinimum = noise.getMinimum();
+		        float gridLargestDifference = (noise.getMaximum() - gridMinimum);
+		        float[][] grid = noise.getGrid();
+		        for(int x=0;x<grid.length;x++){
+		            float[] row = grid[x];
+		            for(int z=0;z<row.length;z++){
+		                int blockHeight = (((int) (((((row[z] - gridMinimum) * 100) / gridLargestDifference) / 100) * size.getY())) + 1);
+		                Vector3Int tmpLocation = new Vector3Int();
+		                for(int y=0;y<blockHeight;y++){
+		                    tmpLocation.set(location.getX() + x, location.getY() + y, location.getZ() + z);
+		                    terrain.setBlock(tmpLocation, blockClass);
+		                }
+		            }
+		        }
+	        } else if(side == PlanetSide.BOTTOM) {
+	        	Noise noise = new Noise(null, roughness, size.getX(), size.getZ());
+		        noise.initialise();
+		        float gridMinimum = noise.getMinimum();
+		        float gridLargestDifference = (noise.getMaximum() - gridMinimum);
+		        float[][] grid = noise.getGrid();
+	        	for(int x=0;x<grid.length;x++){
+		            float[] row = grid[x];
+		            for(int z=0;z<row.length;z++){
+		                int blockHeight = (((int) (((((row[z] - gridMinimum) * 100) / gridLargestDifference) / 100) * size.getY())) + 1);
+		                Vector3Int tmpLocation = new Vector3Int();
+		                for(int y=0;y<blockHeight;y++){
+		                    tmpLocation.set(location.getX() + x, location.getY() - y, location.getZ() + z);
+		                    terrain.setBlock(tmpLocation, blockClass);
+		                }
+		            }
+		        }
+	        } else if(side == PlanetSide.LEFT) {
+	        	Noise noise = new Noise(null, roughness, size.getY(), size.getZ());
+		        noise.initialise();
+		        float gridMinimum = noise.getMinimum();
+		        float gridLargestDifference = (noise.getMaximum() - gridMinimum);
+		        float[][] grid = noise.getGrid();
+	        	for(int y=0;y<grid.length;y++){
+		            float[] row = grid[y];
+		            for(int z=0;z<row.length;z++){
+		                int blockHeight = (((int) (((((row[z] - gridMinimum) * 100) / gridLargestDifference) / 100) * size.getX())) + 1);
+		                Vector3Int tmpLocation = new Vector3Int();
+		                for(int x=0;x<blockHeight;x++){
+		                    tmpLocation.set(location.getX() - x, location.getY() + y, location.getZ() + z);
+		                    terrain.setBlock(tmpLocation, blockClass);
+		                }
+		            }
+		        }
+	        }
+	        else if(side == PlanetSide.RIGHT) {
+	        	Noise noise = new Noise(null, roughness, size.getY(), size.getZ());
+		        noise.initialise();
+		        float gridMinimum = noise.getMinimum();
+		        float gridLargestDifference = (noise.getMaximum() - gridMinimum);
+		        float[][] grid = noise.getGrid();
+	        	for(int y=0;y<grid.length;y++){
+		            float[] row = grid[y];
+		            for(int z=0;z<row.length;z++){
+		                int blockHeight = (((int) (((((row[z] - gridMinimum) * 100) / gridLargestDifference) / 100) * size.getX())) + 1);
+		                Vector3Int tmpLocation = new Vector3Int();
+		                for(int x=0;x<blockHeight;x++){
+		                    tmpLocation.set(location.getX() + x, location.getY() + y, location.getZ() + z);
+		                    terrain.setBlock(tmpLocation, blockClass);
+		                }
+		            }
+		        }
+	        }
+	        else if(side == PlanetSide.FRONT) {
+	        	Noise noise = new Noise(null, roughness, size.getX(), size.getY());
+		        noise.initialise();
+		        float gridMinimum = noise.getMinimum();
+		        float gridLargestDifference = (noise.getMaximum() - gridMinimum);
+		        float[][] grid = noise.getGrid();
+	        	for(int x=0;x<grid.length;x++){
+		            float[] row = grid[x];
+		            for(int y=0;y<row.length;y++){
+		                int blockHeight = (((int) (((((row[y] - gridMinimum) * 100) / gridLargestDifference) / 100) * size.getZ())) + 1);
+		                Vector3Int tmpLocation = new Vector3Int();
+		                for(int z=0;z<blockHeight;z++){
+		                    tmpLocation.set(location.getX() + x, location.getY() + y, location.getZ() + z);
+		                    terrain.setBlock(tmpLocation, blockClass);
+		                }
+		            }
+		        }
+	        }
+	        else if(side == PlanetSide.BACK) {
+	        	Noise noise = new Noise(null, roughness, size.getX(), size.getY());
+		        noise.initialise();
+		        float gridMinimum = noise.getMinimum();
+		        float gridLargestDifference = (noise.getMaximum() - gridMinimum);
+		        float[][] grid = noise.getGrid();
+	        	for(int x=0;x<grid.length;x++){
+		            float[] row = grid[x];
+		            for(int y=0;y<row.length;y++){
+		                int blockHeight = (((int) (((((row[y] - gridMinimum) * 100) / gridLargestDifference) / 100) * size.getZ())) + 1);
+		                Vector3Int tmpLocation = new Vector3Int();
+		                for(int z=0;z<blockHeight;z++){
+		                    tmpLocation.set(location.getX() + x, location.getY() + y, location.getZ() - z);
+		                    terrain.setBlock(tmpLocation, blockClass);
+		                }
+		            }
+		        }
+	        }
+	    }
 	}
 	
 	public static class LoadChunkThread extends Thread{
