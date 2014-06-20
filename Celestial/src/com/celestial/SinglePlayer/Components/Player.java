@@ -7,6 +7,8 @@ Date Created:
 package com.celestial.SinglePlayer.Components;
 
 import com.celestial.CelestialPortal;
+import com.celestial.SinglePlayer.SPPortal;
+import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.objects.PhysicsRigidBody;
@@ -30,12 +32,12 @@ public class Player extends BetterCharacterControl{
 	private Node playerNode;
 	private String name;
 	private Vector3f translationUpdate = null;
+	private BulletAppState bulletAppState;
 
 	public Player(CelestialPortal portal, String name)
 	{
 		super(1.2f, 5.8f, 1f);	
 		this.portal = portal;
-		portal.getBulletAppState().getPhysicsSpace().add(this);
 		playerSpatial = portal.getAssetManager().loadModel("assets/models/player/simpleplayer.mesh.xml");
 		playerSpatial.scale(0.5f, 1.5f, 1);
 		playerSpatial.scale(0.5f);
@@ -47,6 +49,8 @@ public class Player extends BetterCharacterControl{
 		this.cam = portal.cam;
 		this.name = name;
 		this.translationUpdate = null;
+		this.setApplyPhysicsLocal(true);
+		this.setBulletAppState(portal.galaxy.getSpace().getBulletAppState());
 	}
 
 	public void setVisibleToClient(boolean visible)
@@ -142,6 +146,19 @@ public class Player extends BetterCharacterControl{
 
 	public void setPlanet(Planet planet)
 	{
+		if(planet != null)
+		{
+			this.setBulletAppState(planet.getBulletAppState());
+			planet.getPlanetNode().attachChild(this.getNode());
+			planet.getPlanetNode().attachChild(this.playerSpatial);
+		}
+		else
+		{
+			if(this.planet != null)
+			{
+				this.setBulletAppState(portal.galaxy.getSpace().getBulletAppState());
+			}
+		}
 		this.planet = planet;
 	}
 
@@ -267,7 +284,7 @@ public class Player extends BetterCharacterControl{
 		Vector3f P1 = planet.getOriginalPlanetTranslation();
 
 		Vector3f playerP = null;
-		if(portal.getPhysics().isEnabled())
+		if(this.getBulletAppState().isEnabled())
 			playerP = getLocation();
 		else
 			playerP = portal.getCam().getLocation();
@@ -335,6 +352,21 @@ public class Player extends BetterCharacterControl{
 		return this.name;
 	}
 
+	public BulletAppState getBulletAppState()
+	{
+		return this.bulletAppState;
+	}
+	
+	public void setBulletAppState(BulletAppState state)
+	{
+		if(this.bulletAppState != null)
+		{
+			this.bulletAppState.getPhysicsSpace().remove(this);
+		}
+		this.bulletAppState = state;
+		this.bulletAppState.getPhysicsSpace().add(this);
+	}
+	
 	public void setTranslationUpdate(Vector3f translation) {
 		this.translationUpdate  = translation;
 	}

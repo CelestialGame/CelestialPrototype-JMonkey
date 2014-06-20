@@ -21,6 +21,7 @@ public class Galaxy {
 	private int maxSystemsPerSector;
 	private int centerOfDiameter;
 	private int centerOfDepth;
+	private Space space;
 
 	/**
 	 * Creates a galaxy. One galaxy per game may be used.
@@ -39,6 +40,7 @@ public class Galaxy {
 		this.maxSystemsPerSector = maxSystemsPerSector;
 		this.centerOfDiameter = (int)Math.ceil((float)diameter/2);
 		this.centerOfDepth = (int)Math.ceil((float)depth/2);
+		this.space = new Space(portal);
 		
 		if(diameter % 2 == 0)
 		{
@@ -112,5 +114,10 @@ public class Galaxy {
 	public CelestialPortal getPortal() {
 		return portal;
 	}
-
+	
+	public Space getSpace()
+	{
+		return space;
+	}
+	
 }

@@ -120,10 +120,6 @@ public class SPPortal extends CelestialPortal{
 		this.csettings.setChunkSizeY(16);
 		this.csettings.setChunkSizeZ(16);
 
-		/** Set up Physics **/
-		this.bulletAppState = new BulletAppState();
-		this.getParent().getStateManager().attach(this.getBulletAppState());
-
 		Blocks.init();
 
 		this.guiNode.detachAllChildren();
@@ -175,8 +171,6 @@ public class SPPortal extends CelestialPortal{
 		this.rootNode.setShadowMode(ShadowMode.Off);
 		this.player.getNode().setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
 
-		this.bulletAppState.getPhysicsSpace().addCollisionListener(new Listener(this));
-		//this.bulletAppState.setDebugEnabled(true);
 		//initAudio();
 
 		/* BLOCK HIGHLIGHT */		
@@ -234,10 +228,10 @@ public class SPPortal extends CelestialPortal{
 								Vector3f playerRotatedByPlanet = planetRotationAmount.mult(playerToPlanet);
 								Vector3f finalDifference = (playerRotatedByPlanet.add(p.getCurrentPlanetTranslation())).subtract(player.getLocation());
 								
-								player.setTranslationUpdate(finalDifference);
+								//player.setTranslationUpdate(finalDifference);
 								
-								if(this.bulletAppState.isEnabled())
-									cam.setRotation(planetRotationAmount.mult(starRotationAmount.mult(cam.getRotation())));
+								//if(this.bulletAppState.isEnabled())
+								//	cam.setRotation(planetRotationAmount.mult(starRotationAmount.mult(cam.getRotation())));
 							}
 					}
 			this.lastRotation = this.timer.getTimeInSeconds();
@@ -394,7 +388,7 @@ public class SPPortal extends CelestialPortal{
 			}
 			Vector3f blockLocationAbs = (Vector3f) values[0];
 			float dist = blockLocationAbs.distance(player.getLocation());
-			if(block != null && (dist <= 15F || !this.bulletAppState.isEnabled())) {
+			if(block != null && (dist <= 15F || !player.getBulletAppState().isEnabled())) {
 				this.showHighlight();
 				this.blockHighlightGeom.setLocalTranslation(blockLocation.getX()*3+1.5f, blockLocation.getY()*3+1.5f, blockLocation.getZ()*3+1.5f);
 				player.getPlanet().getTerrainNode().attachChild(this.blockHighlightGeom);

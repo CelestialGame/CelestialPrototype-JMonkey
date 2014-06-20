@@ -30,7 +30,6 @@ import com.jme3.system.AppSettings;
 public abstract class CelestialPortal {
 	
 	private Celestial parent;
-	protected BulletAppState bulletAppState;
 	protected InventoryManager invmanager;
 	protected Node rootNode;
 	protected Node guiNode;
@@ -64,14 +63,6 @@ public abstract class CelestialPortal {
 	
 	public abstract BetterCharacterControl getPlayer();
 
-	public BulletAppState getBulletAppState() {
-		return bulletAppState;
-	}
-
-	public void setBulletAppState(BulletAppState bulletAppState) {
-		this.bulletAppState = bulletAppState;
-	}
-	
 	public InventoryManager getInventoryManager(){
 		return this.invmanager;
 	}
@@ -105,10 +96,6 @@ public abstract class CelestialPortal {
 
 	public AssetManager getAssetManager() {
 		return assetManager;
-	}
-
-	public BulletAppState getPhysics() {
-		return bulletAppState;
 	}
 	
 	public FlyByCamera getFlyCam()

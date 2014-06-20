@@ -71,7 +71,7 @@ public class CameraControl {
 	}
 	
 	public void updateCamera(float tpf) {
-		if(this.parent.getBulletAppState().isEnabled()) {
+		if(this.parent.player.getBulletAppState().isEnabled()) {
 			//this.cam.setAxes(this.parent.player.getLocalLeft(), this.parent.player.getLocalUp(), this.parent.player.getLocalForward());
 			
 			Vector3f camDir = this.cam.getDirection().clone().divide(16);

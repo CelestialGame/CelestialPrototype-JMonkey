@@ -56,7 +56,7 @@ public class InventoryDrop{
 		//this.rigidBodyControl.removeCollideWithGroup(Celestial.portal.player.getCollisionGroup());
         this.itemdrop.addControl(rigidBodyControl);
         //Celestial.portal.player.removeCollideWithGroup(this.rigidBodyControl.getCollisionGroup());
-        Celestial.portal.getPhysics().getPhysicsSpace().add(this.itemdrop);
+        planet.getBulletAppState().getPhysicsSpace().add(this.itemdrop);
         
         this.itemdropnode = new Node();
         this.itemdropnode.attachChild(itemdrop);
@@ -95,7 +95,7 @@ public class InventoryDrop{
 		Vector3f P1 = planet.getOriginalPlanetTranslation();
 
 		Vector3f itemP = null;
-		if(SPPortal.self.getPhysics().isEnabled())
+		if(this.planet.getBulletAppState().isEnabled())
 			itemP = this.itemdrop.getWorldTranslation();
 		else
 			return -1;
