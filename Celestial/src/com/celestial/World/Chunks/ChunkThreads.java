@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
+import jme3tools.optimize.LodGenerator;
+
 import com.celestial.Blocks.BlocksEnum;
 import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.SinglePlayer.Components.Planet.planetType;
@@ -14,6 +16,7 @@ import com.cubes.Block;
 import com.cubes.BlockTerrainControl;
 import com.cubes.Noise;
 import com.cubes.Vector3Int;
+import com.jme3.scene.Geometry;
 
 public class ChunkThreads {
 	
@@ -46,6 +49,22 @@ public class ChunkThreads {
 		}
 		
 	}
+	public static class BakeChunkLODThread implements Callable<Geometry> {
+		Geometry blockTerrainGeo;
+		
+		public BakeChunkLODThread(Geometry blockTerrainGeo) {
+			this.blockTerrainGeo = blockTerrainGeo;
+		}
+
+		@Override
+		public Geometry call() throws Exception {
+			LodGenerator lod = new LodGenerator(blockTerrainGeo);
+    		lod.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.5f);
+			return blockTerrainGeo;
+		}
+		
+	}
+	
 	public static class GenerateChunkThread extends Thread{
 		
 		public static enum PlanetSide {
@@ -104,42 +123,43 @@ public class ChunkThreads {
 						else
 						{*/
 						if(preChunk.getPlanet().getType().hasAtmosphere()) {
-							//System.out.println("Chunk Generation at " + preChunk.getLocation().toString());
-							if(preChunk.getLocation().getX() == preChunk.getPlanet().getDiameter()-1 || 
+							//Empty ceiling chunks
+							if(preChunk.getLocation().getX() >= preChunk.getPlanet().getDiameter()-1 || 
 									preChunk.getLocation().getX() == 0) {
 								return;
-							} else if (preChunk.getLocation().getY() == preChunk.getPlanet().getDiameter()-1 || 
+							} else if (preChunk.getLocation().getY() >= preChunk.getPlanet().getDiameter()-1 || 
 									preChunk.getLocation().getY() == 0) {
 								return;
-							} else if (preChunk.getLocation().getZ() == preChunk.getPlanet().getDiameter()-1 || 
+							} else if (preChunk.getLocation().getZ() >= preChunk.getPlanet().getDiameter()-1 || 
 									preChunk.getLocation().getZ() == 0) {
 								return;
 							}
+							//Random Terrain Generation chunks
 							if(preChunk.getLocation().getX() == preChunk.getPlanet().getDiameter()-2) {
 								generateRandomTerrain(new Vector3Int(x,y,z), 
-										new Vector3Int(chunkSize, chunkSize, chunkSize), 5, BlocksEnum.GRASS, PlanetSide.RIGHT, blockTerrain);
+										new Vector3Int(chunkSize/2, chunkSize, chunkSize), 3, BlocksEnum.GRASS, PlanetSide.RIGHT, blockTerrain);
 								return;
 							} else if(preChunk.getLocation().getX() == 1) {
 								generateRandomTerrain(new Vector3Int(x,y,z), 
-										new Vector3Int(chunkSize, chunkSize, chunkSize), 5, BlocksEnum.GRASS, PlanetSide.LEFT, blockTerrain);
+										new Vector3Int(chunkSize/2, chunkSize, chunkSize), 3, BlocksEnum.GRASS, PlanetSide.LEFT, blockTerrain);
 								return;
 							}
 							else if (preChunk.getLocation().getY() == preChunk.getPlanet().getDiameter()-2) {
 								generateRandomTerrain(new Vector3Int(x,y,z), 
-										new Vector3Int(chunkSize, chunkSize, chunkSize), 5, BlocksEnum.GRASS, PlanetSide.TOP, blockTerrain);
+										new Vector3Int(chunkSize, chunkSize/2, chunkSize), 3, BlocksEnum.GRASS, PlanetSide.TOP, blockTerrain);
 								return;
 							} else if(preChunk.getLocation().getY() == 1) {
 								generateRandomTerrain(new Vector3Int(x,y,z), 
-										new Vector3Int(chunkSize, chunkSize, chunkSize), 5, BlocksEnum.GRASS, PlanetSide.BOTTOM, blockTerrain);
+										new Vector3Int(chunkSize, chunkSize/2, chunkSize), 3, BlocksEnum.GRASS, PlanetSide.BOTTOM, blockTerrain);
 								return;
 							}
 							else if (preChunk.getLocation().getZ() == preChunk.getPlanet().getDiameter()-2) {
 								generateRandomTerrain(new Vector3Int(x,y,z), 
-										new Vector3Int(chunkSize, chunkSize, chunkSize), 5, BlocksEnum.GRASS, PlanetSide.FRONT, blockTerrain);
+										new Vector3Int(chunkSize, chunkSize, chunkSize/2), 3, BlocksEnum.GRASS, PlanetSide.FRONT, blockTerrain);
 								return;
 							} else if (preChunk.getLocation().getZ() == 1) {
 								generateRandomTerrain(new Vector3Int(x,y,z), 
-										new Vector3Int(chunkSize, chunkSize, chunkSize), 5, BlocksEnum.GRASS, PlanetSide.BACK, blockTerrain);
+										new Vector3Int(chunkSize, chunkSize, chunkSize/2), 3, BlocksEnum.GRASS, PlanetSide.BACK, blockTerrain);
 								return;
 							}
 							Random randomGenerator = new Random();

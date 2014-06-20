@@ -3,6 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="lib"/>
 	<classpathentry kind="src" path="cubes"/>
+	<classpathentry kind="src" path="jme3tools"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="jmonkey/lib/eventbus.jar"/>
 	<classpathentry kind="lib" path="jmonkey/lib/gluegen-rt.jar"/>

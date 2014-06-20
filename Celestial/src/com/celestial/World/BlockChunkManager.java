@@ -14,6 +14,7 @@ import com.celestial.World.Chunks.ChunkThreads;
 import com.cubes.BlockTerrainControl;
 import com.cubes.Vector3Int;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 
 public class BlockChunkManager {
 
@@ -47,6 +48,8 @@ public class BlockChunkManager {
 	BlockTerrainControl terrainControl;
 	private ExecutorService preGeneratedChunkService;
 	private Future<List<PreGeneratedChunk>> preGeneratedChunkFutureTask;
+	private ExecutorService LODBakeService;
+	private Future<Geometry> LODBakeFutureTask;
 
 	private List<PreGeneratedChunk> preGenChunks = new ArrayList<PreGeneratedChunk>();
 
@@ -60,6 +63,23 @@ public class BlockChunkManager {
 	{
 		this.preGeneratedChunkService = Executors.newFixedThreadPool(1);        
 		this.preGeneratedChunkFutureTask = this.preGeneratedChunkService.submit(new ChunkThreads.PreGenChunksThread(planet.getDiameter(), this.terrainControl, preGenChunks, planet));
+	}
+	public Geometry generateLODBake (Geometry geom) {
+		this.LODBakeService = Executors.newFixedThreadPool(1);        
+		this.LODBakeFutureTask = this.LODBakeService.submit(new ChunkThreads.BakeChunkLODThread(geom));
+		if(!this.LODBakeService.isShutdown())
+			if(this.LODBakeFutureTask.isDone())
+			{
+				try {
+					return this.LODBakeFutureTask.get();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					e.printStackTrace();
+				}
+				this.LODBakeService.shutdown();
+			}
+		return null;
 	}
 
 	public void checkChunks(Vector3f camLocation) {
@@ -118,7 +138,7 @@ public class BlockChunkManager {
 					float distance = rotatedCameraTranslation.distance(centerOfChunk);
 					if(distance > Planet.VIEW_DISTANCE) 
 					{
-						this.terrainControl.getChunks()[x][y][z].unloadChunk();
+						//this.terrainControl.getChunks()[x][y][z].unloadChunk();
 					} else {
 						this.terrainControl.getChunks()[x][y][z].loadChunk();
 					}

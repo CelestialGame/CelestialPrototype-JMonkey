@@ -7,7 +7,9 @@ package com.cubes;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
 
+import com.celestial.World.Chunks.ChunkThreads;
 import com.cubes.network.BitInputStream;
 import com.cubes.network.BitOutputStream;
 import com.cubes.network.BitSerializable;
@@ -20,6 +22,9 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
+import com.jme3.scene.control.LodControl;
+
+import jme3tools.optimize.LodGenerator;
 
 /**
  *
@@ -55,6 +60,8 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
         node.setLocalTranslation(new Vector3f(blockLocation.getX(), blockLocation.getY(), blockLocation.getZ()).mult(terrain.getSettings().getBlockSize()));
         blockTypes = new byte[terrain.getSettings().getChunkSizeX()][terrain.getSettings().getChunkSizeY()][terrain.getSettings().getChunkSizeZ()];
         blocks_IsOnSurface = new boolean[terrain.getSettings().getChunkSizeX()][terrain.getSettings().getChunkSizeY()][terrain.getSettings().getChunkSizeZ()];
+        lc_Opaque = new LodControl();
+        lc_Transparent = new LodControl();
     }
     private BlockTerrainControl terrain;
     private Vector3Int location = new Vector3Int();
@@ -65,6 +72,8 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
     private Node node = new Node();
     private Geometry optimizedGeometry_Opaque;
     private Geometry optimizedGeometry_Transparent;
+    private LodControl lc_Opaque;
+    private LodControl lc_Transparent;
     private boolean needsMeshUpdate;
     private boolean loaded;
     private int blocks;
@@ -181,25 +190,30 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
     }
     
     public boolean updateSpatial(){
-        if(needsMeshUpdate){
-            if(optimizedGeometry_Opaque == null){
-                optimizedGeometry_Opaque = new Geometry("");
-                optimizedGeometry_Opaque.setQueueBucket(Bucket.Opaque);
-                node.attachChild(optimizedGeometry_Opaque);
-                updateBlockMaterial();
-            }
-            if(optimizedGeometry_Transparent == null){
-                optimizedGeometry_Transparent = new Geometry("");
-                optimizedGeometry_Transparent.setQueueBucket(Bucket.Transparent);
-                node.attachChild(optimizedGeometry_Transparent);
-                updateBlockMaterial();
-            }
-            optimizedGeometry_Opaque.setMesh(BlockChunk_MeshOptimizer.generateOptimizedMesh(this, BlockChunk_TransparencyMerger.OPAQUE));
-            optimizedGeometry_Transparent.setMesh(BlockChunk_MeshOptimizer.generateOptimizedMesh(this, BlockChunk_TransparencyMerger.TRANSPARENT));
-            needsMeshUpdate = false;
-            return true;
-        }
-        return false;
+    	if(needsMeshUpdate){
+    		if(optimizedGeometry_Opaque == null){
+    			optimizedGeometry_Opaque = new Geometry("");
+    			optimizedGeometry_Opaque.setQueueBucket(Bucket.Opaque);
+    			node.attachChild(optimizedGeometry_Opaque);
+    			updateBlockMaterial();
+    		}
+    		if(optimizedGeometry_Transparent == null){
+    			optimizedGeometry_Transparent = new Geometry("");
+    			optimizedGeometry_Transparent.setQueueBucket(Bucket.Transparent);
+    			node.attachChild(optimizedGeometry_Transparent);
+    			updateBlockMaterial();
+    		}
+    		optimizedGeometry_Opaque.setMesh(BlockChunk_MeshOptimizer.generateOptimizedMesh(this, BlockChunk_TransparencyMerger.OPAQUE));
+    		optimizedGeometry_Transparent.setMesh(BlockChunk_MeshOptimizer.generateOptimizedMesh(this, BlockChunk_TransparencyMerger.TRANSPARENT));
+    		//terrain.getBlockChunkManager().generateLODBake(optimizedGeometry_Opaque);
+    		LodGenerator lod = new LodGenerator(optimizedGeometry_Opaque);
+    		lod.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.5f);
+    		optimizedGeometry_Opaque.addControl(lc_Opaque);
+    		//optimizedGeometry_Transparent.addControl(lc);
+    		needsMeshUpdate = false;
+    		return true;
+    	}
+    	return false;
     }
     
     public void updateBlockMaterial(){

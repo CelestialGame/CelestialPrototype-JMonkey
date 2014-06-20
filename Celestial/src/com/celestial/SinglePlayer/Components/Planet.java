@@ -32,6 +32,7 @@ import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.control.LodControl;
 import com.jme3.scene.shape.Box;
 
 public class Planet implements BlockChunkListener {
@@ -168,6 +169,7 @@ public class Planet implements BlockChunkListener {
 		terrainControl.getBlockChunkManager().preGenerateChunks();
 		
 		terrainNode.addControl(terrainControl);
+		
 		/* LIGHTING */
 		planetNode.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
 
