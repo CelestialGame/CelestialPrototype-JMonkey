@@ -74,8 +74,8 @@ public class CameraControl {
 		if(this.parent.getBulletAppState().isEnabled()) {
 			//this.cam.setAxes(this.parent.player.getLocalLeft(), this.parent.player.getLocalUp(), this.parent.player.getLocalForward());
 			
-			Vector3f camDir = this.cam.getDirection().clone().divide(32);
-			Vector3f camLeft = this.cam.getLeft().clone().divide(32);
+			Vector3f camDir = this.cam.getDirection().clone().divide(16);
+			Vector3f camLeft = this.cam.getLeft().clone().divide(16);
 			this.parent.walkDirection.set(0, 0, 0);
 			if (this.parent.left)
 				this.parent.walkDirection.addLocal(camLeft); 

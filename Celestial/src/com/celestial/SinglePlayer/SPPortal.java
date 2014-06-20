@@ -75,7 +75,7 @@ public class SPPortal extends CelestialPortal{
 	public static final int SHADOWMAP_SIZE = 512;
 	public static float camHeight = 4.9f;
 
-	private Vector3f normalGravity = new Vector3f(0.0f, -9.81f, 0.0f);
+	private float gravitySpeed = 9.81f * 3f;
 	private Vector3f zeroGravity = new Vector3f(0.0f, 0.0f, 0.0f);
 	private Box blockHighlight;
 	private Geometry blockHighlightGeom;
@@ -171,7 +171,7 @@ public class SPPortal extends CelestialPortal{
 
 		player.spawnPlayer(player.getSystem().getPlanet(0), 0);
 
-		this.flyCam.setMoveSpeed(25);
+		this.flyCam.setMoveSpeed(35);
 		this.cam.setFrustumFar(65000);
 
 		this.rootNode.setShadowMode(ShadowMode.Off);
@@ -237,6 +237,9 @@ public class SPPortal extends CelestialPortal{
 								Vector3f finalDifference = (playerRotatedByPlanet.add(p.getCurrentPlanetTranslation())).subtract(player.getLocation());
 								
 								player.setTranslationUpdate(finalDifference);
+								
+								if(this.bulletAppState.isEnabled())
+									cam.setRotation(planetRotationAmount.mult(starRotationAmount.mult(cam.getRotation())));
 							}
 					}
 			this.lastRotation = this.timer.getTimeInSeconds();
@@ -282,21 +285,21 @@ public class SPPortal extends CelestialPortal{
 	private void updateGravity(float tpf) {
 		if(this.player.getPlanet() != null) {
 			Planet planet = this.player.getPlanet();
+			
 			int FaceOn = this.player.getCurrentFaceOfPlanet(planet);
 			if(FaceOn == Planet.TOP) {
-				this.player.setGravity(this.player.getPlanet().getUpVector().mult(-15));
+				this.player.setGravity(this.player.getPlanet().getUpVector().mult(-gravitySpeed));
 			} else if (FaceOn == Planet.BOTTOM) {
-				this.player.setGravity(this.player.getPlanet().getUpVector().mult(15));
+				this.player.setGravity(this.player.getPlanet().getUpVector().mult(gravitySpeed));
 			} else if (FaceOn == Planet.NORTH) {
-				this.player.setGravity(this.player.getPlanet().getForwardVector().mult(15));
+				this.player.setGravity(this.player.getPlanet().getForwardVector().mult(gravitySpeed));
 			} else if (FaceOn == Planet.SOUTH) {
-				this.player.setGravity(this.player.getPlanet().getForwardVector().mult(-15));
+				this.player.setGravity(this.player.getPlanet().getForwardVector().mult(-gravitySpeed));
 			} else if (FaceOn == Planet.EAST) {
-				this.player.setGravity(this.player.getPlanet().getLeftVector().mult(-15));
+				this.player.setGravity(this.player.getPlanet().getLeftVector().mult(-gravitySpeed));
 			} else if (FaceOn == Planet.WEST) {
-				this.player.setGravity(this.player.getPlanet().getLeftVector().mult(15));
+				this.player.setGravity(this.player.getPlanet().getLeftVector().mult(gravitySpeed));
 			}
-			//this.player.setLocation(this.player.getLocation().add(this.player.getWalkDirection()));
 		} else {
 			this.player.setGravity(zeroGravity);
 		}
@@ -307,19 +310,18 @@ public class SPPortal extends CelestialPortal{
 				Planet planet = item.getPlanet();
 				int FaceOn = item.getCurrentFaceOfPlanet(planet);
 				if(FaceOn == Planet.TOP) {
-					item.getCollisionBox().setGravity(item.getPlanet().getUpVector().mult(-15));
+					item.getCollisionBox().setGravity(item.getPlanet().getUpVector().mult(-gravitySpeed));
 				} else if (FaceOn == Planet.BOTTOM) {
-					item.getCollisionBox().setGravity(item.getPlanet().getUpVector().mult(15));
+					item.getCollisionBox().setGravity(item.getPlanet().getUpVector().mult(gravitySpeed));
 				} else if (FaceOn == Planet.NORTH) {
-					item.getCollisionBox().setGravity(item.getPlanet().getForwardVector().mult(15));
+					item.getCollisionBox().setGravity(item.getPlanet().getForwardVector().mult(gravitySpeed));
 				} else if (FaceOn == Planet.SOUTH) {
-					item.getCollisionBox().setGravity(item.getPlanet().getForwardVector().mult(-15));
+					item.getCollisionBox().setGravity(item.getPlanet().getForwardVector().mult(-gravitySpeed));
 				} else if (FaceOn == Planet.EAST) {
-					item.getCollisionBox().setGravity(item.getPlanet().getLeftVector().mult(-15));
+					item.getCollisionBox().setGravity(item.getPlanet().getLeftVector().mult(-gravitySpeed));
 				} else if (FaceOn == Planet.WEST) {
-					item.getCollisionBox().setGravity(item.getPlanet().getLeftVector().mult(15));
+					item.getCollisionBox().setGravity(item.getPlanet().getLeftVector().mult(gravitySpeed));
 				}
-				//item.setLocation(item.getLocation().add(item.getWalkDirection()));
 			} else {
 				item.getCollisionBox().setGravity(zeroGravity);
 			}
