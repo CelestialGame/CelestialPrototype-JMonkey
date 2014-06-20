@@ -22,7 +22,7 @@ public class Star {
 	private SolarSystem system;
 	private Vector3f location;
 	private Node StarNode;
-	private LightMap lightMap;
+	private PointLight light;
 	private Geometry StarGeometry;
 	private CelestialPortal portal;
 	
@@ -122,11 +122,16 @@ public class Star {
 		
 		this.StarNode.setQueueBucket(Bucket.Opaque);
 		
-		this.lightMap = new LightMap();
+		/*this.lightMap = new LightMap();
 		
 		for(DirectionalLight light : this.lightMap.getLights()) {
 			this.StarNode.addLight(light);
-		}
+		}*/
+		this.light = new PointLight();
+		light.setPosition(location);
+        light.setColor(ColorRGBA.White);
+        light.setRadius(65000f);
+		this.StarNode.addLight(light);
 		
 		this.StarNode.move(location);
 	}
@@ -136,8 +141,11 @@ public class Star {
 		return StarNode;
 	}
 	
-	public LightMap getLightMap() {
+	/*public LightMap getLightMap() {
 		return lightMap;
+	}*/
+	public PointLight getLight() {
+		return this.light;
 	}
 	
 	public Vector3f getLocation()
