@@ -17,6 +17,7 @@ import com.celestial.World.BlockChunkManager;
 import com.cubes.BlockChunkControl;
 import com.cubes.BlockChunkListener;
 import com.cubes.BlockTerrainControl;
+import com.cubes.RandomTerrainGenerator;
 import com.cubes.Vector3Int;
 import com.cubes.render.GreedyMesher;
 import com.jme3.bullet.BulletAppState;
@@ -94,6 +95,7 @@ public class Planet implements BlockChunkListener {
 	private Quaternion previousStarNodeRotation;
 	private BulletAppState bulletAppState;
 	private long seed;
+	private RandomTerrainGenerator terrainGenerator;
 	
 
 	/**
@@ -243,6 +245,9 @@ public class Planet implements BlockChunkListener {
 	
 			this.planetNode.attachChild(this.atmospheregeom);
 		}
+		
+		terrainGenerator = new RandomTerrainGenerator(new Random(seed), 5, CHUNK_SIZE*diameter, CHUNK_SIZE*diameter);
+		terrainGenerator.initialise();
 
 	}
 
@@ -560,5 +565,8 @@ public class Planet implements BlockChunkListener {
 	}
 	public long getSeed() {
 		return this.seed;
+	}
+	public RandomTerrainGenerator getTerrainGenerator() {
+		return this.terrainGenerator;
 	}
 }

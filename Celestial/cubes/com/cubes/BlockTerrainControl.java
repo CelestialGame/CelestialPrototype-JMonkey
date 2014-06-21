@@ -280,7 +280,7 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
     }
     
     public void setBlocksFromNoise(Vector3Int location, Vector3Int size, float roughness, Class<? extends Block> blockClass){
-        RandomDisplacementFractal noise = new RandomDisplacementFractal(null, roughness, size.getX(), size.getZ());
+        RandomTerrainGenerator noise = new RandomTerrainGenerator(null, roughness, size.getX(), size.getZ());
         noise.initialise();
         float gridMinimum = noise.getMinimum();
         float gridLargestDifference = (noise.getMaximum() - gridMinimum);

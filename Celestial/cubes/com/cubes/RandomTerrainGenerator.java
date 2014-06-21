@@ -2,7 +2,7 @@ package com.cubes;
 
 import java.util.Random;
 
-public class RandomDisplacementFractal{
+public class RandomTerrainGenerator{
 
     /** Generate a noise source based upon the midpoint displacement fractal.
      * 
@@ -11,7 +11,7 @@ public class RandomDisplacementFractal{
      * @param width the width of the grid
      * @param height the height of the grid
      */
-    public RandomDisplacementFractal(Random rand, float roughness, int width, int height){
+    public RandomTerrainGenerator(Random rand, float roughness, int width, int height){
         roughness_ = roughness / width;
         grid_ = new float[width][height];
         rand_ = ((rand == null)?new Random():rand);

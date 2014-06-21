@@ -11,6 +11,7 @@ import java.util.concurrent.Future;
 import com.celestial.SinglePlayer.SPPortal;
 import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.World.Chunks.ChunkThreads;
+import com.cubes.BlockChunkControl;
 import com.cubes.BlockTerrainControl;
 import com.cubes.Vector3Int;
 import com.jme3.math.Vector3f;
@@ -19,26 +20,29 @@ import com.jme3.scene.Geometry;
 public class BlockChunkManager {
 
 	public static class PreGeneratedChunk {
-		private BlockTerrainControl terrainControl;
+		private BlockChunkControl chunk;
 		private int x;
 		private int y;
 		private int z;
 		private Planet planet;
-		public PreGeneratedChunk(BlockTerrainControl terrainControl, int locx, int locy, int locz, Planet planet) {
-			this.terrainControl = terrainControl;
+		public PreGeneratedChunk(BlockChunkControl terrainControl, int locx, int locy, int locz, Planet planet) {
+			this.chunk = terrainControl;
 			x = locx;
 			y = locy;
 			z = locz;
 			this.planet = planet;
 		}
 		public void generate() {
-			new ChunkThreads.GenerateChunkThread(terrainControl, (x*Planet.CHUNK_SIZE), (y*Planet.CHUNK_SIZE), (z*Planet.CHUNK_SIZE), this, planet.getSeed()).start();
+			new ChunkThreads.GenerateChunkThread((x*Planet.CHUNK_SIZE), (y*Planet.CHUNK_SIZE), (z*Planet.CHUNK_SIZE), this, planet.getSeed()).start();
 		}
 		public Vector3Int getLocation() {
 			return new Vector3Int(x,y,z);
 		}
 		public Planet getPlanet() {
 			return planet;
+		}
+		public BlockChunkControl getChunk() {
+			return chunk;
 		}
 	}
 
@@ -113,7 +117,9 @@ public class BlockChunkManager {
 			Iterator<PreGeneratedChunk> iterator = this.preGenChunks.iterator();
 			while (iterator.hasNext()) {
 				PreGeneratedChunk preGenChunk = (PreGeneratedChunk) iterator.next();
-				Vector3f centerOfChunk = new Vector3f(((preGenChunk.x*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((preGenChunk.y*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),((preGenChunk.z*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3)).add(planet.getOriginalTerrainTranslation());
+				Vector3f centerOfChunk = new Vector3f(((preGenChunk.x*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),
+						((preGenChunk.y*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3),
+						((preGenChunk.z*Planet.CHUNK_SIZE*3)+(Planet.CHUNK_SIZE/2)*3)).add(planet.getOriginalTerrainTranslation());
 
 				Vector3f currentPlanetTranslation = planet.getCurrentPlanetTranslation();
 				Vector3f planetToCamera = camLocation.subtract(currentPlanetTranslation);
