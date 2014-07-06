@@ -6,9 +6,11 @@ package com.cubes;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Executors;
 
+import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.World.Chunks.ChunkThreads;
 import com.cubes.Block.Face;
 import com.cubes.network.BitInputStream;
@@ -323,4 +325,12 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
     	}
     	return type.getType() == 0 || BlockManager.getInstance().getType(type.getType()).getSkin().isTransparent();
     }
+    public static boolean isLocationInChunk(Vector3Int location, Vector3Int chunkLocation) {
+    	return location.getX() < (chunkLocation.getX() + Planet.CHUNK_SIZE) 
+    			&& location.getY() < (chunkLocation.getY() + Planet.CHUNK_SIZE) 
+	    		&& location.getZ() < (chunkLocation.getZ() + Planet.CHUNK_SIZE) 
+	    		&& location.getX() > (chunkLocation.getX()-1) 
+	    		&& location.getY() > (chunkLocation.getY()-1) 
+	    		&& location.getZ() > (chunkLocation.getZ()-1);
+	}
 }

@@ -38,7 +38,7 @@ public class Player extends BetterCharacterControl{
 	{
 		super(1.2f, 5.8f, 1f);	
 		this.portal = portal;
-		playerSpatial = portal.getAssetManager().loadModel("assets/models/player/simpleplayer.mesh.xml");
+		playerSpatial = portal.getAssetManager().loadModel("assets/models/player/simpleplayer.blend");
 		playerSpatial.scale(0.5f, 1.5f, 1);
 		playerSpatial.scale(0.5f);
 		playerNode = (Node) playerSpatial;

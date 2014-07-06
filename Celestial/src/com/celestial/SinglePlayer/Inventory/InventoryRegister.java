@@ -2,7 +2,7 @@ package com.celestial.SinglePlayer.Inventory;
 
 import java.awt.image.BufferedImage;
 
-import com.celestial.Blocks.BlocksEnum;
+import com.celestial.Blocks.GameBlock;
 import com.celestial.util.InventoryException;
 import com.jme3.asset.AssetNotFoundException;
 
@@ -10,7 +10,7 @@ public class InventoryRegister {
 	
 	
 	public static void RegisterBlocks(InventoryManager IM) {
-		for(BlocksEnum block : BlocksEnum.values())
+		for(GameBlock block : GameBlock.values())
 		{
 			if(block.getID() < 0 || block.getIconPath() == null)
 				continue;
@@ -36,8 +36,8 @@ public class InventoryRegister {
 		}
 	}
 	
-	private static void RegBlankIconBlock(BlocksEnum block, InventoryManager IM) {
-			String path = "/assets/textures/inventory/icons/blank.png";
+	private static void RegBlankIconBlock(GameBlock block, InventoryManager IM) {
+			String path = "/assets/textures/inventory/icons/grass.png";
 			try {
 				IM.registerItem(new InventoryItem(block), block.getID());
 			} catch (InventoryException e) {

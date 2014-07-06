@@ -12,8 +12,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.cubes.Block;
+import com.cubes.BlockManager;
+import com.cubes.BlockType;
 
-public enum BlocksEnum {
+public enum GameBlock {
 	/** CLASSES **/
 	
 	GRASS(Block_Grass.class, "Grass", 3, "/assets/textures/inventory/icons/Grass.png"),
@@ -32,7 +34,9 @@ public enum BlocksEnum {
 	GOLD_ORE(Block_GoldOre.class, "Gold Ore", 13, "/assets/textures/inventory/icons/GoldOre.png"),
 	SUBSTRATUS(Block_Substratus.class, "Substratus", 14, "/assets/textures/inventory/icons/Substratus.png"),
 	DARKSTONE(Block_DarkStone.class, "Dark Stone", 13, "/assets/textures/inventory/icons/DarkStone.png"),
-	ICE(Block_Ice.class, "Ice", 13, "/assets/textures/inventory/icons/Ice.png");
+	ICE(Block_Ice.class, "Ice", 13, "/assets/textures/inventory/icons/Ice.png"),
+	WORKBENCH(Block_WorkBench.class, "Workbench", 16, null, true),
+	FURNACE(Block_Furnace.class, "Furnace", 15, null, true);
 	
 	/** END CLASSES **/
 	
@@ -40,6 +44,7 @@ public enum BlocksEnum {
 	private String name;
 	private int id;
 	private String iconpath;
+	private boolean isDynamic;
 	public Class<? extends Block> getBClass()
 	{
 		return blockclass;
@@ -59,6 +64,9 @@ public enum BlocksEnum {
 	public BufferedImage getIcon()
 	{
 		try {
+			if(iconpath == null) {
+				return ImageIO.read(this.getClass().getResourceAsStream("/assets/textures/inventory/icons/Grass.png"));
+			}
 			return ImageIO.read(this.getClass().getResourceAsStream(iconpath));
 		} catch (IOException e) {
 			return null;
@@ -73,20 +81,39 @@ public enum BlocksEnum {
 		this.id = id;
 		this.iconpath = iconpath;
 	}
-	private BlocksEnum(Class<? extends Block> blockClass, String name, int id, String iconpath)
+	private GameBlock(Class<? extends Block> blockClass, String name, int id, String iconpath)
 	{
 		this.blockclass = blockClass;
 		this.name = name;
 		this.id = id;
 		this.iconpath = iconpath;
 	}
-	public static BlocksEnum getBlockByClass(Class<? extends Block> blockClass)
+	private GameBlock(Class<? extends Block> blockClass, String name, int id, String iconpath, boolean dynamic)
 	{
-		for(BlocksEnum b : values())
+		this.blockclass = blockClass;
+		this.name = name;
+		this.id = id;
+		this.iconpath = iconpath;
+		this.isDynamic = dynamic;
+	}
+	public static GameBlock getBlockByClass(Class<? extends Block> blockClass)
+	{
+		for(GameBlock b : values())
 		{
 			if(b.getBClass().equals(blockClass))
 				return b;
 		}
 		return null;
+	}
+	public static GameBlock getBlockByType(BlockType type) {
+		for(GameBlock b : values())
+		{
+			if(BlockManager.getInstance().getType(b.getBClass()).equals(type))
+				return b;
+		}
+		return null;
+	}
+	public boolean isDynamic() {
+		return isDynamic;
 	}
 }

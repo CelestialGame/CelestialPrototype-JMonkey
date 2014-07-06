@@ -7,15 +7,23 @@ Date Created:
 package com.celestial.Gui;
 
 import com.celestial.Celestial;
-import com.celestial.Blocks.BlocksEnum;
+import com.celestial.Blocks.GameBlock;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
 import com.jme3.audio.AudioRenderer;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
+import com.jme3.light.PointLight;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
+import com.jme3.scene.shape.Box;
 import com.jme3.ui.Picture;
 
 import de.lessvoid.nifty.Nifty;
@@ -45,9 +53,19 @@ public class Gui implements ScreenController {
 	private Picture invhotslot8;
 	private Picture invhotslot9;
 	private Element inventoryPopup;
+	
+	private Element workbenchPopup;
+	private Element furnacePopup;
+	private Element buildmenuPopup;
+	
 	private int gameToStart;
-
-	public final static int INVENTORY = 0;
+	private Node StarNode;
+	private Geometry StarGeometry;
+	private PointLight light;
+	
+	public static enum PopupType {
+		INVENTORY, WORKBENCH, FURNACE, BUILD;
+	}
 	
 	
 	public Gui(Celestial parent, AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort, FlyByCamera flyCam)
@@ -78,11 +96,6 @@ public class Gui implements ScreenController {
 		flyCam.setDragToRotate(true);
 		inputManager.setCursorVisible(true);
 
-		this.parent = parent;
-
-		nifty = niftyDisplay.getNifty();
-		nifty.fromXml("assets/gui/Gui.xml", "start", this);
-
 		guiViewPort.addProcessor(niftyDisplay);
 
 		/* IMAGES */
@@ -101,6 +114,27 @@ public class Gui implements ScreenController {
 		invhotslot7 = new Picture("invhotslot7");     
 		invhotslot8 = new Picture("invhotslot8");
 		invhotslot9 = new Picture("invhotslot9");
+		
+		//Make cute star for main menu
+		
+		this.StarNode = new Node();
+		Box starbox = new Box(.5f,.5f,.5f);
+		this.StarGeometry = new Geometry("Star", starbox);
+		Material mat = new Material(this.assetManager,  // Create new material and...
+			    "Common/MatDefs/Light/Lighting.j3md");
+		mat.setColor("Diffuse", new ColorRGBA(247f, 214f, 81f, 0f));
+		mat.setColor("Ambient", new ColorRGBA(247f, 214f, 81f, 0f));
+		mat.setColor("Specular", new ColorRGBA(247f, 214f, 81f, 0f));
+		mat.setColor("GlowColor", new ColorRGBA(247f, 214f, 81f, 0f));
+		mat.setFloat("Shininess", 5f);
+		mat.setBoolean("UseMaterialColors",true);
+		this.StarGeometry.setMaterial(mat);
+		this.StarNode.attachChild(this.StarGeometry);
+		this.StarNode.setQueueBucket(Bucket.Opaque);
+		this.light = new PointLight();
+		light.setPosition(this.StarNode.getWorldTranslation());
+        light.setColor(ColorRGBA.White);
+		this.StarNode.addLight(light);
 	}
 
 	@Override
@@ -108,6 +142,10 @@ public class Gui implements ScreenController {
 
 	@Override
 	public void onEndScreen() {
+		if(this.nifty.getCurrentScreen().getScreenId().equals("start"))
+		{
+			parent.getGuiNode().detachChild(this.StarNode);
+		}
 	}
 
 	@Override
@@ -139,6 +177,9 @@ public class Gui implements ScreenController {
 			this.setHotBarSelection(0);
 			
 			inventoryPopup = this.nifty.createPopup("Inventory");
+			furnacePopup = this.nifty.createPopup("Furnace");
+			workbenchPopup = this.nifty.createPopup("Workbench");
+			buildmenuPopup = this.nifty.createPopup("BuildMenu");
 			
 		}
 		else if(this.nifty.getCurrentScreen().getScreenId().equals("loadgame"))
@@ -146,7 +187,10 @@ public class Gui implements ScreenController {
 			parent.startGame(gameToStart);
 			nifty.gotoScreen("hud");
 		}
-		
+		else if(this.nifty.getCurrentScreen().getScreenId().equals("start"))
+		{
+			parent.getGuiNode().attachChild(this.StarNode);
+		}
 	}
 
 	public void actionPerformed(String id)
@@ -238,7 +282,7 @@ public class Gui implements ScreenController {
 			invselected.setPosition(this.nifty.getCurrentScreen().findElementByName("hotslot"+slot).getX()-5, 0);
 	}
 
-	public void setHotBarIcon(int slot, BlocksEnum block)
+	public void setHotBarIcon(int slot, GameBlock block)
 	{
 		Picture p = null;
 		if(parent.getGuiNode().getChild("invhotslot"+slot) != null)
@@ -261,7 +305,7 @@ public class Gui implements ScreenController {
 		}
 	}
 	
-	public void showPopup(int type)
+	public void showPopup(PopupType type)
 	{
 		switch(type)
 		{
@@ -269,12 +313,24 @@ public class Gui implements ScreenController {
 			nifty.showPopup(nifty.getCurrentScreen(), inventoryPopup.getId(), null);
 			this.disableControl();
 			break;
+		case FURNACE:
+			nifty.showPopup(nifty.getCurrentScreen(), furnacePopup.getId(), null);
+			this.disableControl();
+			break;
+		case WORKBENCH:
+			nifty.showPopup(nifty.getCurrentScreen(), workbenchPopup.getId(), null);
+			this.disableControl();
+			break;
+		case BUILD:
+			nifty.showPopup(nifty.getCurrentScreen(), buildmenuPopup.getId(), null);
+			this.disableControl();
+			break;
 		default:
 			return;
 		}
 	}
 	
-	public void closePopup(int type)
+	public void closePopup(PopupType type)
 	{
 		switch(type)
 		{
@@ -282,8 +338,29 @@ public class Gui implements ScreenController {
 			nifty.closePopup(inventoryPopup.getId());
 			this.enableControl();
 			break;
+		case FURNACE:
+			nifty.closePopup(furnacePopup.getId());
+			this.enableControl();
+			break;
+		case WORKBENCH:
+			nifty.closePopup(workbenchPopup.getId());
+			this.enableControl();
+			break;
+		case BUILD:
+			nifty.closePopup(buildmenuPopup.getId());
+			this.enableControl();
+			break;
 		default:
 			return;
+		}
+	}
+	
+	public void closePopup() {
+		try {
+			nifty.closePopup(nifty.getCurrentScreen().getTopMostPopup().getId());
+			this.enableControl();
+		} catch(Exception e) {
+			;
 		}
 	}
 }

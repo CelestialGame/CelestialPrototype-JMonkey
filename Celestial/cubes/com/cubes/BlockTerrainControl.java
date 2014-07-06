@@ -6,7 +6,9 @@ package com.cubes;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import com.celestial.Blocks.DynamicBlock;
 import com.celestial.World.BlockChunkManager;
 import com.cubes.network.BitInputStream;
 import com.cubes.network.BitOutputStream;
@@ -35,6 +37,7 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
     private CubesSettings settings;
     private BlockChunkControl[][][] chunks;
     private ArrayList<BlockChunkListener> chunkListeners = new ArrayList<BlockChunkListener>();
+    HashMap<Vector3Int, DynamicBlock> dynamicBlocks = new HashMap<Vector3Int, DynamicBlock>();
 	private BlockChunkManager blockChunkManager;
 	private VoxelMesher mesher;
     
@@ -121,6 +124,15 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
     public void setBlock(Vector3Int location, Class<? extends Block> blockClass){
         BlockTerrain_LocalBlockState localBlockState = getLocalBlockState(location);
         if(localBlockState != null){
+        	if(com.celestial.Blocks.GameBlock.getBlockByClass(blockClass).isDynamic()) {
+        		try {
+					this.dynamicBlocks.put(location, (DynamicBlock) com.celestial.Blocks.GameBlock.getBlockByClass(blockClass).getBClass().newInstance());
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
+        	}
             localBlockState.setBlock(blockClass);
         }
     }
@@ -144,6 +156,9 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
     public void removeBlock(Vector3Int location){
         BlockTerrain_LocalBlockState localBlockState = getLocalBlockState(location);
         if(localBlockState != null){
+        	if(this.dynamicBlocks.containsKey(location)) {
+        		this.dynamicBlocks.remove(location);
+        	}
             localBlockState.removeBlock();
         }
     }
@@ -236,6 +251,9 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
 
     public BlockChunkControl[][][] getChunks(){
         return chunks;
+    }
+    public HashMap<Vector3Int, DynamicBlock> getDynamicBlocks() {
+    	return this.dynamicBlocks;
     }
     
     //Tools

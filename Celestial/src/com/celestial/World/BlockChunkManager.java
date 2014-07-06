@@ -44,6 +44,9 @@ public class BlockChunkManager {
 		public BlockChunkControl getChunk() {
 			return chunk;
 		}
+		public boolean isLocationInChunk(Vector3Int location) {
+			return chunk.isLocationInChunk(location, new Vector3Int(x,y,z).mult(Planet.CHUNK_SIZE));
+		}
 	}
 
 

@@ -10,7 +10,7 @@ import java.util.ListIterator;
 
 import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
-import com.celestial.Blocks.Blocks;
+import com.celestial.Blocks.LocalBlockManager;
 import com.celestial.Gui.Gui;
 import com.celestial.SinglePlayer.Camera.CameraControl;
 import com.celestial.SinglePlayer.Components.Galaxy;
@@ -46,6 +46,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.BloomFilter;
+import com.jme3.post.filters.LightScatteringFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -117,11 +118,11 @@ public class SPPortal extends CelestialPortal{
 
 		this.csettings = new CubesSettings(Celestial.app);
 		this.csettings.setDefaultBlockMaterial("assets/textures/terrain.png");
-		this.csettings.setChunkSizeX(16);
-		this.csettings.setChunkSizeY(16);
-		this.csettings.setChunkSizeZ(16);
+		this.csettings.setChunkSizeX(Planet.CHUNK_SIZE);
+		this.csettings.setChunkSizeY(Planet.CHUNK_SIZE);
+		this.csettings.setChunkSizeZ(Planet.CHUNK_SIZE);
 
-		Blocks.init();
+		LocalBlockManager.init();
 
 		this.guiNode.detachAllChildren();
 
@@ -322,9 +323,9 @@ public class SPPortal extends CelestialPortal{
 	}
 
 	private void initLighting() {	  
-		AmbientLight al = new AmbientLight();
-		al.setColor(ColorRGBA.White);
-		this.rootNode.addLight(al);
+		//AmbientLight al = new AmbientLight();
+		//al.setColor(ColorRGBA.White);
+		//this.rootNode.addLight(al);
 		
 		this.rootNode.addLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
 

@@ -257,7 +257,7 @@ public class Planet implements BlockChunkListener {
 			return this.atmospherebox.getXExtent()*2;
 		} catch (NullPointerException e){
 			//The silly planet may not have an atmosphere, so calculate one
-			return this.diameter*16*3*atmosphereSizeFactor;
+			return this.diameter*CHUNK_SIZE*3*atmosphereSizeFactor;
 		}
 	}
 	

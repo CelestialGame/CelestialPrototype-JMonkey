@@ -11,6 +11,10 @@ public class InventorySlot {
 		this.contents = contents;
 		this.invmanager = inventoryManager;
 	}
+	public InventorySlot(InventoryItem item, int contents) {
+		this.item = item;
+		this.contents = contents;
+	}
 	
 	public InventoryItem getItem() {
 		return this.item;

@@ -7,9 +7,10 @@ import java.util.List;
 
 import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
-import com.celestial.Blocks.BlocksEnum;
+import com.celestial.Blocks.GameBlock;
 import com.celestial.Gui.Gui;
 import com.celestial.SinglePlayer.Components.Planet;
+import com.celestial.Tools.Tools;
 import com.celestial.util.InventoryException;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -50,9 +51,9 @@ public class InventoryManager {
 		this.items = new HashMap<Integer, InventoryItem>();
 		this.dropitems = new ArrayList<InventoryDrop>();
 		
-		this.hotslot0 = new InventorySlot(null, -2, this);
-		this.hotslot1 = new InventorySlot(null, -2, this);
-		this.hotslot2 = new InventorySlot(null, -2, this);
+		this.hotslot0 = new InventorySlot(new InventoryItem(GameBlock.FURNACE), 3, this);
+		this.hotslot1 = new InventorySlot(new InventoryItem(GameBlock.WORKBENCH), 3, this);
+		this.hotslot2 = new InventorySlot(new InventoryItem(Tools.MARKER), 3, this);
 		this.hotslot3 = new InventorySlot(null, -2, this);
 		this.hotslot4 = new InventorySlot(null, -2, this);
 		this.hotslot5 = new InventorySlot(null, -2, this);
@@ -97,7 +98,7 @@ public class InventoryManager {
 	public InventoryItem getItembyID(int id) {
 		return this.items.get(id);
 	}
-	public InventoryItem getItembyBlock(BlocksEnum block) {
+	public InventoryItem getItembyBlock(GameBlock block) {
 		for(InventoryItem item : this.items.values()) {
 			if(item.getBlock().equals(block)) {
 				return item;

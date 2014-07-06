@@ -22,6 +22,10 @@
 				childLayout="vertical">
 				<panel id="panel_right_top" width="100%" height="*"
 					childLayout="center" backgroundColor="#c6c6c6">
+					<control name="label" font="assets/fonts/visitor.fnt"
+							text="Celestial" id="gametitle" align="left" valign="bottom"
+							visibleToMouse="true" width="100%" height="100%">
+						</control>
 				</panel>
 				<panel id="panel_right_buttons" width="100%" height="250"
 					childLayout="vertical">
@@ -108,6 +112,11 @@
 			</panel>
 			<panel id="panel_footer" width="*" height="20%" childLayout="vertical"
 				backgroundColor="#c6c6c6" valign="bottom">
+				
+				<control name="label" font="assets/fonts/visitor.fnt"
+					text="Version 0.001" id="version" align="left" valign="bottom"
+					visibleToMouse="true" width="100%" height="100%">
+				</control>
 			</panel>
 		</layer>
 	</screen>
@@ -156,7 +165,7 @@
 	
 	<screen id="loadgame" controller="com.celestial.Gui.Gui">
 		<layer id="background" childLayout="vertical">
-			<panel id="bgimage">
+			<panel id="bgimage" backgroundColor="#000">
 			    
 			</panel>
 		</layer>
@@ -168,6 +177,68 @@
 			</panel>
 		</layer>
 	</screen>
+	
+	<popup id="Workbench" controller="com.celestial.Gui.Gui" childLayout="center">
+		<panel id="mainPane" height="55%" width="75%" align="center"
+			valign="center" backgroundColor="#c6c6c6" childLayout="vertical"
+			visibleToMouse="true">
+			<panel id="header" childLayout="center">
+				<panel id="title" height="10%" width="90%" align="left"
+					backgroundColor="#c6c6c6" childLayout="center" padding="10px">
+					
+					<control name="label" font="assets/fonts/visitor.fnt" text="Workbench"
+						id="title" align="center" valign="center" visibleToMouse="true"
+						width="100%" height="100%">
+					</control>
+				</panel>
+			</panel>
+		</panel>
+	</popup>
+	<popup id="Furnace" controller="com.celestial.Gui.Gui" childLayout="center">
+		<panel id="mainPane" height="55%" width="75%" align="center"
+			valign="center" backgroundColor="#c6c6c6" childLayout="vertical"
+			visibleToMouse="true">
+			<panel id="header" childLayout="center">
+				<panel id="title" height="10%" width="90%" align="left"
+					backgroundColor="#c6c6c6" childLayout="center" padding="10px">
+					
+					<control name="label" font="assets/fonts/visitor.fnt" text="Furnace"
+						id="title" align="center" valign="center" visibleToMouse="true"
+						width="100%" height="100%">
+					</control>
+				</panel>
+			</panel>
+		</panel>
+	</popup>
+	<popup id="BuildMenu" controller="com.celestial.Gui.Gui" childLayout="center">
+		<panel id="mainPane" height="55%" width="75%" align="center"
+			valign="center" backgroundColor="#c6c6c6" childLayout="vertical"
+			visibleToMouse="true">
+			<panel id="header" childLayout="center">
+				<panel id="title" height="10%" width="90%" align="left"
+					backgroundColor="#c6c6c6" childLayout="center" padding="10px">
+					
+					<control name="label" font="assets/fonts/visitor.fnt" text="Build"
+						id="title" align="center" valign="center" visibleToMouse="true"
+						width="100%" height="100%">
+					</control>
+				</panel>
+				<panel id="positions" height="10%" width="90%" align="left"
+					backgroundColor="#c6c6c6" childLayout="center" padding="10px">
+					
+					<control name="position1" font="assets/fonts/visitor.fnt" text="Position 1:"
+						id="position1" align="center" valign="center" visibleToMouse="true"
+						width="100%" height="100%">
+					</control>
+					<control name="position2" font="assets/fonts/visitor.fnt" text="Position 2:"
+						id="position2" align="center" valign="center" visibleToMouse="true"
+						width="100%" height="100%">
+					</control>
+				</panel>
+			</panel>
+			
+		</panel>
+	</popup>
 	
 	<popup id="Inventory" controller="com.celestial.Gui.Gui"
 		childLayout="center">
