@@ -10,7 +10,7 @@ import com.celestial.CelestialPortal;
 import com.celestial.Blocks.GameBlock;
 import com.celestial.Gui.Gui;
 import com.celestial.SinglePlayer.Components.Planet;
-import com.celestial.Tools.Tools;
+import com.celestial.Tools.Tool;
 import com.celestial.util.InventoryException;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -19,7 +19,7 @@ public class InventoryManager {
 
 	CelestialPortal portal;
 	
-	public HashMap<Integer, InventoryItem> items;
+	public HashMap<Integer, InventoryItem> registeredItems;
 
 	InventorySlot hotslot0;
 	InventorySlot hotslot1;
@@ -48,19 +48,20 @@ public class InventoryManager {
 	public ArrayList<InventoryDrop> dropitems;
 	
 	public InventoryManager(CelestialPortal portal) {
-		this.items = new HashMap<Integer, InventoryItem>();
+		this.registeredItems = new HashMap<Integer, InventoryItem>();
+		this.extendedinv = new ArrayList<InventorySlot>();
 		this.dropitems = new ArrayList<InventoryDrop>();
 		
 		this.hotslot0 = new InventorySlot(new InventoryItem(GameBlock.FURNACE), 3, this);
 		this.hotslot1 = new InventorySlot(new InventoryItem(GameBlock.WORKBENCH), 3, this);
-		this.hotslot2 = new InventorySlot(new InventoryItem(Tools.MARKER), 3, this);
-		this.hotslot3 = new InventorySlot(null, -2, this);
-		this.hotslot4 = new InventorySlot(null, -2, this);
-		this.hotslot5 = new InventorySlot(null, -2, this);
-		this.hotslot6 = new InventorySlot(null, -2, this);
-		this.hotslot7 = new InventorySlot(null, -2, this);
-		this.hotslot8 = new InventorySlot(null, -2, this);
-		this.hotslot9 = new InventorySlot(null, -2, this);
+		this.hotslot2 = new InventorySlot(new InventoryItem(Tool.MARKER), 3, this);
+		this.hotslot3 = new InventorySlot(null, EMPTY, this);
+		this.hotslot4 = new InventorySlot(null, EMPTY, this);
+		this.hotslot5 = new InventorySlot(null, EMPTY, this);
+		this.hotslot6 = new InventorySlot(null, EMPTY, this);
+		this.hotslot7 = new InventorySlot(null, EMPTY, this);
+		this.hotslot8 = new InventorySlot(null, EMPTY, this);
+		this.hotslot9 = new InventorySlot(null, EMPTY, this);
 		
 		this.hotslots = new ArrayList<InventorySlot>();
 		this.hotslots.add(this.hotslot0);
@@ -85,21 +86,24 @@ public class InventoryManager {
 		
 		//TODO Add extended inv (stuffs not in the hotbar
 		
+		for(int i=0; i<27; i++) {
+			this.extendedinv.add(new InventorySlot(null, EMPTY, this));
+		}
 	}
 	
 
 	public void registerItem(InventoryItem item, int id) throws InventoryException {
-		if(!this.items.containsValue(item)) {
-			this.items.put(id, item);
+		if(!this.registeredItems.containsValue(item)) {
+			this.registeredItems.put(id, item);
 		} else {
 			throw new InventoryException("AlreadyRegistered");
 		}
 	}
 	public InventoryItem getItembyID(int id) {
-		return this.items.get(id);
+		return this.registeredItems.get(id);
 	}
 	public InventoryItem getItembyBlock(GameBlock block) {
-		for(InventoryItem item : this.items.values()) {
+		for(InventoryItem item : this.registeredItems.values()) {
 			if(item.getBlock().equals(block)) {
 				return item;
 			}
@@ -112,9 +116,33 @@ public class InventoryManager {
 		refreshHotSlots();
 	}
 	
+	//Extended inv stuffs
+	public List<InventorySlot> getExtendedInvSlots() {
+		return this.extendedinv;
+	}
+	private void setSlot(InventoryItem item, int contents, int slot) throws InventoryException {
+		if(this.registeredItems.containsValue(item)) {
+			if(slot <= this.extendedinv.size()) {
+				this.extendedinv.get(slot).setItem(item, contents, slot);
+			} else {
+				throw new InventoryException("OutOfBounds");
+			}
+		} else {
+			throw new InventoryException("ItemNotRegistered");
+		}
+	}
+	private int getNextEmptySlot() {
+		for (int i=0;i<this.extendedinv.size();i++) {
+			if(this.extendedinv.get(i).getItem() == null) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
 	//HotSlot Stuffs
 	private void setHotSlot(InventoryItem item, int contents, int hotslot) throws InventoryException {
-		if(this.items.containsValue(item)) {
+		if(this.registeredItems.containsValue(item)) {
 			if(hotslot <= 9) {
 				this.hotslots.get(hotslot).setItem(item, contents, hotslot);
 			} else {
@@ -129,8 +157,10 @@ public class InventoryManager {
 		for(int i = 0; i< this.hotslots.size(); i++) {
 			InventorySlot hotslot = this.hotslots.get(i);
 			if(hotslot.getNumberContents() == 0 && hotslot.getItem() != null) {
-				hotslot.setItem(null, 0, i);
+				hotslot.setItem(null, EMPTY, i);
 			}
+			if(hotslot.getItem() != null)
+				getInvGui().setHotBarIcon(i, hotslot);
 		}
 	}
 	
@@ -139,13 +169,13 @@ public class InventoryManager {
 		this.getInvGui().setHotBarSelection(hotslot);
 	}
 	
-	private int getNextEmptySlot() {
+	private int getNextEmptyHotSlot() {
 		for (int i=0;i<this.hotslots.size();i++) {
 			if(this.hotslots.get(i).getItem() == null) {
 				return i;
 			}
 		}
-		return EMPTY;
+		return -1;
 	}
 	
 	public InventorySlot getSelectedHotSlot() {
@@ -184,35 +214,63 @@ public class InventoryManager {
 		}
 	}
 	
-	public void pickupDrop(InventoryDrop drop, int amount) {
-		if(getHotSlotItems().contains(drop.getItem())) {
+	public boolean pickupDrop(InventoryDrop drop, int amount) {
+		if(getHotSlotItems().contains(drop.getItem()) || getExtendedInvSlots().contains(drop.getItem())) {
 			int index = getHotSlotItems().lastIndexOf(drop.getItem());
 			InventorySlot slot = this.hotslots.get(index);
 			if(slot.getNumberContents() < 64) {
-				slot.updateContents(false);
-				return;
-			} else {
-				if(this.getNextEmptySlot() != EMPTY) {
-					try {
-						setHotSlot(drop.getItem(), 1, getNextEmptySlot());
-					} catch (InventoryException exception) {
-						exception.printStackTrace();
-					}
-				} else {
-					this.extendedinv.add(new InventorySlot(drop.getItem(), 1, this));
-				}
+				//existing hotslot items
+				slot.modifyContents(1);
+				return true;
+			} 
+			int index_ =getExtendedInvSlots().lastIndexOf(drop.getItem());
+			InventorySlot slot_= this.extendedinv.get(index_);
+			if(slot_.getNumberContents() < 64) {
+				//existing slot items
+				slot_.modifyContents(1);
+				return true;
 			}
-		} else {
-			if(this.getNextEmptySlot() != EMPTY) {
+			//go for next open hotslot
+			if(this.getNextEmptyHotSlot() != -1) {
 				try {
-					setHotSlot(drop.getItem(), 1, getNextEmptySlot());
+					setHotSlot(drop.getItem(), 1, getNextEmptyHotSlot());
 				} catch (InventoryException exception) {
 					exception.printStackTrace();
 				}
 			} else {
-				this.extendedinv.add(new InventorySlot(drop.getItem(), 1, this));
+				//go for next open SLOT
+				if(this.getNextEmptySlot() != -1) {
+					try {
+						setSlot(drop.getItem(), 1, getNextEmptySlot());
+					} catch (InventoryException exception) {
+						exception.printStackTrace();
+					}
+				}
+				else
+					return false;
+			}
+		} else {
+			//find new open hotslot
+			if(this.getNextEmptyHotSlot() != -1) {
+				try {
+					setHotSlot(drop.getItem(), 1, getNextEmptyHotSlot());
+				} catch (InventoryException exception) {
+					exception.printStackTrace();
+				}
+			} else {
+				//find open slot
+				if(this.getNextEmptySlot() != -1) {
+					try {
+						setSlot(drop.getItem(), 1, getNextEmptySlot());
+					} catch (InventoryException exception) {
+						exception.printStackTrace();
+					}
+				}
+				else
+					return false;
 			}
 		}
+		return true;
 	}
 	
 	public void openExtendedInv(boolean yes) {

@@ -31,26 +31,16 @@ public class InventorySlot {
 	public void setItem(InventoryItem item, int contents, int hotslot) {
 		this.item = item;
 		this.contents = contents;
-		if(item != null)
-			this.invmanager.getInvGui().setHotBarIcon(hotslot, item.getBlock());
-		else
-			this.invmanager.getInvGui().setHotBarIcon(hotslot, null);
+		
+		this.invmanager.refreshHotSlots();
 	}
 	
-	public void modifyNumberContents(boolean decrease, int inc) {
-		if(decrease)
-			this.contents -= inc;
-		else
-			this.contents += inc;
+	public void modifyContents(int inc) {
+		this.contents = this.contents+inc;
 	}
 	
-	public void updateContents(boolean decrease) {
-		if(this.getNumberContents() > 0) {
-			if(decrease)
-				this.modifyNumberContents(true, 1);
-			else
-				this.modifyNumberContents(false, 1);
-		}
+	public void setContents(int number) {
+		this.contents = number;
 	}
 
 }

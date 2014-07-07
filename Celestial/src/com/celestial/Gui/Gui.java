@@ -8,6 +8,7 @@ package com.celestial.Gui;
 
 import com.celestial.Celestial;
 import com.celestial.Blocks.GameBlock;
+import com.celestial.SinglePlayer.Inventory.InventorySlot;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
 import com.jme3.audio.AudioRenderer;
@@ -27,7 +28,15 @@ import com.jme3.scene.shape.Box;
 import com.jme3.ui.Picture;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.builder.ImageBuilder;
+import de.lessvoid.nifty.controls.Draggable;
+import de.lessvoid.nifty.controls.Droppable;
+import de.lessvoid.nifty.controls.DroppableDroppedEvent;
+import de.lessvoid.nifty.controls.dragndrop.builder.DraggableBuilder;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.ImageRenderer;
+import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -38,20 +47,9 @@ public class Gui implements ScreenController {
 
 	private FlyByCamera flyCam;
 	private InputManager inputManager;
-	private AssetManager assetManager;
 	private Picture invselected;
 	private int width;
 	private int height;
-	private Picture invhotslot0;
-	private Picture invhotslot1;
-	private Picture invhotslot2;
-	private Picture invhotslot3;
-	private Picture invhotslot4;
-	private Picture invhotslot5;
-	private Picture invhotslot6;
-	private Picture invhotslot7;
-	private Picture invhotslot8;
-	private Picture invhotslot9;
 	private Element inventoryPopup;
 	
 	private Element workbenchPopup;
@@ -59,10 +57,6 @@ public class Gui implements ScreenController {
 	private Element buildmenuPopup;
 	
 	private int gameToStart;
-	private Node StarNode;
-	private Geometry StarGeometry;
-	private PointLight light;
-	
 	public static enum PopupType {
 		INVENTORY, WORKBENCH, FURNACE, BUILD;
 	}
@@ -80,8 +74,6 @@ public class Gui implements ScreenController {
 
 		this.flyCam = flyCam;
 		this.inputManager = inputManager;
-		this.assetManager = assetManager;
-		
 		// disable the fly cam
         flyCam.setEnabled(false);
         flyCam.setDragToRotate(true);
@@ -97,6 +89,8 @@ public class Gui implements ScreenController {
 		inputManager.setCursorVisible(true);
 
 		guiViewPort.addProcessor(niftyDisplay);
+		
+		
 
 		/* IMAGES */
 		invselected = new Picture("invselected");
@@ -104,7 +98,7 @@ public class Gui implements ScreenController {
 		invselected.setWidth(50);
 		invselected.setHeight(50);
 
-		invhotslot0 = new Picture("invhotslot0");        
+		/*invhotslot0 = new Picture("invhotslot0");        
 		invhotslot1 = new Picture("invhotslot1");        
 		invhotslot2 = new Picture("invhotslot2");        
 		invhotslot3 = new Picture("invhotslot3");        
@@ -113,28 +107,7 @@ public class Gui implements ScreenController {
 		invhotslot6 = new Picture("invhotslot6");        
 		invhotslot7 = new Picture("invhotslot7");     
 		invhotslot8 = new Picture("invhotslot8");
-		invhotslot9 = new Picture("invhotslot9");
-		
-		//Make cute star for main menu
-		
-		this.StarNode = new Node();
-		Box starbox = new Box(.5f,.5f,.5f);
-		this.StarGeometry = new Geometry("Star", starbox);
-		Material mat = new Material(this.assetManager,  // Create new material and...
-			    "Common/MatDefs/Light/Lighting.j3md");
-		mat.setColor("Diffuse", new ColorRGBA(247f, 214f, 81f, 0f));
-		mat.setColor("Ambient", new ColorRGBA(247f, 214f, 81f, 0f));
-		mat.setColor("Specular", new ColorRGBA(247f, 214f, 81f, 0f));
-		mat.setColor("GlowColor", new ColorRGBA(247f, 214f, 81f, 0f));
-		mat.setFloat("Shininess", 5f);
-		mat.setBoolean("UseMaterialColors",true);
-		this.StarGeometry.setMaterial(mat);
-		this.StarNode.attachChild(this.StarGeometry);
-		this.StarNode.setQueueBucket(Bucket.Opaque);
-		this.light = new PointLight();
-		light.setPosition(this.StarNode.getWorldTranslation());
-        light.setColor(ColorRGBA.White);
-		this.StarNode.addLight(light);
+		invhotslot9 = new Picture("invhotslot9");*/
 	}
 
 	@Override
@@ -142,18 +115,16 @@ public class Gui implements ScreenController {
 
 	@Override
 	public void onEndScreen() {
-		if(this.nifty.getCurrentScreen().getScreenId().equals("start"))
-		{
-			parent.getGuiNode().detachChild(this.StarNode);
-		}
 	}
 
 	@Override
 	public void onStartScreen() {
 		if(this.nifty.getCurrentScreen().getScreenId().equals("hud"))
 		{
+			
+			    //final Droppable droppable = this.nifty.getCurrentScreen().findNiftyControl("hotslot0drop", Droppable.class);
 			/* INIT HUD */
-			parent.getGuiNode().attachChild(invselected);
+			/*parent.getGuiNode().attachChild(invselected);
 			parent.getGuiNode().attachChild(this.invhotslot0);
 			parent.getGuiNode().attachChild(this.invhotslot1);
 			parent.getGuiNode().attachChild(this.invhotslot2);
@@ -172,8 +143,8 @@ public class Gui implements ScreenController {
 				p.setCullHint(CullHint.Always);
 				p.setWidth(40);
 				p.setHeight(40);
-				p.setPosition(this.nifty.getCurrentScreen().findElementByName("hotslot"+i).getX(), 5);
-			}
+				p.setPosition(this.nifty.getCurrentScreen().findElementByName("hotslot"+i+"pane").getX(), 5);
+			}*/
 			this.setHotBarSelection(0);
 			
 			inventoryPopup = this.nifty.createPopup("Inventory");
@@ -186,10 +157,6 @@ public class Gui implements ScreenController {
 		{
 			parent.startGame(gameToStart);
 			nifty.gotoScreen("hud");
-		}
-		else if(this.nifty.getCurrentScreen().getScreenId().equals("start"))
-		{
-			parent.getGuiNode().attachChild(this.StarNode);
 		}
 	}
 
@@ -277,32 +244,71 @@ public class Gui implements ScreenController {
 		inputManager.setCursorVisible(false);
 	}
 
+	@NiftyEventSubscriber(pattern = "space-.*")
+	public void onInventoryItemMoved(final String id, final DroppableDroppedEvent event) {
+		
+	}
+	
 	public void setHotBarSelection(int slot) {
 		if(this.nifty.getCurrentScreen().findElementByName("hotslot"+slot) != null)
 			invselected.setPosition(this.nifty.getCurrentScreen().findElementByName("hotslot"+slot).getX()-5, 0);
 	}
 
-	public void setHotBarIcon(int slot, GameBlock block)
+	public void setHotBarIcon(int pos, final InventorySlot slot)
 	{
-		Picture p = null;
-		if(parent.getGuiNode().getChild("invhotslot"+slot) != null)
-			p = (Picture) parent.getGuiNode().getChild("invhotslot"+slot);
+		Element dragSlot = this.nifty.getCurrentScreen().findElementByName("hotslot"+pos);
+		String imagePath;
+		if(slot.getItem().getBlock() == null)
+			imagePath = slot.getItem().getTool().getIconPath();
+		else
+			imagePath = slot.getItem().getBlock().getIconPath();
+		if(imagePath == null || imagePath.equals("")) {
+			imagePath = "assets/textures/inventory/icons/blank.png";
+		}
+		if(this.nifty.getCurrentScreen().findElementByName("hotslot"+pos+"img") != null) {
+			NiftyImage img;
+			try {
+				img = this.nifty.getRenderEngine().createImage(this.nifty.getCurrentScreen(), imagePath, false);
+			} catch (AssetNotFoundException e) {
+				imagePath = "assets/textures/inventory/icons/blank.png";
+				img = this.nifty.getRenderEngine().createImage(this.nifty.getCurrentScreen(), imagePath, false);
+			}
+			Element icon = this.nifty.getCurrentScreen().findElementByName("hotslot"+pos+"img");
+			icon.getRenderer(ImageRenderer.class).setImage(img);
+			return;
+		}
+		ImageBuilder ib = new ImageBuilder("hotslot"+pos+"img");
+		ib.filename(imagePath);
+		try {
+			ib.build(nifty, this.nifty.getCurrentScreen(), dragSlot);
+		} catch (AssetNotFoundException e) {
+			ib.filename("assets/textures/inventory/icons/blank.png");
+			ib.build(nifty, this.nifty.getCurrentScreen(), dragSlot);
+		}
+		
+		/*Picture p = null;
+		if(parent.getGuiNode().getChild("invhotslot"+pos) != null)
+			p = (Picture) parent.getGuiNode().getChild("invhotslot"+pos);
 		else
 			return;
-		if(block == null)
+		if(slot.getItem() == null)
 			p.setCullHint(CullHint.Always);
 		else
 		{
 			p.setCullHint(CullHint.Never);
 			try
 			{
-				p.setImage(assetManager, block.getIconPath(), true);
+				p.setImage(assetManager, slot.getItem().getBlock().getIconPath(), true);
 			}
 			catch(AssetNotFoundException e)
 			{
-				p.setImage(assetManager, "assets/textures/inventory/icons/blank.png", true);
+				p.setImage(assetManager, "assets/textures/inventory/icons/grass.png", true);
 			}
-		}
+			catch(NullPointerException e)
+			{
+				p.setImage(assetManager, slot.getItem().getTool().getIconPath(), true);
+			}
+		}*/
 	}
 	
 	public void showPopup(PopupType type)

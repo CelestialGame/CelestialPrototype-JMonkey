@@ -7,7 +7,7 @@ import com.celestial.SinglePlayer.Components.Empire.Building;
 import com.celestial.SinglePlayer.Components.Empire.Empire;
 import com.celestial.SinglePlayer.Inventory.InventoryItem;
 import com.celestial.SinglePlayer.Inventory.InventorySlot;
-import com.celestial.Tools.Tools;
+import com.celestial.Tools.Tool;
 import com.cubes.Vector3Int;
 
 public class EmpireSquare extends Building{
@@ -25,7 +25,7 @@ public class EmpireSquare extends Building{
 	public ArrayList<InventorySlot> setResourcesReq() {
 		ArrayList<InventorySlot> res = new ArrayList<InventorySlot>();
 		res.add(new InventorySlot(new InventoryItem(GameBlock.COBBLE), 5));
-		res.add(new InventorySlot(new InventoryItem(Tools.COPPER_INGOT), 10));
+		res.add(new InventorySlot(new InventoryItem(Tool.COPPER_INGOT), 10));
 		return res;
 	}
 

@@ -2,8 +2,8 @@ package com.celestial.SinglePlayer.Inventory;
 
 import com.celestial.Celestial;
 import com.celestial.Blocks.GameBlock;
+import com.celestial.Tools.ToolObject;
 import com.celestial.Tools.Tool;
-import com.celestial.Tools.Tools;
 import com.jme3.asset.AssetNotFoundException;
 
 public class InventoryItem {
@@ -13,6 +13,7 @@ public class InventoryItem {
 	}
 
 	private GameBlock block;
+	private ToolObject toolInstance;
 	private Tool tool;
 	private ItemType type;
 	private String name;
@@ -36,9 +37,10 @@ public class InventoryItem {
 		}
 				
 	}
-	public InventoryItem(Tools tool) {
+	public InventoryItem(Tool tool) {
 		try {
-			this.tool = tool.getToolClass().newInstance();
+			this.tool = tool;
+			this.toolInstance = tool.getToolClass().newInstance();
 		} catch (InstantiationException e1) {
 			e1.printStackTrace();
 		} catch (IllegalAccessException e1) {
@@ -71,8 +73,11 @@ public class InventoryItem {
 	public String getIcon() {
 		return icon;
 	}
+	public ToolObject getToolObject() {
+		return toolInstance;
+	}
 	public Tool getTool() {
-		return tool;
+		return this.tool;
 	}
 	public ItemType getType() {
 		return type;

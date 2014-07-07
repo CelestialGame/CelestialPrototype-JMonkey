@@ -199,7 +199,7 @@ public class InputControl {
 							SPPortal.self.hideHighlight();
 							terrain.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock().getBClass()); //Add the Block
 							if(terrain.getBlock(blockLocation) != null)
-								parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
+								parent.getInventoryManager().getSelectedHotSlot().modifyContents(-1);
 						}
 					}
 					else
@@ -211,7 +211,7 @@ public class InputControl {
 								SPPortal.self.hideHighlight();
 								chunk.setBlock(blockLocation, parent.getInventoryManager().getSelectedHotSlot().getItem().getBlock().getBClass()); //Add the Block
 								if(chunk.getBlock(blockLocation) != null)
-									parent.getInventoryManager().getSelectedHotSlot().updateContents(true);
+									parent.getInventoryManager().getSelectedHotSlot().modifyContents(-1);
 							}
 						}
 					}
@@ -330,7 +330,7 @@ public class InputControl {
 						}
 						//Not dynamic...now try to use tool
 						if(parent.getInventoryManager().getSelectedHotSlot().getItem().getType().equals(ItemType.TOOL)) {
-							parent.getInventoryManager().getSelectedHotSlot().getItem().getTool().onActionUse(values, parent.player);
+							parent.getInventoryManager().getSelectedHotSlot().getItem().getToolObject().onActionUse(values, parent.player);
 						}
 					}
 				}

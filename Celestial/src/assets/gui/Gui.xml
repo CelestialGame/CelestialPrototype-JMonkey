@@ -1,40 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <nifty>
-	<useStyles filename="nifty-default-styles.xml" />
-	<useControls filename="nifty-default-controls.xml" />
-
-	<screen id="start" controller="com.celestial.Gui.Gui">
-		<layer id="background" childLayout="center">
-
-		</layer>
-		<layer id="foreground" childLayout="horizontal">
-			<panel id="panel_left" width="100px" height="100%" childLayout="vertical">
-				<panel id="panel_left_top" width="100%" height="75px"
-					backgroundColor="#c6c6c6">
-				</panel>
-				<panel id="panel_left_spacer" width="100%" height="*">
-				</panel>
-				<panel id="panel_left_bottom" width="100%" height="10%"
-					backgroundColor="#c6c6c6">
-				</panel>
-			</panel>
-			<panel id="panel_right" width="200px" height="100%"
-				childLayout="vertical">
-				<panel id="panel_right_top" width="100%" height="*"
-					childLayout="center" backgroundColor="#c6c6c6">
-					<control name="label" font="assets/fonts/visitor.fnt"
-							text="Celestial" id="gametitle" align="left" valign="bottom"
-							visibleToMouse="true" width="100%" height="100%">
-						</control>
-				</panel>
-				<panel id="panel_right_buttons" width="100%" height="250"
-					childLayout="vertical">
-					<panel id="panel_right_buttons_s0" width="100%" height="*"></panel>
-					<panel id="panel_right_buttons_1" width="100%" height="40px"
-						backgroundColor="#c6c6c6" childLayout="center">
-						<control name="label" font="assets/fonts/visitor.fnt"
-							text="Singleplayer" id="Singleplayer" align="center" valign="center"
-							visibleToMouse="true" width="100%" height="100%">
+    <useControls filename="nifty-default-controls.xml"/>
+    <useStyles filename="nifty-default-styles.xml"/>
+    <screen id="start" controller="com.celestial.Gui.Gui">
+        <layer id="background" childLayout="center" width="374px" height="234px">
+            <image id="bckgrnd" filename="assets/gui/images/mmbckgrnd.jpg" width="100%" valign="center" align="center" height="80%"/>
+            <effect>
+			 <onStartScreen name="fade" start="#0" end="#f" length="150" />
+			 </effect>
+        </layer>
+        <layer id="foreground" childLayout="horizontal">
+            <panel id="panel_left" childLayout="vertical" width="100px" height="100%">
+                <panel id="panel_left_top" backgroundColor="#c6c6c6" width="100%" height="75px"/>
+                <panel id="panel_left_spacer" width="100%" height="*"/>
+                <panel id="panel_left_bottom" backgroundColor="#c6c6c6" width="100%" height="10%"/>
+            </panel>
+            <panel id="panel_right" childLayout="vertical" width="200px" height="100%">
+                <panel id="panel_right_top" childLayout="center" backgroundColor="#c6c6c6" width="100%" height="*">
+                    <image id="GImage1" filename="assets/images/Logo_Icon_64px.png" width="31%" height="30%"/>
+                </panel>
+                <panel id="panel_right_buttons" childLayout="vertical" width="100%" height="250">
+                    <panel id="panel_right_buttons_s0" width="100%" height="*"/>
+                    <panel id="panel_right_buttons_1" childLayout="center" backgroundColor="#c6c6c6" width="100%" height="40px">
+                        <control name="label" id="Singleplayer" visibleToMouse="true" width="100%" valign="center" text="Singleplayer" align="center" font="assets/fonts/visitor.fnt" height="100%">
 							<interact onClick="actionPerformed(1)" onMouseOver="hoverPerformed(1)" />
 						</control>
 						<effect>
@@ -43,13 +31,10 @@
 							<onEndScreen name="move" mode="out" direction="left"
 								length="300" startDelay="200" inherit="true" />
 						</effect>
-					</panel>
-					<panel id="panel_right_buttons_s1" width="100%" height="*"></panel>
-					<panel id="panel_right_buttons_2" width="100%" height="40px"
-						backgroundColor="#c6c6c6" childLayout="center">
-						<control name="label" font="assets/fonts/visitor.fnt"
-							text="Multiplayer" id="Multiplayer" align="center" valign="center"
-							visibleToMouse="true" width="100%" height="100%">
+                    </panel>
+                    <panel id="panel_right_buttons_s1" width="100%" height="*"/>
+                    <panel id="panel_right_buttons_2" childLayout="center" backgroundColor="#c6c6c6" width="100%" height="40px">
+                        <control name="label" id="Multiplayer" visibleToMouse="true" width="100%" valign="center" text="Multiplayer" align="center" font="assets/fonts/visitor.fnt" height="100%">
 							<interact onClick="actionPerformed(2)" onMouseOver="hoverPerformed(2)" />
 						</control>
 						<effect>
@@ -58,13 +43,10 @@
 							<onEndScreen name="move" mode="out" direction="left"
 								length="300" startDelay="300" inherit="true" />
 						</effect>
-					</panel>
-					<panel id="panel_right_buttons_s2" width="100%" height="*"></panel>
-					<panel id="panel_right_buttons_3" width="100%" height="40px"
-						backgroundColor="#c6c6c6" childLayout="center">
-						<control name="label" font="assets/fonts/visitor.fnt"
-							text="Options" id="Options" align="center" valign="center"
-							visibleToMouse="true" width="100%" height="100%">
+                    </panel>
+                    <panel id="panel_right_buttons_s2" width="100%" height="*"/>
+                    <panel id="panel_right_buttons_3" childLayout="center" backgroundColor="#c6c6c6" width="100%" height="40px">
+                        <control name="label" id="Options" visibleToMouse="true" width="100%" valign="center" text="Options" align="center" font="assets/fonts/visitor.fnt" height="100%">
 							<interact onClick="actionPerformed(3)" onMouseOver="hoverPerformed(3)" />
 						</control>
 						<effect>
@@ -73,13 +55,10 @@
 							<onEndScreen name="move" mode="out" direction="left"
 								length="300" startDelay="400" inherit="true" />
 						</effect>
-					</panel>
-					<panel id="panel_right_buttons_s3" width="100%" height="*"></panel>
-					<panel id="panel_right_buttons_4" width="100%" height="40px"
-						backgroundColor="#c6c6c6" childLayout="center">
-						<control name="label" font="assets/fonts/visitor.fnt"
-							text="Credits" id="Credits" align="center" valign="center"
-							visibleToMouse="true" width="100%" height="100%">
+                    </panel>
+                    <panel id="panel_right_buttons_s3" width="100%" height="*"/>
+                    <panel id="panel_right_buttons_4" childLayout="center" backgroundColor="#c6c6c6" width="100%" height="40px">
+                        <control name="label" id="Credits" visibleToMouse="true" width="100%" valign="center" text="Credits" align="center" font="assets/fonts/visitor.fnt" height="100%">
 							<interact onClick="actionPerformed(4)" onMouseOver="hoverPerformed(4)" />
 						</control>
 						<effect>
@@ -88,13 +67,10 @@
 							<onEndScreen name="move" mode="out" direction="left"
 								length="300" startDelay="500" inherit="true" />
 						</effect>
-					</panel>
-					<panel id="panel_right_buttons_s4" width="100%" height="*"></panel>
-					<panel id="panel_right_buttons_5" width="100%" height="40px"
-						backgroundColor="#c6c6c6" childLayout="center">
-						<control name="label" font="assets/fonts/visitor.fnt"
-							text="Quit Game" id="Quit" align="center" valign="center"
-							visibleToMouse="true" width="100%" height="100%">
+                    </panel>
+                    <panel id="panel_right_buttons_s4" width="100%" height="*"/>
+                    <panel id="panel_right_buttons_5" childLayout="center" backgroundColor="#c6c6c6" width="100%" height="40px">
+                        <control name="label" id="Quit" visibleToMouse="true" width="100%" valign="center" text="Quit Game" align="center" font="assets/fonts/visitor.fnt" height="100%">
 							<interact onClick="actionPerformed(5)" onMouseOver="hoverPerformed(5)" />
 						</control>
 						<effect>
@@ -103,82 +79,96 @@
 							<onEndScreen name="move" mode="out" direction="left"
 								length="300" startDelay="600" inherit="true" />
 						</effect>
-					</panel>
-					<panel id="panel_right_buttons_s5" width="100%" height="*"></panel>
-				</panel>
-				<panel id="panel_right_bottom" width="100%" height="20%"
-					valign="center" backgroundColor="#c6c6c6">
-				</panel>
-			</panel>
-			<panel id="panel_footer" width="*" height="20%" childLayout="vertical"
-				backgroundColor="#c6c6c6" valign="bottom">
-				
-				<control name="label" font="assets/fonts/visitor.fnt"
-					text="Version 0.001" id="version" align="left" valign="bottom"
-					visibleToMouse="true" width="100%" height="100%">
-				</control>
-			</panel>
-		</layer>
-	</screen>
-
-	<screen id="hud" controller="com.celestial.Gui.Gui">
-		<layer id="foreground" childLayout="vertical">
-			<panel id="spacer0" width="100%" height="*"></panel>
-			<panel id="bottom" width="455px" height="50px" childLayout="horizontal"
-				backgroundColor="#c6c6c6" valign="bottom" align="center">
-				<panel id="hotslotbar" width="445px" height="50px"
-					childLayout="horizontal" valign="center" align="center">
-					<panel id="spacer1" width="5px" height="*"></panel>
-					<panel id="hotslot0" width="40px" height="40px"
-						backgroundColor="#a0a0a0" valign="center"></panel>
-					<panel id="spacerh0" width="5px" height="*"></panel>
-					<panel id="hotslot1" width="40px" height="40px"
-						backgroundColor="#a0a0a0" valign="center"></panel>
-					<panel id="spacerh1" width="5px" height="*"></panel>
-					<panel id="hotslot2" width="40px" height="40px"
-						backgroundColor="#a0a0a0" valign="center"></panel>
-					<panel id="spacerh2" width="5px" height="*"></panel>
-					<panel id="hotslot3" width="40px" height="40px"
-						backgroundColor="#a0a0a0" valign="center"></panel>
-					<panel id="spacerh3" width="5px" height="*"></panel>
-					<panel id="hotslot4" width="40px" height="40px"
-						backgroundColor="#a0a0a0" valign="center"></panel>
-					<panel id="spacerh4" width="5px" height="*"></panel>
-					<panel id="hotslot5" width="40px" height="40px"
-						backgroundColor="#a0a0a0" valign="center"></panel>
-					<panel id="spacerh5" width="5px" height="*"></panel>
-					<panel id="hotslot6" width="40px" height="40px"
-						backgroundColor="#a0a0a0" valign="center"></panel>
-					<panel id="spacerh6" width="5px" height="*"></panel>
-					<panel id="hotslot7" width="40px" height="40px"
-						backgroundColor="#a0a0a0" valign="center"></panel>
-					<panel id="spacerh7" width="5px" height="*"></panel>
-					<panel id="hotslot8" width="40px" height="40px"
-						backgroundColor="#a0a0a0" valign="center"></panel>
-					<panel id="spacerh8" width="5px" height="*"></panel>
-					<panel id="hotslot9" width="40px" height="40px"
-						backgroundColor="#a0a0a0" valign="center"></panel>
-				</panel>
-			</panel>
-		</layer>
-	</screen>
-	
-	<screen id="loadgame" controller="com.celestial.Gui.Gui">
-		<layer id="background" childLayout="vertical">
-			<panel id="bgimage" backgroundColor="#000">
-			    
-			</panel>
-		</layer>
-		<layer id="foreground" childLayout="vertical">
-			<panel id="text" childLayout="vertical">
-			    <control name="label" font="assets/fonts/visitor.fnt"
-							text="Loading Game..." id="label" align="center" valign="center"
-							visibleToMouse="true" width="100%" height="100%" />
-			</panel>
-		</layer>
-	</screen>
-	
-	<popup id="Workbench" controller="com.celestial.Gui.Gui" childLayout="center">
+                    </panel>
+                    <panel id="panel_right_buttons_s5" width="100%" height="*"/>
+                </panel>
+                <panel id="panel_right_bottom" backgroundColor="#c6c6c6" width="100%" valign="center" height="20%"/>
+            </panel>
+            <panel id="panel_footer" childLayout="vertical" backgroundColor="#c6c6c6" width="*" valign="bottom" height="20%">
+                <control name="label" id="version" visibleToMouse="true" width="100%" valign="bottom" text="Version 0.001" align="left" font="assets/fonts/visitor.fnt" height="100%"/>
+            </panel>
+        </layer>
+    </screen>
+    <screen id="hud" controller="com.celestial.Gui.Gui">
+        <layer id="GLayer2" childLayout="vertical">
+            <panel id="spacer0" width="100%" height="*"/>
+            <panel id="bottom" childLayout="horizontal" backgroundColor="#c6c6c6" width="455px" valign="bottom" align="center" height="50px">
+                <panel id="hotslotbar" childLayout="horizontal" width="445px" valign="center" align="center" height="50px">
+                    <panel id="spacerh1" width="5px" height="*"/>
+                    <panel id="hotslot0" backgroundColor="#a0a0a0" width="40px" valign="center" height="40px" childLayout="center">
+                    	<control id="hotslot0drop" name="droppable" childLayout="center">
+                    		<control id="hotslot0drag" name="draggable" />
+                    	</control>
+                    </panel>
+                    <panel id="spacerh0" width="5px" height="*"/>
+                    <panel id="hotslot1pane" backgroundColor="#a0a0a0" width="40px" valign="center" height="40px" childLayout="center">
+                    	<control id="hotslot1drop" name="droppable" childLayout="center">
+                    		<control id="hotslot1" name="draggable" />
+                    	</control>
+                    </panel>
+                    <panel id="spacerh1" width="5px" height="*"/>
+                    <panel id="hotslot2pane" backgroundColor="#a0a0a0" width="40px" valign="center" height="40px" childLayout="center">
+                    	<control id="hotslot2drop" name="droppable" childLayout="center">
+                    		<control id="hotslot2" name="draggable" />
+                    	</control>
+                    </panel>
+                    <panel id="spacerh2" width="5px" height="*"/>
+                    <panel id="hotslot3pane" backgroundColor="#a0a0a0" width="40px" valign="center" height="40px" childLayout="center">
+                    	<control id="hotslot3drop" name="droppable" childLayout="center">
+                    		<control id="hotslot3" name="draggable" />
+                    	</control>
+                    </panel>
+                    <panel id="spacerh3" width="5px" height="*"/>
+                    <panel id="hotslot4pane" backgroundColor="#a0a0a0" width="40px" valign="center" height="40px" childLayout="center">
+                    	<control id="hotslot4drop" name="droppable" childLayout="center">
+                    		<control id="hotslot4" name="draggable" />
+                    	</control>
+                    </panel>
+                    <panel id="spacerh4" width="5px" height="*"/>
+                    <panel id="hotslot5pane" backgroundColor="#a0a0a0" width="40px" valign="center" height="40px" childLayout="center">
+                    	<control id="hotslot5drop" name="droppable" childLayout="center">
+                    		<control id="hotslot5" name="draggable" />
+                    	</control>
+                    </panel>
+                    <panel id="spacerh5" width="5px" height="*"/>
+                    <panel id="hotslot6pane" backgroundColor="#a0a0a0" width="40px" valign="center" height="40px" childLayout="center">
+                    	<control id="hotslot6drop" name="droppable" childLayout="center">
+                    		<control id="hotslot6" name="draggable" />
+                    	</control>
+                    </panel>
+                    <panel id="spacerh6" width="5px" height="*"/>
+                    <panel id="hotslot7pane" backgroundColor="#a0a0a0" width="40px" valign="center" height="40px" childLayout="center">
+                    	<control id="hotslot7drop" name="droppable" childLayout="center">
+                    		<control id="hotslot7" name="draggable" />
+                    	</control>
+                    </panel>
+                    <panel id="spacerh7" width="5px" height="*"/>
+                    <panel id="hotslot8pane" backgroundColor="#a0a0a0" width="40px" valign="center" height="40px" childLayout="center">
+                    	<control id="hotslot8drop" name="droppable" childLayout="center">
+                    		<control id="hotslot8" name="draggable" />
+                    	</control>
+                    </panel>
+                    <panel id="spacerh8" width="5px" height="*"/>
+                    <panel id="hotslot9pane" backgroundColor="#a0a0a0" width="40px" valign="center" height="40px" childLayout="center">
+                    	<control id="hotslot9drop" name="droppable" childLayout="center">
+                    		<control id="hotslot9" name="draggable" />
+                    	</control>
+                    </panel>
+                </panel>
+            </panel>
+        </layer>
+    </screen>
+    <screen id="loadgame" controller="com.celestial.Gui.Gui">
+        <layer id="GLayer3" childLayout="vertical">
+            <panel id="bgimage" backgroundColor="#000"/>
+        </layer>
+        <layer id="GLayer4" childLayout="vertical">
+            <panel id="text" childLayout="vertical">
+                <control name="label" id="label" visibleToMouse="true" width="100%" valign="center" text="Loading Game..." align="center" font="assets/fonts/visitor.fnt" height="100%"/>
+            </panel>
+        </layer>
+    </screen>
+    <popup id="Workbench" controller="com.celestial.Gui.Gui" childLayout="center">
 		<panel id="mainPane" height="55%" width="75%" align="center"
 			valign="center" backgroundColor="#c6c6c6" childLayout="vertical"
 			visibleToMouse="true">
@@ -226,11 +216,11 @@
 				<panel id="positions" height="10%" width="90%" align="left"
 					backgroundColor="#c6c6c6" childLayout="center" padding="10px">
 					
-					<control name="position1" font="assets/fonts/visitor.fnt" text="Position 1:"
+					<control name="label" font="assets/fonts/visitor.fnt" text="Position 1:"
 						id="position1" align="center" valign="center" visibleToMouse="true"
 						width="100%" height="100%">
 					</control>
-					<control name="position2" font="assets/fonts/visitor.fnt" text="Position 2:"
+					<control name="label" font="assets/fonts/visitor.fnt" text="Position 2:"
 						id="position2" align="center" valign="center" visibleToMouse="true"
 						width="100%" height="100%">
 					</control>
@@ -246,7 +236,7 @@
 			valign="center" backgroundColor="#c6c6c6" childLayout="vertical"
 			visibleToMouse="true">
 			<panel id="header" childLayout="center">
-				<panel id="title" height="10%" width="90%" align="left"
+				<panel id="title" height="10%" width="90%" align="center"
 					backgroundColor="#c6c6c6" childLayout="center" padding="10px">
 					
 					<control name="label" font="assets/fonts/visitor.fnt" text="Inventory"

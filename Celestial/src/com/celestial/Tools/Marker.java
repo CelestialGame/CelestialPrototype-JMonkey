@@ -3,7 +3,7 @@ package com.celestial.Tools;
 import com.celestial.SinglePlayer.Components.Player;
 import com.cubes.Vector3Int;
 
-public class Marker extends Tool{
+public class Marker extends ToolObject{
 	
 	Vector3Int pos1;
 	Vector3Int pos2;
