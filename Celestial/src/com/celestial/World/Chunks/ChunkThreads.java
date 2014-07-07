@@ -313,11 +313,10 @@ public class ChunkThreads {
 	        float gridLargestDifference = (noise.getMaximum() - gridMinimum);
 	        float[][] grid = noise.getGrid();
 			if(side == PlanetSide.TOP) {
-		        for(int x=0;x<grid.length;x++){
-		        	//(location.getX()-this.chunk.getLocation().getX())/Planet.CHUNK_SIZE
-		            float[] row = grid[x];
-		            for(int z=0;z<row.length;z++){
-		                int blockHeight = (((int) (((((row[z] - gridMinimum) * 100) / gridLargestDifference) / 100) * size.getY())) + 1);
+		        for(int x=0;x<grid.length;x++) {
+		            float[] row = grid[x+this.x];
+		            for(int z=0;z<row.length-this.x;z++){
+		                int blockHeight = (((int) (((((row[z+this.z] - gridMinimum) * 100) / gridLargestDifference) / 100) * size.getY())) + 1);
 		                Vector3Int tmpLocation = new Vector3Int();
 		                for(int y=0;y<blockHeight;y++){
 		                    tmpLocation.set(location.getX() + x, location.getY() + y, location.getZ() + z);
