@@ -95,7 +95,6 @@ public class Planet implements BlockChunkListener {
 	private Quaternion previousStarNodeRotation;
 	private BulletAppState bulletAppState;
 	private long seed;
-	private RandomTerrainGenerator terrainGenerator;
 	
 
 	/**
@@ -245,9 +244,6 @@ public class Planet implements BlockChunkListener {
 	
 			this.planetNode.attachChild(this.atmospheregeom);
 		}
-		
-		terrainGenerator = new RandomTerrainGenerator(new Random(seed), 5, CHUNK_SIZE*diameter, CHUNK_SIZE*diameter);
-		terrainGenerator.initialise();
 
 	}
 
@@ -410,24 +406,24 @@ public class Planet implements BlockChunkListener {
 	public float getDiameterAsFloat(boolean includeAtmosphere)
 	{
 		if(includeAtmosphere)
-			return this.diameter*16*3*atmosphereSizeFactor;
+			return this.diameter*CHUNK_SIZE*3*atmosphereSizeFactor;
 		else
-			return this.diameter*16*3;
+			return this.diameter*CHUNK_SIZE*3;
 	}
 
 	public float getRadiusAsFloat(boolean includeAtmosphere)
 	{
 		if(includeAtmosphere)
-			return (this.centerofdiam*16-8)*3*atmosphereSizeFactor;
+			return (this.centerofdiam*CHUNK_SIZE-(CHUNK_SIZE/2))*3*atmosphereSizeFactor;
 		else
-			return (this.centerofdiam*16-8)*3;
+			return (this.centerofdiam*CHUNK_SIZE-(CHUNK_SIZE/2))*3;
 	}
 
 	public Vector3f getSpawnLocation(int face)
 	{
 		return new Vector3f(
 				this.planetNode.getWorldTranslation().getX()+1.5f,
-				this.planetNode.getWorldTranslation().getY() + (this.diameter*CHUNK_SIZE*3)/2+3f,
+				this.planetNode.getWorldTranslation().getY() + (this.diameter*CHUNK_SIZE*3)/2+1.5f,
 				this.planetNode.getWorldTranslation().getZ()+1.5f);
 	}
 
@@ -565,8 +561,5 @@ public class Planet implements BlockChunkListener {
 	}
 	public long getSeed() {
 		return this.seed;
-	}
-	public RandomTerrainGenerator getTerrainGenerator() {
-		return this.terrainGenerator;
 	}
 }
