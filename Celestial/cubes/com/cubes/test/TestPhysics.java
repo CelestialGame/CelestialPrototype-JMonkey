@@ -7,7 +7,7 @@ import com.cubes.BlockChunkControl;
 import com.cubes.BlockChunkListener;
 import com.cubes.BlockTerrainControl;
 import com.cubes.CubesSettings;
-import com.cubes.Vector3Int;
+import com.cubes.Vector3i;
 import com.cubes.test.blocks.Block_Grass;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
@@ -39,7 +39,7 @@ public class TestPhysics extends SimpleApplication implements ActionListener{
         settings.setTitle("Cubes Demo - Physics");
         settings.setFrameRate(60);
     }
-    private final Vector3Int terrainSize = new Vector3Int(100, 30, 100);
+    private final Vector3i terrainSize = new Vector3i(100, 30, 100);
     private BulletAppState bulletAppState;
     private CharacterControl playerControl;
     private Vector3f walkDirection = new Vector3f();
@@ -76,8 +76,8 @@ public class TestPhysics extends SimpleApplication implements ActionListener{
         CubesTestAssets.initializeEnvironment(this);
         
         cubesSettings = CubesTestAssets.getSettings(this);
-        blockTerrain = new BlockTerrainControl(cubesSettings, new Vector3Int(7, 1, 7));
-        blockTerrain.setBlocksFromNoise(new Vector3Int(), terrainSize, 0.8f, Block_Grass.class);
+        blockTerrain = new BlockTerrainControl(cubesSettings, new Vector3i(7, 1, 7));
+        blockTerrain.setBlocksFromNoise(new Vector3i(), terrainSize, 0.8f, Block_Grass.class);
         blockTerrain.addChunkListener(new BlockChunkListener(){
 
             @Override

@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 
 import com.cubes.BlockNavigator;
 import com.cubes.BlockTerrainControl;
-import com.cubes.Vector3Int;
+import com.cubes.Vector3i;
 import com.cubes.test.blocks.Block_Grass;
 import com.cubes.test.blocks.Block_Stone;
 import com.cubes.test.blocks.Block_Wood;
@@ -57,9 +57,9 @@ public class TestPicking extends SimpleApplication implements ActionListener{
     }
     
     private void initBlockTerrain(){
-        blockTerrain = new BlockTerrainControl(CubesTestAssets.getSettings(this), new Vector3Int(2, 1, 2));
-        blockTerrain.setBlockArea(new Vector3Int(0, 0, 0), new Vector3Int(32, 1, 32), Block_Stone.class);
-        blockTerrain.setBlocksFromNoise(new Vector3Int(0, 1, 0), new Vector3Int(32, 5, 32), 0.5f, Block_Grass.class);
+        blockTerrain = new BlockTerrainControl(CubesTestAssets.getSettings(this), new Vector3i(2, 1, 2));
+        blockTerrain.setBlockArea(new Vector3i(0, 0, 0), new Vector3i(32, 1, 32), Block_Stone.class);
+        blockTerrain.setBlocksFromNoise(new Vector3i(0, 1, 0), new Vector3i(32, 5, 32), 0.5f, Block_Grass.class);
         terrainNode = new Node();
         terrainNode.addControl(blockTerrain);
         rootNode.attachChild(terrainNode);
@@ -92,20 +92,20 @@ public class TestPicking extends SimpleApplication implements ActionListener{
     @Override
     public void onAction(String action, boolean value, float lastTimePerFrame){
         if(action.equals("set_block") && value){
-            Vector3Int blockLocation = getCurrentPointedBlockLocation(true);
+            Vector3i blockLocation = getCurrentPointedBlockLocation(true);
             if(blockLocation != null){
                 blockTerrain.setBlock(blockLocation, Block_Wood.class);
             }
         }
         else if(action.equals("remove_block") && value){
-            Vector3Int blockLocation = getCurrentPointedBlockLocation(false);
+            Vector3i blockLocation = getCurrentPointedBlockLocation(false);
             if((blockLocation != null) && (blockLocation.getY() > 0)){
                 blockTerrain.removeBlock(blockLocation);
             }
         }
     }
     
-    private Vector3Int getCurrentPointedBlockLocation(boolean getNeighborLocation){
+    private Vector3i getCurrentPointedBlockLocation(boolean getNeighborLocation){
         CollisionResults results = getRayCastingResults(terrainNode);
         if(results.size() > 0){
             Vector3f collisionContactPoint = results.getClosestCollision().getContactPoint();

@@ -4,7 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.cubes.BlockTerrainControl;
-import com.cubes.Vector3Int;
+import com.cubes.Vector3i;
 import com.cubes.test.blocks.Block_Grass;
 import com.cubes.test.blocks.Block_Stone;
 import com.cubes.test.blocks.Block_Wood;
@@ -34,25 +34,25 @@ public class TestTutorial extends SimpleApplication{
         
         //This is your terrain, it contains the whole
         //block world and offers methods to modify it
-        BlockTerrainControl blockTerrain = new BlockTerrainControl(CubesTestAssets.getSettings(this), new Vector3Int(1, 1, 1));
+        BlockTerrainControl blockTerrain = new BlockTerrainControl(CubesTestAssets.getSettings(this), new Vector3i(1, 1, 1));
 
         //To set a block, just specify the location and the block object
         //(Existing blocks will be replaced)
-        blockTerrain.setBlock(new Vector3Int(0, 0, 0), Block_Wood.class); 
-        blockTerrain.setBlock(new Vector3Int(0, 0, 1), Block_Wood.class);
-        blockTerrain.setBlock(new Vector3Int(1, 0, 0), Block_Wood.class);
-        blockTerrain.setBlock(new Vector3Int(1, 0, 1), Block_Stone.class);
+        blockTerrain.setBlock(new Vector3i(0, 0, 0), Block_Wood.class); 
+        blockTerrain.setBlock(new Vector3i(0, 0, 1), Block_Wood.class);
+        blockTerrain.setBlock(new Vector3i(1, 0, 0), Block_Wood.class);
+        blockTerrain.setBlock(new Vector3i(1, 0, 1), Block_Stone.class);
         blockTerrain.setBlock(0, 0, 0, Block_Grass.class); //For the lazy users :P
 
         //You can place whole areas of blocks too: setBlockArea(location, size, block)
         //(The specified block will be cloned each time)
         //The following line will set 3 blocks on top of each other
         //({1,1,1}, {1,2,3} and {1,3,1})
-        blockTerrain.setBlockArea(new Vector3Int(1, 1, 1), new Vector3Int(1, 3, 1), Block_Stone.class);
+        blockTerrain.setBlockArea(new Vector3i(1, 1, 1), new Vector3i(1, 3, 1), Block_Stone.class);
 
         //Removing a block works in a similar way
-        blockTerrain.removeBlock(new Vector3Int(1, 2, 1));
-        blockTerrain.removeBlock(new Vector3Int(1, 3, 1));
+        blockTerrain.removeBlock(new Vector3i(1, 2, 1));
+        blockTerrain.removeBlock(new Vector3i(1, 3, 1));
 
         //The terrain is a jME-Control, you can add it
         //to a node of the scenegraph to display it

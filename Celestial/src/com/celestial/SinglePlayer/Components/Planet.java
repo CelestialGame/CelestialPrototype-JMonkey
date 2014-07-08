@@ -18,7 +18,7 @@ import com.cubes.BlockChunkControl;
 import com.cubes.BlockChunkListener;
 import com.cubes.BlockTerrainControl;
 import com.cubes.RandomTerrainGenerator;
-import com.cubes.Vector3Int;
+import com.cubes.Vector3i;
 import com.cubes.render.GreedyMesher;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -169,7 +169,7 @@ public class Planet implements BlockChunkListener {
 			this.type = planetType.FRIGID;
 		}
 
-		terrainControl = new BlockTerrainControl(portal.csettings, new Vector3Int(diameter, diameter, diameter), new GreedyMesher());
+		terrainControl = new BlockTerrainControl(portal.csettings, new Vector3i(diameter, diameter, diameter), new GreedyMesher());
 		terrainControl.addChunkListener(this);
 
 		terrainControl.setBlockChunkManager(new BlockChunkManager(terrainControl, this));

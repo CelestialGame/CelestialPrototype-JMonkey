@@ -27,7 +27,7 @@ import com.celestial.SinglePlayer.Physics.Listener;
 import com.celestial.World.Picker;
 import com.cubes.BlockChunkControl;
 import com.cubes.CubesSettings;
-import com.cubes.Vector3Int;
+import com.cubes.Vector3i;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
@@ -382,7 +382,7 @@ public class SPPortal extends CelestialPortal{
 				return;
 			}
 			BlockChunkControl block = (BlockChunkControl) values[2];
-			Vector3Int blockLocation = (Vector3Int) values[1];
+			Vector3i blockLocation = (Vector3i) values[1];
 			if(player.getPlanet().getTerrControl().getBlock(blockLocation) == null)
 			{
 				this.hideHighlight();
@@ -424,7 +424,7 @@ public class SPPortal extends CelestialPortal{
 			} 
 			else
 				this.PlanetText.setText("Deep Space");
-			this.Vector3IntPosText.setText(Vector3Int.convert3f(location).toString());
+			this.Vector3IntPosText.setText(Vector3i.convert3f(location).toString());
 			int blocks = 0;
 			int liveBlocks = 0;
 			for (int x = 0; x < this.player.getPlanet().getDiameter(); x++)

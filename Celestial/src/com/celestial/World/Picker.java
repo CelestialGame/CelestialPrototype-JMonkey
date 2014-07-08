@@ -5,7 +5,7 @@ import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.SinglePlayer.Components.SectorCoord;
 import com.cubes.BlockNavigator;
 import com.cubes.BlockTerrainControl;
-import com.cubes.Vector3Int;
+import com.cubes.Vector3i;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
@@ -53,7 +53,7 @@ public class Picker {
 			
 			Vector3f relContactPoint = rotatedContactPoint.subtract(p.getOriginalTerrainTranslation().subtract(p.getOriginalPlanetTranslation()));
 
-			Vector3Int blockPoint = BlockNavigator.getPointedBlockLocation(terrainControl, relContactPoint, getNeighborLocation);
+			Vector3i blockPoint = BlockNavigator.getPointedBlockLocation(terrainControl, relContactPoint, getNeighborLocation);
 			if(blockPoint == null)
 				return null;
 			values[1] = blockPoint;

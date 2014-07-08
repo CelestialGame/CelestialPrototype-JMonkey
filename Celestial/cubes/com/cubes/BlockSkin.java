@@ -26,11 +26,11 @@ public class BlockSkin{
     private BlockSkin_TextureLocation[] textureLocations;
     private boolean isTransparent;
 
-    public BlockSkin_TextureLocation getTextureLocation(BlockChunkControl chunk, Vector3Int blockLocation, Block.Face face){
+    public BlockSkin_TextureLocation getTextureLocation(BlockChunkControl chunk, Vector3i blockLocation, Block.Face face){
         return textureLocations[getTextureLocationIndex(chunk, blockLocation, face)];
     }
 
-    protected int getTextureLocationIndex(BlockChunkControl chunk, Vector3Int blockLocation, Block.Face face){
+    protected int getTextureLocationIndex(BlockChunkControl chunk, Vector3i blockLocation, Block.Face face){
         if(textureLocations.length == 6){
             return face.ordinal();
         }
@@ -41,7 +41,7 @@ public class BlockSkin{
         return isTransparent;
     }
     
-    public int getTextureOffset(BlockChunkControl terrain, Vector3Int blockLoc, Face face) {
+    public int getTextureOffset(BlockChunkControl terrain, Vector3i blockLoc, Face face) {
         if(textureLocations.length == 6) {
             return face.ordinal() + textureOffset;
         }

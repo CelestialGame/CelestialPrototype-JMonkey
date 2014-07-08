@@ -38,7 +38,7 @@ import com.cubes.Block.Face;
 import com.cubes.BlockChunkControl;
 import com.cubes.BlockSkin;
 import com.cubes.BlockTerrainControl;
-import com.cubes.Vector3Int;
+import com.cubes.Vector3i;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer;
@@ -118,7 +118,7 @@ public abstract class VoxelMesher {
      * @param height
      * @param skin 
      */
-    protected void writeTextureCoords(ArrayList<Vector3f> textureCoords, BlockChunkControl terrain, Vector3Int blockLoc, Face face, int width, int height, BlockSkin skin) {
+    protected void writeTextureCoords(ArrayList<Vector3f> textureCoords, BlockChunkControl terrain, Vector3i blockLoc, Face face, int width, int height, BlockSkin skin) {
         int textOffset = skin.getTextureOffset(terrain, blockLoc, face);
         textureCoords.add(new Vector3f(0, 0, textOffset));
         textureCoords.add(new Vector3f(width, 0, textOffset));

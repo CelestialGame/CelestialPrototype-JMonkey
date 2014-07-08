@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 
 import com.cubes.Block;
 import com.cubes.BlockTerrainControl;
-import com.cubes.Vector3Int;
+import com.cubes.Vector3i;
 import com.cubes.test.blocks.Block_Grass;
 import com.cubes.test.blocks.Block_Stone;
 import com.cubes.test.blocks.Block_Wood;
@@ -30,13 +30,13 @@ public class TestModifications extends SimpleApplication{
     }
     private BlockTerrainControl blockTerrain;
     private long lastModificationTimestamp;
-    private Vector3Int lastModificationLocation = new Vector3Int(0, 4, 15);
+    private Vector3i lastModificationLocation = new Vector3i(0, 4, 15);
 
     @Override
     public void simpleInitApp(){
         CubesTestAssets.registerBlocks();
         
-        blockTerrain = new BlockTerrainControl(CubesTestAssets.getSettings(this), new Vector3Int(2, 1, 2));
+        blockTerrain = new BlockTerrainControl(CubesTestAssets.getSettings(this), new Vector3i(2, 1, 2));
         for(int x=0;x<32;x++){
             for(int z=0;z<16;z++){
                 int groundHeight = (int) ((Math.random() * 4) + 8);

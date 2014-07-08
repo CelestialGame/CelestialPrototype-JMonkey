@@ -12,7 +12,7 @@ import com.cubes.BlockSkin;
 import com.cubes.BlockSkin_TextureLocation;
 import com.cubes.BlockTerrainControl;
 import com.cubes.BlockType;
-import com.cubes.Vector3Int;
+import com.cubes.Vector3i;
 import com.cubes.Block.Face;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -42,7 +42,7 @@ public class BlockChunk_MeshOptimizer{
         ArrayList<Integer> indicesList = new ArrayList<Integer>();
         ArrayList<Float> normalsList = new ArrayList<Float>();
         BlockTerrainControl blockTerrain = chunk.getTerrain();
-        Vector3Int tmpLocation = new Vector3Int();
+        Vector3i tmpLocation = new Vector3i();
         for(int x=0;x<blockTerrain.getSettings().getChunkSizeX();x++){
             for(int y=0;y<blockTerrain.getSettings().getChunkSizeY();y++){
                 for(int z=0;z<blockTerrain.getSettings().getChunkSizeZ();z++){

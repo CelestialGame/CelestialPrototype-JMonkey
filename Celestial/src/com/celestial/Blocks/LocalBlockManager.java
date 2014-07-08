@@ -9,7 +9,7 @@ import com.cubes.BlockChunkControl;
 import com.cubes.BlockManager;
 import com.cubes.BlockSkin;
 import com.cubes.BlockSkin_TextureLocation;
-import com.cubes.Vector3Int;
+import com.cubes.Vector3i;
 
 /**
  *
@@ -29,7 +29,7 @@ public class LocalBlockManager {
     		    @Override
     		    //The number that's being returned specified the index
     		    //of the texture in the previous declared TextureLocation array
-    		    protected int getTextureLocationIndex(BlockChunkControl chunk, Vector3Int blockLocation, Face face){
+    		    protected int getTextureLocationIndex(BlockChunkControl chunk, Vector3i blockLocation, Face face){
     		        if(chunk.isBlockOnSurface(blockLocation)){
     		            switch(face){
     		                case Top:
@@ -106,8 +106,8 @@ public class LocalBlockManager {
         	@Override
 		    //The number that's being returned specified the index
         	//of the texture in the previous declared TextureLocation array
-        	protected int getTextureLocationIndex(BlockChunkControl chunk, Vector3Int blockLocation, Face face){
-        		for(Vector3Int loc : chunk.getTerrain().getDynamicBlocks().keySet()) {
+        	protected int getTextureLocationIndex(BlockChunkControl chunk, Vector3i blockLocation, Face face){
+        		for(Vector3i loc : chunk.getTerrain().getDynamicBlocks().keySet()) {
         			if(loc.equals(blockLocation))
 	        			if(chunk.getTerrain().getDynamicBlocks().get(loc) instanceof Block_Furnace) {
 	        				if(((Block_Furnace) chunk.getTerrain().getDynamicBlocks().get(loc)).inUse)

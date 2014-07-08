@@ -13,7 +13,7 @@ import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.World.Chunks.ChunkThreads;
 import com.cubes.BlockChunkControl;
 import com.cubes.BlockTerrainControl;
-import com.cubes.Vector3Int;
+import com.cubes.Vector3i;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 
@@ -35,8 +35,8 @@ public class BlockChunkManager {
 		public void generate() {
 			new ChunkThreads.GenerateChunkThread((x*Planet.CHUNK_SIZE), (y*Planet.CHUNK_SIZE), (z*Planet.CHUNK_SIZE), this, planet.getSeed()).start();
 		}
-		public Vector3Int getLocation() {
-			return new Vector3Int(x,y,z);
+		public Vector3i getLocation() {
+			return new Vector3i(x,y,z);
 		}
 		public Planet getPlanet() {
 			return planet;
@@ -44,8 +44,8 @@ public class BlockChunkManager {
 		public BlockChunkControl getChunk() {
 			return chunk;
 		}
-		public boolean isLocationInChunk(Vector3Int location) {
-			return chunk.isLocationInChunk(location, new Vector3Int(x,y,z).mult(Planet.CHUNK_SIZE));
+		public boolean isLocationInChunk(Vector3i location) {
+			return chunk.isLocationInChunk(location, new Vector3i(x,y,z).mult(Planet.CHUNK_SIZE));
 		}
 	}
 

@@ -70,8 +70,8 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
         lc_Transparent = new LodControl();
     }
     private BlockTerrainControl terrain;
-    private Vector3Int location = new Vector3Int();
-    private Vector3Int blockLocation = new Vector3Int();
+    private Vector3i location = new Vector3i();
+    private Vector3i blockLocation = new Vector3i();
     private byte[][][] blockTypes;
     private List<CachedBlock> savedBlockTypes = new ArrayList<CachedBlock>();
     private boolean[][][] blocks_IsOnSurface;
@@ -113,22 +113,22 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
-    public BlockType getNeighborBlock_Local(Vector3Int location, Block.Face face){
-        Vector3Int neighborLocation = BlockNavigator.getNeighborBlockLocalLocation(location, face);
+    public BlockType getNeighborBlock_Local(Vector3i location, Block.Face face){
+        Vector3i neighborLocation = BlockNavigator.getNeighborBlockLocalLocation(location, face);
         return getBlock(neighborLocation);
     }
     
-    public BlockType getNeighborBlock_Global(Vector3Int location, Block.Face face){
+    public BlockType getNeighborBlock_Global(Vector3i location, Block.Face face){
         return terrain.getBlock(getNeighborBlockGlobalLocation(location, face));
     }
     
-    private Vector3Int getNeighborBlockGlobalLocation(Vector3Int location, Block.Face face){
-        Vector3Int neighborLocation = BlockNavigator.getNeighborBlockLocalLocation(location, face);
+    private Vector3i getNeighborBlockGlobalLocation(Vector3i location, Block.Face face){
+        Vector3i neighborLocation = BlockNavigator.getNeighborBlockLocalLocation(location, face);
         neighborLocation.addLocal(blockLocation);
         return neighborLocation;
     }
     
-    public BlockType getBlock(Vector3Int location){
+    public BlockType getBlock(Vector3i location){
         if(isValidBlockLocation(location)){
             byte blockType = blockTypes[location.getX()][location.getY()][location.getZ()];
             return BlockManager.getInstance().getType(blockType);
@@ -136,7 +136,7 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
         return null;
     }
     
-    public void setBlock(Vector3Int location, Class<? extends Block> blockClass){
+    public void setBlock(Vector3i location, Class<? extends Block> blockClass){
         if(isValidBlockLocation(location)){
             BlockType blockType = BlockManager.getInstance().getType(blockClass);
             blockTypes[location.getX()][location.getY()][location.getZ()] = blockType.getType();
@@ -146,7 +146,7 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
         }
     }
     
-    public void removeBlock(Vector3Int location){
+    public void removeBlock(Vector3i location){
         if(isValidBlockLocation(location)){
             blockTypes[location.getX()][location.getY()][location.getZ()] = 0;
             updateBlockState(location);
@@ -164,7 +164,7 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
     	    for (int y = 0; y < blockTypes[x].length; y++)
     	    	for(int z = 0; z < blockTypes[x][y].length; z++) {
     	    		this.savedBlockTypes.add(new CachedBlock(blockTypes[x][y][z], x, y, z));
-    	    		removeBlock(new Vector3Int(x,y,z));
+    	    		removeBlock(new Vector3i(x,y,z));
     	    	}
     	loaded = false;
     }
@@ -175,7 +175,7 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
     	}
     	for(CachedBlock block : this.savedBlockTypes) {
     		blockTypes[block.x][block.y][block.z] = block.data;
-    		updateBlockState(new Vector3Int(block.x,block.y,block.z));
+    		updateBlockState(new Vector3i(block.x,block.y,block.z));
     		needsMeshUpdate = true;
     	}
     	loaded = true;
@@ -191,7 +191,7 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
     		return blocks;
     }
     
-    private boolean isValidBlockLocation(Vector3Int location){
+    private boolean isValidBlockLocation(Vector3i location){
         return Util.isValidIndex(blockTypes, location);
     }
     
@@ -232,10 +232,10 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
         }
     }
     
-    private void updateBlockState(Vector3Int location){
+    private void updateBlockState(Vector3i location){
         updateBlockInformation(location);
         for(int i=0;i<Block.Face.values().length;i++){
-            Vector3Int neighborLocation = getNeighborBlockGlobalLocation(location, Block.Face.values()[i]);
+            Vector3i neighborLocation = getNeighborBlockGlobalLocation(location, Block.Face.values()[i]);
             BlockChunkControl chunk = terrain.getChunk(neighborLocation);
             if(chunk != null){
                 chunk.updateBlockInformation(neighborLocation.subtract(chunk.getBlockLocation()));
@@ -243,12 +243,12 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
         }
     }
     
-    private void updateBlockInformation(Vector3Int location){
+    private void updateBlockInformation(Vector3i location){
         BlockType neighborBlock_Top = terrain.getBlock(getNeighborBlockGlobalLocation(location, Block.Face.Top));
         blocks_IsOnSurface[location.getX()][location.getY()][location.getZ()] = (neighborBlock_Top == null);
     }
 
-    public boolean isBlockOnSurface(Vector3Int location){
+    public boolean isBlockOnSurface(Vector3i location){
         return blocks_IsOnSurface[location.getX()][location.getY()][location.getZ()];
     }
 
@@ -256,11 +256,11 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
         return terrain;
     }
 
-    public Vector3Int getLocation(){
+    public Vector3i getLocation(){
         return location;
     }
 
-    public Vector3Int getBlockLocation(){
+    public Vector3i getBlockLocation(){
         return blockLocation;
     }
 
@@ -296,7 +296,7 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
                 }
             }
         }
-        Vector3Int tmpLocation = new Vector3Int();
+        Vector3i tmpLocation = new Vector3i();
         for(int x=0;x<blockTypes.length;x++){
             for(int y=0;y<blockTypes[0].length;y++){
                 for(int z=0;z<blockTypes[0][0].length;z++){
@@ -308,15 +308,15 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
         needsMeshUpdate = true;
     }
     
-    private Vector3Int getNeededBlockChunks(Vector3Int blocksCount){
+    private Vector3i getNeededBlockChunks(Vector3i blocksCount){
         int chunksCountX = (int) Math.ceil(((float) blocksCount.getX()) / terrain.getSettings().getChunkSizeX());
         int chunksCountY = (int) Math.ceil(((float) blocksCount.getY()) / terrain.getSettings().getChunkSizeY());
         int chunksCountZ = (int) Math.ceil(((float) blocksCount.getZ()) / terrain.getSettings().getChunkSizeZ());
-        return new Vector3Int(chunksCountX, chunksCountY, chunksCountZ);
+        return new Vector3i(chunksCountX, chunksCountY, chunksCountZ);
     }
 
-    public boolean isFaceVisible(Vector3Int loc, Face face) {
-    	Vector3Int vec = loc.add(face.getOffsetVector());
+    public boolean isFaceVisible(Vector3i loc, Face face) {
+    	Vector3i vec = loc.add(face.getOffsetVector());
     	BlockType type;
     	if (!isValidBlockLocation(vec)) {
     		type = terrain.getBlock(vec.add(blockLocation));
@@ -325,7 +325,7 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
     	}
     	return type.getType() == 0 || BlockManager.getInstance().getType(type.getType()).getSkin().isTransparent();
     }
-    public static boolean isLocationInChunk(Vector3Int location, Vector3Int chunkLocation) {
+    public static boolean isLocationInChunk(Vector3i location, Vector3i chunkLocation) {
     	return location.getX() < (chunkLocation.getX() + Planet.CHUNK_SIZE) 
     			&& location.getY() < (chunkLocation.getY() + Planet.CHUNK_SIZE) 
 	    		&& location.getZ() < (chunkLocation.getZ() + Planet.CHUNK_SIZE) 

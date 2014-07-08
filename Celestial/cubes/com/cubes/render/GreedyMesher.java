@@ -32,7 +32,7 @@ import com.celestial.SinglePlayer.Components.Planet;
 import com.cubes.Block;
 import com.cubes.BlockChunkControl;
 import com.cubes.BlockManager;
-import com.cubes.Vector3Int;
+import com.cubes.Vector3i;
 import com.cubes.Block.Face;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Mesh;
@@ -48,7 +48,7 @@ public class GreedyMesher extends VoxelMesher {
         ArrayList<Integer> indices = new ArrayList<Integer>();
         ArrayList<Float> normals = new ArrayList<Float>();
 
-        Vector3Int tmpI = new Vector3Int();
+        Vector3i tmpI = new Vector3i();
         
         int i, j, k, l, h, w, u, v, n, r, s, t;
  

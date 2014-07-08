@@ -12,7 +12,7 @@ import com.cubes.BlockManager;
 import com.cubes.BlockSkin;
 import com.cubes.BlockSkin_TextureLocation;
 import com.cubes.CubesSettings;
-import com.cubes.Vector3Int;
+import com.cubes.Vector3i;
 import com.cubes.test.blocks.Block_Brick;
 import com.cubes.test.blocks.Block_Grass;
 import com.cubes.test.blocks.Block_Stone;
@@ -44,14 +44,14 @@ public class CubesTestAssets{
     }
     
     public static void registerBlocks(){
-        BlockManager.register(Block_Grass.class, new BlockSkin(new BlockSkin_TextureLocation[]{
+        BlockManager.getInstance().register(Block_Grass.class, new BlockSkin(new BlockSkin_TextureLocation[]{
             new BlockSkin_TextureLocation(0, 0),
             new BlockSkin_TextureLocation(1, 0),
             new BlockSkin_TextureLocation(2, 0),
         }, false){
 
             @Override
-            protected int getTextureLocationIndex(BlockChunkControl chunk, Vector3Int blockLocation, Block.Face face){
+            protected int getTextureLocationIndex(BlockChunkControl chunk, Vector3i blockLocation, Block.Face face){
                 if(chunk.isBlockOnSurface(blockLocation)){
                     switch(face){
                         case Top:
@@ -65,7 +65,7 @@ public class CubesTestAssets{
                 return 2;
             }
         });
-        BlockManager.register(Block_Wood.class, new BlockSkin(new BlockSkin_TextureLocation[]{
+        BlockManager.getInstance().register(Block_Wood.class, new BlockSkin(new BlockSkin_TextureLocation[]{
             new BlockSkin_TextureLocation(4, 0),
             new BlockSkin_TextureLocation(4, 0),
             new BlockSkin_TextureLocation(3, 0),
@@ -73,9 +73,9 @@ public class CubesTestAssets{
             new BlockSkin_TextureLocation(3, 0),
             new BlockSkin_TextureLocation(3, 0)
         }, false));
-        BlockManager.register(Block_Stone.class, new BlockSkin(new BlockSkin_TextureLocation(9, 0), false));
-        BlockManager.register(Block_Water.class, new BlockSkin(new BlockSkin_TextureLocation(0, 1), true));
-        BlockManager.register(Block_Brick.class, new BlockSkin(new BlockSkin_TextureLocation(11, 0), false));
+        BlockManager.getInstance().register(Block_Stone.class, new BlockSkin(new BlockSkin_TextureLocation(9, 0), false));
+        BlockManager.getInstance().register(Block_Water.class, new BlockSkin(new BlockSkin_TextureLocation(0, 1), true));
+        BlockManager.getInstance().register(Block_Brick.class, new BlockSkin(new BlockSkin_TextureLocation(11, 0), false));
     }
     
     public static void initializeEnvironment(SimpleApplication simpleApplication){

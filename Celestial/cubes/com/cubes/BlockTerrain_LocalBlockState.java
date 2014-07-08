@@ -10,18 +10,18 @@ package com.cubes;
  */
 public class BlockTerrain_LocalBlockState{
 
-    public BlockTerrain_LocalBlockState(BlockChunkControl chunk, Vector3Int localBlockLocation){
+    public BlockTerrain_LocalBlockState(BlockChunkControl chunk, Vector3i localBlockLocation){
         this.chunk = chunk;
         this.localBlockLocation = localBlockLocation;
     }
     private BlockChunkControl chunk;
-    private Vector3Int localBlockLocation;
+    private Vector3i localBlockLocation;
 
     public BlockChunkControl getChunk(){
         return chunk;
     }
 
-    public Vector3Int getLocalBlockLocation(){
+    public Vector3i getLocalBlockLocation(){
         return localBlockLocation;
     }
 

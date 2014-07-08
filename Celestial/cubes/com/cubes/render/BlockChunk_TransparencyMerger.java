@@ -7,7 +7,7 @@ package com.cubes.render;
 import com.cubes.Block;
 import com.cubes.BlockChunkControl;
 import com.cubes.BlockType;
-import com.cubes.Vector3Int;
+import com.cubes.Vector3i;
 import com.cubes.Block.Face;
 
 /**
@@ -24,7 +24,7 @@ public class BlockChunk_TransparencyMerger implements BlockChunk_MeshMerger{
     private boolean isGeometryTransparent;
     
     @Override
-    public boolean shouldFaceBeAdded(BlockChunkControl chunk, Vector3Int location, Face face){
+    public boolean shouldFaceBeAdded(BlockChunkControl chunk, Vector3i location, Face face){
         BlockType block = chunk.getBlock(location);
         if(block.getSkin().isTransparent() == isGeometryTransparent){
             BlockType neighborBlock = chunk.getNeighborBlock_Local(location, face);

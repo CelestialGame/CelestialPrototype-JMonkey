@@ -8,11 +8,11 @@ import com.celestial.SinglePlayer.Components.Empire.Empire;
 import com.celestial.SinglePlayer.Inventory.InventoryItem;
 import com.celestial.SinglePlayer.Inventory.InventorySlot;
 import com.celestial.Tools.Tool;
-import com.cubes.Vector3Int;
+import com.cubes.Vector3i;
 
 public class EmpireSquare extends Building{
 
-	public EmpireSquare(Empire emp, Vector3Int location, Vector3Int size) {
+	public EmpireSquare(Empire emp, Vector3i location, Vector3i size) {
 		super(emp, location, size);
 	}
 

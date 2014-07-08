@@ -19,7 +19,7 @@ import com.celestial.World.Picker;
 import com.cubes.Block;
 import com.cubes.BlockManager;
 import com.cubes.BlockTerrainControl;
-import com.cubes.Vector3Int;
+import com.cubes.Vector3i;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
@@ -107,7 +107,7 @@ public class InputControl {
 	private ActionListener actionListener = new ActionListener() {
 
 		private Vector3f lastabs;
-		private Vector3Int last;
+		private Vector3i last;
 		private boolean inventoryopen;
 		private boolean buildmenuopen;
 		
@@ -120,7 +120,7 @@ public class InputControl {
 				{
 					return;
 				}
-				Vector3Int blockLocation = (Vector3Int) values[1];
+				Vector3i blockLocation = (Vector3i) values[1];
 				Vector3f blockAbsLocation = (Vector3f) values[0];
 				if(blockLocation != null)
 				{
@@ -167,13 +167,13 @@ public class InputControl {
 				{
 					return;
 				}
-				Vector3Int blockLocation = (Vector3Int) values[1];
+				Vector3i blockLocation = (Vector3i) values[1];
 				Vector3f blockAbsLocation = (Vector3f) values[0];
 				if(blockLocation != null)
 				{
 					if(last == null)
 					{
-						this.last = new Vector3Int(0,0,0);
+						this.last = new Vector3i(0,0,0);
 						this.lastabs = new Vector3f(0,0,0);
 					}
 					System.out.println("Loc -- Rel: "+ blockLocation +"Abs: "+ blockAbsLocation);
@@ -188,7 +188,7 @@ public class InputControl {
 				{
 					return;
 				}
-				Vector3Int blockLocation = (Vector3Int) values[1];
+				Vector3i blockLocation = (Vector3i) values[1];
 				Vector3f blockAbsLocation = (Vector3f) values[0];
 				if(blockLocation != null){
 					float dist = parent.player.getLocation().distance(blockAbsLocation);
@@ -314,13 +314,13 @@ public class InputControl {
 				{
 					return;
 				}
-				Vector3Int blockLocation = (Vector3Int) values[1];
+				Vector3i blockLocation = (Vector3i) values[1];
 				//Vector3f blockAbsLocation = (Vector3f) values[0];
 				if(blockLocation != null){
 					BlockTerrainControl terrain = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
 					if(terrain != null && terrain.getBlock(blockLocation) != null) {
 						if(GameBlock.getBlockByType(terrain.getBlock(blockLocation)).isDynamic()) {
-							for(Vector3Int loc : terrain.getDynamicBlocks().keySet()) {
+							for(Vector3i loc : terrain.getDynamicBlocks().keySet()) {
 								if(loc.equals(blockLocation)) {
 									terrain.getDynamicBlocks().get(loc).actionSelected();
 									break;

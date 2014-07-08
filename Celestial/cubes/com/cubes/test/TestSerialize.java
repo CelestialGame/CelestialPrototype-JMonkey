@@ -4,7 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.cubes.BlockTerrainControl;
-import com.cubes.Vector3Int;
+import com.cubes.Vector3i;
 import com.cubes.network.CubesSerializer;
 import com.cubes.test.blocks.Block_Grass;
 import com.jme3.app.SimpleApplication;
@@ -31,15 +31,15 @@ public class TestSerialize extends SimpleApplication{
     public void simpleInitApp(){
         CubesTestAssets.registerBlocks();
         
-        BlockTerrainControl blockTerrain = new BlockTerrainControl(CubesTestAssets.getSettings(this), new Vector3Int(1, 1, 1));
-        blockTerrain.setBlocksFromNoise(new Vector3Int(0, 0, 0), new Vector3Int(16, 10, 16), 0.5f, Block_Grass.class);
+        BlockTerrainControl blockTerrain = new BlockTerrainControl(CubesTestAssets.getSettings(this), new Vector3i(1, 1, 1));
+        blockTerrain.setBlocksFromNoise(new Vector3i(0, 0, 0), new Vector3i(16, 10, 16), 0.5f, Block_Grass.class);
         Node terrainNode = new Node();
         terrainNode.addControl(blockTerrain);
         terrainNode.setLocalTranslation(40, 0, 0);
         rootNode.attachChild(terrainNode);
         
         
-        BlockTerrainControl blockTerrainClone = new BlockTerrainControl(CubesTestAssets.getSettings(this), new Vector3Int());
+        BlockTerrainControl blockTerrainClone = new BlockTerrainControl(CubesTestAssets.getSettings(this), new Vector3i());
         
         byte[] serializedBlockTerrain = CubesSerializer.writeToBytes(blockTerrain);
         CubesSerializer.readFromBytes(blockTerrainClone, serializedBlockTerrain);
