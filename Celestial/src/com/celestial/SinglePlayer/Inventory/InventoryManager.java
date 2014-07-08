@@ -222,13 +222,17 @@ public class InventoryManager {
 				//existing hotslot items
 				slot.modifyContents(1);
 				return true;
-			} 
-			int index_ =getExtendedInvSlots().lastIndexOf(drop.getItem());
-			InventorySlot slot_= this.extendedinv.get(index_);
-			if(slot_.getNumberContents() < 64) {
-				//existing slot items
-				slot_.modifyContents(1);
-				return true;
+			}
+			try {
+				int index_ =getExtendedInvSlots().lastIndexOf(drop.getItem());
+				InventorySlot slot_= this.extendedinv.get(index_);
+				if(slot_.getNumberContents() < 64) {
+					//existing slot items
+					slot_.modifyContents(1);
+					return true;
+				}
+			} catch (ArrayIndexOutOfBoundsException e) {
+				//might not be in there so it'll throw an outofbounds
 			}
 			//go for next open hotslot
 			if(this.getNextEmptyHotSlot() != -1) {

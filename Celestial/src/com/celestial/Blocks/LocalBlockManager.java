@@ -72,7 +72,14 @@ public class LocalBlockManager {
         	}, false));
         BlockManager.getInstance().register(GameBlock.STONE.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(4, 1), false));
         BlockManager.getInstance().register(GameBlock.COBBLE.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(9, 0), false));
-        BlockManager.getInstance().register(GameBlock.TORCH.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(0, 2), true));
+        BlockManager.getInstance().register(GameBlock.TORCH.getBClass(), new BlockSkin(new BlockSkin_TextureLocation[]{
+        		new BlockSkin_TextureLocation(1, 2),
+        		new BlockSkin_TextureLocation(1, 2),
+        		new BlockSkin_TextureLocation(0, 2),
+        		new BlockSkin_TextureLocation(0, 2),
+        		new BlockSkin_TextureLocation(0, 2),
+        		new BlockSkin_TextureLocation(0, 2),
+        }, true));
         
         BlockManager.getInstance().register(GameBlock.COAL_ORE.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(10, 1), false));
         BlockManager.getInstance().register(GameBlock.COPPER_ORE.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(9, 1), false));
@@ -80,7 +87,7 @@ public class LocalBlockManager {
         BlockManager.getInstance().register(GameBlock.TIN_ORE.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(7, 1), false));
         BlockManager.getInstance().register(GameBlock.GOLD_ORE.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(6, 1), false));
         BlockManager.getInstance().register(GameBlock.IRON_ORE.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(5, 1), false));
-        BlockManager.getInstance().register(GameBlock.SUBSTRATUS.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(9, 0), false));
+        BlockManager.getInstance().register(GameBlock.SUBSTRATUS.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(10, 0), false));
         BlockManager.getInstance().register(GameBlock.DARKSTONE.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(3, 1), false));
         BlockManager.getInstance().register(GameBlock.ICE.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(0, 1), true));
         BlockManager.getInstance().register(GameBlock.WORKBENCH.getBClass(), new BlockSkin(new BlockSkin_TextureLocation[]{

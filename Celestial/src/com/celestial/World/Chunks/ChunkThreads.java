@@ -150,7 +150,7 @@ public class ChunkThreads {
 
 			//random blox
 			for(int i=0;i<chunkSize;i++)
-			{
+			{ 
 				for(int j=0;j<chunkSize;j++)
 				{
 					for(int k=0;k<chunkSize;k++)
@@ -175,10 +175,10 @@ public class ChunkThreads {
 						if(preChunk.getLocation().getX() == (preChunk.getPlanet().getDiameter()-1)/2 &&
 								preChunk.getLocation().getY() == (preChunk.getPlanet().getDiameter()-1)/2 &&
 								preChunk.getLocation().getZ() == (preChunk.getPlanet().getDiameter()-1)/2) {
+							//core
+							makeCubeAt(x+i,y+j,z+k, GameBlock.SUBSTRATUS, chunk);
 							
-						}
-						
-						if(preChunk.getPlanet().getType().hasAtmosphere()) {
+						} else if(preChunk.getPlanet().getType().hasAtmosphere()) {
 							
 							Random randomGenerator = new Random();
 							for (int idx = 1; idx <= 10; ++idx){
