@@ -55,8 +55,6 @@ public class BlockChunkManager {
 	BlockTerrainControl terrainControl;
 	private ExecutorService preGeneratedChunkService;
 	private Future<List<PreGeneratedChunk>> preGeneratedChunkFutureTask;
-	private ExecutorService LODBakeService;
-	private Future<Geometry> LODBakeFutureTask;
 
 	private List<PreGeneratedChunk> preGenChunks = new ArrayList<PreGeneratedChunk>();
 
