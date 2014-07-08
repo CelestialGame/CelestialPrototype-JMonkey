@@ -6,9 +6,11 @@ package com.cubes;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.celestial.SinglePlayer.Components.Planet;
@@ -60,14 +62,16 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 		location.set(x, y, z);
 		blockLocation.set(location.mult(terrain.getSettings().getChunkSizeX(), terrain.getSettings().getChunkSizeY(), terrain.getSettings().getChunkSizeZ()));
 		node.setLocalTranslation(new Vector3f(blockLocation.getX(), blockLocation.getY(), blockLocation.getZ()).mult(terrain.getSettings().getBlockSize()));
-		blockData = new HashMap<Vector3i, BlockData>();
+		blockDataUnsynchronized = new HashMap<Vector3i, BlockData>();
+		blockData = Collections.synchronizedMap(blockDataUnsynchronized);
 		lc_Opaque = new LodControl();
 		lc_Transparent = new LodControl();
 	}
 	private BlockTerrainControl terrain;
 	private Vector3i location = new Vector3i();
 	private Vector3i blockLocation = new Vector3i();
-	private HashMap<Vector3i, BlockData> blockData;
+	private HashMap<Vector3i, BlockData> blockDataUnsynchronized;
+	private Map<Vector3i, BlockData> blockData;
 	private List<CachedBlock> savedBlockTypes = new ArrayList<CachedBlock>();
 	private Node node = new Node();
 	private Geometry optimizedGeometry_Opaque;
@@ -123,12 +127,15 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 	}
 
 	public BlockType getBlock(Vector3i location){
-		if(isValidBlockLocation(location)){
-			if(!blockData.containsKey(location))
+		if(isValidBlockLocation(location))
+		{
+			if(!(blockData.containsKey(location)))
 				return BlockManager.getInstance().getType((byte)0);
 			else
 			{
-				return BlockManager.getInstance().getType(blockData.get(location).getBlockType());
+				BlockData data = blockData.get(location);
+				byte type = data.getBlockType();
+				return BlockManager.getInstance().getType(type);
 			}
 		}
 		return null;
@@ -164,6 +171,7 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 			Entry<Vector3i, BlockData> entry = iterator.next();
 			this.savedBlockTypes.add(new CachedBlock(entry.getValue().getBlockType(), entry.getKey()));
 			iterator.remove();
+			blocks--;
 		}
 		loaded = false;
 	}
@@ -191,7 +199,17 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 	}
 
 	private boolean isValidBlockLocation(Vector3i location){
-		return true; //TODO: Check whether block is too far away or something idk
+		int xMax = terrain.getSettings().getChunkSizeX();
+		int yMax = terrain.getSettings().getChunkSizeY();
+		int zMax = terrain.getSettings().getChunkSizeZ();
+		Vector3i max = new Vector3i(xMax, yMax, zMax);
+		
+		if(location.hasNegativeCoordinate())
+			return false;
+		if(max.subtract(location).hasNegativeCoordinate())
+			return false;
+		
+		return true;
 	}
 
 	public boolean updateSpatial(){

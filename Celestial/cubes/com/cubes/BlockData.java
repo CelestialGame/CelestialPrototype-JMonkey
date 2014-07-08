@@ -5,8 +5,8 @@ import com.celestial.Blocks.GameBlock;
 public class BlockData 
 {
 
-	private byte blockType = BlockManager.getInstance().getType(GameBlock.DIRT.getBClass()).getType();
-	private boolean isOnSurface = false;
+	private byte blockType;
+	private boolean isOnSurface;
 	
 	public BlockData(byte blockType, boolean isOnSurface)
 	{
@@ -22,13 +22,13 @@ public class BlockData
 	
 	public BlockData(boolean isOnSurface)
 	{
-		this.blockType = BlockManager.getInstance().getType(GameBlock.STONE.getBClass()).getType();
+		this.blockType = BlockManager.getInstance().getType(GameBlock.DIRT.getBClass()).getType();
 		this.isOnSurface = isOnSurface;
 	}
 	
 	public BlockData()
 	{
-		this.blockType = BlockManager.getInstance().getType(GameBlock.STONE.getBClass()).getType();
+		this.blockType = BlockManager.getInstance().getType(GameBlock.DIRT.getBClass()).getType();
 		this.isOnSurface = false;
 	}
 	
@@ -50,6 +50,18 @@ public class BlockData
 	public boolean getIsOnSurface()
 	{
 		return isOnSurface;
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		final int prime = 32;
+    	int result = 1;
+    	
+    	result = prime * result + blockType;
+    	result = prime * result + (isOnSurface ? 1 : 0);
+    	
+    	return result;
 	}
 	
 	@Override

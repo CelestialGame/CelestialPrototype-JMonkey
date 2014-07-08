@@ -26,6 +26,8 @@ public class BlockChunk_TransparencyMerger implements BlockChunk_MeshMerger{
     @Override
     public boolean shouldFaceBeAdded(BlockChunkControl chunk, Vector3i location, Face face){
         BlockType block = chunk.getBlock(location);
+        if(block == null)
+        	System.out.println(location);
         if(block.getSkin().isTransparent() == isGeometryTransparent){
             BlockType neighborBlock = chunk.getNeighborBlock_Local(location, face);
             if(neighborBlock != null){
