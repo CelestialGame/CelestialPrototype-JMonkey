@@ -338,7 +338,7 @@ public class SPPortal extends CelestialPortal{
 		}*/
 		PointLightShadowRenderer plsr = new PointLightShadowRenderer(this.assetManager, SHADOWMAP_SIZE);
         plsr.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
-        plsr.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
+        plsr.setEdgeFilteringMode(EdgeFilteringMode.PCFPOISSON);
         //plsr.setFlushQueues(false);
         //plsr.displayFrustum();
         //plsr.displayDebug();
@@ -346,7 +346,7 @@ public class SPPortal extends CelestialPortal{
  
         PointLightShadowFilter plsf = new PointLightShadowFilter(this.assetManager, SHADOWMAP_SIZE);
         plsf.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
-        plsf.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
+        plsf.setEdgeFilteringMode(EdgeFilteringMode.PCFPOISSON);
         plsf.setEnabled(true);
 
 		this.fpp = new FilterPostProcessor(this.assetManager);
