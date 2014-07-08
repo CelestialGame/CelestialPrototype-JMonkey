@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
+import jme3tools.noise.*;
 import jme3tools.optimize.LodGenerator;
 
 import com.celestial.Blocks.GameBlock;
@@ -18,7 +19,11 @@ import com.cubes.BlockChunkControl;
 import com.cubes.BlockTerrainControl;
 import com.cubes.RandomTerrainGenerator;
 import com.cubes.Vector3i;
+import com.jme3.math.Transform;
 import com.jme3.scene.Geometry;
+import com.jme3.terrain.noise.Basis;
+import com.jme3.terrain.noise.basis.ImprovedNoise;
+import com.jme3.terrain.noise.basis.Noise;
 
 public class ChunkThreads {
 	
@@ -48,21 +53,6 @@ public class ChunkThreads {
 				}
 			}
 			return this.preGenChunkList;
-		}
-		
-	}
-	public static class BakeChunkLODThread implements Callable<Geometry> {
-		Geometry blockTerrainGeo;
-		
-		public BakeChunkLODThread(Geometry blockTerrainGeo) {
-			this.blockTerrainGeo = blockTerrainGeo;
-		}
-
-		@Override
-		public Geometry call() throws Exception {
-			LodGenerator lod = new LodGenerator(blockTerrainGeo);
-    		lod.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.5f);
-			return blockTerrainGeo;
 		}
 		
 	}
@@ -104,6 +94,7 @@ public class ChunkThreads {
 		
 		public void run() {
 			int chunkSize = Planet.CHUNK_SIZE;
+			//TODO use ratios
 			
 			//Empty ceiling chunks
 			if(preChunk.getLocation().getX() >= preChunk.getPlanet().getDiameter()-1 || 
@@ -114,6 +105,11 @@ public class ChunkThreads {
 				return;
 			} else if (preChunk.getLocation().getZ() >= preChunk.getPlanet().getDiameter()-1 || 
 					preChunk.getLocation().getZ() == 0) {
+				return;
+			} else if((preChunk.getLocation().getX() == 1 || preChunk.getLocation().getX() == preChunk.getPlanet().getDiameter()-2) 
+					&& (preChunk.getLocation().getY() == 1 ||preChunk.getLocation().getY() == preChunk.getPlanet().getDiameter()-2) 
+					&& (preChunk.getLocation().getZ() == 1 ||preChunk.getLocation().getZ() == preChunk.getPlanet().getDiameter()-2) ) {
+				//edges yo
 				return;
 			}
 			
@@ -304,7 +300,7 @@ public class ChunkThreads {
 		}
 		
 		public void setBlocksFromNoise(Vector3i location, Vector3i size, Class<? extends Block> blockClass, PlanetSide side, BlockChunkControl chunk){
-			SimplexNoise simplexNoise=new SimplexNoise(150,0.6,(int) preChunk.getPlanet().getSeed());
+			//SimplexNoise simplexNoise=new SimplexNoise(150,0.6,(int) preChunk.getPlanet().getSeed());
 		    double xStart=this.x;
 		    double XEnd=this.x+Planet.CHUNK_SIZE;
 		    double yStart=this.z;
@@ -312,11 +308,18 @@ public class ChunkThreads {
 		    int resolution=Planet.CHUNK_SIZE;
 		    double[][] grid=new double[resolution][resolution];
 
+		    Perlin base = new Perlin(preChunk.getPlanet().getSeed());
+			Ridge basis = new Ridge(base);
+			Transform rmft = new Transform(); rmft.setScale(1.f/64.f);
+			BasicNoise ridgedMF = new BasicNoise(rmft, 0.1f, 0.086f, (int) preChunk.getPlanet().getSeed(), 3, 3.02f, 2f, true, basis);
+			Transform simt = new Transform(); simt.setScale(1.f/64.f);
+			BasicNoise perlin = new BasicNoise(simt, 0.1f, 0.032f, (int) preChunk.getPlanet().getSeed(), 3, 3.02f, 4f, false, base);
+			SummedNoise fractalSum = new SummedNoise(ridgedMF, perlin);
 		    for(int i=0;i<resolution;i++){
 		        for(int j=0;j<resolution;j++){
 		            int x=(int)(xStart+i*((XEnd-xStart)/resolution));
 		            int y=(int)(yStart+j*((yEnd-yStart)/resolution));
-		            grid[i][j]=0.5*(1+simplexNoise.getNoise(x,y));
+		            grid[i][j]=0.5*(1+fractalSum.noise(x,y));
 		        }
 		    }
 		    

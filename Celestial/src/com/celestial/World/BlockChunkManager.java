@@ -71,23 +71,6 @@ public class BlockChunkManager {
 		this.preGeneratedChunkService = Executors.newFixedThreadPool(1);        
 		this.preGeneratedChunkFutureTask = this.preGeneratedChunkService.submit(new ChunkThreads.PreGenChunksThread(planet.getDiameter(), this.terrainControl, preGenChunks, planet));
 	}
-	public Geometry generateLODBake (Geometry geom) {
-		this.LODBakeService = Executors.newFixedThreadPool(1);        
-		this.LODBakeFutureTask = this.LODBakeService.submit(new ChunkThreads.BakeChunkLODThread(geom));
-		if(!this.LODBakeService.isShutdown())
-			if(this.LODBakeFutureTask.isDone())
-			{
-				try {
-					return this.LODBakeFutureTask.get();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					e.printStackTrace();
-				}
-				this.LODBakeService.shutdown();
-			}
-		return null;
-	}
 
 	public void checkChunks(Vector3f camLocation) {
 		if(!this.preGeneratedChunkService.isShutdown())
