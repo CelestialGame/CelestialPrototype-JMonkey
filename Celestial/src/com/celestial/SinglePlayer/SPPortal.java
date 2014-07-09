@@ -303,7 +303,7 @@ public class SPPortal extends CelestialPortal{
 		}
 		ListIterator<InventoryDrop> it = invmanager.getDropItems().listIterator();    
 		if(it.hasNext()) 
-			{  
+		{  
 			InventoryDrop item = it.next();
 			if(item.getPlanet() != null) 
 			{

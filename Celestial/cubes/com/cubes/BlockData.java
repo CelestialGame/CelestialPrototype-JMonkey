@@ -58,9 +58,11 @@ public class BlockData
 	public PlanetFace getCurrentFaceOfPlanet()
 	{
 		Planet planet = this.chunkControl.getTerrain().getBlockChunkManager().getPlanet();
-		float x = getLocation().getX() - ((planet.getDiameter()*Planet.CHUNK_SIZE)/2);
-		float y = getLocation().getY() - ((planet.getDiameter()*Planet.CHUNK_SIZE)/2);
-		float z = getLocation().getZ() - ((planet.getDiameter()*Planet.CHUNK_SIZE)/2);
+		Vector3i terrainRelLocation = this.chunkControl.getBlockLocation().add(this.getLocation());
+		
+		float x = terrainRelLocation.getX() - ((planet.getDiameter()*Planet.CHUNK_SIZE)/2);
+		float y = terrainRelLocation.getY() - ((planet.getDiameter()*Planet.CHUNK_SIZE)/2);
+		float z = terrainRelLocation.getZ() - ((planet.getDiameter()*Planet.CHUNK_SIZE)/2);
 		
 		if( Math.abs(y) > Math.abs(x) && Math.abs(y) > Math.abs(z) ) {
 			if( y < 0 ) {
