@@ -106,12 +106,125 @@ public class ChunkThreads {
 			} else if (preChunk.getLocation().getZ() >= preChunk.getPlanet().getDiameter()-1 || 
 					preChunk.getLocation().getZ() == 0) {
 				return;
-			} else if((preChunk.getLocation().getX() == 1 || preChunk.getLocation().getX() == preChunk.getPlanet().getDiameter()-2) 
+			}//CORNERS 
+			else if((preChunk.getLocation().getX() == 1 || preChunk.getLocation().getX() == preChunk.getPlanet().getDiameter()-2) 
 					&& (preChunk.getLocation().getY() == 1 ||preChunk.getLocation().getY() == preChunk.getPlanet().getDiameter()-2) 
 					&& (preChunk.getLocation().getZ() == 1 ||preChunk.getLocation().getZ() == preChunk.getPlanet().getDiameter()-2) ) {
-				//edges yo
+				for(int i=0;i<chunkSize;i++)
+					for(int j=0;j<chunkSize;j++)
+						for(int k=0;k<chunkSize;k++)
+						{
+							makeCubeAt(x+i,y+j,z+k, GameBlock.SUBSTRATUS, chunk);
+						}
 				return;
 			}
+			
+			//doing edges
+			//-------------------------------------------------- y-n-z
+			else if((preChunk.getLocation().getY() == 1 && preChunk.getLocation().getZ() == 1)) {
+				for(int i=0;i<chunkSize;i++)
+					for(int j=0;j<chunkSize/2;j++)
+						for(int k=0;k<chunkSize/2;k++)
+						{
+							makeCubeAt(x+i,y+j+(chunkSize/2),z+k+(chunkSize/2), GameBlock.SUBSTRATUS, chunk);
+						}
+				return;
+			} else if (preChunk.getLocation().getY() == preChunk.getPlanet().getDiameter()-2 && preChunk.getLocation().getZ() == 1) {
+				for(int i=0;i<chunkSize;i++)
+					for(int j=0;j<chunkSize/2;j++)
+						for(int k=0;k<chunkSize/2;k++)
+						{
+							makeCubeAt(x+i,y+j,z+k+(chunkSize/2), GameBlock.SUBSTRATUS, chunk);
+						}
+				return;
+			} else if(preChunk.getLocation().getY() == 1 && preChunk.getLocation().getZ() == preChunk.getPlanet().getDiameter()-2) {
+				for(int i=0;i<chunkSize;i++)
+					for(int j=0;j<chunkSize/2;j++)
+						for(int k=0;k<chunkSize/2;k++)
+						{
+							makeCubeAt(x+i,y+j+(chunkSize/2),z+k, GameBlock.SUBSTRATUS, chunk);
+						}
+				return;
+			} else if (preChunk.getLocation().getY() == preChunk.getPlanet().getDiameter()-2 && preChunk.getLocation().getZ() == preChunk.getPlanet().getDiameter()-2){
+				for(int i=0;i<chunkSize;i++)
+					for(int j=0;j<chunkSize/2;j++)
+						for(int k=0;k<chunkSize/2;k++)
+						{
+							makeCubeAt(x+i,y+j,z+k, GameBlock.SUBSTRATUS, chunk);
+						}
+				return;
+			} //-------------------------------------------------- x-n-y
+			else if((preChunk.getLocation().getX() == 1 && preChunk.getLocation().getY() == 1)) {
+				for(int i=0;i<chunkSize/2;i++)
+					for(int j=0;j<chunkSize/2;j++)
+						for(int k=0;k<chunkSize;k++)
+						{
+							makeCubeAt(x+i+(chunkSize/2),y+j+(chunkSize/2),z+k, GameBlock.SUBSTRATUS, chunk);
+						}
+				return;
+			} else if((preChunk.getLocation().getX() == preChunk.getPlanet().getDiameter()-2 && preChunk.getLocation().getY() == preChunk.getPlanet().getDiameter()-2)) {
+				for(int i=0;i<chunkSize/2;i++)
+					for(int j=0;j<chunkSize/2;j++)
+						for(int k=0;k<chunkSize;k++)
+						{
+							makeCubeAt(x+i,y+j,z+k, GameBlock.SUBSTRATUS, chunk);
+						}
+				return;
+			}
+			else if (preChunk.getLocation().getX() == 1 && preChunk.getLocation().getY() == preChunk.getPlanet().getDiameter()-2) {
+				for(int i=0;i<chunkSize/2;i++)
+					for(int j=0;j<chunkSize/2;j++)
+						for(int k=0;k<chunkSize;k++)
+						{
+							makeCubeAt(x+i+(chunkSize/2),y+j,z+k, GameBlock.SUBSTRATUS, chunk);
+						}
+				return;
+			}
+			else if (preChunk.getLocation().getX() == preChunk.getPlanet().getDiameter()-2 && preChunk.getLocation().getY() == 1) {
+				for(int i=0;i<chunkSize/2;i++)
+					for(int j=0;j<chunkSize/2;j++)
+						for(int k=0;k<chunkSize;k++)
+						{
+							makeCubeAt(x+i,y+j+(chunkSize/2),z+k, GameBlock.SUBSTRATUS, chunk);
+						}
+				return;
+			}
+			
+			//---------------------------------------------------- x-n-z
+			else if ((preChunk.getLocation().getX() == 1 && preChunk.getLocation().getZ() == 1)) {
+				for(int i=0;i<chunkSize/2;i++)
+					for(int j=0;j<chunkSize;j++)
+						for(int k=0;k<chunkSize/2;k++)
+						{
+							makeCubeAt(x+i+(chunkSize/2),y+j,z+k+(chunkSize/2), GameBlock.SUBSTRATUS, chunk);
+						}
+				return;
+			} else if((preChunk.getLocation().getX() == preChunk.getPlanet().getDiameter()-2 && preChunk.getLocation().getZ() == preChunk.getPlanet().getDiameter()-2)) {
+				for(int i=0;i<chunkSize/2;i++)
+					for(int j=0;j<chunkSize;j++)
+						for(int k=0;k<chunkSize/2;k++)
+						{
+							makeCubeAt(x+i,y+j,z+k, GameBlock.SUBSTRATUS, chunk);
+						}
+				return;
+			} else if (preChunk.getLocation().getX() == 1 && preChunk.getLocation().getZ() == preChunk.getPlanet().getDiameter()-2) {
+				for(int i=0;i<chunkSize/2;i++)
+					for(int j=0;j<chunkSize;j++)
+						for(int k=0;k<chunkSize/2;k++)
+						{
+							makeCubeAt(x+i+(chunkSize/2),y+j,z+k, GameBlock.SUBSTRATUS, chunk);
+						}
+				return;
+			} else if ((preChunk.getLocation().getX() == preChunk.getPlanet().getDiameter()-2 && preChunk.getLocation().getZ() == 1)) {
+				for(int i=0;i<chunkSize/2;i++)
+					for(int j=0;j<chunkSize;j++)
+						for(int k=0;k<chunkSize/2;k++)
+						{
+							makeCubeAt(x+i,y+j,z+k+(chunkSize/2), GameBlock.SUBSTRATUS, chunk);
+						}
+				return;
+			}
+			// ------------------------------- END EDGE GENERATION ---------------------------------------------
 			
 			if(preChunk.getPlanet().getType().hasAtmosphere()) {
 				//Random Terrain Generation chunks
