@@ -21,9 +21,12 @@ public class LocalBlockManager {
 		BlockManager.getInstance().register(GameBlock.GRASS.getBClass(), new BlockSkin(new BlockSkin_TextureLocation[]{
 				//We specify the 3 textures we need:
 				//Grass, Earth-Grass-Transition and Earth
-				new BlockSkin_TextureLocation(0, 0),
-				new BlockSkin_TextureLocation(0, 0),
-				new BlockSkin_TextureLocation(2, 0),
+				new BlockSkin_TextureLocation(0, 0), //grass
+				new BlockSkin_TextureLocation(1, 0), //transition for top and back
+				new BlockSkin_TextureLocation(2, 0), //dirt
+				new BlockSkin_TextureLocation(0, 4), //transition for bottom and front
+				new BlockSkin_TextureLocation(1, 4), //transition for left/west and front
+				new BlockSkin_TextureLocation(2, 4), //transition for right/east 
 		}, false){
 
 			@Override
@@ -47,7 +50,7 @@ public class LocalBlockManager {
 					case Bottom:
 						return 0;
 					default:
-						return 1;
+						return 3;
 					}
 				case WEST:
 					switch(face){
@@ -56,7 +59,7 @@ public class LocalBlockManager {
 					case Right:
 						return 2;
 					default:
-						return 1;
+						return 4;
 					}
 				case EAST:
 					switch(face){
@@ -65,7 +68,7 @@ public class LocalBlockManager {
 					case Right:
 						return 0;
 					default:
-						return 1;
+						return 5;
 					}
 				case NORTH:
 					switch(face){
@@ -73,6 +76,10 @@ public class LocalBlockManager {
 						return 0;
 					case Front:
 						return 2;
+					case Left:
+						return 5;
+					case Right:
+						return 5;
 					default:
 						return 1;
 					}
@@ -82,8 +89,12 @@ public class LocalBlockManager {
 						return 0;
 					case Back:
 						return 2;
+					case Left:
+						return 4;
+					case Right:
+						return 4;
 					default:
-						return 1;
+						return 3;
 					}
 				default:
 					return 2;
