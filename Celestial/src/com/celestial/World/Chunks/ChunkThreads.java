@@ -172,7 +172,14 @@ public class ChunkThreads {
 								preChunk.getLocation().getY() == (preChunk.getPlanet().getDiameter()-1)/2 &&
 								preChunk.getLocation().getZ() == (preChunk.getPlanet().getDiameter()-1)/2) {
 							//core
-							makeCubeAt(x+i,y+j,z+k, GameBlock.SUBSTRATUS, chunk);
+							if(i == chunkSize-1 || i == 0 ||
+									j == chunkSize-1 || j == 0 ||
+									k == chunkSize-1 || k == 0)
+								makeCubeAt(x+i,y+j,z+k, GameBlock.SUBSTRATUS, chunk);
+							else if(i == (chunkSize/2)-1 && j == (chunkSize/2)-1 && k == (chunkSize/2)-1)
+								makeCubeAt(x+i,y+j,z+k, GameBlock.SUBSTRATUS, chunk);
+							else
+								continue;
 							
 						} else if(preChunk.getPlanet().getType().hasAtmosphere()) {
 							

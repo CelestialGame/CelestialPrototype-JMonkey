@@ -25,7 +25,7 @@ public enum GameBlock {
 	BIRCHWOOD(Block_BirchWood.class, "Birch Wood", 6, "assets/textures/inventory/icons/BirchWood.png"),
 	STONE(Block_Stone.class, "Stone", 2, "assets/textures/inventory/icons/Stone.png"),
 	COBBLE(Block_Cobble.class, "Cobblestone", 4, "assets/textures/inventory/icons/CobbleStone.png"),
-	TORCH(Block_Torch.class, "Torch", -1, null), 
+	TORCH(Block_Torch.class, "Torch", -1, "assets/textures/inventory/icons/Torch.png"), 
 	COAL_ORE(Block_CoalOre.class, "Coal Ore", 8, "assets/textures/inventory/icons/CoalOre.png"),
 	IRON_ORE(Block_IronOre.class, "Iron Ore", 9, "assets/textures/inventory/icons/IronOre.png"),
 	COPPER_ORE(Block_CopperOre.class, "Copper Ore", 10, "assets/textures/inventory/icons/CopperOre.png"),
@@ -35,8 +35,8 @@ public enum GameBlock {
 	SUBSTRATUS(Block_Substratus.class, "Substratus", 14, "assets/textures/inventory/icons/Substratus.png"),
 	DARKSTONE(Block_DarkStone.class, "Dark Stone", 13, "assets/textures/inventory/icons/DarkStone.png"),
 	ICE(Block_Ice.class, "Ice", 13, "assets/textures/inventory/icons/Ice.png"),
-	WORKBENCH(Block_WorkBench.class, "Workbench", 16, null, true),
-	FURNACE(Block_Furnace.class, "Furnace", 15, null, true);
+	WORKBENCH(Block_WorkBench.class, "Workbench", 16, "assets/textures/inventory/icons/WorkBench.png", true),
+	FURNACE(Block_Furnace.class, "Furnace", 15, "assets/textures/inventory/icons/Furnace.png", true);
 	
 	/** END CLASSES **/
 	
@@ -65,7 +65,7 @@ public enum GameBlock {
 	{
 		try {
 			if(iconpath == null) {
-				return ImageIO.read(this.getClass().getResourceAsStream("assets/textures/inventory/icons/Grass.png"));
+				return ImageIO.read(this.getClass().getResourceAsStream("assets/textures/inventory/icons/blank.png"));
 			}
 			return ImageIO.read(this.getClass().getResourceAsStream(iconpath));
 		} catch (IOException e) {

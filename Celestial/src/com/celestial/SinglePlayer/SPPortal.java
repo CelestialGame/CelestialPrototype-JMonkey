@@ -77,6 +77,7 @@ public class SPPortal extends CelestialPortal{
 	private CameraControl cameraControl;
 
 	public static SPPortal self;
+	public static boolean generateEntire;
 
 	public SPPortal(
 			Celestial parent, 

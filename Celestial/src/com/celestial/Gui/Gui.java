@@ -30,12 +30,15 @@ import com.jme3.ui.Picture;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.builder.ImageBuilder;
+import de.lessvoid.nifty.builder.TextBuilder;
+import de.lessvoid.nifty.controls.ConsoleExecuteCommandEvent;
 import de.lessvoid.nifty.controls.Draggable;
 import de.lessvoid.nifty.controls.Droppable;
 import de.lessvoid.nifty.controls.DroppableDroppedEvent;
 import de.lessvoid.nifty.controls.dragndrop.builder.DraggableBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -55,6 +58,8 @@ public class Gui implements ScreenController {
 	private Element workbenchPopup;
 	private Element furnacePopup;
 	private Element buildmenuPopup;
+	
+	private Console console;
 	
 	private int gameToStart;
 	public static enum PopupType {
@@ -90,7 +95,6 @@ public class Gui implements ScreenController {
 
 		guiViewPort.addProcessor(niftyDisplay);
 		
-		
 
 		/* IMAGES */
 		invselected = new Picture("invselected");
@@ -124,8 +128,8 @@ public class Gui implements ScreenController {
 			
 			    //final Droppable droppable = this.nifty.getCurrentScreen().findNiftyControl("hotslot0drop", Droppable.class);
 			/* INIT HUD */
-			/*parent.getGuiNode().attachChild(invselected);
-			parent.getGuiNode().attachChild(this.invhotslot0);
+			parent.getGuiNode().attachChild(invselected);
+			/*parent.getGuiNode().attachChild(this.invhotslot0);
 			parent.getGuiNode().attachChild(this.invhotslot1);
 			parent.getGuiNode().attachChild(this.invhotslot2);
 			parent.getGuiNode().attachChild(this.invhotslot3);
@@ -151,6 +155,10 @@ public class Gui implements ScreenController {
 			furnacePopup = this.nifty.createPopup("Furnace");
 			workbenchPopup = this.nifty.createPopup("Workbench");
 			buildmenuPopup = this.nifty.createPopup("BuildMenu");
+			
+			
+			this.console = new Console(this.parent, this);
+			this.console.bind(nifty, this.nifty.getCurrentScreen());
 			
 		}
 		else if(this.nifty.getCurrentScreen().getScreenId().equals("loadgame"))
@@ -243,20 +251,33 @@ public class Gui implements ScreenController {
 		flyCam.setDragToRotate(false);
 		inputManager.setCursorVisible(false);
 	}
+	
+	public void enableInput() {
+		Celestial.getPortal().getInputControl().enable();
+	}
+	public void disableInput() {
+		Celestial.getPortal().getInputControl().disable();
+	}
 
 	@NiftyEventSubscriber(pattern = "space-.*")
 	public void onInventoryItemMoved(final String id, final DroppableDroppedEvent event) {
 		
 	}
+	@NiftyEventSubscriber(id = "console")
+	public void onConsoleCommand(final String id, final ConsoleExecuteCommandEvent command) {
+		if(this.console != null) {
+			this.console.onConsoleCommand(id, command);
+		}
+	}
 	
 	public void setHotBarSelection(int slot) {
-		if(this.nifty.getCurrentScreen().findElementByName("hotslot"+slot) != null)
-			invselected.setPosition(this.nifty.getCurrentScreen().findElementByName("hotslot"+slot).getX()-5, 0);
+		if(this.nifty.getCurrentScreen().findElementByName("hotslot"+slot+"drop") != null)
+			invselected.setPosition(this.nifty.getCurrentScreen().findElementByName("hotslot"+slot+"drop").getX()-5, 0);
 	}
 
 	public void setHotBarIcon(int pos, final InventorySlot slot)
 	{
-		Element dragSlot = this.nifty.getCurrentScreen().findElementByName("hotslot"+pos);
+		Element dragSlot = this.nifty.getCurrentScreen().findElementByName("hotslot"+pos+"drop");
 		String imagePath;
 		if(slot.getItem().getBlock() == null)
 			imagePath = slot.getItem().getTool().getIconPath();
@@ -265,7 +286,7 @@ public class Gui implements ScreenController {
 		if(imagePath == null || imagePath.equals("")) {
 			imagePath = "assets/textures/inventory/icons/blank.png";
 		}
-		if(this.nifty.getCurrentScreen().findElementByName("hotslot"+pos+"img") != null) {
+		if(this.nifty.getCurrentScreen().findElementByName("hotslot"+pos) != null) {
 			NiftyImage img;
 			try {
 				img = this.nifty.getRenderEngine().createImage(this.nifty.getCurrentScreen(), imagePath, false);
@@ -273,17 +294,27 @@ public class Gui implements ScreenController {
 				imagePath = "assets/textures/inventory/icons/blank.png";
 				img = this.nifty.getRenderEngine().createImage(this.nifty.getCurrentScreen(), imagePath, false);
 			}
-			Element icon = this.nifty.getCurrentScreen().findElementByName("hotslot"+pos+"img");
-			icon.getRenderer(ImageRenderer.class).setImage(img);
+			Element drop = this.nifty.getCurrentScreen().findElementByName("hotslot"+pos);
+			drop.getRenderer(ImageRenderer.class).setImage(img);
+			this.nifty.getCurrentScreen().findElementByName("hotslot"+pos+"contents").getRenderer(TextRenderer.class).setText(""+slot.getNumberContents());
 			return;
 		}
+		DraggableBuilder dB = new DraggableBuilder("hotslot"+pos);
+		dB.childLayoutCenter();
 		ImageBuilder ib = new ImageBuilder("hotslot"+pos+"img");
 		ib.filename(imagePath);
+		ib.childLayoutCenter();
+		ib.text(new TextBuilder("hotslot"+pos+"contents"){{
+			font("assets/fonts/visitor.fnt");
+			text(""+slot.getNumberContents());
+		}});
+		
+		dB.image(ib);
 		try {
-			ib.build(nifty, this.nifty.getCurrentScreen(), dragSlot);
+			dB.build(nifty, this.nifty.getCurrentScreen(), dragSlot);
 		} catch (AssetNotFoundException e) {
 			ib.filename("assets/textures/inventory/icons/blank.png");
-			ib.build(nifty, this.nifty.getCurrentScreen(), dragSlot);
+			dB.build(nifty, this.nifty.getCurrentScreen(), dragSlot);
 		}
 		
 		/*Picture p = null;
@@ -310,6 +341,78 @@ public class Gui implements ScreenController {
 			}
 		}*/
 	}
+	private void syncHotBars(boolean popupClosing) {
+		if(popupClosing)
+			syncHotSpacetoBar();
+		else
+			syncHotBartoSpace();
+	}
+	private void syncHotSpacetoBar() {
+		for(int i=0; i<9; i++) {
+			Element hotbarDropSlot = this.nifty.getScreen("hud").findElementByName("hotslot"+i+"drop");
+			Element hotspaceDrag = inventoryPopup.findElementByName("hotspace-"+i);
+			if(hotspaceDrag != null) {
+				NiftyImage img = inventoryPopup.findElementByName("hotspace-"+i+"img").getRenderer(ImageRenderer.class).getImage();
+				final String txt  = inventoryPopup.findElementByName("hotspace-"+i+"contents").getRenderer(TextRenderer.class).getOriginalText();
+			
+				if(this.nifty.getScreen("hud").findElementByName("hotslot"+i) == null) {
+					DraggableBuilder dB = new DraggableBuilder("hotslot"+i);
+					dB.childLayoutCenter();
+					ImageBuilder ib = new ImageBuilder("hotslot"+i+"img");
+					ib.childLayoutCenter();
+					ib.x("40px");
+					ib.y("40px");
+					ib.height("100%");
+					ib.width("100%");
+					ib.text(new TextBuilder("hotslot"+i+"contents"){{
+						font("assets/fonts/visitor.fnt");
+						text(txt);
+					}});
+					dB.image(ib);
+					dB.build(nifty, this.nifty.getCurrentScreen(), hotbarDropSlot);
+					inventoryPopup.findElementByName("hotspace-"+i+"img").getRenderer(ImageRenderer.class).setImage(img);
+					continue;
+				}
+				this.nifty.getCurrentScreen().findElementByName("hotslot"+i+"img").getRenderer(ImageRenderer.class).setImage(img);
+				this.nifty.getCurrentScreen().findElementByName("hotslot"+i+"contents").getRenderer(TextRenderer.class).setText(txt);
+			}
+		}
+	}
+	private void syncHotBartoSpace() {
+		for(int i=0; i<10; i++) {
+			
+			Element hotspaceDropSlot = inventoryPopup.findElementByName("hotspace"+i);
+			Element hotbarDrag = this.nifty.getCurrentScreen().findElementByName("hotslot"+i);
+			if(hotbarDrag != null) {
+				NiftyImage img = this.nifty.getCurrentScreen().findElementByName("hotslot"+i+"img").getRenderer(ImageRenderer.class).getImage();
+				final String txt  = this.nifty.getCurrentScreen().findElementByName("hotslot"+i+"contents").getRenderer(TextRenderer.class).getOriginalText();
+				
+				if(inventoryPopup.findElementByName("hotspace-"+i) == null) {
+					DraggableBuilder dB = new DraggableBuilder("hotspace-"+i);
+					dB.childLayoutCenter();
+					ImageBuilder ib = new ImageBuilder("hotspace-"+i+"img");
+					ib.childLayoutCenter();
+					ib.x("40px");
+					ib.y("40px");
+					ib.height("100%");
+					ib.width("100%");
+					ib.text(new TextBuilder("hotspace-"+i+"contents"){{
+						font("assets/fonts/visitor.fnt");
+						text(txt);
+					}});
+					dB.image(ib);
+					dB.build(nifty, this.nifty.getCurrentScreen(), hotspaceDropSlot);
+					inventoryPopup.findElementByName("hotspace-"+i+"img").getRenderer(ImageRenderer.class).setImage(img);
+					continue;
+				}
+				inventoryPopup.findElementByName("hotspace-"+i+"img").getRenderer(ImageRenderer.class).setImage(img);
+				inventoryPopup.findElementByName("hotspace-"+i+"contents").getRenderer(TextRenderer.class).setText(txt);
+			} else {
+				System.err.println("No item found in hotbar"+i);
+				continue;
+			}
+		}
+	}
 	
 	public void showPopup(PopupType type)
 	{
@@ -317,6 +420,7 @@ public class Gui implements ScreenController {
 		{
 		case INVENTORY:
 			nifty.showPopup(nifty.getCurrentScreen(), inventoryPopup.getId(), null);
+			syncHotBars(false);
 			this.disableControl();
 			break;
 		case FURNACE:
@@ -341,6 +445,7 @@ public class Gui implements ScreenController {
 		switch(type)
 		{
 		case INVENTORY:
+			syncHotBars(true);
 			nifty.closePopup(inventoryPopup.getId());
 			this.enableControl();
 			break;
