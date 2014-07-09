@@ -230,29 +230,29 @@ public class ChunkThreads {
 				//Random Terrain Generation chunks
 				if(preChunk.getLocation().getX() == preChunk.getPlanet().getDiameter()-2) {
 					generateRandomTerrain(new Vector3i(x,y,z), 
-							new Vector3i(chunkSize/2, chunkSize, chunkSize), GameBlock.GRASS, PlanetSide.RIGHT, chunk);
+							new Vector3i(chunkSize, chunkSize, chunkSize), GameBlock.GRASS, PlanetSide.RIGHT, chunk);
 					return;
 				} else if(preChunk.getLocation().getX() == 1) {
 					generateRandomTerrain(new Vector3i(x,y,z), 
-							new Vector3i(chunkSize/2, chunkSize, chunkSize), GameBlock.GRASS, PlanetSide.LEFT, chunk);
+							new Vector3i(chunkSize, chunkSize, chunkSize), GameBlock.GRASS, PlanetSide.LEFT, chunk);
 					return;
 				}
 				else if (preChunk.getLocation().getY() == preChunk.getPlanet().getDiameter()-2) {
 					generateRandomTerrain(new Vector3i(x,y,z), 
-							new Vector3i(chunkSize, chunkSize/2, chunkSize), GameBlock.GRASS, PlanetSide.TOP, chunk);
+							new Vector3i(chunkSize, chunkSize, chunkSize), GameBlock.GRASS, PlanetSide.TOP, chunk);
 					return;
 				} else if(preChunk.getLocation().getY() == 1) {
 					generateRandomTerrain(new Vector3i(x,y,z), 
-							new Vector3i(chunkSize, chunkSize/2, chunkSize), GameBlock.GRASS, PlanetSide.BOTTOM, chunk);
+							new Vector3i(chunkSize, chunkSize, chunkSize), GameBlock.GRASS, PlanetSide.BOTTOM, chunk);
 					return;
 				}
 				else if (preChunk.getLocation().getZ() == preChunk.getPlanet().getDiameter()-2) {
 					generateRandomTerrain(new Vector3i(x,y,z), 
-							new Vector3i(chunkSize, chunkSize, chunkSize/2), GameBlock.GRASS, PlanetSide.FRONT, chunk);
+							new Vector3i(chunkSize, chunkSize, chunkSize), GameBlock.GRASS, PlanetSide.FRONT, chunk);
 					return;
 				} else if (preChunk.getLocation().getZ() == 1) {
 					generateRandomTerrain(new Vector3i(x,y,z), 
-							new Vector3i(chunkSize, chunkSize, chunkSize/2), GameBlock.GRASS, PlanetSide.BACK, chunk);
+							new Vector3i(chunkSize, chunkSize, chunkSize), GameBlock.GRASS, PlanetSide.BACK, chunk);
 					return;
 				}
 			}
@@ -431,9 +431,9 @@ public class ChunkThreads {
 		    Perlin base = new Perlin(preChunk.getPlanet().getSeed());
 			Ridge basis = new Ridge(base);
 			Transform rmft = new Transform(); rmft.setScale(1.f/64.f);
-			BasicNoise ridgedMF = new BasicNoise(rmft, 0.1f, 0.086f, (int) preChunk.getPlanet().getSeed(), 3, 3.02f, 2f, true, basis);
+			BasicNoise ridgedMF = new BasicNoise(rmft, 0.5f, 0.086f, (int) preChunk.getPlanet().getSeed(), 2, 3.02f, 1.5f, true, basis);
 			Transform simt = new Transform(); simt.setScale(1.f/64.f);
-			BasicNoise perlin = new BasicNoise(simt, 0.1f, 0.032f, (int) preChunk.getPlanet().getSeed(), 3, 3.02f, 4f, false, base);
+			BasicNoise perlin = new BasicNoise(simt, 0.15f, 0.086f, (int) preChunk.getPlanet().getSeed(), 3, 3.02f, 1f, true, base);
 			SummedNoise fractalSum = new SummedNoise(ridgedMF, perlin);
 		    for(int i=0;i<resolution;i++){
 		        for(int j=0;j<resolution;j++){
@@ -446,7 +446,7 @@ public class ChunkThreads {
 			if(side == PlanetSide.TOP) {
 		        for(int x=0;x<grid[0].length;x++) {
 		            for(int z=0;z<grid.length;z++){
-		                int blockHeight = (int) ((grid[x][z]) * size.getY() + 1);
+		                int blockHeight = (int) ((grid[x][z]) * size.getY() - 5);
 		                Vector3i tmpLocation = new Vector3i();
 		                for(int y=0;y<blockHeight;y++){
 		                    tmpLocation.set(location.getX() + x, location.getY() + y, location.getZ() + z);
@@ -458,7 +458,7 @@ public class ChunkThreads {
 	        } else if(side == PlanetSide.BOTTOM) {
 	        	for(int x=0;x<grid[0].length;x++){
 		            for(int z=0;z<grid.length;z++){
-		                int blockHeight = (int) ((grid[x][z]) * size.getY() + 1);
+		                int blockHeight = (int) ((grid[x][z]) * size.getY());
 		                Vector3i tmpLocation = new Vector3i();
 		                for(int y=0;y<blockHeight;y++){
 		                    tmpLocation.set(location.getX() + x, location.getY() - y + Planet.CHUNK_SIZE, location.getZ() + z);
@@ -470,7 +470,7 @@ public class ChunkThreads {
 	        } else if(side == PlanetSide.LEFT) {
 	        	for(int y=0;y<grid[0].length;y++){
 		            for(int z=0;z<grid.length;z++){
-		                int blockHeight = (int) ((grid[y][z]) * size.getX() + 1);
+		                int blockHeight = (int) ((grid[y][z]) * size.getX());
 		                Vector3i tmpLocation = new Vector3i();
 		                for(int x=0;x<blockHeight;x++){
 		                    tmpLocation.set(location.getX() - x + Planet.CHUNK_SIZE, location.getY() + y, location.getZ() + z);
@@ -483,7 +483,7 @@ public class ChunkThreads {
 	        else if(side == PlanetSide.RIGHT) {
 	        	for(int y=0;y<grid[0].length;y++){
 		            for(int z=0;z<grid.length;z++){
-		                int blockHeight = (int) ((grid[y][z]) * size.getX() + 1);
+		                int blockHeight = (int) ((grid[y][z]) * size.getX());
 		                Vector3i tmpLocation = new Vector3i();
 		                for(int x=0;x<blockHeight;x++){
 		                    tmpLocation.set(location.getX() + x, location.getY() + y, location.getZ() + z);
@@ -496,7 +496,7 @@ public class ChunkThreads {
 	        else if(side == PlanetSide.FRONT) {
 	        	for(int x=0;x<grid[0].length;x++){
 		            for(int y=0;y<grid.length;y++){
-		                int blockHeight = (int) ((grid[x][y]) * size.getZ() + 1);
+		                int blockHeight = (int) ((grid[x][y]) * size.getZ());
 		                Vector3i tmpLocation = new Vector3i();
 		                for(int z=0;z<blockHeight;z++){
 		                    tmpLocation.set(location.getX() + x, location.getY() + y, location.getZ() + z);
@@ -509,7 +509,7 @@ public class ChunkThreads {
 	        else if(side == PlanetSide.BACK) {
 	        	for(int x=0;x<grid[0].length;x++){
 		            for(int y=0;y<grid.length;y++){
-		                int blockHeight = (int) ((grid[x][y]) * size.getZ() + 1);
+		                int blockHeight = (int) ((grid[x][y]) * size.getZ());
 		                Vector3i tmpLocation = new Vector3i();
 		                for(int z=0;z<blockHeight;z++){
 		                    tmpLocation.set(location.getX() + x, location.getY() + y, location.getZ() - z + Planet.CHUNK_SIZE);
