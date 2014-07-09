@@ -115,13 +115,14 @@ public class Star {
 		Box starbox = new Box(500,500,500);
 		this.StarGeometry = new Geometry("Star", starbox);
 		Material mat = new Material(portal.getAssetManager(),  // Create new material and...
-			    "Common/MatDefs/Light/Lighting.j3md");
-		mat.setColor("Diffuse", new ColorRGBA(247f, 214f, 81f, 0f));
-		mat.setColor("Ambient", new ColorRGBA(247f, 214f, 81f, 0f));
-		mat.setColor("Specular", new ColorRGBA(247f, 214f, 81f, 0f));
+			    "Common/MatDefs/Misc/Unshaded.j3md");
+		mat.setColor("Color", ColorRGBA.White);  
+		//mat.setColor("Diffuse", new ColorRGBA(247f, 214f, 81f, 0f));
+		//mat.setColor("Ambient", new ColorRGBA(247f, 214f, 81f, 0f));
+		//mat.setColor("Specular", new ColorRGBA(247f, 214f, 81f, 0f));
 		mat.setColor("GlowColor", new ColorRGBA(247f, 214f, 81f, 0f));
-		mat.setFloat("Shininess", 5f);
-		mat.setBoolean("UseMaterialColors",true);
+		//mat.setFloat("Shininess", 5f);
+		//mat.setBoolean("UseMaterialColors",true);
 		this.StarGeometry.setMaterial(mat);
 		this.StarNode.attachChild(this.StarGeometry);
 		portal.getRootNode().attachChild(StarNode);
