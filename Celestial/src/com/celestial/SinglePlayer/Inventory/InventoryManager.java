@@ -54,7 +54,7 @@ public class InventoryManager {
 		
 		this.hotslot0 = new InventorySlot(new InventoryItem(GameBlock.FURNACE), 3, this);
 		this.hotslot1 = new InventorySlot(new InventoryItem(GameBlock.WORKBENCH), 3, this);
-		this.hotslot2 = new InventorySlot(new InventoryItem(Tool.MARKER), 3, this);
+		this.hotslot2 = new InventorySlot(null, EMPTY, this);
 		this.hotslot3 = new InventorySlot(null, EMPTY, this);
 		this.hotslot4 = new InventorySlot(null, EMPTY, this);
 		this.hotslot5 = new InventorySlot(null, EMPTY, this);

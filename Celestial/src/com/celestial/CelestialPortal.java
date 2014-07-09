@@ -66,6 +66,9 @@ public abstract class CelestialPortal {
 	public InventoryManager getInventoryManager(){
 		return this.invmanager;
 	}
+	public InputControl getInputControl() {
+		return this.inputControl;
+	}
 	
 	public Node getGuiNode() {
 		return this.guiNode;
