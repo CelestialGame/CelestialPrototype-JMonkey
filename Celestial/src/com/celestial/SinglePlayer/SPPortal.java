@@ -66,7 +66,7 @@ public class SPPortal extends CelestialPortal{
 	private Timer timer;
 	private float lastRotation;
 	private FilterPostProcessor fpp;
-	public static final int SHADOWMAP_SIZE = 512;
+	public static final int SHADOWMAP_SIZE = 1024;
 	public static float camHeight = 4.9f;
 
 	private float gravitySpeed = 9.81f * 3f;
@@ -97,7 +97,7 @@ public class SPPortal extends CelestialPortal{
 		this.guiNode = guiNode;
 		this.cam = cam;
 		this.flyCam = flyCam;
-		this.viewPort = viewPort;
+		this.setViewPort(viewPort);
 		this.assetManager = assetManager;
 		this.inputManager = inputManager;
 		this.settings = settings;
@@ -320,35 +320,6 @@ public class SPPortal extends CelestialPortal{
 		//AmbientLight al = new AmbientLight();
 		//al.setColor(ColorRGBA.White);
 		//this.rootNode.addLight(al);
-		
-		this.rootNode.addLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
-
-		/*for(DirectionalLight light : this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLightMap().getLights()) {
-			this.rootNode.addLight(light);
-			DirectionalLightShadowRenderer directionalLightShadowRenderer = new DirectionalLightShadowRenderer(getAssetManager(), 2048, 3);
-			directionalLightShadowRenderer.setLight(light);
-			directionalLightShadowRenderer.setShadowIntensity(0.3f);
-			this.viewPort.addProcessor(directionalLightShadowRenderer);
-		}*/
-		PointLightShadowRenderer plsr = new PointLightShadowRenderer(this.assetManager, SHADOWMAP_SIZE);
-        plsr.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
-        plsr.setEdgeFilteringMode(EdgeFilteringMode.PCFPOISSON);
-        //plsr.setFlushQueues(false);
-        //plsr.displayFrustum();
-        //plsr.displayDebug();
-        this.viewPort.addProcessor(plsr);
- 
-        PointLightShadowFilter plsf = new PointLightShadowFilter(this.assetManager, SHADOWMAP_SIZE);
-        plsf.setLight(this.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getStar().getLight());
-        plsf.setEdgeFilteringMode(EdgeFilteringMode.PCFPOISSON);
-        plsf.setEnabled(true);
-
-		this.fpp = new FilterPostProcessor(this.assetManager);
-		BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.SceneAndObjects);
-		this.fpp.addFilter(bloom);
-		this.fpp.addFilter(plsf);
-
-		this.viewPort.addProcessor(this.fpp);
 	}
 
 	public void initAudio() {
@@ -504,7 +475,7 @@ public class SPPortal extends CelestialPortal{
 				this.assetManager,
 				this.inputManager,
 				this.getParent().getAudioRenderer(),
-				this.viewPort,
+				this.getViewPort(),
 				this.flyCam
 		};
 	}

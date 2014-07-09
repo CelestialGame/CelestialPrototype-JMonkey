@@ -36,7 +36,7 @@ public abstract class CelestialPortal {
 	protected Node guiNode;
 	public Camera cam;
 	protected FlyByCamera flyCam;
-	protected ViewPort viewPort;
+	private ViewPort viewPort;
 	protected AssetManager assetManager;
 	public Vector3f walkDirection;
 	public boolean left = false, right = false, up = false, down = false;
@@ -108,6 +108,18 @@ public abstract class CelestialPortal {
 		return cam;
 	}
 
+	/**
+	 * @return the viewPort
+	 */
+	public ViewPort getViewPort() {
+		return viewPort;
+	}
+	/**
+	 * @param viewPort the viewPort to set
+	 */
+	public void setViewPort(ViewPort viewPort) {
+		this.viewPort = viewPort;
+	}
 	public abstract InputManager getInputManager();
 	public abstract Object[] getNiftyUtils();
 

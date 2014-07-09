@@ -7,15 +7,20 @@ Date Created:
 package com.celestial.SinglePlayer.Components;
 
 import com.celestial.CelestialPortal;
+import com.celestial.SinglePlayer.SPPortal;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.BloomFilter;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
+import com.jme3.shadow.PointLightShadowFilter;
+import com.jme3.shadow.PointLightShadowRenderer;
 
 
 public class Star {
@@ -130,8 +135,29 @@ public class Star {
 		this.light = new PointLight();
 		light.setPosition(location);
         light.setColor(ColorRGBA.White);
-        light.setRadius(65000f);
-		this.StarNode.addLight(light);
+        light.setRadius(10000f);
+        this.StarNode.addLight(light);
+        
+        PointLightShadowRenderer plsr = new PointLightShadowRenderer(this.portal.getAssetManager(), SPPortal.SHADOWMAP_SIZE);
+        plsr.setLight(light);
+        //plsr.setEdgeFilteringMode(EdgeFilteringMode.PCF4);
+        //plsr.setFlushQueues(false);
+        //plsr.displayFrustum();
+        //plsr.displayDebug();
+        portal.getViewPort().addProcessor(plsr);
+        
+        PointLightShadowFilter plsf = new PointLightShadowFilter(this.portal.getAssetManager(), SPPortal.SHADOWMAP_SIZE);
+        plsf.setLight(light);
+        //plsf.setEdgeFilteringMode(EdgeFilteringMode.PCFPOISSON);
+        plsf.setEnabled(true);
+        
+        FilterPostProcessor fpp = new FilterPostProcessor(this.portal.getAssetManager());
+		BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.SceneAndObjects);
+		fpp.addFilter(bloom);
+		fpp.addFilter(plsf);
+
+		
+		portal.getViewPort().addProcessor(fpp);
 		
 		this.StarNode.move(location);
 	}
