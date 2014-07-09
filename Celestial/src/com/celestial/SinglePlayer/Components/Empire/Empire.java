@@ -2,8 +2,8 @@ package com.celestial.SinglePlayer.Components.Empire;
 
 import java.util.ArrayList;
 
-import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.SinglePlayer.Components.Player;
+import com.celestial.SinglePlayer.Components.Planet.Planet;
 
 public class Empire {
 	

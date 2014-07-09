@@ -14,11 +14,11 @@ import com.celestial.Blocks.LocalBlockManager;
 import com.celestial.Gui.Gui;
 import com.celestial.SinglePlayer.Camera.CameraControl;
 import com.celestial.SinglePlayer.Components.Galaxy;
-import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.SinglePlayer.Components.Player;
 import com.celestial.SinglePlayer.Components.Sector;
-import com.celestial.SinglePlayer.Components.SectorCoord;
 import com.celestial.SinglePlayer.Components.SolarSystem;
+import com.celestial.SinglePlayer.Components.Planet.Planet;
+import com.celestial.SinglePlayer.Components.Planet.PlanetFace;
 import com.celestial.SinglePlayer.Input.InputControl;
 import com.celestial.SinglePlayer.Inventory.InventoryDrop;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
@@ -41,7 +41,6 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
-import com.jme3.post.filters.BloomFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -53,9 +52,6 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Box;
-import com.jme3.shadow.EdgeFilteringMode;
-import com.jme3.shadow.PointLightShadowFilter;
-import com.jme3.shadow.PointLightShadowRenderer;
 import com.jme3.system.AppSettings;
 import com.jme3.system.Timer;
 import com.jme3.util.SkyFactory;
@@ -176,7 +172,7 @@ public class SPPortal extends CelestialPortal{
 		blockHighlightGeom = new Geometry("blockHighlight", this.blockHighlight);
 		blockHighlightMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
 		blockHighlightMat.getAdditionalRenderState().setWireframe(true);
-		
+
 		blockHighlightMat.setColor("Color", new ColorRGBA(0f, 0f, 0f, 1f));
 		blockHighlightGeom.setMaterial(blockHighlightMat);
 
@@ -219,14 +215,14 @@ public class SPPortal extends CelestialPortal{
 							{
 								Quaternion planetRotationAmount = new Quaternion().fromAngles(p.amountRotation.getX()*FastMath.DEG_TO_RAD, p.amountRotation.getY()*FastMath.DEG_TO_RAD, p.amountRotation.getZ()*FastMath.DEG_TO_RAD);
 								Quaternion starRotationAmount = new Quaternion().fromAngles(p.amountRevolution.getX()*FastMath.DEG_TO_RAD, p.amountRevolution.getY()*FastMath.DEG_TO_RAD, p.amountRevolution.getZ()*FastMath.DEG_TO_RAD);
-								
+
 								Vector3f playerRotatedByStar = starRotationAmount.mult(player.getLocation());
 								Vector3f playerToPlanet = playerRotatedByStar.subtract(p.getCurrentPlanetTranslation());
 								Vector3f playerRotatedByPlanet = planetRotationAmount.mult(playerToPlanet);
 								Vector3f finalDifference = (playerRotatedByPlanet.add(p.getCurrentPlanetTranslation())).subtract(player.getLocation());
-								
+
 								//player.setTranslationUpdate(finalDifference);
-								
+
 								//if(this.bulletAppState.isEnabled())
 								//	cam.setRotation(planetRotationAmount.mult(starRotationAmount.mult(cam.getRotation())));
 							}
@@ -274,44 +270,72 @@ public class SPPortal extends CelestialPortal{
 	private void updateGravity(float tpf) {
 		if(this.player.getPlanet() != null) {
 			Planet planet = this.player.getPlanet();
-			
-			int FaceOn = this.player.getCurrentFaceOfPlanet(planet);
-			if(FaceOn == Planet.TOP) {
+
+			PlanetFace currFace = this.player.getCurrentFaceOfPlanet(planet);
+			switch(currFace)
+			{
+			case TOP:
 				this.player.setGravity(this.player.getPlanet().getUpVector().mult(-gravitySpeed));
-			} else if (FaceOn == Planet.BOTTOM) {
+				break;
+			case BOTTOM:
 				this.player.setGravity(this.player.getPlanet().getUpVector().mult(gravitySpeed));
-			} else if (FaceOn == Planet.NORTH) {
+				break;
+			case NORTH:
 				this.player.setGravity(this.player.getPlanet().getForwardVector().mult(gravitySpeed));
-			} else if (FaceOn == Planet.SOUTH) {
+				break;
+			case SOUTH:
 				this.player.setGravity(this.player.getPlanet().getForwardVector().mult(-gravitySpeed));
-			} else if (FaceOn == Planet.EAST) {
+				break;
+			case EAST:
 				this.player.setGravity(this.player.getPlanet().getLeftVector().mult(-gravitySpeed));
-			} else if (FaceOn == Planet.WEST) {
+				break;
+			case WEST:
 				this.player.setGravity(this.player.getPlanet().getLeftVector().mult(gravitySpeed));
+				break;
+			default:
+				this.player.setGravity(zeroGravity);
+				break;
 			}
-		} else {
-			this.player.setGravity(zeroGravity);
+		} 
+		else
+		{
+			this.player.setGravity(zeroGravity);	
 		}
 		ListIterator<InventoryDrop> it = invmanager.getDropItems().listIterator();    
-		if(it.hasNext()) {  
+		if(it.hasNext()) 
+			{  
 			InventoryDrop item = it.next();
-			if(item.getPlanet() != null) {
+			if(item.getPlanet() != null) 
+			{
 				Planet planet = item.getPlanet();
-				int FaceOn = item.getCurrentFaceOfPlanet(planet);
-				if(FaceOn == Planet.TOP) {
+				PlanetFace currFace = item.getCurrentFaceOfPlanet(planet);
+				switch(currFace)
+				{
+				case TOP:
 					item.getCollisionBox().setGravity(item.getPlanet().getUpVector().mult(-gravitySpeed));
-				} else if (FaceOn == Planet.BOTTOM) {
+					break;
+				case BOTTOM:
 					item.getCollisionBox().setGravity(item.getPlanet().getUpVector().mult(gravitySpeed));
-				} else if (FaceOn == Planet.NORTH) {
+					break;
+				case NORTH:
 					item.getCollisionBox().setGravity(item.getPlanet().getForwardVector().mult(gravitySpeed));
-				} else if (FaceOn == Planet.SOUTH) {
+					break;
+				case SOUTH:
 					item.getCollisionBox().setGravity(item.getPlanet().getForwardVector().mult(-gravitySpeed));
-				} else if (FaceOn == Planet.EAST) {
+					break;
+				case EAST:
 					item.getCollisionBox().setGravity(item.getPlanet().getLeftVector().mult(-gravitySpeed));
-				} else if (FaceOn == Planet.WEST) {
+					break;
+				case WEST:
 					item.getCollisionBox().setGravity(item.getPlanet().getLeftVector().mult(gravitySpeed));
+					break;
+				default:
+					item.getCollisionBox().setGravity(zeroGravity);
+					break;
 				}
-			} else {
+			} 
+			else 
+			{
 				item.getCollisionBox().setGravity(zeroGravity);
 			}
 		}  
@@ -445,7 +469,7 @@ public class SPPortal extends CelestialPortal{
 		this.Vector3IntPosText.setSize(this.guiFont.getCharSet().getRenderedSize());
 		this.Vector3IntPosText.setLocalTranslation(10, this.settings.getHeight()-30, 0);
 		this.guiNode.attachChild(this.Vector3IntPosText);
-		
+
 		this.blocksLiveText = new BitmapText(this.guiFont, false);
 		this.blocksLiveText.setSize(this.guiFont.getCharSet().getRenderedSize());
 		this.blocksLiveText.setLocalTranslation(10, this.settings.getHeight()-150, 0);

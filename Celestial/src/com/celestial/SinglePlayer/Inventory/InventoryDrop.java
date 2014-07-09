@@ -1,8 +1,8 @@
 package com.celestial.SinglePlayer.Inventory;
 
 import com.celestial.Celestial;
-import com.celestial.SinglePlayer.SPPortal;
-import com.celestial.SinglePlayer.Components.Planet;
+import com.celestial.SinglePlayer.Components.Planet.Planet;
+import com.celestial.SinglePlayer.Components.Planet.PlanetFace;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
@@ -91,7 +91,7 @@ public class InventoryDrop{
 		return this.planet;
 	}
 	
-	public int getCurrentFaceOfPlanet(Planet planet)
+	public PlanetFace getCurrentFaceOfPlanet(Planet planet)
 	{		
 		Vector3f P1 = planet.getOriginalPlanetTranslation();
 
@@ -99,7 +99,7 @@ public class InventoryDrop{
 		if(this.planet.getBulletAppState().isEnabled())
 			itemP = this.itemdrop.getWorldTranslation();
 		else
-			return -1;
+			return PlanetFace.UNKNOWN;
 
 		Vector3f rot1P = planet.getStarNode().getLocalRotation().inverse().mult(itemP);
 		Vector3f transP = rot1P.subtract(P1);
@@ -111,30 +111,24 @@ public class InventoryDrop{
 
 		if( Math.abs(y) > Math.abs(x) && Math.abs(y) > Math.abs(z) ) {
 			if( y < 0 ) {
-				//System.out.println("Bottom");
-				return Planet.BOTTOM;
+				return PlanetFace.BOTTOM;
 			} else {
-				//System.out.println("Top");
-				return Planet.TOP;
+				return PlanetFace.TOP;
 			}
 		} else if( Math.abs(x) > Math.abs(z) ) {
 			if( x < 0 ) {
-				//System.out.println("West");
-				return Planet.WEST;
+				return PlanetFace.WEST;
 			} else {
-				//System.out.println("East");
-				return Planet.EAST;
+				return PlanetFace.EAST;
 			}
 		} else if( Math.abs(z) > Math.abs(x) ) {
 			if( z < 0 ) {
-				//System.out.println("North");
-				return Planet.NORTH;
+				return PlanetFace.NORTH;
 			} else {
-				//System.out.println("South");
-				return Planet.SOUTH;
+				return PlanetFace.SOUTH;
 			}
 		} else {
-			return -1;
+			return PlanetFace.UNKNOWN;
 		}
 	}
 	

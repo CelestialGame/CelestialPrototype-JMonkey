@@ -4,7 +4,7 @@ Date Created:
 	Jun 2, 2013
  */
 
-package com.celestial.SinglePlayer.Components;
+package com.celestial.SinglePlayer.Components.Planet;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.celestial.CelestialPortal;
+import com.celestial.SinglePlayer.Components.Star;
 import com.celestial.SinglePlayer.Physics.Listener;
 import com.celestial.World.BlockChunkManager;
 import com.cubes.BlockChunkControl;
@@ -40,12 +41,6 @@ import com.jme3.scene.control.LodControl;
 import com.jme3.scene.shape.Box;
 
 public class Planet {
-	public static final int TOP = 0;
-	public static final int NORTH = 1;
-	public static final int EAST = 2;
-	public static final int SOUTH = 3;
-	public static final int WEST = 4;
-	public static final int BOTTOM = 5;
 	public float atmosphereSizeFactor;
 	public enum planetType {
 		HABITABLE, INNER, OUTER, INFERNO, FRIGID, MOON;

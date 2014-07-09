@@ -7,9 +7,11 @@ package com.cubes.network;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Map;
 
 import com.cubes.BlockChunkControl;
 import com.cubes.BlockTerrainControl;
+import com.cubes.Vector3i;
 
 /**
  *
@@ -17,8 +19,8 @@ import com.cubes.BlockTerrainControl;
  */
 public class CubesSerializer{
     
-    public static byte[][][][] writeChunksToBytes(BlockTerrainControl blockTerrain){
-        BlockChunkControl[][][] chunks = blockTerrain.getChunks();
+   /* public static byte[][][][] writeChunksToBytes(BlockTerrainControl blockTerrain){
+        Map<Vector3i, BlockChunkControl> chunks = blockTerrain.getChunks();
         byte[][][][] bytes = new byte[chunks.length][chunks[0].length][chunks[0][0].length][];
         for(int x=0;x<chunks.length;x++){
             for(int y=0;y<chunks[x].length;y++){
@@ -28,7 +30,7 @@ public class CubesSerializer{
             }
         }
         return bytes;
-    }
+    }*///TODO: This.
     
     public static byte[] writeToBytes(BitSerializable bitSerializable){
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

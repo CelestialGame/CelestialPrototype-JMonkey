@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.celestial.CelestialPortal;
+import com.celestial.SinglePlayer.Components.Planet.Planet;
 
 public class Galaxy {
 

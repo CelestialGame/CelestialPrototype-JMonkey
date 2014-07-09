@@ -7,7 +7,8 @@ Date Created:
 package com.celestial.SinglePlayer.Components;
 
 import com.celestial.CelestialPortal;
-import com.celestial.SinglePlayer.SPPortal;
+import com.celestial.SinglePlayer.Components.Planet.Planet;
+import com.celestial.SinglePlayer.Components.Planet.PlanetFace;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.BetterCharacterControl;
@@ -186,28 +187,36 @@ public class Player extends BetterCharacterControl{
 	 * Used if we ever switch back from BetterCharacterControl. Currently this is handled by BetterCharacterControl.
 	 * @param face
 	 */
-	public void rotatePlayer(int face) {
+	public void rotatePlayer(PlanetFace face) {
 		Quaternion q = new Quaternion();
 		int x=0,y=0,z=0;
-		if(face == Planet.TOP) {
+		switch(face)
+		{
+		case TOP:
 			x=0;y=0;z=0;
 			this.spatial.rotateUpTo(new Vector3f(0, 1, 0));
-		} else if (face == Planet.BOTTOM) {
+			break;
+		case BOTTOM:
 			x=0;y=180;z=0;
 			this.spatial.rotateUpTo(new Vector3f(0, -1, 0));
-		} else if (face == Planet.NORTH) {
+			break;
+		case NORTH:
 			x=0;y=0;z=90;
 			this.spatial.rotateUpTo(new Vector3f(0, 0, 1));
-		} else if (face == Planet.SOUTH) {
+			break;
+		case SOUTH:
 			x=0;y=0;z=270;
 			this.spatial.rotateUpTo(new Vector3f(0, 0, -1));
-		} else if (face == Planet.EAST) {
+			break;
+		case EAST:
 			x=90;y=0;z=0;
 			this.spatial.rotateUpTo(new Vector3f(1, 0, 0));
-		} else if (face == Planet.WEST) {
+			break;
+		case WEST:
 			x=270;y=0;z=0;
 			this.spatial.rotateUpTo(new Vector3f(-1, 0, 0));
-		} else {
+			break;
+		default:
 			return;
 		}
 		q.fromAngles(x*FastMath.DEG_TO_RAD, y*FastMath.DEG_TO_RAD, z*FastMath.DEG_TO_RAD);
@@ -279,7 +288,7 @@ public class Player extends BetterCharacterControl{
 		return false;
 	}
 
-	public int getCurrentFaceOfPlanet(Planet planet)
+	public PlanetFace getCurrentFaceOfPlanet(Planet planet)
 	{		
 		Vector3f P1 = planet.getOriginalPlanetTranslation();
 
@@ -293,37 +302,31 @@ public class Player extends BetterCharacterControl{
 		Vector3f transP = rot1P.subtract(P1);
 		Vector3f rot2P = planet.getPlanetNode().getLocalRotation().inverse().mult(transP);
 
+		
 		float x = rot2P.x;
 		float y = rot2P.y;
 		float z = rot2P.z;
-		//System.out.println("x "+x+" y "+y+" z "+z);
 
 		if( Math.abs(y) > Math.abs(x) && Math.abs(y) > Math.abs(z) ) {
 			if( y < 0 ) {
-				//System.out.println("Bottom");
-				return Planet.BOTTOM;
+				return PlanetFace.BOTTOM;
 			} else {
-				//System.out.println("Top");
-				return Planet.TOP;
+				return PlanetFace.TOP;
 			}
 		} else if( Math.abs(x) > Math.abs(z) ) {
 			if( x < 0 ) {
-				//System.out.println("West");
-				return Planet.WEST;
+				return PlanetFace.WEST;
 			} else {
-				//System.out.println("East");
-				return Planet.EAST;
+				return PlanetFace.EAST;
 			}
 		} else if( Math.abs(z) > Math.abs(x) ) {
 			if( z < 0 ) {
-				//System.out.println("North");
-				return Planet.NORTH;
+				return PlanetFace.NORTH;
 			} else {
-				//System.out.println("South");
-				return Planet.SOUTH;
+				return PlanetFace.SOUTH;
 			}
 		} else {
-			return -1;
+			return PlanetFace.UNKNOWN;
 		}
 	}
 

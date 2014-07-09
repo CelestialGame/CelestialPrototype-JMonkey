@@ -13,7 +13,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.celestial.SinglePlayer.Components.Planet;
+import jme3tools.optimize.LodGenerator;
+
+import com.celestial.SinglePlayer.Components.Planet.Planet;
+import com.celestial.SinglePlayer.Components.Planet.PlanetFace;
 import com.cubes.Block.Face;
 import com.cubes.network.BitInputStream;
 import com.cubes.network.BitOutputStream;
@@ -30,8 +33,6 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import com.jme3.scene.control.LodControl;
-
-import jme3tools.optimize.LodGenerator;
 
 /**
  *
@@ -144,8 +145,7 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 	public void setBlock(Vector3i location, Class<? extends Block> blockClass){
 		if(isValidBlockLocation(location)){
 			BlockType blockType = BlockManager.getInstance().getType(blockClass);
-			blockData.put(location, new BlockData(blockType.getType()));
-			updateBlockState(location);
+			blockData.put(location, new BlockData(blockType.getType(), location, this));
 			needsMeshUpdate = true;
 			blocks++;
 		}
@@ -154,7 +154,6 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 	public void removeBlock(Vector3i location){
 		if(isValidBlockLocation(location)){
 			blockData.remove(location);
-			updateBlockState(location);
 			needsMeshUpdate = true;
 			blocks--;
 		}
@@ -172,7 +171,6 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 			this.savedBlockTypes.add(new CachedBlock(entry.getValue().getBlockType(), entry.getKey()));
 			Vector3i location = entry.getKey();
 			iterator.remove();
-			updateBlockState(location);
 			needsMeshUpdate = true;
 			blocks--;
 		}
@@ -184,8 +182,7 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 			return;
 		}
 		for(CachedBlock block : this.savedBlockTypes) {
-			blockData.put(block.getLocation(), new BlockData(block.getByteData()));
-			updateBlockState(block.getLocation());
+			blockData.put(block.getLocation(), new BlockData(block.getByteData(), block.getLocation(), this));
 			needsMeshUpdate = true;
 		}
 		loaded = true;
@@ -252,25 +249,14 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 		}
 	}
 
-	private void updateBlockState(Vector3i location){
-		updateBlockInformation(location);
-		for(int i=0;i<Block.Face.values().length;i++){
-			Vector3i neighborLocation = getNeighborBlockGlobalLocation(location, Block.Face.values()[i]);
-			BlockChunkControl chunk = terrain.getChunk(neighborLocation);
-			if(chunk != null){
-				chunk.updateBlockInformation(neighborLocation.subtract(chunk.getBlockLocation()));
-			}
-		}
-	}
-
-	private void updateBlockInformation(Vector3i location){
-		BlockType neighborBlock_Top = terrain.getBlock(getNeighborBlockGlobalLocation(location, Block.Face.Top));
-		if(blockData.containsKey(location))
-			blockData.get(location).setIsOnSurface(neighborBlock_Top == null);
-	}
-
-	public boolean isBlockOnSurface(Vector3i location){
+	public boolean isBlockOnSurface(Vector3i location)
+	{
 		return blockData.get(location).getIsOnSurface();
+	}
+	
+	public PlanetFace getBlockPlanetFace(Vector3i location)
+	{
+		return blockData.get(location).getCurrentFaceOfPlanet();
 	}
 
 	public BlockTerrainControl getTerrain(){

@@ -28,7 +28,7 @@ package com.cubes.render;
  */
 
 
-import com.celestial.SinglePlayer.Components.Planet;
+import com.celestial.SinglePlayer.Components.Planet.Planet;
 import com.cubes.Block;
 import com.cubes.BlockChunkControl;
 import com.cubes.BlockManager;

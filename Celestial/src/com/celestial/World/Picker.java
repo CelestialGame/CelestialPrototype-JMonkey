@@ -1,8 +1,8 @@
 package com.celestial.World;
 
 import com.celestial.CelestialPortal;
-import com.celestial.SinglePlayer.Components.Planet;
 import com.celestial.SinglePlayer.Components.SectorCoord;
+import com.celestial.SinglePlayer.Components.Planet.Planet;
 import com.cubes.BlockNavigator;
 import com.cubes.BlockTerrainControl;
 import com.cubes.Vector3i;

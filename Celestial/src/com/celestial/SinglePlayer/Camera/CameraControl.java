@@ -1,7 +1,7 @@
 package com.celestial.SinglePlayer.Camera;
 
 import com.celestial.CelestialPortal;
-import com.celestial.SinglePlayer.Components.Planet;
+import com.celestial.SinglePlayer.Components.Planet.Planet;
 import com.jme3.input.InputManager;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
@@ -90,16 +90,16 @@ public class CameraControl {
 			{
 				switch(this.parent.player.getCurrentFaceOfPlanet(this.parent.player.getPlanet()))
 				{
-				case Planet.TOP:
-				case Planet.BOTTOM:
+				case TOP:
+				case BOTTOM:
 					this.parent.walkDirection.y = 0;
 					break;
-				case Planet.EAST:
-				case Planet.WEST:
+				case EAST:
+				case WEST:
 					this.parent.walkDirection.x = 0;
 					break;
-				case Planet.NORTH:
-				case Planet.SOUTH:
+				case NORTH:
+				case SOUTH:
 					this.parent.walkDirection.z = 0;
 					break;
 				default:

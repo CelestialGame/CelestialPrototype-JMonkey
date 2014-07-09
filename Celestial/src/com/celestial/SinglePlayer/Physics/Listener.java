@@ -3,7 +3,7 @@ package com.celestial.SinglePlayer.Physics;
 import java.util.Iterator;
 
 import com.celestial.SinglePlayer.SPPortal;
-import com.celestial.SinglePlayer.Components.Planet;
+import com.celestial.SinglePlayer.Components.Planet.Planet;
 import com.celestial.SinglePlayer.Inventory.InventoryDrop;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;

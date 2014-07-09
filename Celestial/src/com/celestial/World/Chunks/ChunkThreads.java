@@ -10,8 +10,8 @@ import jme3tools.noise.*;
 import jme3tools.optimize.LodGenerator;
 
 import com.celestial.Blocks.GameBlock;
-import com.celestial.SinglePlayer.Components.Planet;
-import com.celestial.SinglePlayer.Components.Planet.planetType;
+import com.celestial.SinglePlayer.Components.Planet.Planet;
+import com.celestial.SinglePlayer.Components.Planet.Planet.planetType;
 import com.celestial.World.BlockChunkManager.PreGeneratedChunk;
 import com.celestial.World.SimplexNoise;
 import com.cubes.Block;
