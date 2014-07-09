@@ -354,4 +354,33 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 				&& location.getY() > (chunkLocation.getY()-1) 
 				&& location.getZ() > (chunkLocation.getZ()-1);
 	}
+	
+	@Override 
+	public int hashCode()
+	{
+		final int prime = 2;
+		int result = 1;
+		
+		result = prime * result + (this.enabled ? 1 : 0);
+		result = prime * result + (this.loaded ? 1 : 0);
+		result = prime * result + (this.needsMeshUpdate ? 1 : 0);
+		result = prime * result + this.blockData.hashCode();
+		result = prime * result + this.blocks;
+		result = prime * result + this.location.hashCode();
+		
+		return result;
+	}
+	
+	@Override 
+	public boolean equals(Object other)
+	{
+		if(other == null)
+			return false;
+		if(!(other instanceof BlockChunkControl))
+			return false;
+		BlockChunkControl otherChunk = (BlockChunkControl) other;
+		if(otherChunk.enabled == this.enabled && otherChunk.loaded == this.loaded && otherChunk.needsMeshUpdate == this.needsMeshUpdate && otherChunk.blockData.equals(this.blockData) && otherChunk.blocks == this.blocks && otherChunk.location == this.location)
+			return true;
+		return false;
+	}
 }
