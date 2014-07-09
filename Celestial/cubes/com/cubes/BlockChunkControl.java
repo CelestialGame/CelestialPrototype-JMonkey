@@ -170,7 +170,10 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 		{
 			Entry<Vector3i, BlockData> entry = iterator.next();
 			this.savedBlockTypes.add(new CachedBlock(entry.getValue().getBlockType(), entry.getKey()));
+			Vector3i location = entry.getKey();
 			iterator.remove();
+			updateBlockState(location);
+			needsMeshUpdate = true;
 			blocks--;
 		}
 		loaded = false;

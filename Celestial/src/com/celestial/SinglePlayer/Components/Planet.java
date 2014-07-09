@@ -49,29 +49,29 @@ public class Planet {
 	public float atmosphereSizeFactor;
 	public enum planetType {
 		HABITABLE, INNER, OUTER, INFERNO, FRIGID, MOON;
- 
- 		public static final EnumSet<planetType> PLANETTYPES = EnumSet.range(HABITABLE, FRIGID);
- 		public static final EnumSet<planetType> HOSTILETYPES = EnumSet.range(INNER, MOON);
- 		public static final EnumSet<planetType> ATMOSPHERETYPES = EnumSet.range(HABITABLE, OUTER);
- 
- 		public final boolean isPlanetType() {
- 			return PLANETTYPES.contains(this);
- 		}
- 		public final boolean isHostile() {
- 			return HOSTILETYPES.contains(this);
- 		}
- 		public final boolean hasAtmosphere() {
- 			return ATMOSPHERETYPES.contains(this);
- 		}
- 
- 		public static final EnumSet<planetType> ALLTYPES = EnumSet.allOf(planetType.class);
- 	}
+
+		public static final EnumSet<planetType> PLANETTYPES = EnumSet.range(HABITABLE, FRIGID);
+		public static final EnumSet<planetType> HOSTILETYPES = EnumSet.range(INNER, MOON);
+		public static final EnumSet<planetType> ATMOSPHERETYPES = EnumSet.range(HABITABLE, OUTER);
+
+		public final boolean isPlanetType() {
+			return PLANETTYPES.contains(this);
+		}
+		public final boolean isHostile() {
+			return HOSTILETYPES.contains(this);
+		}
+		public final boolean hasAtmosphere() {
+			return ATMOSPHERETYPES.contains(this);
+		}
+
+		public static final EnumSet<planetType> ALLTYPES = EnumSet.allOf(planetType.class);
+	}
 	public planetType type;
-	
+
 	public static int CHUNK_SIZE = 16;
 	public static int VIEW_DISTANCE = 128;
-	
-	
+
+
 	private Star star;
 	private int diameter;
 	private String name;
@@ -95,7 +95,7 @@ public class Planet {
 	private Quaternion previousStarNodeRotation;
 	private BulletAppState bulletAppState;
 	private long seed;
-	
+
 
 	/**
 	 * Create a new Planet
@@ -133,7 +133,7 @@ public class Planet {
 	}
 
 	private void generatePlanet() {
-		
+
 		/* NODES */
 		starNode = new Node();
 		planetNode = new Node();
@@ -150,10 +150,10 @@ public class Planet {
 		this.originalPlanetTranslation = planetNode.getWorldTranslation().clone();
 
 		star.getStarNode().attachChild(starNode);
-		
-		
+
+
 		/* PLANET TYPE DETERMINATION */
-		
+
 		if(this.starNode.getWorldTranslation().distance(this.planetNode.getWorldTranslation()) >= 3500F && 
 				this.starNode.getWorldTranslation().distance(this.planetNode.getWorldTranslation()) <= 4000F) {
 			this.type = planetType.HABITABLE;
@@ -170,39 +170,53 @@ public class Planet {
 		}
 
 		/* TERRAIN CONTROL & CHUNK LISTENER */
-		
+
 		terrainControl = new BlockTerrainControl(portal.csettings, new Vector3i(diameter, diameter, diameter), new GreedyMesher());
 		terrainControl.addChunkListener(new BlockChunkListener()
-        {
-            @Override
-            public void onSpatialUpdated(BlockChunkControl blockChunk)
-            {
-                Geometry optimizedGeometry = blockChunk.getOptimizedGeometry_Opaque();
-                RigidBodyControl rigidBodyControl = optimizedGeometry.getControl(RigidBodyControl.class);
-                if(rigidBodyControl == null)
-                {
-                    rigidBodyControl = new RigidBodyControl(0);
-                    optimizedGeometry.addControl(rigidBodyControl);
-                    bulletAppState.getPhysicsSpace().add(rigidBodyControl);
-                }else
-                {
-                    bulletAppState.getPhysicsSpace().remove(rigidBodyControl);
-                    optimizedGeometry.removeControl(RigidBodyControl.class);
-                    rigidBodyControl = new RigidBodyControl(0);
-                    optimizedGeometry.addControl(rigidBodyControl);
-                    bulletAppState.getPhysicsSpace().add(rigidBodyControl);
-                }
-                rigidBodyControl.setCollisionShape(new MeshCollisionShape(optimizedGeometry.getMesh()));
-             }
-        });
+		{
+			@Override
+			public void onSpatialUpdated(BlockChunkControl blockChunk)
+			{
+				Geometry optimizedGeometry = blockChunk.getOptimizedGeometry_Opaque();
+				Geometry transparentGeometry = blockChunk.getOptimizedGeometry_Transparent();
+				RigidBodyControl optimizedRigidBodyControl = optimizedGeometry.getControl(RigidBodyControl.class);
+				RigidBodyControl transparentRigidBodyControl = transparentGeometry.getControl(RigidBodyControl.class);
+				if(optimizedRigidBodyControl != null)
+				{
+					bulletAppState.getPhysicsSpace().remove(optimizedRigidBodyControl);
+					optimizedGeometry.removeControl(RigidBodyControl.class);
+				}
+				if(transparentRigidBodyControl != null)
+				{
+					bulletAppState.getPhysicsSpace().remove(transparentRigidBodyControl);
+					transparentGeometry.removeControl(RigidBodyControl.class);
+				}
+
+				if(optimizedGeometry.getTriangleCount() > 0)
+				{
+					optimizedRigidBodyControl = new RigidBodyControl(0);
+					optimizedGeometry.addControl(optimizedRigidBodyControl);
+					bulletAppState.getPhysicsSpace().add(optimizedRigidBodyControl);
+					optimizedRigidBodyControl.setCollisionShape(new MeshCollisionShape(optimizedGeometry.getMesh()));
+				}
+				
+				if(transparentGeometry.getTriangleCount() > 0)
+				{
+					transparentRigidBodyControl = new RigidBodyControl(0);
+					transparentGeometry.addControl(transparentRigidBodyControl);
+					bulletAppState.getPhysicsSpace().add(transparentRigidBodyControl);
+					transparentRigidBodyControl.setCollisionShape(new MeshCollisionShape(transparentGeometry.getMesh()));
+				}
+			}
+		});
 
 		/* TERRAIN CONTROL CHUNK GENERATION */
-		
+
 		terrainControl.setBlockChunkManager(new BlockChunkManager(terrainControl, this));
 		terrainControl.getBlockChunkManager().preGenerateChunks();
-		
+
 		terrainNode.addControl(terrainControl);
-		
+
 		/* LIGHTING */
 		planetNode.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
 
@@ -211,7 +225,7 @@ public class Planet {
 			this.atmospherebox = new Box(this.diameter*CHUNK_SIZE*3*atmosphereSizeFactor, this.diameter*CHUNK_SIZE*3*atmosphereSizeFactor, this.diameter*CHUNK_SIZE*3*atmosphereSizeFactor);
 			this.atmospheregeom = new Geometry("Atmosphere", this.atmospherebox);
 			this.atmospheremat = new Material(portal.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-			
+
 			if(this.type.equals(planetType.HABITABLE))
 				this.atmospheremat.setColor("Color", new ColorRGBA(0.3f, 0.5f, 1, 0.75f));
 			else if(this.type.equals(planetType.INNER))
@@ -219,12 +233,12 @@ public class Planet {
 			else
 				this.atmospheremat.setColor("Color", new ColorRGBA(0.25f, 0.38f, 0.98f, 0.75f));
 			this.atmospheregeom.setMaterial(this.atmospheremat);
-	
+
 			this.atmospheremat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
 			this.atmospheremat.getAdditionalRenderState().setFaceCullMode(FaceCullMode.Off);
 			this.atmospheregeom.setQueueBucket(Bucket.Transparent);
 			this.atmospheregeom.setShadowMode(ShadowMode.Receive);
-	
+
 			this.planetNode.attachChild(this.atmospheregeom);
 		}
 
@@ -239,16 +253,16 @@ public class Planet {
 			return this.diameter*CHUNK_SIZE*3*atmosphereSizeFactor;
 		}
 	}
-	
+
 	public void updateChunks(Vector3f camLocation) {
 		terrainControl.getBlockChunkManager().checkChunks(camLocation);
 	}
-	
+
 	public BulletAppState getBulletAppState()
 	{
 		return this.bulletAppState;
 	}
-	
+
 	public BlockTerrainControl getTerrControl() {
 		return terrainControl;
 	}
@@ -304,44 +318,44 @@ public class Planet {
 		starNode.rotate(this.amountRevolution.getX()*FastMath.DEG_TO_RAD, this.amountRevolution.getY()*FastMath.DEG_TO_RAD, this.amountRevolution.getZ()*FastMath.DEG_TO_RAD);
 		planetNode.rotate(this.amountRotation.getX()*FastMath.DEG_TO_RAD, this.amountRotation.getY()*FastMath.DEG_TO_RAD, this.amountRotation.getZ()*FastMath.DEG_TO_RAD);
 	}
-	
+
 	public Vector3f getUpVector()
 	{
 		float x = this.planetNode.getLocalRotation().getX();
 		float y = this.planetNode.getLocalRotation().getY();
 		float z = this.planetNode.getLocalRotation().getZ();
 		float w = this.planetNode.getLocalRotation().getW();
-		
+
 		return new Vector3f(
 				2 * (x * y - w * z), 
-                1 - 2 * (x * x + z * z),
-                2 * (y * z + w * x));
+				1 - 2 * (x * x + z * z),
+				2 * (y * z + w * x));
 	}
-	
+
 	public Vector3f getForwardVector()
 	{
 		float x = this.planetNode.getLocalRotation().getX();
 		float y = this.planetNode.getLocalRotation().getY();
 		float z = this.planetNode.getLocalRotation().getZ();
 		float w = this.planetNode.getLocalRotation().getW();
-		
+
 		return new Vector3f(
 				2 * (x * z + w * y), 
-                2 * (y * x - w * x),
-                1 - 2 * (x * x + y * y));
+				2 * (y * x - w * x),
+				1 - 2 * (x * x + y * y));
 	}
-	
+
 	public Vector3f getLeftVector()
 	{
 		float x = this.planetNode.getLocalRotation().getX();
 		float y = this.planetNode.getLocalRotation().getY();
 		float z = this.planetNode.getLocalRotation().getZ();
 		float w = this.planetNode.getLocalRotation().getW();
-		
+
 		return new Vector3f(
 				(1 - 2 * (y * y + z * z)),
-                2 * (x * y + w * z),
-                2 * (x * z - w * y));
+				2 * (x * y + w * z),
+				2 * (x * z - w * y));
 	}
 
 	public Vector3f getCurrentPlanetTranslation() {
@@ -359,12 +373,12 @@ public class Planet {
 	public Vector3f getOriginalPlanetTranslation() {
 		return this.originalPlanetTranslation;
 	}
-	
+
 	public Vector3f getPreviousPlanetTranslation()
 	{
 		return this.previousPlanetTranslation;
 	}
-	
+
 	public Quaternion getPreviousPlanetRotation()
 	{
 		return this.previousPlanetRotation;
@@ -373,7 +387,7 @@ public class Planet {
 	public Spatial getStarNode() {
 		return starNode;
 	}
-	
+
 	public Quaternion getPreviousStarNodeRotation()
 	{
 		return this.previousStarNodeRotation;
@@ -382,11 +396,11 @@ public class Planet {
 	public Quaternion getCurrentPlanetRotation() {
 		return this.planetNode.getWorldRotation();
 	}
-	
+
 	public Quaternion getCurrentStarNodeRotation() {
 		return this.starNode.getWorldRotation();
 	}
-	
+
 	public planetType getType() {
 		if(this.type == null)
 			return null;

@@ -128,7 +128,7 @@ public class BlockChunkManager {
 					float distance = rotatedCameraTranslation.distance(centerOfChunk);
 					if(distance > Planet.VIEW_DISTANCE) 
 					{
-						//this.terrainControl.getChunks().get(new Vector3i(x,y,z)).unloadChunk();
+						this.terrainControl.getChunks().get(new Vector3i(x,y,z)).unloadChunk();
 					} else {
 						this.terrainControl.getChunks().get(new Vector3i(x,y,z)).loadChunk();
 					}
