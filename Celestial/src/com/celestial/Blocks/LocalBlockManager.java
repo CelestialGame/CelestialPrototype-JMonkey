@@ -22,7 +22,7 @@ public class LocalBlockManager {
 				//We specify the 3 textures we need:
 				//Grass, Earth-Grass-Transition and Earth
 				new BlockSkin_TextureLocation(0, 0),
-				new BlockSkin_TextureLocation(1, 0),
+				new BlockSkin_TextureLocation(0, 0),
 				new BlockSkin_TextureLocation(2, 0),
 		}, false){
 
@@ -30,26 +30,64 @@ public class LocalBlockManager {
 			//The number that's being returned specified the index
 			//of the texture in the previous declared TextureLocation array
 			protected int getTextureLocationIndex(BlockChunkControl chunk, Vector3i blockLocation, Face face){
-				if(chunk.isBlockOnSurface(blockLocation)){
+				switch(chunk.getBlockPlanetFace(blockLocation)){
+				case TOP:
 					switch(face){
 					case Top:
 						return 0;
-
 					case Bottom:
 						return 2;
-
-					case Left:
-						return 1;
-					case Right:
-						return 1;
-					case Front:
-						return 1;
-					case Back:
+					default:
 						return 1;
 					}
-					return 1;
+				case BOTTOM:
+					switch(face){
+					case Top:
+						return 2;
+					case Bottom:
+						return 0;
+					default:
+						return 1;
+					}
+				case WEST:
+					switch(face){
+					case Left:
+						return 0;
+					case Right:
+						return 2;
+					default:
+						return 1;
+					}
+				case EAST:
+					switch(face){
+					case Left:
+						return 2;
+					case Right:
+						return 0;
+					default:
+						return 1;
+					}
+				case NORTH:
+					switch(face){
+					case Back:
+						return 0;
+					case Front:
+						return 2;
+					default:
+						return 1;
+					}
+				case SOUTH:
+					switch(face){
+					case Front:
+						return 0;
+					case Back:
+						return 2;
+					default:
+						return 1;
+					}
+				default:
+					return 2;
 				}
-				return 2;
 			}
 		});
 		BlockManager.getInstance().register(GameBlock.DIRT.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(2, 0), false));
