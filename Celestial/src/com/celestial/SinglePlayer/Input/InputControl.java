@@ -41,7 +41,7 @@ public class InputControl {
 
 	public static boolean statson = false;
 
-	private boolean enabled;
+	private boolean enabled = true;
 
 	public InputControl(CelestialPortal parent, Camera cam, InputManager inputManager) {
 		this.parent = parent;
