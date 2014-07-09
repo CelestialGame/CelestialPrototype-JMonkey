@@ -23,21 +23,17 @@ import com.celestial.SinglePlayer.Input.InputControl;
 import com.celestial.SinglePlayer.Inventory.InventoryDrop;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
 import com.celestial.SinglePlayer.Inventory.InventoryRegister;
-import com.celestial.SinglePlayer.Physics.Listener;
 import com.celestial.World.Picker;
 import com.cubes.BlockChunkControl;
 import com.cubes.CubesSettings;
 import com.cubes.Vector3i;
-import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
-import com.jme3.bullet.BulletAppState;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
-import com.jme3.light.AmbientLight;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
@@ -46,7 +42,6 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.BloomFilter;
-import com.jme3.post.filters.LightScatteringFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -70,7 +65,6 @@ public class SPPortal extends CelestialPortal{
 	private BitmapFont guiFont;
 	private Timer timer;
 	private float lastRotation;
-	private boolean rotated = false;
 	private FilterPostProcessor fpp;
 	public static final int SHADOWMAP_SIZE = 512;
 	public static float camHeight = 4.9f;
@@ -430,8 +424,8 @@ public class SPPortal extends CelestialPortal{
 			for (int x = 0; x < this.player.getPlanet().getDiameter(); x++)
 				for (int y = 0; y < this.player.getPlanet().getDiameter(); y++)
 					for(int z = 0; z < this.player.getPlanet().getDiameter(); z++) {
-						blocks = blocks + this.player.getPlanet().getTerrControl().getChunks()[x][y][z].getBlockAmount(false);
-						liveBlocks = liveBlocks + this.player.getPlanet().getTerrControl().getChunks()[x][y][z].getBlockAmount(true);
+						blocks = blocks + this.player.getPlanet().getTerrControl().getChunks().get(new Vector3i(x,y,z)).getBlockAmount(false);
+						liveBlocks = liveBlocks + this.player.getPlanet().getTerrControl().getChunks().get(new Vector3i(x,y,z)).getBlockAmount(true);
 					}
 			this.blocksLiveText.setText("Blocks [Cached, Live]: [" + blocks + ", " + liveBlocks + "]");
 			setDisplayFps(true);

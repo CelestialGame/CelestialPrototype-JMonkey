@@ -416,7 +416,7 @@ public class ChunkThreads {
 		
 		public void run() 
 		{
-			this.terrainControl.getChunks()[x][y][z].loadChunk();
+			this.terrainControl.getChunks().get(new Vector3i(x,y,z)).loadChunk();
 		}
 	}
 	
@@ -434,7 +434,7 @@ public class ChunkThreads {
 		
 		public void run() 
 		{
-			this.terrainControl.getChunks()[x][y][z].unloadChunk();
+			this.terrainControl.getChunks().get(new Vector3i(x,y,z)).unloadChunk();
 		}
 	}
 

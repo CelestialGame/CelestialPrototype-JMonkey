@@ -61,7 +61,7 @@ public class BlockChunkManager {
 	public BlockChunkManager(BlockTerrainControl terrControl, Planet planet) {
 		this.planet = planet;
 		this.terrainControl = terrControl;
-		
+
 	}
 
 	public void preGenerateChunks() 
@@ -94,7 +94,7 @@ public class BlockChunkManager {
 					System.out.println("preGenChunk List was null!\nAt line: "+Thread.currentThread().getStackTrace()[2].getLineNumber()+"\nIn BlockChunkManager.");
 					SPPortal.self.stopGame();
 				}
-				
+
 			}
 		}
 		if(!this.preGenChunks.isEmpty()) {
@@ -108,7 +108,7 @@ public class BlockChunkManager {
 				Vector3f currentPlanetTranslation = planet.getCurrentPlanetTranslation();
 				Vector3f planetToCamera = camLocation.subtract(currentPlanetTranslation);
 				Vector3f rotatedCameraTranslation = planet.getOriginalPlanetTranslation().add(planet.getPlanetNode().getLocalRotation().inverse().mult(planet.getStarNode().getWorldRotation().inverse().mult(planetToCamera)));
-									
+
 				float distance = rotatedCameraTranslation.distance(centerOfChunk);
 				if(distance < Planet.VIEW_DISTANCE) {
 					preGenChunk.generate();
@@ -124,13 +124,13 @@ public class BlockChunkManager {
 					Vector3f currentPlanetTranslation = planet.getCurrentPlanetTranslation();
 					Vector3f planetToCamera = camLocation.subtract(currentPlanetTranslation);
 					Vector3f rotatedCameraTranslation = planet.getOriginalPlanetTranslation().add(planet.getPlanetNode().getLocalRotation().inverse().mult(planet.getStarNode().getWorldRotation().inverse().mult(planetToCamera)));
-					
+
 					float distance = rotatedCameraTranslation.distance(centerOfChunk);
 					if(distance > Planet.VIEW_DISTANCE) 
 					{
-						//this.terrainControl.getChunks()[x][y][z].unloadChunk();
+						//this.terrainControl.getChunks().get(new Vector3i(x,y,z)).unloadChunk();
 					} else {
-						this.terrainControl.getChunks()[x][y][z].loadChunk();
+						this.terrainControl.getChunks().get(new Vector3i(x,y,z)).loadChunk();
 					}
 				}
 	}

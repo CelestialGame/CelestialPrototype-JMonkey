@@ -139,7 +139,6 @@ public class InputControl {
 								}
 								chunk.removeBlock(blockLocation); //Remove the Block
 							}
-	
 						}
 						else
 						{

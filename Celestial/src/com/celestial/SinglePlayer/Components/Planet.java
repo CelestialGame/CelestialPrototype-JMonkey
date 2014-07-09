@@ -21,6 +21,7 @@ import com.cubes.RandomTerrainGenerator;
 import com.cubes.Vector3i;
 import com.cubes.render.GreedyMesher;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.collision.shapes.MeshCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
@@ -38,7 +39,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.LodControl;
 import com.jme3.scene.shape.Box;
 
-public class Planet implements BlockChunkListener {
+public class Planet {
 	public static final int TOP = 0;
 	public static final int NORTH = 1;
 	public static final int EAST = 2;
@@ -83,7 +84,6 @@ public class Planet implements BlockChunkListener {
 	private Quaternion originalRotation;
 	private Vector3f originalTerrainTranslation;
 	private CelestialPortal portal;
-	private List<PlanetCorner> cornerList;
 	private Box atmospherebox;
 	private Geometry atmospheregeom;
 	private Material atmospheremat;
@@ -133,13 +133,13 @@ public class Planet implements BlockChunkListener {
 	}
 
 	private void generatePlanet() {
+		
+		/* NODES */
 		starNode = new Node();
 		planetNode = new Node();
 		starNode.attachChild(planetNode);
 		terrainNode = new Node();
 		planetNode.attachChild(terrainNode);
-		
-		/* NODES */
 
 		this.originalRotation = planetNode.getWorldRotation().clone(); 
 
@@ -169,9 +169,35 @@ public class Planet implements BlockChunkListener {
 			this.type = planetType.FRIGID;
 		}
 
+		/* TERRAIN CONTROL & CHUNK LISTENER */
+		
 		terrainControl = new BlockTerrainControl(portal.csettings, new Vector3i(diameter, diameter, diameter), new GreedyMesher());
-		terrainControl.addChunkListener(this);
+		terrainControl.addChunkListener(new BlockChunkListener()
+        {
+            @Override
+            public void onSpatialUpdated(BlockChunkControl blockChunk)
+            {
+                Geometry optimizedGeometry = blockChunk.getOptimizedGeometry_Opaque();
+                RigidBodyControl rigidBodyControl = optimizedGeometry.getControl(RigidBodyControl.class);
+                if(rigidBodyControl == null)
+                {
+                    rigidBodyControl = new RigidBodyControl(0);
+                    optimizedGeometry.addControl(rigidBodyControl);
+                    bulletAppState.getPhysicsSpace().add(rigidBodyControl);
+                }else
+                {
+                    bulletAppState.getPhysicsSpace().remove(rigidBodyControl);
+                    optimizedGeometry.removeControl(RigidBodyControl.class);
+                    rigidBodyControl = new RigidBodyControl(0);
+                    optimizedGeometry.addControl(rigidBodyControl);
+                    bulletAppState.getPhysicsSpace().add(rigidBodyControl);
+                }
+                rigidBodyControl.setCollisionShape(new MeshCollisionShape(optimizedGeometry.getMesh()));
+             }
+        });
 
+		/* TERRAIN CONTROL CHUNK GENERATION */
+		
 		terrainControl.setBlockChunkManager(new BlockChunkManager(terrainControl, this));
 		terrainControl.getBlockChunkManager().preGenerateChunks();
 		
@@ -180,49 +206,6 @@ public class Planet implements BlockChunkListener {
 		/* LIGHTING */
 		planetNode.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
 
-		/* CORNERS */
-		this.cornerList = new ArrayList<PlanetCorner>();
-
-		PlanetCorner c1 = new PlanetCorner(TOP,NORTH,EAST);
-		planetNode.attachChild(c1);
-		c1.move(((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*-3, ((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*3, ((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*3);
-		this.cornerList.add(c1);
-
-		PlanetCorner c2 = new PlanetCorner(TOP,EAST,SOUTH);
-		planetNode.attachChild(c2);
-		c2.move(((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*-3, ((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*3, ((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*-3);
-		this.cornerList.add(c2);
-
-		PlanetCorner c3 = new PlanetCorner(TOP,SOUTH,WEST);
-		planetNode.attachChild(c3);
-		c3.move(((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*3, ((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*3, ((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*-3);
-		this.cornerList.add(c3);
-
-		PlanetCorner c4 = new PlanetCorner(TOP,WEST,NORTH);
-		planetNode.attachChild(c4);
-		c4.move(((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*3, ((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*3, ((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*3);
-		this.cornerList.add(c4);
-
-		PlanetCorner c5 = new PlanetCorner(BOTTOM,NORTH,EAST);
-		planetNode.attachChild(c5);
-		c5.move(((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*-3, ((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*-3, ((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*3);
-		this.cornerList.add(c5);
-
-		PlanetCorner c6 = new PlanetCorner(BOTTOM,EAST,SOUTH);
-		planetNode.attachChild(c6);
-		c6.move(((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*-3, ((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*-3, ((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*-3);
-		this.cornerList.add(c6);
-
-		PlanetCorner c7 = new PlanetCorner(BOTTOM,SOUTH,WEST);
-		planetNode.attachChild(c7);
-		c7.move(((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*3, ((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*-3, ((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*-3);
-		this.cornerList.add(c7);
-
-		PlanetCorner c8 = new PlanetCorner(BOTTOM,WEST,NORTH);
-		planetNode.attachChild(c8);
-		c8.move(((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*3, ((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*-3, ((centerofdiam*CHUNK_SIZE)-(CHUNK_SIZE/2))*3);
-		this.cornerList.add(c8);
-		
 		/* ATMOSPHERE */
 		if(this.type.hasAtmosphere()) {
 			this.atmospherebox = new Box(this.diameter*CHUNK_SIZE*3*atmosphereSizeFactor, this.diameter*CHUNK_SIZE*3*atmosphereSizeFactor, this.diameter*CHUNK_SIZE*3*atmosphereSizeFactor);
@@ -266,119 +249,6 @@ public class Planet implements BlockChunkListener {
 		return this.bulletAppState;
 	}
 	
-	public PlanetCorner[] getCornersForFace(int face)
-	{
-		PlanetCorner[] values = new PlanetCorner[4];
-
-		PlanetCorner c1 = null;
-		PlanetCorner c2 = null;
-		PlanetCorner c3 = null;
-		PlanetCorner c4 = null;
-
-		int amt = 0;
-		for(PlanetCorner c : this.cornerList)
-			if(c.getSides().contains(face))
-				switch(amt)
-				{
-				case 0:
-					c1 = c;
-					amt++;
-					break;
-				case 1:
-					c2 = c;
-					amt++;
-					break;
-				case 2:
-					c3 = c;
-					amt++;
-					break;
-				case 3:
-					c4 = c;
-					amt++;
-					break;
-				default:
-					break;
-				}
-
-		if(c1 != null && c2 != null && c3 != null && c4 != null)
-		{
-
-			switch(face)
-			{
-			case TOP:
-				values[0] = c1;
-				values[1] = c2;
-				values[2] = c3;
-				values[3] = c4;
-				break;
-			case NORTH:
-				values[0] = c1;
-				values[1] = c2;
-				values[2] = c4;
-				values[3] = c3;
-				break;
-			case EAST:
-				values[0] = c2;
-				values[1] = c1;
-				values[2] = c3;
-				values[3] = c4;
-				break;
-			case SOUTH:
-				values[0] = c2;
-				values[1] = c1;
-				values[2] = c3;
-				values[3] = c4;
-				break;
-			case WEST:
-				values[0] = c1;
-				values[1] = c2;
-				values[2] = c4;
-				values[3] = c3;
-				break;
-			case BOTTOM:
-				values[0] = c1;
-				values[1] = c4;
-				values[2] = c3;
-				values[3] = c2;
-				break;
-			default:
-				return null;
-			}
-		}
-		else
-		{
-			return null;
-		}
-		return values;
-	}
-
-	@Override
-	public void onSpatialUpdated(BlockChunkControl bcc) {
-		bcc.getOptimizedGeometry_Opaque().setQueueBucket(Bucket.Opaque);
-		bcc.getOptimizedGeometry_Transparent().setQueueBucket(Bucket.Transparent);
-		updateCollisionShape(bcc.getOptimizedGeometry_Opaque());
-		updateCollisionShape(bcc.getOptimizedGeometry_Transparent());
-		bcc.getOptimizedGeometry_Opaque().setShadowMode(ShadowMode.CastAndReceive);
-		bcc.getOptimizedGeometry_Transparent().setShadowMode(ShadowMode.Receive);
-	}
-	private void updateCollisionShape(Geometry chunkGeometry){
-		RigidBodyControl rigidBodyControl = chunkGeometry.getControl(RigidBodyControl.class);
-		if(chunkGeometry.getTriangleCount() > 0){
-			if(rigidBodyControl != null){
-				chunkGeometry.removeControl(rigidBodyControl);
-				this.getBulletAppState().getPhysicsSpace().remove(rigidBodyControl);
-			}
-			rigidBodyControl = new RigidBodyControl(0);
-			chunkGeometry.addControl(rigidBodyControl);
-			this.getBulletAppState().getPhysicsSpace().add(rigidBodyControl);
-		}
-		else{
-			if(rigidBodyControl != null){
-				chunkGeometry.removeControl(rigidBodyControl);
-			}
-		}
-	}
-
 	public BlockTerrainControl getTerrControl() {
 		return terrainControl;
 	}
@@ -433,7 +303,6 @@ public class Planet implements BlockChunkListener {
 		this.previousStarNodeRotation = starNode.getWorldRotation().clone();
 		starNode.rotate(this.amountRevolution.getX()*FastMath.DEG_TO_RAD, this.amountRevolution.getY()*FastMath.DEG_TO_RAD, this.amountRevolution.getZ()*FastMath.DEG_TO_RAD);
 		planetNode.rotate(this.amountRotation.getX()*FastMath.DEG_TO_RAD, this.amountRotation.getY()*FastMath.DEG_TO_RAD, this.amountRotation.getZ()*FastMath.DEG_TO_RAD);
-		updateCollision();
 	}
 	
 	public Vector3f getUpVector()
@@ -475,42 +344,6 @@ public class Planet implements BlockChunkListener {
                 2 * (x * z - w * y));
 	}
 
-	public void updateCollision()
-	{
-		for(int x = 0; x<this.diameter; x++)
-		{
-			for(int y = 0; y<this.diameter; y++)
-			{
-				for(int z = 0; z<this.diameter; z++)
-				{
-					BlockChunkControl chunk = this.terrainControl.getChunks()[x][y][z];
-					if(chunk.getOptimizedGeometry_Opaque() != null)
-					{
-						if(chunk.getOptimizedGeometry_Opaque().getControl(RigidBodyControl.class) != null)
-						{
-							RigidBodyControl r = chunk.getOptimizedGeometry_Opaque().getControl(RigidBodyControl.class);
-							chunk.getOptimizedGeometry_Opaque().removeControl(r);
-							this.getBulletAppState().getPhysicsSpace().remove(r);
-							chunk.getOptimizedGeometry_Opaque().addControl(r);
-							this.getBulletAppState().getPhysicsSpace().add(r);
-						}
-					}
-					if(chunk.getOptimizedGeometry_Transparent() != null)
-					{
-						if(chunk.getOptimizedGeometry_Transparent().getControl(RigidBodyControl.class) != null)
-						{
-							RigidBodyControl r = chunk.getOptimizedGeometry_Transparent().getControl(RigidBodyControl.class);
-							chunk.getOptimizedGeometry_Transparent().removeControl(r);
-							this.getBulletAppState().getPhysicsSpace().remove(r);
-							chunk.getOptimizedGeometry_Transparent().addControl(r);
-							this.getBulletAppState().getPhysicsSpace().add(r);
-						}
-					}
-				}
-			}
-		}
-	}
-	
 	public Vector3f getCurrentPlanetTranslation() {
 		return planetNode.getWorldTranslation();
 	}

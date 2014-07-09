@@ -52,7 +52,7 @@ public class InventoryDrop{
 		this.itemdrop.setShadowMode(ShadowMode.Cast);
 		
 		this.rigidBodyControl = new RigidBodyControl();
-		this.rigidBodyControl.setMass(1);
+		this.rigidBodyControl.setMass(5);
 		//this.rigidBodyControl.removeCollideWithGroup(Celestial.portal.player.getCollisionGroup());
         this.itemdrop.addControl(rigidBodyControl);
         //Celestial.portal.player.removeCollideWithGroup(this.rigidBodyControl.getCollisionGroup());
@@ -61,6 +61,7 @@ public class InventoryDrop{
         this.itemdropnode = new Node();
         this.itemdropnode.attachChild(itemdrop);
         
+        planet.getPlanetNode().attachChild(itemdropnode);
         this.planet = planet;
         
         this.item = item;
