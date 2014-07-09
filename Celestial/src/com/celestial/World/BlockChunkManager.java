@@ -137,5 +137,42 @@ public class BlockChunkManager {
 					}
 				}
 	}
+	
+	public int getFaceByBlockPosition(Vector3i blockPos)
+	{
+		Vector3f P1 = planet.getOriginalPlanetTranslation();
+
+		Vector3f blockPosf = Vector3i.convert3Int(blockPos);
+		
+		Vector3f rot1P = planet.getStarNode().getLocalRotation().inverse().mult(blockPosf);
+		Vector3f transP = rot1P.subtract(P1);
+		Vector3f rot2P = planet.getPlanetNode().getLocalRotation().inverse().mult(transP);
+
+		float x = rot2P.x;
+		float y = rot2P.y;
+		float z = rot2P.z;
+
+		if( Math.abs(y) > Math.abs(x) && Math.abs(y) > Math.abs(z) ) {
+			if( y < 0 ) {
+				return Planet.BOTTOM;
+			} else {
+				return Planet.TOP;
+			}
+		} else if( Math.abs(x) > Math.abs(z) ) {
+			if( x < 0 ) {
+				return Planet.WEST;
+			} else {
+				return Planet.EAST;
+			}
+		} else if( Math.abs(z) > Math.abs(x) ) {
+			if( z < 0 ) {
+				return Planet.NORTH;
+			} else {
+				return Planet.SOUTH;
+			}
+		} else {
+			return -1;
+		}
+	}
 
 }
