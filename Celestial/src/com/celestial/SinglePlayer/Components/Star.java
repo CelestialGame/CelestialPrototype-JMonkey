@@ -19,6 +19,7 @@ import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
+import com.jme3.shadow.EdgeFilteringMode;
 import com.jme3.shadow.PointLightShadowFilter;
 import com.jme3.shadow.PointLightShadowRenderer;
 
@@ -148,12 +149,10 @@ public class Star {
         
         PointLightShadowFilter plsf = new PointLightShadowFilter(this.portal.getAssetManager(), SPPortal.SHADOWMAP_SIZE);
         plsf.setLight(light);
-        //plsf.setEdgeFilteringMode(EdgeFilteringMode.PCFPOISSON);
+        plsf.setEdgeFilteringMode(EdgeFilteringMode.Dither);
         plsf.setEnabled(true);
         
         FilterPostProcessor fpp = new FilterPostProcessor(this.portal.getAssetManager());
-		BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.SceneAndObjects);
-		fpp.addFilter(bloom);
 		fpp.addFilter(plsf);
 
 		

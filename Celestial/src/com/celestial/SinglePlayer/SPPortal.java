@@ -41,6 +41,8 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.BloomFilter;
+import com.jme3.post.ssao.SSAOFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -345,6 +347,14 @@ public class SPPortal extends CelestialPortal{
 		//AmbientLight al = new AmbientLight();
 		//al.setColor(ColorRGBA.White);
 		//this.rootNode.addLight(al);
+		FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
+		SSAOFilter ssaoFilter = new SSAOFilter(12.94f, 43.92f, 0.33f, 0.61f);
+		fpp.addFilter(ssaoFilter);
+		
+		BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.SceneAndObjects);
+		fpp.addFilter(bloom);
+		
+		this.getViewPort().addProcessor(fpp);
 	}
 
 	public void initAudio() {
