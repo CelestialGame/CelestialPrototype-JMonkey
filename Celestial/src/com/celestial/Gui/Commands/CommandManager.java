@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.celestial.Celestial;
 import com.celestial.Gui.Gui;
 import com.celestial.SinglePlayer.SPPortal;
+import com.jme3.math.Vector3f;
 
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleExecuteCommandEvent;
@@ -24,6 +25,7 @@ public class CommandManager {
 		
 		registerCommand("help");
 		registerCommand("generateEntire");
+		registerCommand("noclip");
 	}
 	
 	public void registerCommand(String command) {
@@ -60,6 +62,28 @@ public class CommandManager {
 					} else {
 						this.console.outputError("Unsupported command.");
 					}
+				else {
+					this.console.outputError("Invalid command.");
+					this.console.outputError("generateEntire [bool]");
+				}
+			}  else if (command.equalsIgnoreCase("noclip")) {
+				if(args.length == 0) {
+					if(this.parent.portal instanceof SPPortal) {
+						if(parent.portal.player.getBulletAppState().isEnabled()) {
+							parent.portal.player.getBulletAppState().setEnabled(false);
+							parent.portal.setCamSpeed(100);
+							parent.portal.player.setVisibleToClient(true);
+							this.console.output("Noclip On");
+						} else {
+							parent.portal.player.getBulletAppState().setEnabled(true);
+							parent.portal.player.setLocation(new Vector3f(parent.portal.cam.getLocation().getX(), parent.portal.cam.getLocation().getY()-parent.portal.getCamHeight(), parent.portal.cam.getLocation().getZ()));
+							parent.portal.player.setVisibleToClient(false);
+							this.console.output("Noclip Off");
+						}
+					} else {
+						this.console.outputError("Unsupported command.");
+					}
+				}
 				else {
 					this.console.outputError("Invalid command.");
 					this.console.outputError("generateEntire [bool]");
