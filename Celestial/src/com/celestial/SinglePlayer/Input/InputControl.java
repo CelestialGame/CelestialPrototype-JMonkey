@@ -9,11 +9,13 @@ import com.celestial.CelestialPortal;
 import com.celestial.Blocks.GameBlock;
 import com.celestial.Gui.Gui.PopupType;
 import com.celestial.SinglePlayer.SPPortal;
+import com.celestial.SinglePlayer.Components.Player;
 import com.celestial.SinglePlayer.Components.SectorCoord;
 import com.celestial.SinglePlayer.Inventory.InventoryItem;
 import com.celestial.SinglePlayer.Inventory.InventoryItem.ItemType;
 import com.celestial.World.Picker;
 import com.cubes.Block;
+import com.cubes.BlockChunkControl;
 import com.cubes.BlockManager;
 import com.cubes.BlockTerrainControl;
 import com.cubes.Vector3i;
@@ -25,6 +27,7 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.terrain.Terrain;
 
 /**
  *
@@ -185,6 +188,9 @@ public class InputControl {
 					}
 					Vector3i blockLocation = (Vector3i) values[1];
 					Vector3f blockAbsLocation = (Vector3f) values[0];
+					
+					BlockChunkControl blockChunk = SPPortal.self.player.getPlanet().getTerrControl().getChunk(blockLocation);
+					Vector3i blockLocationRelChunk = blockLocation.subtract(blockChunk.getBlockLocation());
 					if(blockLocation != null)
 					{
 						if(last == null)
@@ -194,6 +200,7 @@ public class InputControl {
 						}
 						System.out.println("Loc -- Rel: "+ blockLocation +"Abs: "+ blockAbsLocation);
 						System.out.println("Distance from last: "+lastabs.distance(blockAbsLocation)+" ("+lastabs.distance(blockAbsLocation)/3+")");
+						System.out.println("IsOnTop: "+blockChunk.isBlockOnSurface(blockLocationRelChunk));
 						this.last = blockLocation;
 						this.lastabs = blockAbsLocation;
 					}

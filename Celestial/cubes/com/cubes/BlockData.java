@@ -35,20 +35,29 @@ public class BlockData
 	public boolean getIsOnSurface()
 	{
 		PlanetFace currFace = this.getCurrentFaceOfPlanet();
+		
+		BlockType neighbor = null;
+		
 		switch(currFace)
 		{
 		case TOP:
-			return (this.chunkControl.getNeighborBlock_Local(getLocation(), Block.Face.Top) == null);
+			neighbor = this.chunkControl.getNeighborBlock_Local(getLocation(), Block.Face.Top);
+			return (neighbor == null || neighbor == BlockManager.getInstance().getType((byte)0));
 		case BOTTOM:
-			return (this.chunkControl.getNeighborBlock_Local(getLocation(), Block.Face.Bottom) == null);
+			neighbor = this.chunkControl.getNeighborBlock_Local(getLocation(), Block.Face.Bottom);
+			return (neighbor == null || neighbor == BlockManager.getInstance().getType((byte)0));
 		case NORTH:
-			return (this.chunkControl.getNeighborBlock_Local(getLocation(), Block.Face.Front) == null);
+			neighbor = this.chunkControl.getNeighborBlock_Local(getLocation(), Block.Face.Back);
+			return (neighbor == null || neighbor == BlockManager.getInstance().getType((byte)0));
 		case SOUTH:
-			return (this.chunkControl.getNeighborBlock_Local(getLocation(), Block.Face.Back) == null);
+			neighbor = this.chunkControl.getNeighborBlock_Local(getLocation(), Block.Face.Front);
+			return (neighbor == null || neighbor == BlockManager.getInstance().getType((byte)0));
 		case EAST:
-			return (this.chunkControl.getNeighborBlock_Local(getLocation(), Block.Face.Right) == null);
+			neighbor = this.chunkControl.getNeighborBlock_Local(getLocation(), Block.Face.Right);
+			return (neighbor == null || neighbor == BlockManager.getInstance().getType((byte)0));
 		case WEST:
-			return (this.chunkControl.getNeighborBlock_Local(getLocation(), Block.Face.Left) == null);
+			neighbor = this.chunkControl.getNeighborBlock_Local(getLocation(), Block.Face.Left);
+			return (neighbor == null || neighbor == BlockManager.getInstance().getType((byte)0));
 		default:
 			return false;
 		}

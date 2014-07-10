@@ -33,72 +33,76 @@ public class LocalBlockManager {
 			//The number that's being returned specified the index
 			//of the texture in the previous declared TextureLocation array
 			protected int getTextureLocationIndex(BlockChunkControl chunk, Vector3i blockLocation, Face face){
-				switch(chunk.getBlockPlanetFace(blockLocation)){
-				case TOP:
-					switch(face){
-					case Top:
-						return 0;
-					case Bottom:
-						return 2;
+				if(chunk.getBlockData().get(blockLocation).getIsOnSurface())
+				{
+					switch(chunk.getBlockPlanetFace(blockLocation)){
+					case TOP:
+						switch(face){
+						case Top:
+							return 0;
+						case Bottom:
+							return 2;
+						default:
+							return 1;
+						}
+					case BOTTOM:
+						switch(face){
+						case Top:
+							return 2;
+						case Bottom:
+							return 0;
+						default:
+							return 3;
+						}
+					case WEST:
+						switch(face){
+						case Left:
+							return 0;
+						case Right:
+							return 2;
+						default:
+							return 4;
+						}
+					case EAST:
+						switch(face){
+						case Left:
+							return 2;
+						case Right:
+							return 0;
+						default:
+							return 5;
+						}
+					case NORTH:
+						switch(face){
+						case Back:
+							return 0;
+						case Front:
+							return 2;
+						case Left:
+							return 5;
+						case Right:
+							return 5;
+						default:
+							return 1;
+						}
+					case SOUTH:
+						switch(face){
+						case Front:
+							return 0;
+						case Back:
+							return 2;
+						case Left:
+							return 4;
+						case Right:
+							return 4;
+						default:
+							return 3;
+						}
 					default:
-						return 1;
-					}
-				case BOTTOM:
-					switch(face){
-					case Top:
 						return 2;
-					case Bottom:
-						return 0;
-					default:
-						return 3;
 					}
-				case WEST:
-					switch(face){
-					case Left:
-						return 0;
-					case Right:
-						return 2;
-					default:
-						return 4;
-					}
-				case EAST:
-					switch(face){
-					case Left:
-						return 2;
-					case Right:
-						return 0;
-					default:
-						return 5;
-					}
-				case NORTH:
-					switch(face){
-					case Back:
-						return 0;
-					case Front:
-						return 2;
-					case Left:
-						return 5;
-					case Right:
-						return 5;
-					default:
-						return 1;
-					}
-				case SOUTH:
-					switch(face){
-					case Front:
-						return 0;
-					case Back:
-						return 2;
-					case Left:
-						return 4;
-					case Right:
-						return 4;
-					default:
-						return 3;
-					}
-				default:
-					return 2;
 				}
+				return 2;
 			}
 		});
 		BlockManager.getInstance().register(GameBlock.DIRT.getBClass(), new BlockSkin(new BlockSkin_TextureLocation(2, 0), false));
