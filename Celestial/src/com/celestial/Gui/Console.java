@@ -122,7 +122,7 @@ public class Console implements ScreenController, KeyInputHandler{
 		de.lessvoid.nifty.controls.Console console = consolePopup.findNiftyControl("console", de.lessvoid.nifty.controls.Console.class);
 		if (console != null) {
 			if ("exit".equals(command.getCommand())) {
-				this.parent.stop();
+				this.parent.portal.stopGame();
 			} else {
 				this.commandManager.onCommand(command);
 			}
