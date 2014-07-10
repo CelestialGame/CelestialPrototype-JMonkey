@@ -179,24 +179,24 @@ public class ChunkGeneratorCallable implements Callable<Map<Vector3i, BlockData>
 		if(this.planetType.hasAtmosphere()) {
 			//Random Terrain Generation chunks
 			if(x == planetDiameter-2) {
-				generateRandomTerrain(new Vector3i(chunkSize/2, chunkSize, chunkSize), GameBlock.GRASS, PlanetFace.EAST);
+				generateRandomTerrain(new Vector3i(chunkSize, chunkSize, chunkSize), GameBlock.GRASS, PlanetFace.EAST);
 				return blockData;
 			} else if(x == 1) {
-				generateRandomTerrain(new Vector3i(chunkSize/2, chunkSize, chunkSize), GameBlock.GRASS, PlanetFace.WEST);
+				generateRandomTerrain(new Vector3i(chunkSize, chunkSize, chunkSize), GameBlock.GRASS, PlanetFace.WEST);
 				return blockData;
 			}
 			else if (y == planetDiameter-2) {
-				generateRandomTerrain(new Vector3i(chunkSize, chunkSize/2, chunkSize), GameBlock.GRASS, PlanetFace.TOP);
+				generateRandomTerrain(new Vector3i(chunkSize, chunkSize, chunkSize), GameBlock.GRASS, PlanetFace.TOP);
 				return blockData;
 			} else if(y == 1) {
-				generateRandomTerrain(new Vector3i(chunkSize, chunkSize/2, chunkSize), GameBlock.GRASS, PlanetFace.BOTTOM);
+				generateRandomTerrain(new Vector3i(chunkSize, chunkSize, chunkSize), GameBlock.GRASS, PlanetFace.BOTTOM);
 				return blockData;
 			}
 			else if (z == planetDiameter-2) {
-				generateRandomTerrain(new Vector3i(chunkSize, chunkSize, chunkSize/2), GameBlock.GRASS, PlanetFace.NORTH);
+				generateRandomTerrain(new Vector3i(chunkSize, chunkSize, chunkSize), GameBlock.GRASS, PlanetFace.NORTH);
 				return blockData;
 			} else if (z == 1) {
-				generateRandomTerrain(new Vector3i(chunkSize, chunkSize, chunkSize/2), GameBlock.GRASS, PlanetFace.SOUTH);
+				generateRandomTerrain(new Vector3i(chunkSize, chunkSize, chunkSize), GameBlock.GRASS, PlanetFace.SOUTH);
 				return blockData;
 			}
 		}
@@ -317,9 +317,9 @@ public class ChunkGeneratorCallable implements Callable<Map<Vector3i, BlockData>
 		Perlin base = new Perlin(planetSeed);
 		Ridge basis = new Ridge(base);
 		Transform rmft = new Transform(); rmft.setScale(1.f/64.f);
-		BasicNoise ridgedMF = new BasicNoise(rmft, 0.1f, 0.086f, (int) planetSeed, 3, 3.02f, 2f, true, basis);
+		BasicNoise ridgedMF = new BasicNoise(rmft, 0.5f, 0.086f, (int) planetSeed, 3, 3.02f, 2f, true, basis);
 		Transform simt = new Transform(); simt.setScale(1.f/64.f);
-		BasicNoise perlin = new BasicNoise(simt, 0.1f, 0.032f, (int) planetSeed, 3, 3.02f, 4f, false, base);
+		BasicNoise perlin = new BasicNoise(simt, 0.15f, 0.086f, (int) planetSeed, 3, 3.02f, 4f, false, base);
 		SummedNoise fractalSum = new SummedNoise(ridgedMF, perlin);
 		for(int i=0;i<resolution;i++){
 			for(int j=0;j<resolution;j++){
@@ -334,7 +334,7 @@ public class ChunkGeneratorCallable implements Callable<Map<Vector3i, BlockData>
 		case TOP:
 			for(int x=0;x<grid[0].length;x++){
 				for(int z=0;z<grid.length;z++){
-					int blockHeight = (int) ((grid[x][z]) * size.getY() + 1);
+					int blockHeight = (int) ((grid[x][z]) * size.getY() - 5);
 					Vector3i blockLocation = new Vector3i();
 					for(int y=0;y<blockHeight;y++){
 						blockLocation.set(x, y, z);
@@ -346,7 +346,7 @@ public class ChunkGeneratorCallable implements Callable<Map<Vector3i, BlockData>
 		case BOTTOM:
 			for(int x=0;x<grid[0].length;x++){
 				for(int z=0;z<grid.length;z++){
-					int blockHeight = (int) ((grid[x][z]) * size.getY() + 1);
+					int blockHeight = (int) ((grid[x][z]) * size.getY());
 					Vector3i blockLocation = new Vector3i();
 					for(int y=0;y<blockHeight;y++){
 						blockLocation.set(x, (y * -1) + Planet.CHUNK_SIZE, z);
@@ -358,7 +358,7 @@ public class ChunkGeneratorCallable implements Callable<Map<Vector3i, BlockData>
 		case NORTH:
 			for(int x=0;x<grid[0].length;x++){
 				for(int y=0;y<grid.length;y++){
-					int blockHeight = (int) ((grid[x][y]) * size.getZ() + 1);
+					int blockHeight = (int) ((grid[x][y]) * size.getZ());
 					Vector3i blockLocation = new Vector3i();
 					for(int z=0;z<blockHeight;z++){
 						blockLocation.set(x, y, z);
@@ -370,7 +370,7 @@ public class ChunkGeneratorCallable implements Callable<Map<Vector3i, BlockData>
 		case SOUTH:
 			for(int x=0;x<grid[0].length;x++){
 				for(int y=0;y<grid.length;y++){
-					int blockHeight = (int) ((grid[x][y]) * size.getZ() + 1);
+					int blockHeight = (int) ((grid[x][y]) * size.getZ());
 					Vector3i blockLocation = new Vector3i();
 					for(int z=0;z<blockHeight;z++){
 						blockLocation.set(x, y, (z * -1) + Planet.CHUNK_SIZE);
@@ -382,7 +382,7 @@ public class ChunkGeneratorCallable implements Callable<Map<Vector3i, BlockData>
 		case EAST:
 			for(int y=0;y<grid[0].length;y++){
 				for(int z=0;z<grid.length;z++){
-					int blockHeight = (int) ((grid[y][z]) * size.getX() + 1);
+					int blockHeight = (int) ((grid[y][z]) * size.getX());
 					Vector3i blockLocation = new Vector3i();
 					for(int x=0;x<blockHeight;x++){
 						blockLocation.set(x, y, z);
@@ -394,7 +394,7 @@ public class ChunkGeneratorCallable implements Callable<Map<Vector3i, BlockData>
 		case WEST:
 			for(int y=0;y<grid[0].length;y++){
 				for(int z=0;z<grid.length;z++){
-					int blockHeight = (int) ((grid[y][z]) * size.getX() + 1);
+					int blockHeight = (int) ((grid[y][z]) * size.getX());
 					Vector3i blockLocation = new Vector3i();
 					for(int x=0;x<blockHeight;x++){
 						blockLocation.set((x * -1) + Planet.CHUNK_SIZE, y, z);
