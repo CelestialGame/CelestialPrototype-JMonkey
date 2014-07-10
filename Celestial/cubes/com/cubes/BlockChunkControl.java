@@ -5,11 +5,7 @@
 package com.cubes;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -41,48 +37,37 @@ import com.jme3.scene.control.LodControl;
  */
 public class BlockChunkControl extends AbstractControl implements BitSerializable{
 
-	public class CachedBlock {
-		private byte data;
-		private Vector3i location;
-
-		public CachedBlock(byte data, Vector3i location) {
-			this.data = data;
-			this.location = location;
-		}
-
-		public byte getByteData() { return data; }
-
-		public Vector3i getLocation()
-		{
-			return this.location;
-		}
-	}
-
-	public BlockChunkControl(BlockTerrainControl terrain, int x, int y, int z){
-		this.terrain = terrain;
-		location.set(x, y, z);
-		blockLocation.set(location.mult(terrain.getSettings().getChunkSizeX(), terrain.getSettings().getChunkSizeY(), terrain.getSettings().getChunkSizeZ()));
-		node.setLocalTranslation(new Vector3f(blockLocation.getX(), blockLocation.getY(), blockLocation.getZ()).mult(terrain.getSettings().getBlockSize()));
-		blockDataUnsynchronized = new HashMap<Vector3i, BlockData>();
-		blockData = Collections.synchronizedMap(blockDataUnsynchronized);
-		lc_Opaque = new LodControl();
-		lc_Transparent = new LodControl();
-	}
 	private BlockTerrainControl terrain;
 	private Vector3i location = new Vector3i();
 	private Vector3i blockLocation = new Vector3i();
-	private HashMap<Vector3i, BlockData> blockDataUnsynchronized;
 	private Map<Vector3i, BlockData> blockData;
-	private List<CachedBlock> savedBlockTypes = new ArrayList<CachedBlock>();
 	private Node node = new Node();
 	private Geometry optimizedGeometry_Opaque;
 	private Geometry optimizedGeometry_Transparent;
 	private LodControl lc_Opaque;
 	private LodControl lc_Transparent;
 	private boolean needsMeshUpdate;
-	private boolean loaded;
 	private int blocks;
 
+	public BlockChunkControl(BlockTerrainControl terrain, Vector3i location, Map<Vector3i, BlockData> blockData){
+		this.terrain = terrain;
+		this.location = location;
+		this.blockLocation.set(location.mult(terrain.getSettings().getChunkSizeX(), terrain.getSettings().getChunkSizeY(), terrain.getSettings().getChunkSizeZ()));
+		this.node.setLocalTranslation(new Vector3f(blockLocation.getX(), blockLocation.getY(), blockLocation.getZ()).mult(terrain.getSettings().getBlockSize()));
+		
+		this.blockData = blockData;
+		for(Iterator<Entry<Vector3i, BlockData>> iterator = this.blockData.entrySet().iterator(); iterator.hasNext();)
+		{
+			Entry<Vector3i, BlockData> entry = iterator.next();
+			entry.getValue().setChunk(this);
+		}
+		this.blocks = this.blockData.size();
+		this.needsMeshUpdate = true;
+		
+		this.lc_Opaque = new LodControl();
+		this.lc_Transparent = new LodControl();
+	}
+	
 	@Override
 	public void setSpatial(Spatial spatial){
 		Spatial oldSpatial = this.spatial;
@@ -159,43 +144,8 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 		}
 	}
 
-	public void unloadChunk() {
-		if(!loaded) {
-			return;
-		}
-		this.savedBlockTypes.clear();
-		Iterator<Entry<Vector3i, BlockData>> iterator = blockData.entrySet().iterator();
-		while(iterator.hasNext()) 
-		{
-			Entry<Vector3i, BlockData> entry = iterator.next();
-			this.savedBlockTypes.add(new CachedBlock(entry.getValue().getBlockType(), entry.getKey()));
-			Vector3i location = entry.getKey();
-			iterator.remove();
-			needsMeshUpdate = true;
-			blocks--;
-		}
-		loaded = false;
-	}
-
-	public void loadChunk() {
-		if(loaded) {
-			return;
-		}
-		for(CachedBlock block : this.savedBlockTypes) {
-			blockData.put(block.getLocation(), new BlockData(block.getByteData(), block.getLocation(), this));
-			needsMeshUpdate = true;
-		}
-		loaded = true;
-	}
-
-	public int getBlockAmount(boolean live) {
-		if(!live)
-			if(loaded) 
-				return blocks;
-			else
-				return this.savedBlockTypes.size();
-		else
-			return blocks;
+	public int getBlockAmount() {
+		return blocks;
 	}
 
 	private boolean isValidBlockLocation(Vector3i location){
@@ -259,6 +209,11 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 		return blockData.get(location).getCurrentFaceOfPlanet();
 	}
 
+	public Map<Vector3i, BlockData> getBlockData()
+	{
+		return this.blockData;
+	}
+	
 	public BlockTerrainControl getTerrain(){
 		return terrain;
 	}
@@ -318,13 +273,6 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 		//TODO: Read data from file (Serialize)
 	}
 
-	private Vector3i getNeededBlockChunks(Vector3i blocksCount){
-		int chunksCountX = (int) Math.ceil(((float) blocksCount.getX()) / terrain.getSettings().getChunkSizeX());
-		int chunksCountY = (int) Math.ceil(((float) blocksCount.getY()) / terrain.getSettings().getChunkSizeY());
-		int chunksCountZ = (int) Math.ceil(((float) blocksCount.getZ()) / terrain.getSettings().getChunkSizeZ());
-		return new Vector3i(chunksCountX, chunksCountY, chunksCountZ);
-	}
-
 	public boolean isFaceVisible(Vector3i loc, Face face) {
 		Vector3i vec = loc.add(face.getOffsetVector());
 		BlockType type;
@@ -351,7 +299,6 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 		int result = 1;
 		
 		result = prime * result + (this.enabled ? 1 : 0);
-		result = prime * result + (this.loaded ? 1 : 0);
 		result = prime * result + (this.needsMeshUpdate ? 1 : 0);
 		result = prime * result + this.blockData.hashCode();
 		result = prime * result + this.blocks;
@@ -368,7 +315,7 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 		if(!(other instanceof BlockChunkControl))
 			return false;
 		BlockChunkControl otherChunk = (BlockChunkControl) other;
-		if(otherChunk.enabled == this.enabled && otherChunk.loaded == this.loaded && otherChunk.needsMeshUpdate == this.needsMeshUpdate && otherChunk.blockData.equals(this.blockData) && otherChunk.blocks == this.blocks && otherChunk.location == this.location)
+		if(otherChunk.enabled == this.enabled && otherChunk.needsMeshUpdate == this.needsMeshUpdate && otherChunk.blockData.equals(this.blockData) && otherChunk.blocks == this.blocks && otherChunk.location == this.location)
 			return true;
 		return false;
 	}

@@ -6,10 +6,7 @@ package com.celestial.SinglePlayer.Input;
 
 import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
-import com.celestial.Blocks.Block_Furnace;
-import com.celestial.Blocks.Block_WorkBench;
 import com.celestial.Blocks.GameBlock;
-import com.celestial.Gui.Gui;
 import com.celestial.Gui.Gui.PopupType;
 import com.celestial.SinglePlayer.SPPortal;
 import com.celestial.SinglePlayer.Components.SectorCoord;

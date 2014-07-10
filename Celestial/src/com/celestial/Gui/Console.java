@@ -1,9 +1,7 @@
 package com.celestial.Gui;
 
 import com.celestial.Celestial;
-import com.celestial.CelestialPortal;
 import com.celestial.Gui.Commands.CommandManager;
-import com.jme3.input.InputManager;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;

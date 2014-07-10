@@ -6,9 +6,6 @@ Date Created:
 
 package com.celestial.SinglePlayer.Components.Planet;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
 import java.util.Random;
 
 import com.celestial.CelestialPortal;
@@ -18,7 +15,6 @@ import com.celestial.World.BlockChunkManager;
 import com.cubes.BlockChunkControl;
 import com.cubes.BlockChunkListener;
 import com.cubes.BlockTerrainControl;
-import com.cubes.RandomTerrainGenerator;
 import com.cubes.Vector3i;
 import com.cubes.render.GreedyMesher;
 import com.jme3.bullet.BulletAppState;
@@ -37,31 +33,12 @@ import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.control.LodControl;
 import com.jme3.scene.shape.Box;
 
 public class Planet {
 	public float atmosphereSizeFactor;
-	public enum planetType {
-		HABITABLE, INNER, OUTER, INFERNO, FRIGID, MOON;
 
-		public static final EnumSet<planetType> PLANETTYPES = EnumSet.range(HABITABLE, FRIGID);
-		public static final EnumSet<planetType> HOSTILETYPES = EnumSet.range(INNER, MOON);
-		public static final EnumSet<planetType> ATMOSPHERETYPES = EnumSet.range(HABITABLE, OUTER);
-
-		public final boolean isPlanetType() {
-			return PLANETTYPES.contains(this);
-		}
-		public final boolean isHostile() {
-			return HOSTILETYPES.contains(this);
-		}
-		public final boolean hasAtmosphere() {
-			return ATMOSPHERETYPES.contains(this);
-		}
-
-		public static final EnumSet<planetType> ALLTYPES = EnumSet.allOf(planetType.class);
-	}
-	public planetType type;
+	public PlanetType type;
 
 	public static int CHUNK_SIZE = 16;
 	public static int VIEW_DISTANCE = 128;
@@ -151,17 +128,17 @@ public class Planet {
 
 		if(this.starNode.getWorldTranslation().distance(this.planetNode.getWorldTranslation()) >= 3500F && 
 				this.starNode.getWorldTranslation().distance(this.planetNode.getWorldTranslation()) <= 4000F) {
-			this.type = planetType.HABITABLE;
+			this.type = PlanetType.HABITABLE;
 		} else if(this.starNode.getWorldTranslation().distance(this.planetNode.getWorldTranslation()) <= 3500F && 
 				this.starNode.getWorldTranslation().distance(this.planetNode.getWorldTranslation()) >= 2500F) {
-			this.type = planetType.INNER;
+			this.type = PlanetType.INNER;
 		} else if(this.starNode.getWorldTranslation().distance(this.planetNode.getWorldTranslation()) <= 2500F) {
-			this.type = planetType.INFERNO;
+			this.type = PlanetType.INFERNO;
 		} else if(this.starNode.getWorldTranslation().distance(this.planetNode.getWorldTranslation()) <= 5000F && 
 				this.starNode.getWorldTranslation().distance(this.planetNode.getWorldTranslation()) >= 4000F) {
-			this.type = planetType.OUTER;
+			this.type = PlanetType.OUTER;
 		} else if(this.starNode.getWorldTranslation().distance(this.planetNode.getWorldTranslation()) >= 5000F) {
-			this.type = planetType.FRIGID;
+			this.type = PlanetType.FRIGID;
 		}
 
 		/* TERRAIN CONTROL & CHUNK LISTENER */
@@ -194,7 +171,7 @@ public class Planet {
 					bulletAppState.getPhysicsSpace().add(optimizedRigidBodyControl);
 					optimizedRigidBodyControl.setCollisionShape(new MeshCollisionShape(optimizedGeometry.getMesh()));
 				}
-				
+
 				if(transparentGeometry.getTriangleCount() > 0)
 				{
 					transparentRigidBodyControl = new RigidBodyControl(0);
@@ -208,7 +185,6 @@ public class Planet {
 		/* TERRAIN CONTROL CHUNK GENERATION */
 
 		terrainControl.setBlockChunkManager(new BlockChunkManager(terrainControl, this));
-		terrainControl.getBlockChunkManager().preGenerateChunks();
 
 		terrainNode.addControl(terrainControl);
 
@@ -221,9 +197,9 @@ public class Planet {
 			this.atmospheregeom = new Geometry("Atmosphere", this.atmospherebox);
 			this.atmospheremat = new Material(portal.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
 
-			if(this.type.equals(planetType.HABITABLE))
+			if(this.type.equals(PlanetType.HABITABLE))
 				this.atmospheremat.setColor("Color", new ColorRGBA(0.3f, 0.5f, 1, 0.75f));
-			else if(this.type.equals(planetType.INNER))
+			else if(this.type.equals(PlanetType.INNER))
 				this.atmospheremat.setColor("Color", new ColorRGBA(0.68f, 0.4f, 0.09f, 0.75f));
 			else
 				this.atmospheremat.setColor("Color", new ColorRGBA(0.25f, 0.38f, 0.98f, 0.75f));
@@ -396,7 +372,7 @@ public class Planet {
 		return this.starNode.getWorldRotation();
 	}
 
-	public planetType getType() {
+	public PlanetType getType() {
 		if(this.type == null)
 			return null;
 		return this.type;

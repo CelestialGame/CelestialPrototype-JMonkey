@@ -6,6 +6,7 @@ package com.cubes;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -35,16 +36,15 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
 	public BlockTerrainControl(CubesSettings settings, Vector3i chunksCount, VoxelMesher mesher){
 		this.settings = settings;
 		this.mesher = mesher;
-		initializeChunks(chunksCount);
+		initializeChunks();
 	}
 	public BlockTerrainControl(CubesSettings settings, Vector3i chunksCount){
 		this.settings = settings;
-		initializeChunks(chunksCount);
+		initializeChunks();
 	}
 
 	private CubesSettings settings;
-	private HashMap<Vector3i, BlockChunkControl> chunksUnsynchronized;
-	private Map<Vector3i, BlockChunkControl> chunks;
+	private HashMap<Vector3i, BlockChunkControl> chunks;
 	private ArrayList<BlockChunkListener> chunkListeners = new ArrayList<BlockChunkListener>();
 	HashMap<Vector3i, DynamicBlock> dynamicBlocks = new HashMap<Vector3i, DynamicBlock>();
 	private BlockChunkManager blockChunkManager;
@@ -57,20 +57,8 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
 		return blockChunkManager;
 	}
 
-	private void initializeChunks(Vector3i chunksCount){
+	private void initializeChunks(){
 		chunks = new HashMap<Vector3i, BlockChunkControl>();
-
-		for(int i = 0; i < chunksCount.getX(); i++)
-		{
-			for(int j = 0; j < chunksCount.getY(); j++)
-			{
-				for(int k = 0; k < chunksCount.getZ(); k++)
-				{
-					BlockChunkControl chunk = new BlockChunkControl(this, i, j,k );
-					chunks.put(new Vector3i(i,j,k), chunk);
-				}
-			}
-		}
 	}
 
 	@Override
@@ -178,6 +166,23 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
 			localBlockState.removeBlock();
 		}
 	}
+	
+	public void loadChunk(Vector3i chunkLocation, Map<Vector3i, BlockData> blockData)
+	{
+		if(!this.chunks.containsKey(chunkLocation))
+		{
+			BlockChunkControl chunk = new BlockChunkControl(this, chunkLocation, blockData);
+			this.chunks.put(chunkLocation, chunk);
+		}
+	}
+	
+	public void unLoadChunk(Vector3i chunkLocation)
+	{
+		if(this.chunks.containsKey(chunkLocation))
+		{
+			this.chunks.remove(chunkLocation);
+		}
+	}
 
 	private BlockTerrain_LocalBlockState getLocalBlockState(Vector3i blockLocation){
 		if(blockLocation.hasNegativeCoordinate()){
@@ -224,7 +229,8 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
 		return localLocation;
 	}
 
-	public boolean updateSpatial(){
+	public boolean updateSpatial()
+	{
 		boolean wasUpdatedNeeded = false;
 		for(Iterator<Entry<Vector3i, BlockChunkControl>> iterator = chunks.entrySet().iterator(); iterator.hasNext();)
 		{
@@ -261,7 +267,7 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
 		return settings;
 	}
 
-	public Map<Vector3i, BlockChunkControl> getChunks(){
+	public HashMap<Vector3i, BlockChunkControl> getChunks(){
 		return chunks;
 	}
 	public HashMap<Vector3i, DynamicBlock> getDynamicBlocks() {

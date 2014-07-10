@@ -1,6 +1,5 @@
 package com.celestial.Blocks;
 
-import com.celestial.Gui.Gui;
 import com.celestial.Gui.Gui.PopupType;
 import com.celestial.SinglePlayer.SPPortal;
 

@@ -27,6 +27,10 @@ public class BlockData
 	{
 		return blockType;
 	}
+
+	public void setChunk(BlockChunkControl blockChunkControl) {
+		this.chunkControl = blockChunkControl;
+	}
 	
 	public boolean getIsOnSurface()
 	{

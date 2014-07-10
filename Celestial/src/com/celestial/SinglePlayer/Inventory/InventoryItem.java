@@ -2,8 +2,8 @@ package com.celestial.SinglePlayer.Inventory;
 
 import com.celestial.Celestial;
 import com.celestial.Blocks.GameBlock;
-import com.celestial.Tools.ToolObject;
 import com.celestial.Tools.Tool;
+import com.celestial.Tools.ToolObject;
 import com.jme3.asset.AssetNotFoundException;
 
 public class InventoryItem {

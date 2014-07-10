@@ -182,6 +182,7 @@ public class SPPortal extends CelestialPortal{
 	}
 
 	public void stopGame() {
+		Celestial.executor.shutdown();
 		this.app.stop();
 	}
 
@@ -416,14 +417,18 @@ public class SPPortal extends CelestialPortal{
 				this.PlanetText.setText("Deep Space");
 			this.Vector3IntPosText.setText(Vector3i.convert3f(location).toString());
 			int blocks = 0;
-			int liveBlocks = 0;
-			for (int x = 0; x < this.player.getPlanet().getDiameter(); x++)
-				for (int y = 0; y < this.player.getPlanet().getDiameter(); y++)
-					for(int z = 0; z < this.player.getPlanet().getDiameter(); z++) {
-						blocks = blocks + this.player.getPlanet().getTerrControl().getChunks().get(new Vector3i(x,y,z)).getBlockAmount(false);
-						liveBlocks = liveBlocks + this.player.getPlanet().getTerrControl().getChunks().get(new Vector3i(x,y,z)).getBlockAmount(true);
-					}
-			this.blocksLiveText.setText("Blocks [Cached, Live]: [" + blocks + ", " + liveBlocks + "]");
+			if(this.player.getPlanet() != null)
+			{
+				for (int x = 0; x < this.player.getPlanet().getDiameter(); x++)
+					for (int y = 0; y < this.player.getPlanet().getDiameter(); y++)
+						for(int z = 0; z < this.player.getPlanet().getDiameter(); z++) {
+							if(this.player.getPlanet().getTerrControl().getChunks().containsKey(new Vector3i(x,y,z)))
+							{
+								blocks = blocks + this.player.getPlanet().getTerrControl().getChunks().get(new Vector3i(x,y,z)).getBlockAmount();
+							}
+						}
+			}
+			this.blocksLiveText.setText("Loaded Blocks: [" + blocks + "]");
 			setDisplayFps(true);
 			setDisplayStatView(true); 
 		} else {

@@ -1,6 +1,7 @@
 package com.celestial;
 
 import java.awt.Canvas;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
@@ -8,7 +9,6 @@ import java.util.logging.Logger;
 import com.celestial.Gui.Gui;
 import com.celestial.SinglePlayer.SPPortal;
 import com.celestial.util.TTFFontLoader;
-import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
@@ -24,11 +24,12 @@ public class Celestial extends SimpleApplication{
 	public static int width;
 	public static int height;
 	public static String title;
-	private static Celestial cel;
+	private static Celestial self;
+	public static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(3);
 
 	public static void main(String[] args) {
-		cel = new Celestial();
-		cel.setShowSettings(false);
+		self = new Celestial();
+		self.setShowSettings(false);
 		
 		JmeFormatter formatter = new JmeFormatter();
 
@@ -47,8 +48,8 @@ public class Celestial extends SimpleApplication{
 		Celestial.height = 500;
 		Celestial.title = "Celestial";
 
-		cel.setDisplayFps(true);
-		cel.setDisplayStatView(true);
+		self.setDisplayFps(true);
+		self.setDisplayStatView(true);
 		
 		createNewCanvas();
 		app.start();
@@ -77,7 +78,7 @@ public class Celestial extends SimpleApplication{
 		settings.setHeight(Celestial.height);
 		settings.setTitle(Celestial.title);
 
-		app = cel;
+		app = self;
 		app.setPauseOnLostFocus(false);
 		app.setSettings(settings);
 		app.createCanvas();
@@ -147,8 +148,8 @@ public class Celestial extends SimpleApplication{
 	}
 	
 	public static void toggleStats(boolean state) {
-		cel.setDisplayFps(state);
-		cel.setDisplayStatView(state);
+		self.setDisplayFps(state);
+		self.setDisplayStatView(state);
 	}
 
 	public static CelestialPortal getPortal() {

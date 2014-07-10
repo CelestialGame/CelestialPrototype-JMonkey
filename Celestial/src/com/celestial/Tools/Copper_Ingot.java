@@ -1,6 +1,5 @@
 package com.celestial.Tools;
 
-import com.celestial.Tools.ToolObject;
 import com.celestial.SinglePlayer.Components.Player;
 
 public class Copper_Ingot extends ToolObject {
