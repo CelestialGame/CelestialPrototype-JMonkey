@@ -74,7 +74,6 @@ public class InputControl {
 		inputManager.addMapping("Slot8", new KeyTrigger(KeyInput.KEY_8));
 		inputManager.addMapping("Slot9", new KeyTrigger(KeyInput.KEY_9));
 		inputManager.addMapping("Respawn", new KeyTrigger(KeyInput.KEY_R));
-		inputManager.addMapping("FindFace", new KeyTrigger(KeyInput.KEY_F));
 		inputManager.addMapping("Inventory", new KeyTrigger(KeyInput.KEY_E));
 		inputManager.addMapping("Use", new KeyTrigger(KeyInput.KEY_V));
 		inputManager.addMapping("Build", new KeyTrigger(KeyInput.KEY_B));
@@ -98,7 +97,6 @@ public class InputControl {
 		inputManager.addListener(actionListener, "Slot8");
 		inputManager.addListener(actionListener, "Slot9");
 		inputManager.addListener(actionListener, "Respawn");
-		inputManager.addListener(actionListener, "FindFace");
 		inputManager.addListener(actionListener, "Inventory");
 		inputManager.addListener(actionListener, "Use");
 		inputManager.addListener(actionListener, "Build");
@@ -310,11 +308,6 @@ public class InputControl {
 	
 					parent.player.spawnPlayer(parent.player.getSystem().getPlanet(0), 0);
 					parent.cam.setLocation(new Vector3f(parent.player.getLocation().getX(), parent.player.getLocation().getY()+parent.getCamHeight(), parent.player.getLocation().getZ()));
-				}
-				else if(binding.equals("FindFace") && !keyPressed)
-				{
-					System.out.println(parent.player.getCurrentFaceOfPlanet(parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0)));
-					System.out.println(parent.player.getPlanet().getPlanetNode().getWorldTranslation().distance(parent.player.getPlanet().getStar().getStarNode().getWorldTranslation()));
 				}
 				else if(binding.equals("Inventory") && !keyPressed) {
 					if(!this.inventoryopen) {

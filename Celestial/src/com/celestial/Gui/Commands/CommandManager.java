@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.celestial.Celestial;
 import com.celestial.Gui.Gui;
 import com.celestial.SinglePlayer.SPPortal;
+import com.celestial.SinglePlayer.Components.SectorCoord;
 import com.jme3.math.Vector3f;
 
 import de.lessvoid.nifty.controls.Console;
@@ -26,6 +27,7 @@ public class CommandManager {
 		registerCommand("help");
 		registerCommand("generateEntire");
 		registerCommand("noclip");
+		registerCommand("findface");
 	}
 	
 	public void registerCommand(String command) {
@@ -80,6 +82,19 @@ public class CommandManager {
 							parent.portal.player.setVisibleToClient(false);
 							this.console.output("Noclip Off");
 						}
+					} else {
+						this.console.outputError("Unsupported command.");
+					}
+				}
+				else {
+					this.console.outputError("Invalid command.");
+					this.console.outputError("generateEntire [bool]");
+				}
+			} else if (command.equalsIgnoreCase("findface")) {
+				if(args.length == 0) {
+					if(this.parent.portal instanceof SPPortal) {
+						System.out.println(parent.portal.player.getCurrentFaceOfPlanet(parent.portal.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0)));
+						System.out.println(parent.portal.player.getPlanet().getPlanetNode().getWorldTranslation().distance(parent.portal.player.getPlanet().getStar().getStarNode().getWorldTranslation()));
 					} else {
 						this.console.outputError("Unsupported command.");
 					}
