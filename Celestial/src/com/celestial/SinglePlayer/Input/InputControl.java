@@ -4,6 +4,11 @@
  */
 package com.celestial.SinglePlayer.Input;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
 import com.celestial.Blocks.GameBlock;
@@ -25,6 +30,7 @@ import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.input.controls.Trigger;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.terrain.Terrain;
@@ -40,6 +46,8 @@ public class InputControl {
 	Camera cam;
 
 	public static boolean statson = false;
+	
+	HashMap<String, Trigger> inputMap = new HashMap<String, Trigger>();
 
 	private boolean enabled = true;
 
@@ -47,61 +55,43 @@ public class InputControl {
 		this.parent = parent;
 		this.cam = cam;
 
-		inputManager.addMapping("Block_Del",
+		inputMap.put("Block_Del",
 				new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-		inputManager.addListener(actionListener, "Block_Del");
-		inputManager.addMapping("Block_Add",
+		inputMap.put("Block_Add",
 				new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
-		inputManager.addListener(actionListener, "Block_Add");
-		inputManager.addMapping("Block_Pick",
+		inputMap.put("Block_Pick",
 				new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
-		inputManager.addListener(actionListener, "Block_Pick");
-		inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
-		inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
-		inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
-		inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
-		inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
-		inputManager.addMapping("NoClip", new KeyTrigger(KeyInput.KEY_LSHIFT));
-		inputManager.addMapping("ESC", new KeyTrigger(KeyInput.KEY_ESCAPE));
-		inputManager.addMapping("SeeStats", new KeyTrigger(KeyInput.KEY_F3));
-		inputManager.addMapping("Slot1", new KeyTrigger(KeyInput.KEY_1));
-		inputManager.addMapping("Slot2", new KeyTrigger(KeyInput.KEY_2));
-		inputManager.addMapping("Slot3", new KeyTrigger(KeyInput.KEY_3));
-		inputManager.addMapping("Slot4", new KeyTrigger(KeyInput.KEY_4));
-		inputManager.addMapping("Slot5", new KeyTrigger(KeyInput.KEY_5));
-		inputManager.addMapping("Slot6", new KeyTrigger(KeyInput.KEY_6));
-		inputManager.addMapping("Slot7", new KeyTrigger(KeyInput.KEY_7));
-		inputManager.addMapping("Slot8", new KeyTrigger(KeyInput.KEY_8));
-		inputManager.addMapping("Slot9", new KeyTrigger(KeyInput.KEY_9));
-		inputManager.addMapping("Respawn", new KeyTrigger(KeyInput.KEY_R));
-		inputManager.addMapping("Inventory", new KeyTrigger(KeyInput.KEY_E));
-		inputManager.addMapping("Use", new KeyTrigger(KeyInput.KEY_V));
-		inputManager.addMapping("Build", new KeyTrigger(KeyInput.KEY_B));
-		inputManager.addMapping("Return", new KeyTrigger(KeyInput.KEY_Q));
-		inputManager.addMapping("FullScreen", new KeyTrigger(KeyInput.KEY_F11));
-		inputManager.addListener(actionListener, "Left");
-		inputManager.addListener(actionListener, "Right");
-		inputManager.addListener(actionListener, "Up");
-		inputManager.addListener(actionListener, "Down");
-		inputManager.addListener(actionListener, "Jump");
-		inputManager.addListener(actionListener, "NoClip");
-		inputManager.addListener(actionListener, "ESC");
-		inputManager.addListener(actionListener, "SeeStats");
-		inputManager.addListener(actionListener, "Slot1");
-		inputManager.addListener(actionListener, "Slot2");
-		inputManager.addListener(actionListener, "Slot3");
-		inputManager.addListener(actionListener, "Slot4");
-		inputManager.addListener(actionListener, "Slot5");
-		inputManager.addListener(actionListener, "Slot6");
-		inputManager.addListener(actionListener, "Slot7");
-		inputManager.addListener(actionListener, "Slot8");
-		inputManager.addListener(actionListener, "Slot9");
-		inputManager.addListener(actionListener, "Respawn");
-		inputManager.addListener(actionListener, "Inventory");
-		inputManager.addListener(actionListener, "Use");
-		inputManager.addListener(actionListener, "Build");
-		inputManager.addListener(actionListener, "Return");
-		inputManager.addListener(actionListener, "FullScreen");
+		inputMap.put("Left", new KeyTrigger(KeyInput.KEY_A));
+		inputMap.put("Right", new KeyTrigger(KeyInput.KEY_D));
+		inputMap.put("Up", new KeyTrigger(KeyInput.KEY_W));
+		inputMap.put("Down", new KeyTrigger(KeyInput.KEY_S));
+		inputMap.put("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
+		inputMap.put("NoClip", new KeyTrigger(KeyInput.KEY_LSHIFT));
+		inputMap.put("ESC", new KeyTrigger(KeyInput.KEY_ESCAPE));
+		inputMap.put("SeeStats", new KeyTrigger(KeyInput.KEY_F3));
+		inputMap.put("Slot1", new KeyTrigger(KeyInput.KEY_1));
+		inputMap.put("Slot2", new KeyTrigger(KeyInput.KEY_2));
+		inputMap.put("Slot3", new KeyTrigger(KeyInput.KEY_3));
+		inputMap.put("Slot4", new KeyTrigger(KeyInput.KEY_4));
+		inputMap.put("Slot5", new KeyTrigger(KeyInput.KEY_5));
+		inputMap.put("Slot6", new KeyTrigger(KeyInput.KEY_6));
+		inputMap.put("Slot7", new KeyTrigger(KeyInput.KEY_7));
+		inputMap.put("Slot8", new KeyTrigger(KeyInput.KEY_8));
+		inputMap.put("Slot9", new KeyTrigger(KeyInput.KEY_9));
+		inputMap.put("Respawn", new KeyTrigger(KeyInput.KEY_R));
+		inputMap.put("Inventory", new KeyTrigger(KeyInput.KEY_E));
+		inputMap.put("Use", new KeyTrigger(KeyInput.KEY_V));
+		inputMap.put("Build", new KeyTrigger(KeyInput.KEY_B));
+		inputMap.put("Return", new KeyTrigger(KeyInput.KEY_Q));
+		inputMap.put("FullScreen", new KeyTrigger(KeyInput.KEY_F11));
+		
+		Iterator<Entry<String, Trigger>> it = inputMap.entrySet().iterator();
+	    while (it.hasNext()) {
+	        Map.Entry<String, Trigger> pairs = (Map.Entry<String, Trigger>)it.next();
+	        inputManager.addMapping(pairs.getKey(), pairs.getValue());
+	        inputManager.addListener(actionListener, pairs.getKey());
+	        //it.remove(); // avoids a ConcurrentModificationException
+	    }
 	}
 	
 	public void enable() {
