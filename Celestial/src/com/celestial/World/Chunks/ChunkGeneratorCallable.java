@@ -342,9 +342,9 @@ public class ChunkGeneratorCallable implements Callable<Map<Vector3i, BlockData>
 		Perlin base = new Perlin(planetSeed);
 		Ridge basis = new Ridge(base);
 		Transform rmft = new Transform(); rmft.setScale(1.f/64.f);
-		BasicNoise ridgedMF = new BasicNoise(rmft, 0.5f, 0.086f, (int) planetSeed, 3, 3.02f, 2f, true, basis);
+		BasicNoise ridgedMF = new BasicNoise(rmft, 0.5f, 0.086f, (int) planetSeed, 2, 3.02f, 1.5f, true, basis);
 		Transform simt = new Transform(); simt.setScale(1.f/64.f);
-		BasicNoise perlin = new BasicNoise(simt, 0.15f, 0.086f, (int) planetSeed, 3, 3.02f, 4f, false, base);
+		BasicNoise perlin = new BasicNoise(simt, 0.15f, 0.086f, (int) planetSeed, 3, 3.02f, 1f, true, base);
 		SummedNoise fractalSum = new SummedNoise(ridgedMF, perlin);
 		for(int i=0;i<resolution;i++){
 			for(int j=0;j<resolution;j++){
