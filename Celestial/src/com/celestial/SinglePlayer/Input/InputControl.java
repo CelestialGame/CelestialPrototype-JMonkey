@@ -147,6 +147,9 @@ public class InputControl {
 										item = parent.getInventoryManager().getItembyBlock(GameBlock.DIRT);
 										parent.getInventoryManager().dropItem(item, blockAbsLocation, parent.player.getPlanet());
 									}
+									else if(item.getBlock().getName().equals("Substratus")) {
+										return;
+									}
 									else if(item != null) {
 										parent.getInventoryManager().dropItem(item, blockAbsLocation, parent.player.getPlanet());
 									}

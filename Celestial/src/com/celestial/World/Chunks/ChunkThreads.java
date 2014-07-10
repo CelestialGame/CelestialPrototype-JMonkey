@@ -420,11 +420,35 @@ public class ChunkThreads {
 		}
 		
 		public void setBlocksFromNoise(Vector3i location, Vector3i size, Class<? extends Block> blockClass, PlanetSide side, BlockChunkControl chunk){
-			//SimplexNoise simplexNoise=new SimplexNoise(150,0.6,(int) preChunk.getPlanet().getSeed());
+			//SimplexNoise simplexNoise=new SimplexNoise(150,0.6,(int) preChunk.getPlanet().getSeed())			
 		    double xStart=this.x;
 		    double XEnd=this.x+Planet.CHUNK_SIZE;
 		    double yStart=this.z;
 		    double yEnd=this.z+Planet.CHUNK_SIZE;
+		    switch(side) {
+			case TOP:
+			case BOTTOM:
+				xStart=this.x;
+			    XEnd=this.x+Planet.CHUNK_SIZE;
+			    yStart=this.z;
+			    yEnd=this.z+Planet.CHUNK_SIZE;
+			    break;
+			case FRONT:
+			case BACK:
+				xStart=this.x;
+			    XEnd=this.x+Planet.CHUNK_SIZE;
+			    yStart=this.y;
+			    yEnd=this.y+Planet.CHUNK_SIZE;
+			    break;
+			case LEFT:
+			case RIGHT:
+				xStart=this.y;
+			    XEnd=this.y+Planet.CHUNK_SIZE;
+			    yStart=this.z;
+			    yEnd=this.z+Planet.CHUNK_SIZE;
+			    break;
+			}
+		    
 		    int resolution=Planet.CHUNK_SIZE;
 		    double[][] grid=new double[resolution][resolution];
 
