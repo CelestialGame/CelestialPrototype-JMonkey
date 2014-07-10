@@ -307,31 +307,31 @@ public class ChunkGeneratorCallable implements Callable<Map<Vector3i, BlockData>
 	private void setBlocksFromNoise(Vector3i size, GameBlock blockClass, PlanetFace face)
 	{
 		//SimplexNoise simplexNoise=new SimplexNoise(150,0.6,(int) preChunk.getPlanet().getSeed());
-		double xStart=this.x;
-		double XEnd=this.x+Planet.CHUNK_SIZE;
-		double yStart=this.z;
-		double yEnd=this.z+Planet.CHUNK_SIZE;
+		double xStart=(this.x*Planet.CHUNK_SIZE);
+		double XEnd=(this.x*Planet.CHUNK_SIZE)+Planet.CHUNK_SIZE;
+		double yStart=(this.z*Planet.CHUNK_SIZE);
+		double yEnd=(this.z*Planet.CHUNK_SIZE)+Planet.CHUNK_SIZE;
 		switch(face) {
 		case TOP:
 		case BOTTOM:
-			xStart=this.x;
-			XEnd=this.x+Planet.CHUNK_SIZE;
-			yStart=this.z;
-			yEnd=this.z+Planet.CHUNK_SIZE;
+			xStart=(this.x*Planet.CHUNK_SIZE);
+			XEnd=(this.x*Planet.CHUNK_SIZE)+Planet.CHUNK_SIZE;
+			yStart=(this.z*Planet.CHUNK_SIZE);
+			yEnd=(this.z*Planet.CHUNK_SIZE)+Planet.CHUNK_SIZE;
 			break;
 		case NORTH:
 		case SOUTH:
-			xStart=this.x;
-			XEnd=this.x+Planet.CHUNK_SIZE;
-			yStart=this.y;
-			yEnd=this.y+Planet.CHUNK_SIZE;
+			xStart=(this.x*Planet.CHUNK_SIZE);
+			XEnd=(this.x*Planet.CHUNK_SIZE)+Planet.CHUNK_SIZE;
+			yStart=(this.y*Planet.CHUNK_SIZE);
+			yEnd=(this.y*Planet.CHUNK_SIZE)+Planet.CHUNK_SIZE;
 			break;
 		case EAST:
 		case WEST:
-			xStart=this.y;
-			XEnd=this.y+Planet.CHUNK_SIZE;
-			yStart=this.z;
-			yEnd=this.z+Planet.CHUNK_SIZE;
+			xStart=(this.y*Planet.CHUNK_SIZE);
+			XEnd=(this.y*Planet.CHUNK_SIZE)+Planet.CHUNK_SIZE;
+			yStart=(this.z*Planet.CHUNK_SIZE);
+			yEnd=(this.z*Planet.CHUNK_SIZE)+Planet.CHUNK_SIZE;
 			break;
 		default:
 			break;
