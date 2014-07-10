@@ -36,11 +36,11 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
 	public BlockTerrainControl(CubesSettings settings, Vector3i chunksCount, VoxelMesher mesher){
 		this.settings = settings;
 		this.mesher = mesher;
-		initializeChunks();
+		initializeChunks(chunksCount);
 	}
 	public BlockTerrainControl(CubesSettings settings, Vector3i chunksCount){
 		this.settings = settings;
-		initializeChunks();
+		initializeChunks(chunksCount);
 	}
 
 	private CubesSettings settings;
@@ -57,8 +57,18 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
 		return blockChunkManager;
 	}
 
-	private void initializeChunks(){
+	private void initializeChunks(Vector3i chunksCount){
 		chunks = new HashMap<Vector3i, BlockChunkControl>();
+		for(int x = 0; x < chunksCount.getX(); x++)
+		{
+			for(int y = 0; y < chunksCount.getY(); y++)
+			{
+				for(int z = 0; z < chunksCount.getZ(); z++)
+				{
+					chunks.put(new Vector3i(x,y,z), new BlockChunkControl(this, new Vector3i(x,y,z)));
+				}
+			}
+		}
 	}
 
 	@Override
@@ -169,19 +179,27 @@ public class BlockTerrainControl extends AbstractControl implements BitSerializa
 	
 	public void loadChunk(Vector3i chunkLocation, Map<Vector3i, BlockData> blockData)
 	{
-		if(!this.chunks.containsKey(chunkLocation))
+		if(!isChunkLoaded(chunkLocation))
 		{
-			BlockChunkControl chunk = new BlockChunkControl(this, chunkLocation, blockData);
-			this.chunks.put(chunkLocation, chunk);
+			this.chunks.get(chunkLocation).load(blockData);
 		}
 	}
 	
 	public void unLoadChunk(Vector3i chunkLocation)
 	{
-		if(this.chunks.containsKey(chunkLocation))
+		if(isChunkLoaded(chunkLocation))
 		{
-			this.chunks.remove(chunkLocation);
+			this.chunks.get(chunkLocation).unLoad();
 		}
+	}
+	
+	public boolean isChunkLoaded(Vector3i chunkLocation)
+	{
+		if(!this.chunks.containsKey(chunkLocation))
+			return false;
+		if(this.chunks.get(chunkLocation).isLoaded())
+			return true;
+		return false;
 	}
 
 	private BlockTerrain_LocalBlockState getLocalBlockState(Vector3i blockLocation){

@@ -5,6 +5,7 @@
 package com.cubes;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -48,21 +49,17 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 	private LodControl lc_Transparent;
 	private boolean needsMeshUpdate;
 	private int blocks;
+	private boolean loaded;
 
-	public BlockChunkControl(BlockTerrainControl terrain, Vector3i location, Map<Vector3i, BlockData> blockData){
+	public BlockChunkControl(BlockTerrainControl terrain, Vector3i location){
 		this.terrain = terrain;
 		this.location = location;
 		this.blockLocation.set(location.mult(terrain.getSettings().getChunkSizeX(), terrain.getSettings().getChunkSizeY(), terrain.getSettings().getChunkSizeZ()));
 		this.node.setLocalTranslation(new Vector3f(blockLocation.getX(), blockLocation.getY(), blockLocation.getZ()).mult(terrain.getSettings().getBlockSize()));
 		
-		this.blockData = blockData;
-		for(Iterator<Entry<Vector3i, BlockData>> iterator = this.blockData.entrySet().iterator(); iterator.hasNext();)
-		{
-			Entry<Vector3i, BlockData> entry = iterator.next();
-			entry.getValue().setChunk(this);
-		}
-		this.blocks = this.blockData.size();
-		this.needsMeshUpdate = true;
+		this.blockData = new HashMap<Vector3i, BlockData>();
+		this.blocks = 0;
+		this.loaded = false;
 		
 		this.lc_Opaque = new LodControl();
 		this.lc_Transparent = new LodControl();
@@ -144,6 +141,36 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 		}
 	}
 
+	public boolean isLoaded()
+	{
+		return this.loaded;
+	}
+	
+	public void load(Map<Vector3i, BlockData> blockData) 
+	{
+		if(this.loaded)
+			return;
+		this.blockData = blockData;
+		for(Iterator<Entry<Vector3i, BlockData>> iterator = this.blockData.entrySet().iterator(); iterator.hasNext();)
+		{
+			Entry<Vector3i, BlockData> entry = iterator.next();
+			entry.getValue().setChunk(this);
+		}
+		this.blocks = this.blockData.size();
+		this.needsMeshUpdate = true;
+		this.loaded = true;
+	}
+	
+	public void unLoad()
+	{
+		if(!this.loaded)
+			return;
+		this.blockData = new HashMap<Vector3i, BlockData>();
+		this.blocks = 0;
+		this.needsMeshUpdate = true;
+		this.loaded = false;
+	}
+	
 	public int getBlockAmount() {
 		return blocks;
 	}
@@ -213,7 +240,7 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 	{
 		return this.blockData;
 	}
-	
+
 	public BlockTerrainControl getTerrain(){
 		return terrain;
 	}
@@ -319,4 +346,5 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 			return true;
 		return false;
 	}
+
 }

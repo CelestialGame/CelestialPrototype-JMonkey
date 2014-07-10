@@ -70,18 +70,12 @@ public class BlockChunkManager {
 					Vector3i location = new Vector3i(x, y, z);
 					if(distance > Planet.VIEW_DISTANCE) 
 					{
-						if(this.generatingChunks.containsKey(location) || !this.terrainControl.getChunks().containsKey(location))
+						if(this.generatingChunks.containsKey(location) || !this.terrainControl.isChunkLoaded(location))
 							continue;
 						//this.terrainControl.unLoadChunk(new Vector3i(x,y,z));
 					} else {
-						if(this.generatingChunks.containsKey(location) || this.terrainControl.getChunks().containsKey(location))
-						{
-							if(this.terrainControl.getChunks().containsKey(location))
-							{
-								//this.terrainControl.getChunks().get(location).setBlock(new Vector3i(0,0,0), GameBlock.DIRT.getBClass());
-							}
+						if(this.generatingChunks.containsKey(location) || this.terrainControl.isChunkLoaded(location))
 							continue;
-						}
 						this.startChunkGeneration(location);
 					}
 				}

@@ -311,6 +311,31 @@ public class ChunkGeneratorCallable implements Callable<Map<Vector3i, BlockData>
 		double XEnd=this.x+Planet.CHUNK_SIZE;
 		double yStart=this.z;
 		double yEnd=this.z+Planet.CHUNK_SIZE;
+		switch(face) {
+		case TOP:
+		case BOTTOM:
+			xStart=this.x;
+			XEnd=this.x+Planet.CHUNK_SIZE;
+			yStart=this.z;
+			yEnd=this.z+Planet.CHUNK_SIZE;
+			break;
+		case NORTH:
+		case SOUTH:
+			xStart=this.x;
+			XEnd=this.x+Planet.CHUNK_SIZE;
+			yStart=this.y;
+			yEnd=this.y+Planet.CHUNK_SIZE;
+			break;
+		case EAST:
+		case WEST:
+			xStart=this.y;
+			XEnd=this.y+Planet.CHUNK_SIZE;
+			yStart=this.z;
+			yEnd=this.z+Planet.CHUNK_SIZE;
+			break;
+		default:
+			break;
+		}
 		int resolution=Planet.CHUNK_SIZE;
 		double[][] grid=new double[resolution][resolution];
 
@@ -328,7 +353,7 @@ public class ChunkGeneratorCallable implements Callable<Map<Vector3i, BlockData>
 				grid[i][j]=0.5*(1+fractalSum.noise(x,y));
 			}
 		}
-		
+
 		switch(face)
 		{
 		case TOP:
