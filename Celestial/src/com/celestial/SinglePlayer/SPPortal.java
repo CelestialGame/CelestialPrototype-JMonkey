@@ -180,6 +180,7 @@ public class SPPortal extends CelestialPortal{
 
 		blockHighlightMat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
 		blockHighlightGeom.setQueueBucket(Bucket.Transparent);
+		blockHighlightGeom.setShadowMode(ShadowMode.Off);
 
 	}
 
