@@ -239,15 +239,7 @@ public class ChunkGeneratorCallable implements Callable<Map<Vector3i, BlockData>
 							continue;
 
 					} else if(planetType.hasAtmosphere()) {
-
-						Random randomGenerator = new Random();
-						for (int idx = 1; idx <= 10; ++idx){
-							int rInt = randomGenerator.nextInt(10);
-							if(rInt == 2 || rInt == 5 || rInt == 4)
-								makeCubeAt(i,j,k, GameBlock.DIRT);
-							else
-								makeCubeAt(i,j,k, GameBlock.STONE);
-						}
+						makeCubeAt(i,j,k, GameBlock.STONE);
 					} else {
 						//TODO update with better detail
 						if(planetType.equals(PlanetType.INFERNO)) {
@@ -255,14 +247,11 @@ public class ChunkGeneratorCallable implements Callable<Map<Vector3i, BlockData>
 						}
 						else if(planetType.equals(PlanetType.FRIGID)) {
 							//Block_Ice && Block_BlackStone
-							Random randomGenerator = new Random();
-							for (int idx = 1; idx <= 2; ++idx){
-								int rInt = randomGenerator.nextInt(2);
-								if(rInt == 1){
-									makeCubeAt(i,j,k, GameBlock.ICE);
-								} else {
-									makeCubeAt(i,j,k, GameBlock.DARKSTONE);
-								}
+							int random = 5 + (int)(Math.random() * ((10 - 5) + 1));
+							if(random == 5) {
+								makeCubeAt(i,j,k, GameBlock.ICE);
+							} else {
+								makeCubeAt(i,j,k, GameBlock.DARKSTONE);
 							}
 						}
 					}
