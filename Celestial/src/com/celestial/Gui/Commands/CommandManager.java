@@ -6,6 +6,7 @@ import com.celestial.Celestial;
 import com.celestial.Gui.Gui;
 import com.celestial.SinglePlayer.SPPortal;
 import com.celestial.SinglePlayer.Components.SectorCoord;
+import com.celestial.util.WireProcessor;
 import com.jme3.math.Vector3f;
 
 import de.lessvoid.nifty.controls.Console;
@@ -17,6 +18,8 @@ public class CommandManager {
 	private Gui gui;
 	private Console console;
 	
+	private WireProcessor wP;
+	
 	private ArrayList<String> commands = new ArrayList<String>();
 	
 	public CommandManager(Celestial parent, Gui gui, Console console) {
@@ -27,7 +30,7 @@ public class CommandManager {
 		registerCommand("help");
 		registerCommand("generateEntire");
 		registerCommand("noclip");
-		registerCommand("findface");
+		registerCommand("show");
 	}
 	
 	public void registerCommand(String command) {
@@ -90,18 +93,31 @@ public class CommandManager {
 					this.console.outputError("Invalid command.");
 					this.console.outputError("generateEntire [bool]");
 				}
-			} else if (command.equalsIgnoreCase("findface")) {
+			} else if(command.equalsIgnoreCase("show")) {
 				if(args.length == 0) {
+					this.console.outputError("Invalid command.");
+					this.console.outputError("show <var>");
+				} else if (args[0].equalsIgnoreCase("renderstats")) {
+					String[] labels = parent.app.getRenderer().getStatistics().getLabels();
+					int[] stats = new int[labels.length];
+					parent.app.getRenderer().getStatistics().getData(stats);
+					for(int i=0;i<parent.app.getRenderer().getStatistics().getLabels().length; i++) {
+						this.console.output(labels[i] + ": " + stats[i]);
+					}
+				} else if(args[0].equalsIgnoreCase("wireframe")) {
+					if(wP == null)
+						wP = new WireProcessor(parent.getAssetManager());
+					if(!parent.getViewPort().getProcessors().contains(wP))
+						parent.getViewPort().addProcessor(wP);
+					else
+						parent.getViewPort().removeProcessor(wP);
+				} else if(args[0].equalsIgnoreCase("planetface")) {
 					if(this.parent.portal instanceof SPPortal) {
-						System.out.println(parent.portal.player.getCurrentFaceOfPlanet(parent.portal.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0)));
-						System.out.println(parent.portal.player.getPlanet().getPlanetNode().getWorldTranslation().distance(parent.portal.player.getPlanet().getStar().getStarNode().getWorldTranslation()));
+						this.console.output(""+parent.portal.player.getCurrentFaceOfPlanet(parent.portal.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0)));
+						this.console.output(""+parent.portal.player.getPlanet().getPlanetNode().getWorldTranslation().distance(parent.portal.player.getPlanet().getStar().getStarNode().getWorldTranslation()));
 					} else {
 						this.console.outputError("Unsupported command.");
 					}
-				}
-				else {
-					this.console.outputError("Invalid command.");
-					this.console.outputError("generateEntire [bool]");
 				}
 			}
 		}
