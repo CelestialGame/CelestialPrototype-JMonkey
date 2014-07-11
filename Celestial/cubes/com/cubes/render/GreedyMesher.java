@@ -83,7 +83,11 @@ public class GreedyMesher extends VoxelMesher {
                     for (x[v] = 0; x[v] < chunkSize; x[v]++) {
                         for (x[u] = 0; x[u] < chunkSize; x[u]++) {
                             tmpI.set(x[0], x[1], x[2]);
-                            mask[n++] = (Byte) (terrain.isFaceVisible(tmpI, face) ? terrain.getBlock(tmpI).getType() : 0);
+                            try {
+                            	mask[n++] = terrain.isFaceVisible(tmpI, face) ? terrain.getBlock(tmpI).getType() : 0;
+                            } catch(NullPointerException e) {
+                            	;
+                            }
                         }
                     }
                     

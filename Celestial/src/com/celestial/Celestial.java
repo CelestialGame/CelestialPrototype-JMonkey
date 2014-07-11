@@ -148,8 +148,8 @@ public class Celestial extends SimpleApplication{
 	}
 	
 	public static void toggleStats(boolean state) {
-		self.setDisplayFps(state);
-		self.setDisplayStatView(state);
+		self.setDisplayFps(true);
+		self.setDisplayStatView(true);
 	}
 
 	public static CelestialPortal getPortal() {

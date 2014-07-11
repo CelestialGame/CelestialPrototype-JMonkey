@@ -80,6 +80,7 @@ public class Gui implements ScreenController {
 		flyCam.setEnabled(false);
 		flyCam.setDragToRotate(true);
 		inputManager.setCursorVisible(true);
+		
 
 		guiViewPort.addProcessor(niftyDisplay);
 		
@@ -148,6 +149,7 @@ public class Gui implements ScreenController {
 			this.console = new Console(this.parent, this);
 			this.console.bind(nifty, this.nifty.getCurrentScreen());
 			
+			parent.setDisplayStatView(true);
 		}
 		else if(this.nifty.getCurrentScreen().getScreenId().equals("loadgame"))
 		{
