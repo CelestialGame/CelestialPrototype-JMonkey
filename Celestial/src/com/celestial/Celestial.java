@@ -34,7 +34,7 @@ public class Celestial extends SimpleApplication
     public static final int MULTIPLAYER = 1;
     
     public static CelestialPortal portal;
-
+    
     public static void main(String[] args)
     {
 	self = new Celestial();

@@ -10,23 +10,27 @@ import com.celestial.SinglePlayer.Inventory.InventorySlot;
 import com.celestial.Tools.Tool;
 import com.cubes.Vector3i;
 
-public class EmpireSquare extends Building{
-
-	public EmpireSquare(Empire emp, Vector3i location, Vector3i size) {
-		super(emp, location, size);
-	}
-
-	@Override
-	public void onUpdate() {
-		//sit there and wave? Not much to update xD
-	}
-
-	@Override
-	public ArrayList<InventorySlot> setResourcesReq() {
-		ArrayList<InventorySlot> res = new ArrayList<InventorySlot>();
-		res.add(new InventorySlot(new InventoryItem(GameBlock.COBBLE), 5));
-		res.add(new InventorySlot(new InventoryItem(Tool.COPPER_INGOT), 10));
-		return res;
-	}
-
+public class EmpireSquare extends Building
+{
+    
+    public EmpireSquare(Empire emp, Vector3i location, Vector3i size)
+    {
+	super(emp, location, size);
+    }
+    
+    @Override
+    public void onUpdate()
+    {
+	// sit there and wave? Not much to update xD
+    }
+    
+    @Override
+    public ArrayList<InventorySlot> setResourcesReq()
+    {
+	ArrayList<InventorySlot> res = new ArrayList<InventorySlot>();
+	res.add(new InventorySlot(new InventoryItem(GameBlock.COBBLE), 5));
+	res.add(new InventorySlot(new InventoryItem(Tool.COPPER_INGOT), 10));
+	return res;
+    }
+    
 }

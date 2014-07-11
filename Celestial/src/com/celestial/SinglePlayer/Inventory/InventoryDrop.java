@@ -18,118 +18,152 @@ import com.jme3.scene.shape.Box;
 /**
  * Inventory Drop Items
  *
- * @author kevint.
- *         Created Jun 7, 2013.
+ * @author kevint. Created Jun 7, 2013.
  */
-public class InventoryDrop{
+public class InventoryDrop
+{
+    
+    private Box itemdropshape;
+    private Geometry itemdrop;
+    
+    private InventoryItem item;
+    private RigidBodyControl rigidBodyControl;
+    
+    private Node itemdropnode;
+    
+    private Planet planet;
+    
+    public InventoryDrop(InventoryItem item, Vector3f location, Planet planet)
+    {
+	Material mat = new Material(Celestial.portal.getAssetManager(), // Create
+									// new
+									// material
+									// and...
+		"Common/MatDefs/Light/Lighting.j3md");
+	mat.setColor("Diffuse", new ColorRGBA(0.5f, 0.5f, 0.5f, 0.3f));
+	mat.setColor("Ambient", new ColorRGBA(0.5f, 0.5f, 0.5f, 0.3f));
+	mat.setTexture("DiffuseMap", Celestial.portal.getAssetManager()
+		.loadTexture(item.getIcon()));
+	mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
 	
-	private Box itemdropshape;
-	private Geometry itemdrop;
+	this.itemdropshape = new Box(0.3f, 0.3f, 0.3f);
+	this.itemdrop = new Geometry("DropItem", this.itemdropshape);
+	this.itemdrop.setMaterial(mat);
+	this.itemdrop.getMesh().scaleTextureCoordinates(new Vector2f(1f, 1f));
 	
-	private InventoryItem item;
-	private RigidBodyControl rigidBodyControl;
+	this.itemdrop.setLocalTranslation(location);
 	
-	private Node itemdropnode;
+	this.itemdrop.setQueueBucket(Bucket.Transparent);
+	this.itemdrop.setShadowMode(ShadowMode.Cast);
 	
-	private Planet planet;
+	this.rigidBodyControl = new RigidBodyControl();
+	this.rigidBodyControl.setMass(5);
+	// this.rigidBodyControl.removeCollideWithGroup(Celestial.portal.player.getCollisionGroup());
+	this.itemdrop.addControl(rigidBodyControl);
+	// Celestial.portal.player.removeCollideWithGroup(this.rigidBodyControl.getCollisionGroup());
+	planet.getBulletAppState().getPhysicsSpace().add(this.itemdrop);
 	
-	public InventoryDrop(InventoryItem item, Vector3f location, Planet planet) {
-		Material mat = new Material(Celestial.portal.getAssetManager(),  // Create new material and...
-			    "Common/MatDefs/Light/Lighting.j3md");
-		mat.setColor("Diffuse", new ColorRGBA(0.5f,0.5f,0.5f,0.3f));
-		mat.setColor("Ambient", new ColorRGBA(0.5f,0.5f,0.5f,0.3f));
-		mat.setTexture("DiffuseMap", Celestial.portal.getAssetManager().loadTexture(item.getIcon()));
-		mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-		
-		this.itemdropshape = new Box(0.3f,0.3f,0.3f);
-		this.itemdrop = new Geometry("DropItem", this.itemdropshape);
-		this.itemdrop.setMaterial(mat);
-		this.itemdrop.getMesh().scaleTextureCoordinates(new Vector2f(1f,1f));
-		
-		this.itemdrop.setLocalTranslation(location);
-		
-		this.itemdrop.setQueueBucket(Bucket.Transparent);
-		this.itemdrop.setShadowMode(ShadowMode.Cast);
-		
-		this.rigidBodyControl = new RigidBodyControl();
-		this.rigidBodyControl.setMass(5);
-		//this.rigidBodyControl.removeCollideWithGroup(Celestial.portal.player.getCollisionGroup());
-        this.itemdrop.addControl(rigidBodyControl);
-        //Celestial.portal.player.removeCollideWithGroup(this.rigidBodyControl.getCollisionGroup());
-        planet.getBulletAppState().getPhysicsSpace().add(this.itemdrop);
-        
-        this.itemdropnode = new Node();
-        this.itemdropnode.attachChild(itemdrop);
-        
-        planet.getPlanetNode().attachChild(itemdropnode);
-        this.planet = planet;
-        
-        this.item = item;
+	this.itemdropnode = new Node();
+	this.itemdropnode.attachChild(itemdrop);
+	
+	planet.getPlanetNode().attachChild(itemdropnode);
+	this.planet = planet;
+	
+	this.item = item;
+    }
+    
+    public Box getShape()
+    {
+	return this.itemdropshape;
+    }
+    
+    public Geometry getGeometry()
+    {
+	return this.itemdrop;
+    }
+    
+    public InventoryItem getItem()
+    {
+	return this.item;
+    }
+    
+    public Node getNode()
+    {
+	return this.itemdropnode;
+    }
+    
+    public RigidBodyControl getCollisionBox()
+    {
+	return this.rigidBodyControl;
+    }
+    
+    public InventorySlot getSlot(InventoryManager invmanager)
+    {
+	return new InventorySlot(getItem(), 1, invmanager);
+    }
+    
+    public Planet getPlanet()
+    {
+	return this.planet;
+    }
+    
+    public PlanetFace getCurrentFaceOfPlanet(Planet planet)
+    {
+	Vector3f P1 = planet.getOriginalPlanetTranslation();
+	
+	Vector3f itemP = null;
+	if (this.planet.getBulletAppState().isEnabled())
+	    itemP = this.itemdrop.getWorldTranslation();
+	else
+	    return PlanetFace.UNKNOWN;
+	
+	Vector3f rot1P = planet.getStarNode().getLocalRotation().inverse()
+		.mult(itemP);
+	Vector3f transP = rot1P.subtract(P1);
+	Vector3f rot2P = planet.getPlanetNode().getLocalRotation().inverse()
+		.mult(transP);
+	
+	float x = rot2P.x;
+	float y = rot2P.y;
+	float z = rot2P.z;
+	
+	if (Math.abs(y) > Math.abs(x) && Math.abs(y) > Math.abs(z))
+	{
+	    if (y < 0)
+	    {
+		return PlanetFace.BOTTOM;
+	    }
+	    else
+	    {
+		return PlanetFace.TOP;
+	    }
 	}
-	
-	public Box getShape() {
-		return this.itemdropshape;
+	else if (Math.abs(x) > Math.abs(z))
+	{
+	    if (x < 0)
+	    {
+		return PlanetFace.WEST;
+	    }
+	    else
+	    {
+		return PlanetFace.EAST;
+	    }
 	}
-	
-	public Geometry getGeometry() {
-		return this.itemdrop;
+	else if (Math.abs(z) > Math.abs(x))
+	{
+	    if (z < 0)
+	    {
+		return PlanetFace.NORTH;
+	    }
+	    else
+	    {
+		return PlanetFace.SOUTH;
+	    }
 	}
-	
-	public InventoryItem getItem() {
-		return this.item;
+	else
+	{
+	    return PlanetFace.UNKNOWN;
 	}
-	public Node getNode() {
-		return this.itemdropnode;
-	}
-	public RigidBodyControl getCollisionBox() {
-		return this.rigidBodyControl;
-	}
-	public InventorySlot getSlot(InventoryManager invmanager) {
-		return new InventorySlot(getItem(), 1, invmanager);
-	}
-	public Planet getPlanet() {
-		return this.planet;
-	}
-	
-	public PlanetFace getCurrentFaceOfPlanet(Planet planet)
-	{		
-		Vector3f P1 = planet.getOriginalPlanetTranslation();
-
-		Vector3f itemP = null;
-		if(this.planet.getBulletAppState().isEnabled())
-			itemP = this.itemdrop.getWorldTranslation();
-		else
-			return PlanetFace.UNKNOWN;
-
-		Vector3f rot1P = planet.getStarNode().getLocalRotation().inverse().mult(itemP);
-		Vector3f transP = rot1P.subtract(P1);
-		Vector3f rot2P = planet.getPlanetNode().getLocalRotation().inverse().mult(transP);
-
-		float x = rot2P.x;
-		float y = rot2P.y;
-		float z = rot2P.z;
-
-		if( Math.abs(y) > Math.abs(x) && Math.abs(y) > Math.abs(z) ) {
-			if( y < 0 ) {
-				return PlanetFace.BOTTOM;
-			} else {
-				return PlanetFace.TOP;
-			}
-		} else if( Math.abs(x) > Math.abs(z) ) {
-			if( x < 0 ) {
-				return PlanetFace.WEST;
-			} else {
-				return PlanetFace.EAST;
-			}
-		} else if( Math.abs(z) > Math.abs(x) ) {
-			if( z < 0 ) {
-				return PlanetFace.NORTH;
-			} else {
-				return PlanetFace.SOUTH;
-			}
-		} else {
-			return PlanetFace.UNKNOWN;
-		}
-	}
-	
+    }
+    
 }

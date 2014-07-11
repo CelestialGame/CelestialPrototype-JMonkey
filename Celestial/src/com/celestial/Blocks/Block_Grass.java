@@ -4,12 +4,11 @@
  */
 package com.celestial.Blocks;
 
-
 /**
  *
  * @author kevint
  */
-public class Block_Grass extends com.cubes.Block{
-    
+public class Block_Grass extends com.cubes.Block
+{
     
 }
