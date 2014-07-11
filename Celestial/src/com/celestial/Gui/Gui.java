@@ -116,7 +116,7 @@ public class Gui implements ScreenController
     @Override
     public void onStartScreen()
     {
-	if (this.nifty.getCurrentScreen().getScreenId().equals("hud"))
+	if(this.nifty.getCurrentScreen().getScreenId().equals("hud"))
 	{
 	    
 	    // final Droppable droppable =
@@ -154,7 +154,7 @@ public class Gui implements ScreenController
 	    
 	    parent.setDisplayStatView(true);
 	}
-	else if (this.nifty.getCurrentScreen().getScreenId().equals("loadgame"))
+	else if(this.nifty.getCurrentScreen().getScreenId().equals("loadgame"))
 	{
 	    parent.startGame(gameToStart);
 	    nifty.gotoScreen("hud");
@@ -163,8 +163,8 @@ public class Gui implements ScreenController
     
     public void actionPerformed(String id)
     {
-	if (this.nifty.getCurrentScreen().getScreenId().equals("start"))
-	    switch (Integer.parseInt(id))
+	if(this.nifty.getCurrentScreen().getScreenId().equals("start"))
+	    switch(Integer.parseInt(id))
 	    {
 		case 1: // SP
 		    this.startGame(Celestial.SINGLEPLAYER);
@@ -182,8 +182,8 @@ public class Gui implements ScreenController
 		default:
 		    break;
 	    }
-	else if (this.nifty.getCurrentScreen().getScreenId().equals("hud"))
-	    switch (Integer.parseInt(id))
+	else if(this.nifty.getCurrentScreen().getScreenId().equals("hud"))
+	    switch(Integer.parseInt(id))
 	    {
 		case 1:
 		    break;
@@ -200,8 +200,8 @@ public class Gui implements ScreenController
     
     public void hoverPerformed(String id)
     {
-	if (this.nifty.getCurrentScreen().getScreenId().equals("start"))
-	    switch (Integer.parseInt(id))
+	if(this.nifty.getCurrentScreen().getScreenId().equals("start"))
+	    switch(Integer.parseInt(id))
 	    {
 		case 1: // SP
 		    break;
@@ -216,8 +216,8 @@ public class Gui implements ScreenController
 		default:
 		    break;
 	    }
-	else if (this.nifty.getCurrentScreen().getScreenId().equals("hud"))
-	    switch (Integer.parseInt(id))
+	else if(this.nifty.getCurrentScreen().getScreenId().equals("hud"))
+	    switch(Integer.parseInt(id))
 	    {
 		case 1:
 		    break;
@@ -271,7 +271,7 @@ public class Gui implements ScreenController
     public void onConsoleCommand(final String id,
 	    final ConsoleExecuteCommandEvent command)
     {
-	if (this.console != null)
+	if(this.console != null)
 	{
 	    this.console.onConsoleCommand(id, command);
 	}
@@ -279,7 +279,7 @@ public class Gui implements ScreenController
     
     public void setHotBarSelection(int slot)
     {
-	if (this.nifty.getCurrentScreen().findElementByName(
+	if(this.nifty.getCurrentScreen().findElementByName(
 		"hotslot" + slot + "drop") != null)
 	    invselected
 		    .setPosition(this.nifty.getCurrentScreen()
@@ -292,15 +292,15 @@ public class Gui implements ScreenController
 	Element dragSlot = this.nifty.getCurrentScreen().findElementByName(
 		"hotslot" + pos + "drop");
 	String imagePath;
-	if (slot.getItem().getBlock() == null)
+	if(slot.getItem().getBlock() == null)
 	    imagePath = slot.getItem().getTool().getIconPath();
 	else
 	    imagePath = slot.getItem().getBlock().getIconPath();
-	if (imagePath == null || imagePath.equals(""))
+	if(imagePath == null || imagePath.equals(""))
 	{
 	    imagePath = "assets/textures/inventory/icons/blank.png";
 	}
-	if (this.nifty.getCurrentScreen().findElementByName("hotslot" + pos) != null)
+	if(this.nifty.getCurrentScreen().findElementByName("hotslot" + pos) != null)
 	{
 	    NiftyImage img;
 	    try
@@ -308,7 +308,7 @@ public class Gui implements ScreenController
 		img = this.nifty.getRenderEngine().createImage(
 			this.nifty.getCurrentScreen(), imagePath, false);
 	    }
-	    catch (AssetNotFoundException e)
+	    catch(AssetNotFoundException e)
 	    {
 		imagePath = "assets/textures/inventory/icons/blank.png";
 		img = this.nifty.getRenderEngine().createImage(
@@ -341,7 +341,7 @@ public class Gui implements ScreenController
 	{
 	    dB.build(nifty, this.nifty.getCurrentScreen(), dragSlot);
 	}
-	catch (AssetNotFoundException e)
+	catch(AssetNotFoundException e)
 	{
 	    ib.filename("assets/textures/inventory/icons/blank.png");
 	    dB.build(nifty, this.nifty.getCurrentScreen(), dragSlot);
@@ -363,7 +363,7 @@ public class Gui implements ScreenController
     
     private void syncHotBars(boolean popupClosing)
     {
-	if (popupClosing)
+	if(popupClosing)
 	    syncHotSpacetoBar();
 	else
 	    syncHotBartoSpace();
@@ -371,13 +371,13 @@ public class Gui implements ScreenController
     
     private void syncHotSpacetoBar()
     {
-	for (int i = 0; i < 9; i++)
+	for(int i = 0; i < 9; i++)
 	{
 	    Element hotbarDropSlot = this.nifty.getScreen("hud")
 		    .findElementByName("hotslot" + i + "drop");
 	    Element hotspaceDrag = inventoryPopup.findElementByName("hotspace-"
 		    + i);
-	    if (hotspaceDrag != null)
+	    if(hotspaceDrag != null)
 	    {
 		NiftyImage img = inventoryPopup
 			.findElementByName("hotspace-" + i + "img")
@@ -386,8 +386,7 @@ public class Gui implements ScreenController
 			.findElementByName("hotspace-" + i + "contents")
 			.getRenderer(TextRenderer.class).getOriginalText();
 		
-		if (this.nifty.getScreen("hud")
-			.findElementByName("hotslot" + i) == null)
+		if(this.nifty.getScreen("hud").findElementByName("hotslot" + i) == null)
 		{
 		    DraggableBuilder dB = new DraggableBuilder("hotslot" + i);
 		    dB.childLayoutCenter();
@@ -423,14 +422,14 @@ public class Gui implements ScreenController
     
     private void syncHotBartoSpace()
     {
-	for (int i = 0; i < 10; i++)
+	for(int i = 0; i < 10; i++)
 	{
 	    
 	    Element hotspaceDropSlot = inventoryPopup
 		    .findElementByName("hotspace" + i);
 	    Element hotbarDrag = this.nifty.getCurrentScreen()
 		    .findElementByName("hotslot" + i);
-	    if (hotbarDrag != null)
+	    if(hotbarDrag != null)
 	    {
 		NiftyImage img = this.nifty.getCurrentScreen()
 			.findElementByName("hotslot" + i + "img")
@@ -439,7 +438,7 @@ public class Gui implements ScreenController
 			.findElementByName("hotslot" + i + "contents")
 			.getRenderer(TextRenderer.class).getOriginalText();
 		
-		if (inventoryPopup.findElementByName("hotspace-" + i) == null)
+		if(inventoryPopup.findElementByName("hotspace-" + i) == null)
 		{
 		    DraggableBuilder dB = new DraggableBuilder("hotspace-" + i);
 		    dB.childLayoutCenter();
@@ -478,7 +477,7 @@ public class Gui implements ScreenController
     
     public void showPopup(PopupType type)
     {
-	switch (type)
+	switch(type)
 	{
 	    case INVENTORY:
 		nifty.showPopup(nifty.getCurrentScreen(),
@@ -508,7 +507,7 @@ public class Gui implements ScreenController
     
     public void closePopup(PopupType type)
     {
-	switch (type)
+	switch(type)
 	{
 	    case INVENTORY:
 		syncHotBars(true);
@@ -539,7 +538,7 @@ public class Gui implements ScreenController
 	    nifty.closePopup(nifty.getCurrentScreen().getTopMostPopup().getId());
 	    this.enableControl();
 	}
-	catch (Exception e)
+	catch(Exception e)
 	{
 	    ;
 	}

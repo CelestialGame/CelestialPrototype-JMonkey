@@ -46,13 +46,13 @@ public class LocalBlockManager
 			    BlockChunkControl chunk, Vector3i blockLocation,
 			    Face face)
 		    {
-			if (chunk.getBlockData().get(blockLocation)
+			if(chunk.getBlockData().get(blockLocation)
 				.getIsOnSurface())
 			{
-			    switch (chunk.getBlockPlanetFace(blockLocation))
+			    switch(chunk.getBlockPlanetFace(blockLocation))
 			    {
 				case TOP:
-				    switch (face)
+				    switch(face)
 				    {
 					case Top:
 					    return 0;
@@ -62,7 +62,7 @@ public class LocalBlockManager
 					    return 1;
 				    }
 				case BOTTOM:
-				    switch (face)
+				    switch(face)
 				    {
 					case Top:
 					    return 2;
@@ -72,7 +72,7 @@ public class LocalBlockManager
 					    return 3;
 				    }
 				case WEST:
-				    switch (face)
+				    switch(face)
 				    {
 					case Left:
 					    return 0;
@@ -82,7 +82,7 @@ public class LocalBlockManager
 					    return 4;
 				    }
 				case EAST:
-				    switch (face)
+				    switch(face)
 				    {
 					case Left:
 					    return 2;
@@ -92,7 +92,7 @@ public class LocalBlockManager
 					    return 5;
 				    }
 				case NORTH:
-				    switch (face)
+				    switch(face)
 				    {
 					case Back:
 					    return 0;
@@ -106,7 +106,7 @@ public class LocalBlockManager
 					    return 1;
 				    }
 				case SOUTH:
-				    switch (face)
+				    switch(face)
 				    {
 					case Front:
 					    return 0;
@@ -204,16 +204,16 @@ public class LocalBlockManager
 			    BlockChunkControl chunk, Vector3i blockLocation,
 			    Face face)
 		    {
-			for (Vector3i loc : chunk.getTerrain()
+			for(Vector3i loc : chunk.getTerrain()
 				.getDynamicBlocks().keySet())
 			{
-			    if (loc.equals(blockLocation))
-				if (chunk.getTerrain().getDynamicBlocks()
+			    if(loc.equals(blockLocation))
+				if(chunk.getTerrain().getDynamicBlocks()
 					.get(loc) instanceof Block_Furnace)
 				{
-				    if (((Block_Furnace) chunk.getTerrain()
+				    if(((Block_Furnace) chunk.getTerrain()
 					    .getDynamicBlocks().get(loc)).inUse)
-					switch (face)
+					switch(face)
 					{
 					    case Top:
 						return 1;
@@ -233,7 +233,7 @@ public class LocalBlockManager
 				}
 			    break;
 			}
-			switch (face)
+			switch(face)
 			{
 			    case Top:
 				return 1;

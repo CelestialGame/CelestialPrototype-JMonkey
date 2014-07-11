@@ -90,18 +90,18 @@ public enum GameBlock
     {
 	try
 	{
-	    if (iconpath == null)
+	    if(iconpath == null)
 	    {
 		return ImageIO.read(this.getClass().getResourceAsStream(
 			"assets/textures/inventory/icons/blank.png"));
 	    }
 	    return ImageIO.read(this.getClass().getResourceAsStream(iconpath));
 	}
-	catch (IOException e)
+	catch(IOException e)
 	{
 	    return null;
 	}
-	catch (IllegalArgumentException e)
+	catch(IllegalArgumentException e)
 	{
 	    return null;
 	}
@@ -137,9 +137,9 @@ public enum GameBlock
     
     public static GameBlock getBlockByClass(Class<? extends Block> blockClass)
     {
-	for (GameBlock b : values())
+	for(GameBlock b : values())
 	{
-	    if (b.getBClass().equals(blockClass))
+	    if(b.getBClass().equals(blockClass))
 		return b;
 	}
 	return null;
@@ -147,9 +147,9 @@ public enum GameBlock
     
     public static GameBlock getBlockByType(BlockType type)
     {
-	for (GameBlock b : values())
+	for(GameBlock b : values())
 	{
-	    if (BlockManager.getInstance().getType(b.getBClass()).equals(type))
+	    if(BlockManager.getInstance().getType(b.getBClass()).equals(type))
 		return b;
 	}
 	return null;

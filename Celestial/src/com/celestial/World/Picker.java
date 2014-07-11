@@ -43,13 +43,13 @@ public class Picker
 		new SectorCoord(0, 0, 0), 0, 0).getTerrControl();
 	CollisionResults results = getRayCastingResults(terrainNode, parent,
 		cam);
-	if (results.size() > 0)
+	if(results.size() > 0)
 	{
 	    
 	    Vector3f collisionContactPoint = results.getClosestCollision()
 		    .getContactPoint();
 	    
-	    if (collisionContactPoint == null)
+	    if(collisionContactPoint == null)
 		return null;
 	    
 	    values[0] = collisionContactPoint;
@@ -72,7 +72,7 @@ public class Picker
 	    
 	    Vector3i blockPoint = BlockNavigator.getPointedBlockLocation(
 		    terrainControl, relContactPoint, getNeighborLocation);
-	    if (blockPoint == null)
+	    if(blockPoint == null)
 		return null;
 	    values[1] = blockPoint;
 	    
@@ -99,7 +99,7 @@ public class Picker
 	String xs = new String(x + "");
 	String ys = new String(y + "");
 	String zs = new String(z + "");
-	if (xs == null || ys == null || zs == null || xs.equals("NaN")
+	if(xs == null || ys == null || zs == null || xs.equals("NaN")
 		|| ys.equals("NaN") || zs.equals("NaN"))
 	    return vec;
 	float xd = Float.parseFloat("0."
@@ -112,118 +112,118 @@ public class Picker
 	Vector3f newvec = vec.clone();
 	int greatest = 0, smallest = 0;
 	
-	if ((xd > yd && xd > zd))
+	if((xd > yd && xd > zd))
 	{
 	    greatest = 0;
 	}
-	else if ((yd > xd && yd > zd))
+	else if((yd > xd && yd > zd))
 	{
 	    greatest = 1;
 	}
-	else if ((zd > xd && zd > yd))
+	else if((zd > xd && zd > yd))
 	{
 	    greatest = 2;
 	}
 	
-	if ((xd < yd && xd < zd))
+	if((xd < yd && xd < zd))
 	{
 	    smallest = 0;
 	}
-	else if ((yd < xd && yd < zd))
+	else if((yd < xd && yd < zd))
 	{
 	    smallest = 1;
 	}
-	else if ((zd < xd && zd < yd))
+	else if((zd < xd && zd < yd))
 	{
 	    smallest = 2;
 	}
 	
-	if (greatest == 0 && smallest == 1) // xy
+	if(greatest == 0 && smallest == 1) // xy
 	{
 	    int ground = StrictMath.round(x);
 	    int sround = StrictMath.round(y);
 	    
-	    if (ground % 3 == 0 && sround % 3 == 0)
-		if (Math.abs(x - ground) < Math.abs(y - sround))
+	    if(ground % 3 == 0 && sround % 3 == 0)
+		if(Math.abs(x - ground) < Math.abs(y - sround))
 		    newvec = new Vector3f(ground, y, z);
 		else
 		    newvec = new Vector3f(x, sround, z);
-	    else if (ground % 3 == 0)
+	    else if(ground % 3 == 0)
 		newvec = new Vector3f(ground, y, z);
 	    else
 		newvec = new Vector3f(x, sround, z);
 	}
-	else if (greatest == 0 && smallest == 2) // xz
+	else if(greatest == 0 && smallest == 2) // xz
 	{
 	    int ground = StrictMath.round(x);
 	    int sround = StrictMath.round(z);
 	    
-	    if (ground % 3 == 0 && sround % 3 == 0)
-		if (Math.abs(x - ground) < Math.abs(z - sround))
+	    if(ground % 3 == 0 && sround % 3 == 0)
+		if(Math.abs(x - ground) < Math.abs(z - sround))
 		    newvec = new Vector3f(ground, y, z);
 		else
 		    newvec = new Vector3f(x, y, sround);
-	    else if (ground % 3 == 0)
+	    else if(ground % 3 == 0)
 		newvec = new Vector3f(ground, y, z);
 	    else
 		newvec = new Vector3f(x, y, sround);
 	}
-	else if (greatest == 1 && smallest == 0) // yx
+	else if(greatest == 1 && smallest == 0) // yx
 	{
 	    int ground = StrictMath.round(y);
 	    int sround = StrictMath.round(x);
 	    
-	    if (ground % 3 == 0 && sround % 3 == 0)
-		if (Math.abs(y - ground) < Math.abs(x - sround))
+	    if(ground % 3 == 0 && sround % 3 == 0)
+		if(Math.abs(y - ground) < Math.abs(x - sround))
 		    newvec = new Vector3f(x, ground, z);
 		else
 		    newvec = new Vector3f(sround, y, z);
-	    else if (ground % 3 == 0)
+	    else if(ground % 3 == 0)
 		newvec = new Vector3f(x, ground, z);
 	    else
 		newvec = new Vector3f(sround, y, z);
 	}
-	else if (greatest == 1 && smallest == 2) // yz
+	else if(greatest == 1 && smallest == 2) // yz
 	{
 	    int ground = StrictMath.round(y);
 	    int sround = StrictMath.round(z);
 	    
-	    if (ground % 3 == 0 && sround % 3 == 0)
-		if (Math.abs(y - ground) < Math.abs(z - sround))
+	    if(ground % 3 == 0 && sround % 3 == 0)
+		if(Math.abs(y - ground) < Math.abs(z - sround))
 		    newvec = new Vector3f(x, ground, z);
 		else
 		    newvec = new Vector3f(x, y, sround);
-	    else if (ground % 3 == 0)
+	    else if(ground % 3 == 0)
 		newvec = new Vector3f(x, ground, z);
 	    else
 		newvec = new Vector3f(x, y, sround);
 	}
-	else if (greatest == 2 && smallest == 0) // zx
+	else if(greatest == 2 && smallest == 0) // zx
 	{
 	    int ground = StrictMath.round(z);
 	    int sround = StrictMath.round(x);
 	    
-	    if (ground % 3 == 0 && sround % 3 == 0)
-		if (Math.abs(z - ground) < Math.abs(x - sround))
+	    if(ground % 3 == 0 && sround % 3 == 0)
+		if(Math.abs(z - ground) < Math.abs(x - sround))
 		    newvec = new Vector3f(x, y, ground);
 		else
 		    newvec = new Vector3f(sround, y, z);
-	    else if (ground % 3 == 0)
+	    else if(ground % 3 == 0)
 		newvec = new Vector3f(x, y, ground);
 	    else
 		newvec = new Vector3f(sround, y, z);
 	}
-	else if (greatest == 2 && smallest == 1) // zy
+	else if(greatest == 2 && smallest == 1) // zy
 	{
 	    int ground = StrictMath.round(z);
 	    int sround = StrictMath.round(y);
 	    
-	    if (ground % 3 == 0 && sround % 3 == 0)
-		if (Math.abs(z - ground) < Math.abs(y - sround))
+	    if(ground % 3 == 0 && sround % 3 == 0)
+		if(Math.abs(z - ground) < Math.abs(y - sround))
 		    newvec = new Vector3f(x, y, ground);
 		else
 		    newvec = new Vector3f(x, sround, z);
-	    else if (ground % 3 == 0)
+	    else if(ground % 3 == 0)
 		newvec = new Vector3f(x, y, ground);
 	    else
 		newvec = new Vector3f(x, sround, z);

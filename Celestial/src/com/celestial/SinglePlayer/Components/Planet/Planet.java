@@ -103,7 +103,7 @@ public class Planet
 		new Listener());
 	this.seed = seed;
 	
-	if (diameter % 2 == 0)
+	if(diameter % 2 == 0)
 	{
 	    System.err.println("Planet Diameter MUST be odd number!");
 	    return;
@@ -138,33 +138,33 @@ public class Planet
 	
 	/* PLANET TYPE DETERMINATION */
 	
-	if (this.starNode.getWorldTranslation().distance(
+	if(this.starNode.getWorldTranslation().distance(
 		this.planetNode.getWorldTranslation()) >= 3500F
 		&& this.starNode.getWorldTranslation().distance(
 			this.planetNode.getWorldTranslation()) <= 4000F)
 	{
 	    this.type = PlanetType.HABITABLE;
 	}
-	else if (this.starNode.getWorldTranslation().distance(
+	else if(this.starNode.getWorldTranslation().distance(
 		this.planetNode.getWorldTranslation()) <= 3500F
 		&& this.starNode.getWorldTranslation().distance(
 			this.planetNode.getWorldTranslation()) >= 2500F)
 	{
 	    this.type = PlanetType.INNER;
 	}
-	else if (this.starNode.getWorldTranslation().distance(
+	else if(this.starNode.getWorldTranslation().distance(
 		this.planetNode.getWorldTranslation()) <= 2500F)
 	{
 	    this.type = PlanetType.INFERNO;
 	}
-	else if (this.starNode.getWorldTranslation().distance(
+	else if(this.starNode.getWorldTranslation().distance(
 		this.planetNode.getWorldTranslation()) <= 5000F
 		&& this.starNode.getWorldTranslation().distance(
 			this.planetNode.getWorldTranslation()) >= 4000F)
 	{
 	    this.type = PlanetType.OUTER;
 	}
-	else if (this.starNode.getWorldTranslation().distance(
+	else if(this.starNode.getWorldTranslation().distance(
 		this.planetNode.getWorldTranslation()) >= 5000F)
 	{
 	    this.type = PlanetType.FRIGID;
@@ -187,20 +187,20 @@ public class Planet
 			.getControl(RigidBodyControl.class);
 		RigidBodyControl transparentRigidBodyControl = transparentGeometry
 			.getControl(RigidBodyControl.class);
-		if (optimizedRigidBodyControl != null)
+		if(optimizedRigidBodyControl != null)
 		{
 		    bulletAppState.getPhysicsSpace().remove(
 			    optimizedRigidBodyControl);
 		    optimizedGeometry.removeControl(RigidBodyControl.class);
 		}
-		if (transparentRigidBodyControl != null)
+		if(transparentRigidBodyControl != null)
 		{
 		    bulletAppState.getPhysicsSpace().remove(
 			    transparentRigidBodyControl);
 		    transparentGeometry.removeControl(RigidBodyControl.class);
 		}
 		
-		if (optimizedGeometry.getTriangleCount() > 0)
+		if(optimizedGeometry.getTriangleCount() > 0)
 		{
 		    optimizedRigidBodyControl = new RigidBodyControl(0);
 		    optimizedGeometry.addControl(optimizedRigidBodyControl);
@@ -211,7 +211,7 @@ public class Planet
 				    optimizedGeometry.getMesh()));
 		}
 		
-		if (transparentGeometry.getTriangleCount() > 0)
+		if(transparentGeometry.getTriangleCount() > 0)
 		{
 		    transparentRigidBodyControl = new RigidBodyControl(0);
 		    transparentGeometry.addControl(transparentRigidBodyControl);
@@ -235,7 +235,7 @@ public class Planet
 	terrainNode.setShadowMode(ShadowMode.CastAndReceive);
 	
 	/* ATMOSPHERE */
-	if (this.type.hasAtmosphere())
+	if(this.type.hasAtmosphere())
 	{
 	    this.atmospherebox = new Box(this.diameter * CHUNK_SIZE * 3
 		    * atmosphereSizeFactor, this.diameter * CHUNK_SIZE * 3
@@ -245,10 +245,10 @@ public class Planet
 	    this.atmospheremat = new Material(portal.getAssetManager(),
 		    "Common/MatDefs/Misc/Unshaded.j3md");
 	    
-	    if (this.type.equals(PlanetType.HABITABLE))
+	    if(this.type.equals(PlanetType.HABITABLE))
 		this.atmospheremat.setColor("Color", new ColorRGBA(0.3f, 0.5f,
 			1, 0.75f));
-	    else if (this.type.equals(PlanetType.INNER))
+	    else if(this.type.equals(PlanetType.INNER))
 		this.atmospheremat.setColor("Color", new ColorRGBA(0.68f, 0.4f,
 			0.09f, 0.75f));
 	    else
@@ -274,7 +274,7 @@ public class Planet
 	{
 	    return this.atmospherebox.getXExtent() * 2;
 	}
-	catch (NullPointerException e)
+	catch(NullPointerException e)
 	{
 	    // The silly planet may not have an atmosphere, so calculate one
 	    return this.diameter * CHUNK_SIZE * 3 * atmosphereSizeFactor;
@@ -323,7 +323,7 @@ public class Planet
     
     public float getDiameterAsFloat(boolean includeAtmosphere)
     {
-	if (includeAtmosphere)
+	if(includeAtmosphere)
 	    return this.diameter * CHUNK_SIZE * 3 * atmosphereSizeFactor;
 	else
 	    return this.diameter * CHUNK_SIZE * 3;
@@ -331,7 +331,7 @@ public class Planet
     
     public float getRadiusAsFloat(boolean includeAtmosphere)
     {
-	if (includeAtmosphere)
+	if(includeAtmosphere)
 	    return (this.centerofdiam * CHUNK_SIZE - (CHUNK_SIZE / 2)) * 3
 		    * atmosphereSizeFactor;
 	else
@@ -446,7 +446,7 @@ public class Planet
     
     public PlanetType getType()
     {
-	if (this.type == null)
+	if(this.type == null)
 	    return null;
 	return this.type;
     }

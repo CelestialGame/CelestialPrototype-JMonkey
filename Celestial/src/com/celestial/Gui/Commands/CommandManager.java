@@ -37,7 +37,7 @@ public class CommandManager
     
     public void registerCommand(String command)
     {
-	if (!this.commands.contains(command))
+	if(!this.commands.contains(command))
 	{
 	    this.commands.add(command);
 	}
@@ -48,37 +48,37 @@ public class CommandManager
 	String command = commandInfo.getCommand();
 	String[] args = commandInfo.getArguments();
 	
-	if (!commands.contains(command))
+	if(!commands.contains(command))
 	{
 	    this.console.outputError("Invalid command.");
 	}
 	else
 	{
-	    if (command.equalsIgnoreCase("help"))
+	    if(command.equalsIgnoreCase("help"))
 	    {
 		StringBuilder sb = new StringBuilder();
-		for (String com : commands)
+		for(String com : commands)
 		{
 		    sb.append(com + " ");
 		}
 		this.console.output("Commands: " + sb.toString());
 	    }
-	    else if (command.equalsIgnoreCase("generateEntire"))
+	    else if(command.equalsIgnoreCase("generateEntire"))
 	    {
-		if (args.length == 0)
+		if(args.length == 0)
 		{
 		    this.console.outputError("Invalid command.");
 		    this.console.outputError("generateEntire [bool]");
 		}
-		else if (args.length == 1)
-		    if (parent.getPortal() instanceof SPPortal)
+		else if(args.length == 1)
+		    if(parent.getPortal() instanceof SPPortal)
 		    {
 			try
 			{
 			    SPPortal.generateEntire = Boolean
 				    .parseBoolean(args[0]);
 			}
-			catch (Exception e)
+			catch(Exception e)
 			{
 			    this.console.outputError("Invalid command.");
 			    this.console.outputError("generateEntire [bool]");
@@ -94,14 +94,13 @@ public class CommandManager
 		    this.console.outputError("generateEntire [bool]");
 		}
 	    }
-	    else if (command.equalsIgnoreCase("noclip"))
+	    else if(command.equalsIgnoreCase("noclip"))
 	    {
-		if (args.length == 0)
+		if(args.length == 0)
 		{
-		    if (this.parent.portal instanceof SPPortal)
+		    if(this.parent.portal instanceof SPPortal)
 		    {
-			if (parent.portal.player.getBulletAppState()
-				.isEnabled())
+			if(parent.portal.player.getBulletAppState().isEnabled())
 			{
 			    parent.portal.player.getBulletAppState()
 				    .setEnabled(false);
@@ -133,37 +132,37 @@ public class CommandManager
 		    this.console.outputError("generateEntire [bool]");
 		}
 	    }
-	    else if (command.equalsIgnoreCase("show"))
+	    else if(command.equalsIgnoreCase("show"))
 	    {
-		if (args.length == 0)
+		if(args.length == 0)
 		{
 		    this.console.outputError("Invalid command.");
 		    this.console.outputError("show <var>");
 		}
-		else if (args[0].equalsIgnoreCase("renderstats"))
+		else if(args[0].equalsIgnoreCase("renderstats"))
 		{
 		    String[] labels = parent.app.getRenderer().getStatistics()
 			    .getLabels();
 		    int[] stats = new int[labels.length];
 		    parent.app.getRenderer().getStatistics().getData(stats);
-		    for (int i = 0; i < parent.app.getRenderer()
-			    .getStatistics().getLabels().length; i++)
+		    for(int i = 0; i < parent.app.getRenderer().getStatistics()
+			    .getLabels().length; i++)
 		    {
 			this.console.output(labels[i] + ": " + stats[i]);
 		    }
 		}
-		else if (args[0].equalsIgnoreCase("wireframe"))
+		else if(args[0].equalsIgnoreCase("wireframe"))
 		{
-		    if (wP == null)
+		    if(wP == null)
 			wP = new WireProcessor(parent.getAssetManager());
-		    if (!parent.getViewPort().getProcessors().contains(wP))
+		    if(!parent.getViewPort().getProcessors().contains(wP))
 			parent.getViewPort().addProcessor(wP);
 		    else
 			parent.getViewPort().removeProcessor(wP);
 		}
-		else if (args[0].equalsIgnoreCase("planetface"))
+		else if(args[0].equalsIgnoreCase("planetface"))
 		{
-		    if (this.parent.portal instanceof SPPortal)
+		    if(this.parent.portal instanceof SPPortal)
 		    {
 			this.console
 				.output(""

@@ -53,7 +53,7 @@ public class Celestial extends SimpleApplication
 	{
 	    Thread.sleep(500);
 	}
-	catch (InterruptedException ex)
+	catch(InterruptedException ex)
 	{
 	}
 	
@@ -97,7 +97,7 @@ public class Celestial extends SimpleApplication
     
     public void startGame(int type)
     {
-	if (type == Celestial.SINGLEPLAYER)
+	if(type == Celestial.SINGLEPLAYER)
 	{
 	    
 	    Celestial.portal = new SPPortal(this, rootNode, guiNode, cam,
@@ -109,7 +109,7 @@ public class Celestial extends SimpleApplication
 	    Celestial.portal = null;
 	}
 	
-	if (portal != null)
+	if(portal != null)
 	{
 	    flyCam.setEnabled(true);
 	    flyCam.setDragToRotate(false);
@@ -121,14 +121,14 @@ public class Celestial extends SimpleApplication
     @Override
     public void simpleUpdate(float tpf)
     {
-	if (portal != null)
+	if(portal != null)
 	    Celestial.portal.simpleUpdate(tpf);
     }
     
     @Override
     public void simpleRender(RenderManager rm)
     {
-	if (portal != null)
+	if(portal != null)
 	    Celestial.portal.simpleRender(rm);
     }
     

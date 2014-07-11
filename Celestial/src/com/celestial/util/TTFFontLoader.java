@@ -48,7 +48,7 @@ public class TTFFontLoader implements AssetLoader
     @Override
     public Object load(AssetInfo assetInfo) throws IOException
     {
-	if (assetInfo.getKey() instanceof FontKey)
+	if(assetInfo.getKey() instanceof FontKey)
 	{
 	    Graphics2D graphics = this.getGraphics();
 	    FontKey fontKey = (FontKey) assetInfo.getKey();
@@ -100,7 +100,7 @@ public class TTFFontLoader implements AssetLoader
 	    return Font.createFont(fontKey.getType(), assetInfo.openStream())
 		    .deriveFont(fontKey.getStyle(), fontKey.getSize());
 	}
-	catch (FontFormatException e)
+	catch(FontFormatException e)
 	{
 	    throw new IOException(e.getMessage(), e);
 	}
@@ -131,13 +131,13 @@ public class TTFFontLoader implements AssetLoader
 	result.bitmapFont.getCharSet().setRenderedSize(font.getSize());
 	result.charList = new ArrayList();
 	
-	while (i < glyphsAmount)
+	while(i < glyphsAmount)
 	{
 	    GlyphVector gv = font.createGlyphVector(
 		    graphics.getFontRenderContext(), chars);
 	    int glyphCode = gv.getGlyphCode(0);
 	    GlyphMetrics gm = gv.getGlyphMetrics(0);
-	    if (glyphCode != missingGlyphCode
+	    if(glyphCode != missingGlyphCode
 		    && glyphCode < glyphsAmount
 		    && result.bitmapFont.getCharSet().getCharacter(
 			    (int) chars[0]) == null)
@@ -163,7 +163,7 @@ public class TTFFontLoader implements AssetLoader
 			bitmapCharacter));
 		++i;
 	    }
-	    else if (Character.isWhitespace(chars[0]))
+	    else if(Character.isWhitespace(chars[0]))
 	    {
 		++i;
 	    }
@@ -198,21 +198,21 @@ public class TTFFontLoader implements AssetLoader
      */
     protected int parseBuffer(String buffer, int imageHeight)
     {
-	if (buffer == null || buffer.isEmpty())
+	if(buffer == null || buffer.isEmpty())
 	{
 	    return 0;
 	}
-	if (buffer.endsWith("%"))
+	if(buffer.endsWith("%"))
 	{
 	    String value = buffer.split("%")[0];
 	    float percent = Float.parseFloat(value);
-	    if (percent != 0.0f)
+	    if(percent != 0.0f)
 	    {
 		percent = 1.0f / percent;
 	    }
 	    return (int) Math.round(imageHeight * percent);
 	}
-	else if (buffer.endsWith("px"))
+	else if(buffer.endsWith("px"))
 	{
 	    String value = buffer.split("px")[0];
 	    return (int) Float.parseFloat(value);
@@ -255,7 +255,7 @@ public class TTFFontLoader implements AssetLoader
 	int xPos = 0;
 	int base = fontData.bitmapFont.getCharSet().getBase();
 	char[] chars = new char[1];
-	for (CharacterData characterData : fontData.charList)
+	for(CharacterData characterData : fontData.charList)
 	{
 	    chars[0] = characterData.character;
 	    characterData.bitmapCharacter.setXOffset(characterData.lsb);
@@ -300,7 +300,7 @@ public class TTFFontLoader implements AssetLoader
 	Material[] pages = new Material[textures.length];
 	MaterialDef spriteMat = (MaterialDef) assetInfo.getManager().loadAsset(
 		new AssetKey("Common/MatDefs/Gui/Gui.j3md"));
-	for (int i = 0; i < textures.length; ++i)
+	for(int i = 0; i < textures.length; ++i)
 	{
 	    Material mat = new Material(spriteMat);
 	    mat.setTexture("m_Texture", textures[i]);

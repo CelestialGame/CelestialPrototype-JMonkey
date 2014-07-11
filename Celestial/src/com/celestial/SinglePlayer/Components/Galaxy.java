@@ -49,13 +49,13 @@ public class Galaxy
 	this.centerOfDepth = (int) Math.ceil((float) depth / 2);
 	this.space = new Space(portal);
 	
-	if (diameter % 2 == 0)
+	if(diameter % 2 == 0)
 	{
 	    System.err.println("Galaxy Diameter MUST be odd number!");
 	    return;
 	}
 	
-	if (depth % 2 == 0)
+	if(depth % 2 == 0)
 	{
 	    System.err.println("Galaxy Depth MUST be odd number!");
 	    return;
@@ -66,11 +66,11 @@ public class Galaxy
     
     private void generate()
     {
-	for (int i = 0; i < diameter; i++)
+	for(int i = 0; i < diameter; i++)
 	{
-	    for (int j = 0; j < diameter; j++)
+	    for(int j = 0; j < diameter; j++)
 	    {
-		for (int k = 0; k < depth; k++)
+		for(int k = 0; k < depth; k++)
 		{
 		    // TODO random name generation
 		    this.createSectorAt(i - (this.centerOfDiameter - 1), j
@@ -88,7 +88,7 @@ public class Galaxy
     
     private void createSectorAt(SectorCoord coord, String name)
     {
-	if (this.sectorMap.get(coord) == null)
+	if(this.sectorMap.get(coord) == null)
 	{
 	    int amountOfSystems = 1 + (int) Math.random()
 		    * this.maxSystemsPerSector;
@@ -114,7 +114,7 @@ public class Galaxy
     
     public Planet getPlanet(SectorCoord coord, int index, int index2)
     {
-	if (this.getSectorAt(coord) != null)
+	if(this.getSectorAt(coord) != null)
 	    return this.getSectorAt(coord).getSolarSystem(index)
 		    .getPlanet(index2);
 	else

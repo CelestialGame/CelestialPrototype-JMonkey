@@ -31,11 +31,11 @@ public class InventoryItem
 	{
 	    Celestial.app.getAssetManager().loadTexture(icon);
 	}
-	catch (AssetNotFoundException e)
+	catch(AssetNotFoundException e)
 	{
 	    this.icon = "assets/textures/inventory/icons/blank.png";
 	}
-	catch (NullPointerException e)
+	catch(NullPointerException e)
 	{
 	    this.icon = "assets/textures/inventory/icons/blank.png";
 	}
@@ -49,11 +49,11 @@ public class InventoryItem
 	    this.tool = tool;
 	    this.toolInstance = tool.getToolClass().newInstance();
 	}
-	catch (InstantiationException e1)
+	catch(InstantiationException e1)
 	{
 	    e1.printStackTrace();
 	}
-	catch (IllegalAccessException e1)
+	catch(IllegalAccessException e1)
 	{
 	    e1.printStackTrace();
 	}
@@ -64,11 +64,11 @@ public class InventoryItem
 	{
 	    Celestial.app.getAssetManager().loadTexture(icon);
 	}
-	catch (AssetNotFoundException e)
+	catch(AssetNotFoundException e)
 	{
 	    this.icon = "assets/textures/inventory/icons/blank.png";
 	}
-	catch (NullPointerException e)
+	catch(NullPointerException e)
 	{
 	    this.icon = "assets/textures/inventory/icons/blank.png";
 	}

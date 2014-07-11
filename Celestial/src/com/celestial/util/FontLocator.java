@@ -43,7 +43,7 @@ public class FontLocator implements AssetLocator
     
     public AssetInfo locate(AssetManager manager, AssetKey key)
     {
-	if (!key.getName().startsWith("font("))
+	if(!key.getName().startsWith("font("))
 	{
 	    return null;
 	}
@@ -59,18 +59,18 @@ public class FontLocator implements AssetLocator
 	    int size = Integer.parseInt(params[0].trim());
 	    Color color;
 	    int style = Font.PLAIN;
-	    if (params.length > 1)
+	    if(params.length > 1)
 	    {
 		color = new Color(Integer.decode(params[1].trim()));
 		
-		if (params.length > 2)
+		if(params.length > 2)
 		{
 		    String styleString = params[2].trim();
-		    if (styleString.toLowerCase().equals("bold"))
+		    if(styleString.toLowerCase().equals("bold"))
 		    {
 			style = Font.BOLD;
 		    }
-		    else if (styleString.toLowerCase().equals("italic"))
+		    else if(styleString.toLowerCase().equals("italic"))
 		    {
 			style = Font.ITALIC;
 		    }

@@ -112,7 +112,7 @@ public class InventoryDrop
 	Vector3f P1 = planet.getOriginalPlanetTranslation();
 	
 	Vector3f itemP = null;
-	if (this.planet.getBulletAppState().isEnabled())
+	if(this.planet.getBulletAppState().isEnabled())
 	    itemP = this.itemdrop.getWorldTranslation();
 	else
 	    return PlanetFace.UNKNOWN;
@@ -127,9 +127,9 @@ public class InventoryDrop
 	float y = rot2P.y;
 	float z = rot2P.z;
 	
-	if (Math.abs(y) > Math.abs(x) && Math.abs(y) > Math.abs(z))
+	if(Math.abs(y) > Math.abs(x) && Math.abs(y) > Math.abs(z))
 	{
-	    if (y < 0)
+	    if(y < 0)
 	    {
 		return PlanetFace.BOTTOM;
 	    }
@@ -138,9 +138,9 @@ public class InventoryDrop
 		return PlanetFace.TOP;
 	    }
 	}
-	else if (Math.abs(x) > Math.abs(z))
+	else if(Math.abs(x) > Math.abs(z))
 	{
-	    if (x < 0)
+	    if(x < 0)
 	    {
 		return PlanetFace.WEST;
 	    }
@@ -149,9 +149,9 @@ public class InventoryDrop
 		return PlanetFace.EAST;
 	    }
 	}
-	else if (Math.abs(z) > Math.abs(x))
+	else if(Math.abs(z) > Math.abs(x))
 	{
-	    if (z < 0)
+	    if(z < 0)
 	    {
 		return PlanetFace.NORTH;
 	    }

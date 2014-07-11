@@ -58,7 +58,7 @@ public class Player extends BetterCharacterControl
     
     public void setVisibleToClient(boolean visible)
     {
-	if (visible)
+	if(visible)
 	    this.playerSpatial.setCullHint(CullHint.Never);
 	else
 	    this.playerSpatial.setCullHint(CullHint.Always);
@@ -99,12 +99,12 @@ public class Player extends BetterCharacterControl
     {
 	super.update(tpf);
 	
-	if (getPlanet() != null)
+	if(getPlanet() != null)
 	{
 	    
 	    Vector3f translation = getLocation();
 	    
-	    if (this.translationUpdate != null)
+	    if(this.translationUpdate != null)
 	    {
 		translation.addLocal(translationUpdate);
 		this.translationUpdate = null;
@@ -148,7 +148,7 @@ public class Player extends BetterCharacterControl
     
     public void setPlanet(Planet planet)
     {
-	if (planet != null)
+	if(planet != null)
 	{
 	    this.setBulletAppState(planet.getBulletAppState());
 	    planet.getPlanetNode().attachChild(this.getNode());
@@ -156,7 +156,7 @@ public class Player extends BetterCharacterControl
 	}
 	else
 	{
-	    if (this.planet != null)
+	    if(this.planet != null)
 	    {
 		this.setBulletAppState(portal.galaxy.getSpace()
 			.getBulletAppState());
@@ -195,7 +195,7 @@ public class Player extends BetterCharacterControl
     {
 	Quaternion q = new Quaternion();
 	int x = 0, y = 0, z = 0;
-	switch (face)
+	switch(face)
 	{
 	    case TOP:
 		x = 0;
@@ -245,11 +245,11 @@ public class Player extends BetterCharacterControl
     {
 	float closestdist = -1;
 	Planet closestplanet = null;
-	for (Planet planet : getSystem().getPlanets())
+	for(Planet planet : getSystem().getPlanets())
 	{
 	    float distance = getLocation().distance(
 		    planet.getPlanetNode().getWorldTranslation());
-	    if (distance < closestdist || closestdist == -1)
+	    if(distance < closestdist || closestdist == -1)
 	    {
 		closestdist = distance;
 		closestplanet = planet;
@@ -260,7 +260,7 @@ public class Player extends BetterCharacterControl
     
     public float getDistanceFromPlanet(Planet planet)
     {
-	if (planet != null)
+	if(planet != null)
 	{
 	    return getLocation().distance(
 		    planet.getPlanetNode().getWorldTranslation());
@@ -270,7 +270,7 @@ public class Player extends BetterCharacterControl
     
     public float getDistanceFromPlanet(Planet planet, Vector3f location)
     {
-	if (planet != null)
+	if(planet != null)
 	{
 	    return location.distance(planet.getPlanetNode()
 		    .getWorldTranslation());
@@ -282,7 +282,7 @@ public class Player extends BetterCharacterControl
     {
 	Vector3f difference = this.getLocation().subtract(
 		planet.getCurrentPlanetTranslation());
-	if (difference.getX() > -1 * (planet.getAtmosphereDiameter() / 2)
+	if(difference.getX() > -1 * (planet.getAtmosphereDiameter() / 2)
 		&& difference.getX() < (planet.getAtmosphereDiameter() / 2)
 		&& difference.getY() > -1
 			* (planet.getAtmosphereDiameter() / 2)
@@ -297,14 +297,14 @@ public class Player extends BetterCharacterControl
     
     public boolean isWithinLoadingDistance(Planet planet)
     {
-	if (this.getDistanceFromPlanet(planet) <= planet.getRadiusAsFloat(true) + 200)
+	if(this.getDistanceFromPlanet(planet) <= planet.getRadiusAsFloat(true) + 200)
 	    return true;
 	return false;
     }
     
     public boolean isWithinLoadingDistance(Planet planet, Vector3f location)
     {
-	if (this.getDistanceFromPlanet(planet, location) <= planet
+	if(this.getDistanceFromPlanet(planet, location) <= planet
 		.getRadiusAsFloat(true) + 200)
 	    return true;
 	return false;
@@ -315,7 +315,7 @@ public class Player extends BetterCharacterControl
 	Vector3f P1 = planet.getOriginalPlanetTranslation();
 	
 	Vector3f playerP = null;
-	if (this.getBulletAppState().isEnabled())
+	if(this.getBulletAppState().isEnabled())
 	    playerP = getLocation();
 	else
 	    playerP = portal.getCam().getLocation();
@@ -330,9 +330,9 @@ public class Player extends BetterCharacterControl
 	float y = rot2P.y;
 	float z = rot2P.z;
 	
-	if (Math.abs(y) > Math.abs(x) && Math.abs(y) > Math.abs(z))
+	if(Math.abs(y) > Math.abs(x) && Math.abs(y) > Math.abs(z))
 	{
-	    if (y < 0)
+	    if(y < 0)
 	    {
 		return PlanetFace.BOTTOM;
 	    }
@@ -341,9 +341,9 @@ public class Player extends BetterCharacterControl
 		return PlanetFace.TOP;
 	    }
 	}
-	else if (Math.abs(x) > Math.abs(z))
+	else if(Math.abs(x) > Math.abs(z))
 	{
-	    if (x < 0)
+	    if(x < 0)
 	    {
 		return PlanetFace.WEST;
 	    }
@@ -352,9 +352,9 @@ public class Player extends BetterCharacterControl
 		return PlanetFace.EAST;
 	    }
 	}
-	else if (Math.abs(z) > Math.abs(x))
+	else if(Math.abs(z) > Math.abs(x))
 	{
-	    if (z < 0)
+	    if(z < 0)
 	    {
 		return PlanetFace.NORTH;
 	    }
@@ -406,7 +406,7 @@ public class Player extends BetterCharacterControl
     
     public void setBulletAppState(BulletAppState state)
     {
-	if (this.bulletAppState != null)
+	if(this.bulletAppState != null)
 	{
 	    this.bulletAppState.getPhysicsSpace().remove(this);
 	}

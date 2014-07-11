@@ -69,7 +69,7 @@ public class Empire
     
     public void discoveredEmpire(Empire empire)
     {
-	switch (this.defaultStance)
+	switch(this.defaultStance)
 	{
 	    case HOSTILE:
 		this.enemyEmpires.add(empire);

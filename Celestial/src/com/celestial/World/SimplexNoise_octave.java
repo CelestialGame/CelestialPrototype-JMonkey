@@ -86,7 +86,7 @@ public class SimplexNoise_octave
     {
 	p = p_supply.clone();
 	
-	if (seed == RANDOMSEED)
+	if(seed == RANDOMSEED)
 	{
 	    Random rand = new Random();
 	    seed = rand.nextInt();
@@ -97,7 +97,7 @@ public class SimplexNoise_octave
 	
 	// the seed determines the swaps that occur between the default order
 	// and the order we're actually going to use
-	for (int i = 0; i < NUMBEROFSWAPS; i++)
+	for(int i = 0; i < NUMBEROFSWAPS; i++)
 	{
 	    int swapFrom = rand.nextInt(p.length);
 	    int swapTo = rand.nextInt(p.length);
@@ -107,7 +107,7 @@ public class SimplexNoise_octave
 	    p[swapTo] = temp;
 	}
 	
-	for (int i = 0; i < 512; i++)
+	for(int i = 0; i < 512; i++)
 	{
 	    perm[i] = p[i & 255];
 	    permMod12[i] = (short) (perm[i] % 12);
@@ -161,7 +161,7 @@ public class SimplexNoise_octave
 	// Determine which simplex we are in.
 	int i1, j1; // Offsets for second (middle) corner of simplex in (i,j)
 		    // coords
-	if (x0 > y0)
+	if(x0 > y0)
 	{
 	    i1 = 1;
 	    j1 = 0;
@@ -171,9 +171,9 @@ public class SimplexNoise_octave
 	    i1 = 0;
 	    j1 = 1;
 	} // upper triangle, YX order: (0,0)->(0,1)->(1,1)
-	// A step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and
-	// a step of (0,1) in (i,j) means a step of (-c,1-c) in (x,y), where
-	// c = (3-sqrt(3))/6
+	  // A step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and
+	  // a step of (0,1) in (i,j) means a step of (-c,1-c) in (x,y), where
+	  // c = (3-sqrt(3))/6
 	double x1 = x0 - i1 + G2; // Offsets for middle corner in (x,y) unskewed
 				  // coords
 	double y1 = y0 - j1 + G2;
@@ -188,7 +188,7 @@ public class SimplexNoise_octave
 	int gi2 = permMod12[ii + 1 + perm[jj + 1]];
 	// Calculate the contribution from the three corners
 	double t0 = 0.5 - x0 * x0 - y0 * y0;
-	if (t0 < 0)
+	if(t0 < 0)
 	    n0 = 0.0;
 	else
 	{
@@ -197,7 +197,7 @@ public class SimplexNoise_octave
 						    // 2D gradient
 	}
 	double t1 = 0.5 - x1 * x1 - y1 * y1;
-	if (t1 < 0)
+	if(t1 < 0)
 	    n1 = 0.0;
 	else
 	{
@@ -205,7 +205,7 @@ public class SimplexNoise_octave
 	    n1 = t1 * t1 * dot(grad3[gi1], x1, y1);
 	}
 	double t2 = 0.5 - x2 * x2 - y2 * y2;
-	if (t2 < 0)
+	if(t2 < 0)
 	    n2 = 0.0;
 	else
 	{
@@ -240,9 +240,9 @@ public class SimplexNoise_octave
 	int i1, j1, k1; // Offsets for second corner of simplex in (i,j,k)
 			// coords
 	int i2, j2, k2; // Offsets for third corner of simplex in (i,j,k) coords
-	if (x0 >= y0)
+	if(x0 >= y0)
 	{
-	    if (y0 >= z0)
+	    if(y0 >= z0)
 	    {
 		i1 = 1;
 		j1 = 0;
@@ -251,7 +251,7 @@ public class SimplexNoise_octave
 		j2 = 1;
 		k2 = 0;
 	    } // X Y Z order
-	    else if (x0 >= z0)
+	    else if(x0 >= z0)
 	    {
 		i1 = 1;
 		j1 = 0;
@@ -272,7 +272,7 @@ public class SimplexNoise_octave
 	}
 	else
 	{ // x0<y0
-	    if (y0 < z0)
+	    if(y0 < z0)
 	    {
 		i1 = 0;
 		j1 = 0;
@@ -281,7 +281,7 @@ public class SimplexNoise_octave
 		j2 = 1;
 		k2 = 1;
 	    } // Z Y X order
-	    else if (x0 < z0)
+	    else if(x0 < z0)
 	    {
 		i1 = 0;
 		j1 = 1;
@@ -327,7 +327,7 @@ public class SimplexNoise_octave
 	int gi3 = permMod12[ii + 1 + perm[jj + 1 + perm[kk + 1]]];
 	// Calculate the contribution from the four corners
 	double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
-	if (t0 < 0)
+	if(t0 < 0)
 	    n0 = 0.0;
 	else
 	{
@@ -335,7 +335,7 @@ public class SimplexNoise_octave
 	    n0 = t0 * t0 * dot(grad3[gi0], x0, y0, z0);
 	}
 	double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
-	if (t1 < 0)
+	if(t1 < 0)
 	    n1 = 0.0;
 	else
 	{
@@ -343,7 +343,7 @@ public class SimplexNoise_octave
 	    n1 = t1 * t1 * dot(grad3[gi1], x1, y1, z1);
 	}
 	double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
-	if (t2 < 0)
+	if(t2 < 0)
 	    n2 = 0.0;
 	else
 	{
@@ -351,7 +351,7 @@ public class SimplexNoise_octave
 	    n2 = t2 * t2 * dot(grad3[gi2], x2, y2, z2);
 	}
 	double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
-	if (t3 < 0)
+	if(t3 < 0)
 	    n3 = 0.0;
 	else
 	{
@@ -395,27 +395,27 @@ public class SimplexNoise_octave
 	int ranky = 0;
 	int rankz = 0;
 	int rankw = 0;
-	if (x0 > y0)
+	if(x0 > y0)
 	    rankx++;
 	else
 	    ranky++;
-	if (x0 > z0)
+	if(x0 > z0)
 	    rankx++;
 	else
 	    rankz++;
-	if (x0 > w0)
+	if(x0 > w0)
 	    rankx++;
 	else
 	    rankw++;
-	if (y0 > z0)
+	if(y0 > z0)
 	    ranky++;
 	else
 	    rankz++;
-	if (y0 > w0)
+	if(y0 > w0)
 	    ranky++;
 	else
 	    rankw++;
-	if (z0 > w0)
+	if(z0 > w0)
 	    rankz++;
 	else
 	    rankw++;
@@ -479,7 +479,7 @@ public class SimplexNoise_octave
 	int gi4 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1 + perm[ll + 1]]]] % 32;
 	// Calculate the contribution from the five corners
 	double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
-	if (t0 < 0)
+	if(t0 < 0)
 	    n0 = 0.0;
 	else
 	{
@@ -487,7 +487,7 @@ public class SimplexNoise_octave
 	    n0 = t0 * t0 * dot(grad4[gi0], x0, y0, z0, w0);
 	}
 	double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
-	if (t1 < 0)
+	if(t1 < 0)
 	    n1 = 0.0;
 	else
 	{
@@ -495,7 +495,7 @@ public class SimplexNoise_octave
 	    n1 = t1 * t1 * dot(grad4[gi1], x1, y1, z1, w1);
 	}
 	double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
-	if (t2 < 0)
+	if(t2 < 0)
 	    n2 = 0.0;
 	else
 	{
@@ -503,7 +503,7 @@ public class SimplexNoise_octave
 	    n2 = t2 * t2 * dot(grad4[gi2], x2, y2, z2, w2);
 	}
 	double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
-	if (t3 < 0)
+	if(t3 < 0)
 	    n3 = 0.0;
 	else
 	{
@@ -511,7 +511,7 @@ public class SimplexNoise_octave
 	    n3 = t3 * t3 * dot(grad4[gi3], x3, y3, z3, w3);
 	}
 	double t4 = 0.6 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
-	if (t4 < 0)
+	if(t4 < 0)
 	    n4 = 0.0;
 	else
 	{

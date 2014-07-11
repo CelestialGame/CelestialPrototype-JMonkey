@@ -34,19 +34,19 @@ public class CameraControl
     
     public void onAnalog(String name, float value, float tpf)
     {
-	if (name.equals("MOUSE_AXIS_LEFT"))
+	if(name.equals("MOUSE_AXIS_LEFT"))
 	{
 	    rotateCamera(value, tpf, this.parent.getCam().getUp());
 	}
-	else if (name.equals("MOUSE_AXIS_RIGHT"))
+	else if(name.equals("MOUSE_AXIS_RIGHT"))
 	{
 	    rotateCamera(-value, tpf, this.parent.getCam().getUp());
 	}
-	else if (name.equals("MOUSE_AXIS_UP"))
+	else if(name.equals("MOUSE_AXIS_UP"))
 	{
 	    rotateCamera(-value, tpf, this.parent.getCam().getLeft());
 	}
-	else if (name.equals("MOUSE_AXIS_DOWN"))
+	else if(name.equals("MOUSE_AXIS_DOWN"))
 	{
 	    rotateCamera(value, tpf, this.parent.getCam().getLeft());
 	}
@@ -83,7 +83,7 @@ public class CameraControl
     
     public void updateCamera(float tpf)
     {
-	if (this.parent.player.getBulletAppState().isEnabled())
+	if(this.parent.player.getBulletAppState().isEnabled())
 	{
 	    // this.cam.setAxes(this.parent.player.getLocalLeft(),
 	    // this.parent.player.getLocalUp(),
@@ -92,18 +92,18 @@ public class CameraControl
 	    Vector3f camDir = this.cam.getDirection().clone().divide(4);
 	    Vector3f camLeft = this.cam.getLeft().clone().divide(4);
 	    this.parent.walkDirection.set(0, 0, 0);
-	    if (this.parent.left)
+	    if(this.parent.left)
 		this.parent.walkDirection.addLocal(camLeft);
-	    if (this.parent.right)
+	    if(this.parent.right)
 		this.parent.walkDirection.addLocal(camLeft.negate());
-	    if (this.parent.up)
+	    if(this.parent.up)
 		this.parent.walkDirection.addLocal(camDir);
-	    if (this.parent.down)
+	    if(this.parent.down)
 		this.parent.walkDirection.addLocal(camDir.negate());
 	    
-	    if (this.parent.player.getPlanet() != null)
+	    if(this.parent.player.getPlanet() != null)
 	    {
-		switch (this.parent.player
+		switch(this.parent.player
 			.getCurrentFaceOfPlanet(this.parent.player.getPlanet()))
 		{
 		    case TOP:

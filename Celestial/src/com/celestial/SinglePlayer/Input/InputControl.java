@@ -89,7 +89,7 @@ public class InputControl
 	inputMap.put("FullScreen", new KeyTrigger(KeyInput.KEY_F11));
 	
 	Iterator<Entry<String, Trigger>> it = inputMap.entrySet().iterator();
-	while (it.hasNext())
+	while(it.hasNext())
 	{
 	    Map.Entry<String, Trigger> pairs = (Map.Entry<String, Trigger>) it
 		    .next();
@@ -119,35 +119,40 @@ public class InputControl
 	
 	public void onAction(String binding, boolean keyPressed, float tpf)
 	{
-	    if (enabled)
+	    if(enabled)
 	    {
-		if (binding.equals("Block_Del") && !keyPressed)
+		if(binding.equals("Block_Del") && !keyPressed)
 		{
 		    Object[] values = Picker.getCurrentPointedBlock(false,
 			    parent, cam);
-		    if (values == null || values[0] == null
-			    || values[1] == null) // Check to see if they
-						  // clicked the sky...
+		    if(values == null || values[0] == null || values[1] == null) // Check
+										 // to
+										 // see
+										 // if
+										 // they
+										 // clicked
+										 // the
+										 // sky...
 		    {
 			return;
 		    }
 		    Vector3i blockLocation = (Vector3i) values[1];
 		    Vector3f blockAbsLocation = (Vector3f) values[0];
-		    if (blockLocation != null)
+		    if(blockLocation != null)
 		    {
 			float dist = parent.player.getLocation().distance(
 				blockAbsLocation);
 			InventoryItem item;
-			if (!this.inventoryopen)
+			if(!this.inventoryopen)
 			{
-			    if (!parent.player.getBulletAppState().isEnabled()) // Are
-										// they
-										// flying?
+			    if(!parent.player.getBulletAppState().isEnabled()) // Are
+									       // they
+									       // flying?
 			    {
 				BlockTerrainControl chunk = parent.galaxy
 					.getPlanet(new SectorCoord(0, 0, 0), 0,
 						0).getTerrControl();
-				if (chunk != null
+				if(chunk != null
 					&& blockLocation != null
 					&& chunk.getBlock(blockLocation) != null)
 				{
@@ -158,7 +163,7 @@ public class InputControl
 							    blockLocation)
 							    .getType());
 				    
-				    switch (GameBlock.getBlockByClass(block))
+				    switch(GameBlock.getBlockByClass(block))
 				    {
 					case GRASS:
 					    item = parent.getInventoryManager()
@@ -176,7 +181,7 @@ public class InputControl
 					    break;
 				    }
 				    
-				    if (item != null && item.getBlock() != null)
+				    if(item != null && item.getBlock() != null)
 				    {
 					parent.getInventoryManager().dropItem(
 						item, blockAbsLocation,
@@ -188,12 +193,12 @@ public class InputControl
 								      // Block
 				}
 			    }
-			    else if (dist <= 15F) // Is the block nearby?
+			    else if(dist <= 15F) // Is the block nearby?
 			    {
 				BlockTerrainControl chunk = parent.galaxy
 					.getPlanet(new SectorCoord(0, 0, 0), 0,
 						0).getTerrControl();
-				if (chunk != null
+				if(chunk != null
 					&& blockLocation != null
 					&& chunk.getBlock(blockLocation) != null)
 				{
@@ -208,7 +213,7 @@ public class InputControl
 					    .getItembyBlock(
 						    GameBlock
 							    .getBlockByClass(block));
-				    if (item != null
+				    if(item != null
 					    && item.getBlock() != null
 					    && item.getBlock().getName()
 						    .equals("Grass"))
@@ -219,7 +224,7 @@ public class InputControl
 						item, blockAbsLocation,
 						parent.player.getPlanet());
 				    }
-				    else if (item != null)
+				    else if(item != null)
 				    {
 					parent.getInventoryManager().dropItem(
 						item, blockAbsLocation,
@@ -233,13 +238,18 @@ public class InputControl
 			}
 		    }
 		}
-		if (binding.equals("Block_Pick") && !keyPressed)
+		if(binding.equals("Block_Pick") && !keyPressed)
 		{
 		    Object[] values = Picker.getCurrentPointedBlock(false,
 			    parent, cam);
-		    if (values == null || values[0] == null
-			    || values[1] == null) // Check to see if they
-						  // clicked the sky...
+		    if(values == null || values[0] == null || values[1] == null) // Check
+										 // to
+										 // see
+										 // if
+										 // they
+										 // clicked
+										 // the
+										 // sky...
 		    {
 			return;
 		    }
@@ -251,9 +261,9 @@ public class InputControl
 			    .getChunk(blockLocation);
 		    Vector3i blockLocationRelChunk = blockLocation
 			    .subtract(blockChunk.getBlockLocation());
-		    if (blockLocation != null)
+		    if(blockLocation != null)
 		    {
-			if (last == null)
+			if(last == null)
 			{
 			    this.last = new Vector3i(0, 0, 0);
 			    this.lastabs = new Vector3f(0, 0, 0);
@@ -271,30 +281,35 @@ public class InputControl
 			this.lastabs = blockAbsLocation;
 		    }
 		}
-		if (binding.equals("Block_Add") && !keyPressed)
+		if(binding.equals("Block_Add") && !keyPressed)
 		{
 		    Object[] values = Picker.getCurrentPointedBlock(true,
 			    parent, cam);
-		    if (values == null || values[0] == null
-			    || values[1] == null) // Check to see if they
-						  // clicked the sky...
+		    if(values == null || values[0] == null || values[1] == null) // Check
+										 // to
+										 // see
+										 // if
+										 // they
+										 // clicked
+										 // the
+										 // sky...
 		    {
 			return;
 		    }
 		    Vector3i blockLocation = (Vector3i) values[1];
 		    Vector3f blockAbsLocation = (Vector3f) values[0];
-		    if (blockLocation != null)
+		    if(blockLocation != null)
 		    {
 			float dist = parent.player.getLocation().distance(
 				blockAbsLocation);
-			if (!parent.player.getBulletAppState().isEnabled()) // Are
-									    // they
-									    // flying?
+			if(!parent.player.getBulletAppState().isEnabled()) // Are
+									   // they
+									   // flying?
 			{
 			    BlockTerrainControl terrain = parent.galaxy
 				    .getPlanet(new SectorCoord(0, 0, 0), 0, 0)
 				    .getTerrControl();
-			    if (terrain != null
+			    if(terrain != null
 				    && blockLocation != null
 				    && parent.getInventoryManager()
 					    .getSelectedHotSlot().getItem() != null)
@@ -305,7 +320,7 @@ public class InputControl
 					.getSelectedHotSlot().getItem()
 					.getBlock().getBClass()); // Add the
 								  // Block
-				if (terrain.getBlock(blockLocation) != null)
+				if(terrain.getBlock(blockLocation) != null)
 				    parent.getInventoryManager()
 					    .getSelectedHotSlot()
 					    .modifyContents(-1);
@@ -313,12 +328,12 @@ public class InputControl
 			}
 			else
 			{
-			    if (dist <= 15F) // Is the block nearby?
+			    if(dist <= 15F) // Is the block nearby?
 			    {
 				BlockTerrainControl chunk = parent.galaxy
 					.getPlanet(new SectorCoord(0, 0, 0), 0,
 						0).getTerrControl();
-				if (chunk != null
+				if(chunk != null
 					&& blockLocation != null
 					&& parent.getInventoryManager()
 						.getSelectedHotSlot().getItem() != null)
@@ -329,7 +344,7 @@ public class InputControl
 					    .getSelectedHotSlot().getItem()
 					    .getBlock().getBClass()); // Add the
 								      // Block
-				    if (chunk.getBlock(blockLocation) != null)
+				    if(chunk.getBlock(blockLocation) != null)
 					parent.getInventoryManager()
 						.getSelectedHotSlot()
 						.modifyContents(-1);
@@ -338,29 +353,29 @@ public class InputControl
 			}
 		    }
 		}
-		else if (binding.equals("Left"))
+		else if(binding.equals("Left"))
 		{
 		    parent.left = keyPressed;
 		}
-		else if (binding.equals("Right"))
+		else if(binding.equals("Right"))
 		{
 		    parent.right = keyPressed;
 		}
-		else if (binding.equals("Up"))
+		else if(binding.equals("Up"))
 		{
 		    parent.up = keyPressed;
 		}
-		else if (binding.equals("Down"))
+		else if(binding.equals("Down"))
 		{
 		    parent.down = keyPressed;
 		}
-		else if (binding.equals("Jump"))
+		else if(binding.equals("Jump"))
 		{
 		    parent.player.jump();
 		}
-		else if (binding.equals("NoClip") && !keyPressed)
+		else if(binding.equals("NoClip") && !keyPressed)
 		{
-		    if (parent.player.getBulletAppState().isEnabled())
+		    if(parent.player.getBulletAppState().isEnabled())
 		    {
 			parent.player.getBulletAppState().setEnabled(false);
 			parent.setCamSpeed(100);
@@ -376,13 +391,13 @@ public class InputControl
 			parent.player.setVisibleToClient(false);
 		    }
 		}
-		else if (binding.equals("ESC"))
+		else if(binding.equals("ESC"))
 		{
 		    parent.stopGame();
 		}
-		else if (binding.equals("SeeStats") && !keyPressed)
+		else if(binding.equals("SeeStats") && !keyPressed)
 		{
-		    if (statson)
+		    if(statson)
 		    {
 			Celestial.toggleStats(false);
 			parent.getGuiNode().detachChild(parent.InvText);
@@ -396,43 +411,43 @@ public class InputControl
 		    }
 		    
 		}
-		else if (binding.equals("Slot1") && !keyPressed)
+		else if(binding.equals("Slot1") && !keyPressed)
 		{
 		    parent.getInventoryManager().setSelectedHotSlot(0);
 		}
-		else if (binding.equals("Slot2") && !keyPressed)
+		else if(binding.equals("Slot2") && !keyPressed)
 		{
 		    parent.getInventoryManager().setSelectedHotSlot(1);
 		}
-		else if (binding.equals("Slot3") && !keyPressed)
+		else if(binding.equals("Slot3") && !keyPressed)
 		{
 		    parent.getInventoryManager().setSelectedHotSlot(2);
 		}
-		else if (binding.equals("Slot4") && !keyPressed)
+		else if(binding.equals("Slot4") && !keyPressed)
 		{
 		    parent.getInventoryManager().setSelectedHotSlot(3);
 		}
-		else if (binding.equals("Slot5") && !keyPressed)
+		else if(binding.equals("Slot5") && !keyPressed)
 		{
 		    parent.getInventoryManager().setSelectedHotSlot(4);
 		}
-		else if (binding.equals("Slot6") && !keyPressed)
+		else if(binding.equals("Slot6") && !keyPressed)
 		{
 		    parent.getInventoryManager().setSelectedHotSlot(5);
 		}
-		else if (binding.equals("Slot7") && !keyPressed)
+		else if(binding.equals("Slot7") && !keyPressed)
 		{
 		    parent.getInventoryManager().setSelectedHotSlot(6);
 		}
-		else if (binding.equals("Slot8") && !keyPressed)
+		else if(binding.equals("Slot8") && !keyPressed)
 		{
 		    parent.getInventoryManager().setSelectedHotSlot(7);
 		}
-		else if (binding.equals("Slot9") && !keyPressed)
+		else if(binding.equals("Slot9") && !keyPressed)
 		{
 		    parent.getInventoryManager().setSelectedHotSlot(8);
 		}
-		else if (binding.equals("Respawn") && !keyPressed)
+		else if(binding.equals("Respawn") && !keyPressed)
 		{
 		    
 		    parent.player.spawnPlayer(parent.player.getSystem()
@@ -442,9 +457,9 @@ public class InputControl
 			    .getY() + parent.getCamHeight(), parent.player
 			    .getLocation().getZ()));
 		}
-		else if (binding.equals("Inventory") && !keyPressed)
+		else if(binding.equals("Inventory") && !keyPressed)
 		{
-		    if (!this.inventoryopen)
+		    if(!this.inventoryopen)
 		    {
 			parent.getGui().showPopup(PopupType.INVENTORY);
 			this.inventoryopen = true;
@@ -455,43 +470,48 @@ public class InputControl
 			this.inventoryopen = false;
 		    }
 		}
-		else if (binding.equals("*") && !keyPressed)
+		else if(binding.equals("*") && !keyPressed)
 		{
 		    SPPortal.self.getCameraControl().onAnalog("MOUSE_AXIS_UP",
 			    (float) Math.toRadians(90), tpf);
 		}
-		else if (binding.equals("Return") && !keyPressed)
+		else if(binding.equals("Return") && !keyPressed)
 		{
 		    parent.getGui().closePopup();
 		}
-		else if (binding.equals("Use") && !keyPressed)
+		else if(binding.equals("Use") && !keyPressed)
 		{
 		    Object[] values = Picker.getCurrentPointedBlock(false,
 			    parent, cam);
-		    if (values == null || values[0] == null
-			    || values[1] == null) // Check to see if they
-						  // clicked the sky...
+		    if(values == null || values[0] == null || values[1] == null) // Check
+										 // to
+										 // see
+										 // if
+										 // they
+										 // clicked
+										 // the
+										 // sky...
 		    {
 			return;
 		    }
 		    Vector3i blockLocation = (Vector3i) values[1];
 		    // Vector3f blockAbsLocation = (Vector3f) values[0];
-		    if (blockLocation != null)
+		    if(blockLocation != null)
 		    {
 			BlockTerrainControl terrain = parent.galaxy.getPlanet(
 				new SectorCoord(0, 0, 0), 0, 0)
 				.getTerrControl();
-			if (terrain != null
+			if(terrain != null
 				&& terrain.getBlock(blockLocation) != null)
 			{
-			    if (GameBlock.getBlockByType(
+			    if(GameBlock.getBlockByType(
 				    terrain.getBlock(blockLocation))
 				    .isDynamic())
 			    {
-				for (Vector3i loc : terrain.getDynamicBlocks()
+				for(Vector3i loc : terrain.getDynamicBlocks()
 					.keySet())
 				{
-				    if (loc.equals(blockLocation))
+				    if(loc.equals(blockLocation))
 				    {
 					terrain.getDynamicBlocks().get(loc)
 						.actionSelected();
@@ -501,7 +521,7 @@ public class InputControl
 				return;
 			    }
 			    // Not dynamic...now try to use tool
-			    if (parent.getInventoryManager()
+			    if(parent.getInventoryManager()
 				    .getSelectedHotSlot().getItem().getType()
 				    .equals(ItemType.TOOL))
 			    {
@@ -513,9 +533,9 @@ public class InputControl
 			}
 		    }
 		}
-		else if (binding.equals("Build") && !keyPressed)
+		else if(binding.equals("Build") && !keyPressed)
 		{
-		    if (!this.buildmenuopen)
+		    if(!this.buildmenuopen)
 		    {
 			parent.getGui().showPopup(PopupType.BUILD);
 			this.buildmenuopen = true;

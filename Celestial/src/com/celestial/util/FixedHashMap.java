@@ -20,7 +20,7 @@ public class FixedHashMap<K, V> implements Map<K, V>
     
     public V put(K key, V value)
     {
-	if (map.size() >= MAX && !map.containsKey(key))
+	if(map.size() >= MAX && !map.containsKey(key))
 	{
 	    return null;
 	}
@@ -41,7 +41,7 @@ public class FixedHashMap<K, V> implements Map<K, V>
     @Override
     public boolean containsKey(Object key)
     {
-	if (map.containsKey(key))
+	if(map.containsKey(key))
 	    return true;
 	return false;
     }
@@ -49,7 +49,7 @@ public class FixedHashMap<K, V> implements Map<K, V>
     @Override
     public boolean containsValue(Object value)
     {
-	if (map.containsValue(value))
+	if(map.containsValue(value))
 	    return true;
 	return false;
     }
@@ -69,7 +69,7 @@ public class FixedHashMap<K, V> implements Map<K, V>
     @Override
     public boolean isEmpty()
     {
-	if (map.isEmpty())
+	if(map.isEmpty())
 	    return true;
 	return false;
     }

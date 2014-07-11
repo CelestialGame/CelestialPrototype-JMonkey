@@ -38,7 +38,7 @@ public class Sector
 	
 	this.systemMap = new HashMap<Vector3f, SolarSystem>();
 	
-	for (int i = 0; i < this.amountOfSystems; i++)
+	for(int i = 0; i < this.amountOfSystems; i++)
 	{
 	    // TODO: Sector size, system location
 	    SolarSystem system = new SolarSystem(this, name);
@@ -47,7 +47,7 @@ public class Sector
 	    float randomz = (float) (Math.random() * 100 + 1);
 	    Vector3f location = new Vector3f(randomx, randomy, randomz);
 	    
-	    while (this.systemMap.get(location) != null)
+	    while(this.systemMap.get(location) != null)
 	    {
 		randomx = (float) (Math.random() * 100 + 1);
 		randomy = (float) (Math.random() * 100 + 1);
@@ -68,7 +68,7 @@ public class Sector
     
     public SolarSystem getSolarSystem(int index)
     {
-	if (this.systemList.get(index) != null)
+	if(this.systemList.get(index) != null)
 	    return this.systemList.get(index);
 	else
 	{

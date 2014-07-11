@@ -89,7 +89,7 @@ public class InventoryManager
 	
 	// TODO Add extended inv (stuffs not in the hotbar
 	
-	for (int i = 0; i < 27; i++)
+	for(int i = 0; i < 27; i++)
 	{
 	    this.extendedinv.add(new InventorySlot(null, EMPTY, this));
 	}
@@ -98,7 +98,7 @@ public class InventoryManager
     public void registerItem(InventoryItem item, int id)
 	    throws InventoryException
     {
-	if (!this.registeredItems.containsValue(item))
+	if(!this.registeredItems.containsValue(item))
 	{
 	    this.registeredItems.put(id, item);
 	}
@@ -115,9 +115,9 @@ public class InventoryManager
     
     public InventoryItem getItembyBlock(GameBlock block)
     {
-	for (InventoryItem item : this.registeredItems.values())
+	for(InventoryItem item : this.registeredItems.values())
 	{
-	    if (item.getBlock().equals(block))
+	    if(item.getBlock().equals(block))
 	    {
 		return item;
 	    }
@@ -140,9 +140,9 @@ public class InventoryManager
     private void setSlot(InventoryItem item, int contents, int slot)
 	    throws InventoryException
     {
-	if (this.registeredItems.containsValue(item))
+	if(this.registeredItems.containsValue(item))
 	{
-	    if (slot <= this.extendedinv.size())
+	    if(slot <= this.extendedinv.size())
 	    {
 		this.extendedinv.get(slot).setItem(item, contents, slot);
 	    }
@@ -159,9 +159,9 @@ public class InventoryManager
     
     private int getNextEmptySlot()
     {
-	for (int i = 0; i < this.extendedinv.size(); i++)
+	for(int i = 0; i < this.extendedinv.size(); i++)
 	{
-	    if (this.extendedinv.get(i).getItem() == null)
+	    if(this.extendedinv.get(i).getItem() == null)
 	    {
 		return i;
 	    }
@@ -173,9 +173,9 @@ public class InventoryManager
     private void setHotSlot(InventoryItem item, int contents, int hotslot)
 	    throws InventoryException
     {
-	if (this.registeredItems.containsValue(item))
+	if(this.registeredItems.containsValue(item))
 	{
-	    if (hotslot <= 9)
+	    if(hotslot <= 9)
 	    {
 		this.hotslots.get(hotslot).setItem(item, contents, hotslot);
 	    }
@@ -192,14 +192,14 @@ public class InventoryManager
     
     public void refreshHotSlots()
     {
-	for (int i = 0; i < this.hotslots.size(); i++)
+	for(int i = 0; i < this.hotslots.size(); i++)
 	{
 	    InventorySlot hotslot = this.hotslots.get(i);
-	    if (hotslot.getNumberContents() == 0 && hotslot.getItem() != null)
+	    if(hotslot.getNumberContents() == 0 && hotslot.getItem() != null)
 	    {
 		hotslot.setItem(null, EMPTY, i);
 	    }
-	    if (hotslot.getItem() != null)
+	    if(hotslot.getItem() != null)
 		getInvGui().setHotBarIcon(i, hotslot);
 	}
     }
@@ -212,9 +212,9 @@ public class InventoryManager
     
     private int getNextEmptyHotSlot()
     {
-	for (int i = 0; i < this.hotslots.size(); i++)
+	for(int i = 0; i < this.hotslots.size(); i++)
 	{
-	    if (this.hotslots.get(i).getItem() == null)
+	    if(this.hotslots.get(i).getItem() == null)
 	    {
 		return i;
 	    }
@@ -245,7 +245,7 @@ public class InventoryManager
     private List<InventoryItem> getHotSlotItems()
     {
 	List<InventoryItem> returnlist = new ArrayList<InventoryItem>();
-	for (InventorySlot slot : this.hotslots)
+	for(InventorySlot slot : this.hotslots)
 	{
 	    returnlist.add(slot.getItem());
 	}
@@ -263,7 +263,7 @@ public class InventoryManager
     
     public void removeDropItem(InventoryDrop drop, Iterator<InventoryDrop> itr)
     {
-	if (this.dropitems.contains(drop))
+	if(this.dropitems.contains(drop))
 	{
 	    drop.getPlanet().getBulletAppState().getPhysicsSpace()
 		    .remove(drop.getCollisionBox().getUserObject());
@@ -274,12 +274,12 @@ public class InventoryManager
     
     public boolean pickupDrop(InventoryDrop drop, int amount)
     {
-	if (getHotSlotItems().contains(drop.getItem())
+	if(getHotSlotItems().contains(drop.getItem())
 		|| getExtendedInvSlots().contains(drop.getItem()))
 	{
 	    int index = getHotSlotItems().lastIndexOf(drop.getItem());
 	    InventorySlot slot = this.hotslots.get(index);
-	    if (slot.getNumberContents() < 64)
+	    if(slot.getNumberContents() < 64)
 	    {
 		// existing hotslot items
 		slot.modifyContents(1);
@@ -289,25 +289,25 @@ public class InventoryManager
 	    {
 		int index_ = getExtendedInvSlots().lastIndexOf(drop.getItem());
 		InventorySlot slot_ = this.extendedinv.get(index_);
-		if (slot_.getNumberContents() < 64)
+		if(slot_.getNumberContents() < 64)
 		{
 		    // existing slot items
 		    slot_.modifyContents(1);
 		    return true;
 		}
 	    }
-	    catch (ArrayIndexOutOfBoundsException e)
+	    catch(ArrayIndexOutOfBoundsException e)
 	    {
 		// might not be in there so it'll throw an outofbounds
 	    }
 	    // go for next open hotslot
-	    if (this.getNextEmptyHotSlot() != -1)
+	    if(this.getNextEmptyHotSlot() != -1)
 	    {
 		try
 		{
 		    setHotSlot(drop.getItem(), 1, getNextEmptyHotSlot());
 		}
-		catch (InventoryException exception)
+		catch(InventoryException exception)
 		{
 		    exception.printStackTrace();
 		}
@@ -315,13 +315,13 @@ public class InventoryManager
 	    else
 	    {
 		// go for next open SLOT
-		if (this.getNextEmptySlot() != -1)
+		if(this.getNextEmptySlot() != -1)
 		{
 		    try
 		    {
 			setSlot(drop.getItem(), 1, getNextEmptySlot());
 		    }
-		    catch (InventoryException exception)
+		    catch(InventoryException exception)
 		    {
 			exception.printStackTrace();
 		    }
@@ -333,13 +333,13 @@ public class InventoryManager
 	else
 	{
 	    // find new open hotslot
-	    if (this.getNextEmptyHotSlot() != -1)
+	    if(this.getNextEmptyHotSlot() != -1)
 	    {
 		try
 		{
 		    setHotSlot(drop.getItem(), 1, getNextEmptyHotSlot());
 		}
-		catch (InventoryException exception)
+		catch(InventoryException exception)
 		{
 		    exception.printStackTrace();
 		}
@@ -347,13 +347,13 @@ public class InventoryManager
 	    else
 	    {
 		// find open slot
-		if (this.getNextEmptySlot() != -1)
+		if(this.getNextEmptySlot() != -1)
 		{
 		    try
 		    {
 			setSlot(drop.getItem(), 1, getNextEmptySlot());
 		    }
-		    catch (InventoryException exception)
+		    catch(InventoryException exception)
 		    {
 			exception.printStackTrace();
 		    }
@@ -367,7 +367,7 @@ public class InventoryManager
     
     public void openExtendedInv(boolean yes)
     {
-	if (yes)
+	if(yes)
 	{
 	    Celestial.gui.getNifty().gotoScreen("extendedinv");
 	    Celestial.gui.disableControl();

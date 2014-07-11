@@ -20,13 +20,13 @@ public class Listener implements PhysicsCollisionListener
     public void collision(PhysicsCollisionEvent e)
     {
 	InventoryManager invmanager = SPPortal.self.getInventoryManager();
-	if (!invmanager.getDropItems().isEmpty())
+	if(!invmanager.getDropItems().isEmpty())
 	{
 	    Iterator<InventoryDrop> itr = invmanager.getDropItems().iterator();
-	    while (itr.hasNext())
+	    while(itr.hasNext())
 	    {
 		InventoryDrop drop = itr.next();
-		if ((e.getObjectA().equals(drop.getCollisionBox()) && e
+		if((e.getObjectA().equals(drop.getCollisionBox()) && e
 			.getObjectB().equals(
 				SPPortal.self.player.getCollisionBox()))
 			|| (e.getObjectB().equals(drop.getCollisionBox()) && e

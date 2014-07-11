@@ -32,7 +32,7 @@ public class Block_Furnace extends com.cubes.Block implements DynamicBlock
     public void actionSelected()
     {
 	SPPortal.self.getGui().showPopup(PopupType.FURNACE);
-	if (isInUse())
+	if(isInUse())
 	    turnOff();
 	else
 	    turnOn();

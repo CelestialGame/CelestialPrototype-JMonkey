@@ -195,7 +195,7 @@ public class SPPortal extends CelestialPortal
 	
 	updatePlanets();
 	
-	if (player.getPlanet() != null)
+	if(player.getPlanet() != null)
 	    this.renderBlockBorders();
 	
 	this.invmanager.updateAll();
@@ -204,15 +204,15 @@ public class SPPortal extends CelestialPortal
     private void updatePlanets()
     {
 	
-	if (this.timer.getTimeInSeconds() - this.lastRotation > 0)
+	if(this.timer.getTimeInSeconds() - this.lastRotation > 0)
 	{
-	    for (Sector s : this.galaxy.getSectors())
-		for (SolarSystem sys : s.getSolarSystems())
-		    for (Planet p : sys.getPlanets())
+	    for(Sector s : this.galaxy.getSectors())
+		for(SolarSystem sys : s.getSolarSystems())
+		    for(Planet p : sys.getPlanets())
 		    {
 			p.rotate();
-			if (player.getPlanet() != null)
-			    if (player.getPlanet() == p)
+			if(player.getPlanet() != null)
+			    if(player.getPlanet() == p)
 			    {
 				Quaternion planetRotationAmount = new Quaternion()
 					.fromAngles(p.amountRotation.getX()
@@ -248,9 +248,9 @@ public class SPPortal extends CelestialPortal
 		    }
 	    this.lastRotation = this.timer.getTimeInSeconds();
 	}
-	for (Sector s : this.galaxy.getSectors())
-	    for (SolarSystem sys : s.getSolarSystems())
-		for (Planet p : sys.getPlanets())
+	for(Sector s : this.galaxy.getSectors())
+	    for(SolarSystem sys : s.getSolarSystems())
+		for(Planet p : sys.getPlanets())
 		{
 		    p.updateChunks(this.cam.getLocation());
 		}
@@ -259,15 +259,15 @@ public class SPPortal extends CelestialPortal
     private void updatePlayer(float tpf)
     {
 	Planet closest = player.getClosestPlanet();
-	if (player.isWithinLoadingDistance(closest, player.getLocation())) // They
-									   // are
-									   // within
-									   // range
-									   // of
-									   // a
-									   // planet
+	if(player.isWithinLoadingDistance(closest, player.getLocation())) // They
+									  // are
+									  // within
+									  // range
+									  // of
+									  // a
+									  // planet
 	{
-	    if (player.getPlanet() != closest)
+	    if(player.getPlanet() != closest)
 	    {
 		player.setPlanet(closest);
 	    }
@@ -297,12 +297,12 @@ public class SPPortal extends CelestialPortal
     
     private void updateGravity(float tpf)
     {
-	if (this.player.getPlanet() != null)
+	if(this.player.getPlanet() != null)
 	{
 	    Planet planet = this.player.getPlanet();
 	    
 	    PlanetFace currFace = this.player.getCurrentFaceOfPlanet(planet);
-	    switch (currFace)
+	    switch(currFace)
 	    {
 		case TOP:
 		    this.player.setGravity(this.player.getPlanet()
@@ -339,14 +339,14 @@ public class SPPortal extends CelestialPortal
 	}
 	ListIterator<InventoryDrop> it = invmanager.getDropItems()
 		.listIterator();
-	if (it.hasNext())
+	if(it.hasNext())
 	{
 	    InventoryDrop item = it.next();
-	    if (item.getPlanet() != null)
+	    if(item.getPlanet() != null)
 	    {
 		Planet planet = item.getPlanet();
 		PlanetFace currFace = item.getCurrentFaceOfPlanet(planet);
-		switch (currFace)
+		switch(currFace)
 		{
 		    case TOP:
 			item.getCollisionBox().setGravity(
@@ -430,22 +430,22 @@ public class SPPortal extends CelestialPortal
     private void renderBlockBorders()
     {
 	Object[] values = Picker.getCurrentPointedBlock(false, this, cam);
-	if (values != null)
+	if(values != null)
 	{
-	    if (!(values[2] instanceof BlockChunkControl))
+	    if(!(values[2] instanceof BlockChunkControl))
 	    {
 		return;
 	    }
 	    BlockChunkControl block = (BlockChunkControl) values[2];
 	    Vector3i blockLocation = (Vector3i) values[1];
-	    if (player.getPlanet().getTerrControl().getBlock(blockLocation) == null)
+	    if(player.getPlanet().getTerrControl().getBlock(blockLocation) == null)
 	    {
 		this.hideHighlight();
 		return;
 	    }
 	    Vector3f blockLocationAbs = (Vector3f) values[0];
 	    float dist = blockLocationAbs.distance(player.getLocation());
-	    if (block != null
+	    if(block != null
 		    && (dist <= 15F || !player.getBulletAppState().isEnabled()))
 	    {
 		this.showHighlight();
@@ -469,11 +469,11 @@ public class SPPortal extends CelestialPortal
     
     public void updateStats(float tpf)
     {
-	if (this.invmanager.getSelectedHotSlot().getItem() != null)
+	if(this.invmanager.getSelectedHotSlot().getItem() != null)
 	{
 	    int number = this.invmanager.getSelectedHotSlot()
 		    .getNumberContents();
-	    if (number == -1)
+	    if(number == -1)
 		this.InvText.setText("Selected Item: "
 			+ this.invmanager.getSelectedHotSlot().getItem()
 				.getName() + " - Contents: unlimited");
@@ -484,12 +484,12 @@ public class SPPortal extends CelestialPortal
 	}
 	else
 	    this.InvText.setText("Selected Item: none");
-	if (InputControl.statson)
+	if(InputControl.statson)
 	{
 	    Vector3f location = this.cam.getLocation();
 	    this.posText.setText("X: " + location.x + " Y: " + location.y
 		    + " Z: " + location.z);
-	    if (this.player.getPlanet() != null)
+	    if(this.player.getPlanet() != null)
 	    {
 		this.PlanetText.setText("Planet "
 			+ this.player.getPlanet().getName()
@@ -503,14 +503,14 @@ public class SPPortal extends CelestialPortal
 	    this.Vector3IntPosText.setText(Vector3i.convert3f(location)
 		    .toString());
 	    int blocks = 0;
-	    if (this.player.getPlanet() != null)
+	    if(this.player.getPlanet() != null)
 	    {
-		for (int x = 0; x < this.player.getPlanet().getDiameter(); x++)
-		    for (int y = 0; y < this.player.getPlanet().getDiameter(); y++)
-			for (int z = 0; z < this.player.getPlanet()
+		for(int x = 0; x < this.player.getPlanet().getDiameter(); x++)
+		    for(int y = 0; y < this.player.getPlanet().getDiameter(); y++)
+			for(int z = 0; z < this.player.getPlanet()
 				.getDiameter(); z++)
 			{
-			    if (this.player.getPlanet().getTerrControl()
+			    if(this.player.getPlanet().getTerrControl()
 				    .getChunks()
 				    .containsKey(new Vector3i(x, y, z)))
 			    {
@@ -627,7 +627,7 @@ public class SPPortal extends CelestialPortal
     @Override
     public void hideHighlight()
     {
-	if (this.blockHighlightGeom.getParent() != null)
+	if(this.blockHighlightGeom.getParent() != null)
 	{
 	    this.blockHighlightGeom.setCullHint(CullHint.Always);
 	    this.blockHighlightGeom.setLocalTranslation(new Vector3f(0, 0, 0));
@@ -637,7 +637,7 @@ public class SPPortal extends CelestialPortal
     
     public void showHighlight()
     {
-	if (this.blockHighlightGeom.getParent() == null)
+	if(this.blockHighlightGeom.getParent() == null)
 	{
 	    this.blockHighlightGeom.setCullHint(CullHint.Never);
 	}

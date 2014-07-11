@@ -11,23 +11,23 @@ public class InventoryRegister
     
     public static void RegisterBlocks(InventoryManager IM)
     {
-	for (GameBlock block : GameBlock.values())
+	for(GameBlock block : GameBlock.values())
 	{
-	    if (block.getID() < 0 || block.getIconPath() == null)
+	    if(block.getID() < 0 || block.getIconPath() == null)
 		continue;
 	    try
 	    {
 		BufferedImage icon = block.getIcon();
-		if (icon == null)
+		if(icon == null)
 		{
 		    RegBlankIconBlock(block, IM);
 		    continue;
 		}
 		IM.registerItem(new InventoryItem(block), block.getID());
 	    }
-	    catch (InventoryException e)
+	    catch(InventoryException e)
 	    {
-		if (e.getMessage().equalsIgnoreCase("AlreadyRegistered"))
+		if(e.getMessage().equalsIgnoreCase("AlreadyRegistered"))
 		{
 		    // pass...w/e bro
 		}
@@ -37,7 +37,7 @@ public class InventoryRegister
 		    e.printStackTrace();
 		}
 	    }
-	    catch (AssetNotFoundException e)
+	    catch(AssetNotFoundException e)
 	    {
 		RegBlankIconBlock(block, IM);
 		continue;
@@ -52,7 +52,7 @@ public class InventoryRegister
 	{
 	    IM.registerItem(new InventoryItem(block), block.getID());
 	}
-	catch (InventoryException e)
+	catch(InventoryException e)
 	{
 	    e.printStackTrace();
 	}

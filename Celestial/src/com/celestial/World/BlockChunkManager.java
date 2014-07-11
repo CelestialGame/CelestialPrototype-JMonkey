@@ -31,24 +31,24 @@ public class BlockChunkManager
     
     public void checkChunks(Vector3f camLocation)
     {
-	for (Iterator<Entry<Vector3i, Future<Map<Vector3i, BlockData>>>> iterator = this.generatingChunks
+	for(Iterator<Entry<Vector3i, Future<Map<Vector3i, BlockData>>>> iterator = this.generatingChunks
 		.entrySet().iterator(); iterator.hasNext();)
 	{
 	    Entry<Vector3i, Future<Map<Vector3i, BlockData>>> entry = iterator
 		    .next();
-	    if (entry.getValue().isDone())
+	    if(entry.getValue().isDone())
 	    {
 		Map<Vector3i, BlockData> map = null;
 		try
 		{
 		    map = entry.getValue().get();
 		}
-		catch (InterruptedException | ExecutionException e)
+		catch(InterruptedException | ExecutionException e)
 		{
 		    e.printStackTrace();
 		}
 		
-		if (map == null)
+		if(map == null)
 		{
 		    iterator.remove();
 		    continue;
@@ -56,16 +56,16 @@ public class BlockChunkManager
 		this.terrainControl.loadChunk(entry.getKey(), map);
 		iterator.remove();
 	    }
-	    else if (entry.getValue().isCancelled())
+	    else if(entry.getValue().isCancelled())
 	    {
 		iterator.remove();
 		continue;
 	    }
 	}
 	
-	for (int x = 0; x < this.getPlanet().getDiameter(); x++)
-	    for (int y = 0; y < this.getPlanet().getDiameter(); y++)
-		for (int z = 0; z < this.getPlanet().getDiameter(); z++)
+	for(int x = 0; x < this.getPlanet().getDiameter(); x++)
+	    for(int y = 0; y < this.getPlanet().getDiameter(); y++)
+		for(int z = 0; z < this.getPlanet().getDiameter(); z++)
 		{
 		    
 		    Vector3f centerOfChunk = new Vector3f(
@@ -92,16 +92,16 @@ public class BlockChunkManager
 		    float distance = rotatedCameraTranslation
 			    .distance(centerOfChunk);
 		    Vector3i location = new Vector3i(x, y, z);
-		    if (distance > Planet.VIEW_DISTANCE)
+		    if(distance > Planet.VIEW_DISTANCE)
 		    {
-			if (this.generatingChunks.containsKey(location)
+			if(this.generatingChunks.containsKey(location)
 				|| !this.terrainControl.isChunkLoaded(location))
 			    continue;
 			// this.terrainControl.unLoadChunk(new Vector3i(x,y,z));
 		    }
 		    else
 		    {
-			if (this.generatingChunks.containsKey(location)
+			if(this.generatingChunks.containsKey(location)
 				|| this.terrainControl.isChunkLoaded(location))
 			    continue;
 			this.startChunkGeneration(location);
@@ -119,7 +119,7 @@ public class BlockChunkManager
 			    this.planet.getType(), this.planet.getSeed()));
 	    this.generatingChunks.put(chunkLocation, newFuture);
 	}
-	catch (Exception e)
+	catch(Exception e)
 	{
 	    // e.printStackTrace();
 	}

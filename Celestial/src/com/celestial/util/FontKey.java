@@ -203,39 +203,39 @@ public class FontKey extends AssetKey
     @Override
     public boolean equals(Object obj)
     {
-	if (this == obj)
+	if(this == obj)
 	{
 	    return true;
 	}
-	if (!super.equals(obj))
+	if(!super.equals(obj))
 	{
 	    return false;
 	}
-	if (getClass() != obj.getClass())
+	if(getClass() != obj.getClass())
 	{
 	    return false;
 	}
 	FontKey other = (FontKey) obj;
-	if (color == null)
+	if(color == null)
 	{
-	    if (other.color != null)
+	    if(other.color != null)
 	    {
 		return false;
 	    }
 	}
-	else if (!color.equals(other.color))
+	else if(!color.equals(other.color))
 	{
 	    return false;
 	}
-	if (size != other.size)
+	if(size != other.size)
 	{
 	    return false;
 	}
-	if (style != other.style)
+	if(style != other.style)
 	{
 	    return false;
 	}
-	if (type != other.type)
+	if(type != other.type)
 	{
 	    return false;
 	}

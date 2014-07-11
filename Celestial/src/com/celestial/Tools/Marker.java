@@ -16,9 +16,9 @@ public class Marker extends ToolObject
     {
 	Vector3i blockLocation = (Vector3i) values[1];
 	// Vector3f blockAbsLocation = (Vector3f) values[0];
-	if (blockLocation != null)
+	if(blockLocation != null)
 	{
-	    if (onFirst)
+	    if(onFirst)
 	    {
 		pos1 = blockLocation;
 		System.out.println("First position set: " + pos1.toString());
@@ -36,7 +36,7 @@ public class Marker extends ToolObject
     
     public Vector3i[] getPositions()
     {
-	if (pos1 != null && pos2 != null)
+	if(pos1 != null && pos2 != null)
 	    return new Vector3i[] { pos1, pos2 };
 	else
 	    return null;

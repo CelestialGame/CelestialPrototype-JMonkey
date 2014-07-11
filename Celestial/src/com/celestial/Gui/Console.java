@@ -59,7 +59,7 @@ public class Console implements ScreenController, KeyInputHandler
     @Override
     public boolean keyEvent(final NiftyInputEvent inputEvent)
     {
-	if (inputEvent == NiftyInputEvent.ConsoleToggle)
+	if(inputEvent == NiftyInputEvent.ConsoleToggle)
 	{
 	    toggleConsole();
 	    return true;
@@ -72,10 +72,10 @@ public class Console implements ScreenController, KeyInputHandler
     
     private void toggleConsole()
     {
-	if (allowConsoleToggle)
+	if(allowConsoleToggle)
 	{
 	    allowConsoleToggle = false;
-	    if (consoleVisible)
+	    if(consoleVisible)
 	    {
 		closeConsole();
 		guiManager.enableControl();
@@ -93,7 +93,7 @@ public class Console implements ScreenController, KeyInputHandler
     private void openConsole()
     {
 	String id = consolePopup != null ? consolePopup.getId() : null;
-	if (id == null)
+	if(id == null)
 	{
 	    return;
 	}
@@ -101,13 +101,13 @@ public class Console implements ScreenController, KeyInputHandler
 		consolePopup.findElementByName("console#textInput"));
 	screen.processAddAndRemoveLayerElements();
 	
-	if (firstConsoleShow)
+	if(firstConsoleShow)
 	{
 	    firstConsoleShow = false;
 	    de.lessvoid.nifty.controls.Console console = screen
 		    .findNiftyControl("console",
 			    de.lessvoid.nifty.controls.Console.class);
-	    if (console != null)
+	    if(console != null)
 	    {
 		console.output("      ___           ___     \n"
 			+ "     /\\__\\         /\\__\\    \n"
@@ -131,7 +131,7 @@ public class Console implements ScreenController, KeyInputHandler
     private void closeConsole()
     {
 	String id = consolePopup != null ? consolePopup.getId() : null;
-	if (id == null)
+	if(id == null)
 	{
 	    return;
 	}
@@ -153,9 +153,9 @@ public class Console implements ScreenController, KeyInputHandler
 	de.lessvoid.nifty.controls.Console console = consolePopup
 		.findNiftyControl("console",
 			de.lessvoid.nifty.controls.Console.class);
-	if (console != null)
+	if(console != null)
 	{
-	    if ("exit".equals(command.getCommand()))
+	    if("exit".equals(command.getCommand()))
 	    {
 		this.parent.portal.stopGame();
 	    }
