@@ -27,6 +27,7 @@ import com.celestial.World.Picker;
 import com.cubes.BlockChunkControl;
 import com.cubes.CubesSettings;
 import com.cubes.Vector3i;
+import com.cubes.test.CubesTestAssets;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
