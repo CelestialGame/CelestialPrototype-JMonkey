@@ -46,7 +46,7 @@ public class InputControl {
 	Camera cam;
 
 	public static boolean statson = false;
-	
+
 	HashMap<String, Trigger> inputMap = new HashMap<String, Trigger>();
 
 	private boolean enabled = true;
@@ -84,16 +84,16 @@ public class InputControl {
 		inputMap.put("Build", new KeyTrigger(KeyInput.KEY_B));
 		inputMap.put("Return", new KeyTrigger(KeyInput.KEY_Q));
 		inputMap.put("FullScreen", new KeyTrigger(KeyInput.KEY_F11));
-		
+
 		Iterator<Entry<String, Trigger>> it = inputMap.entrySet().iterator();
-	    while (it.hasNext()) {
-	        Map.Entry<String, Trigger> pairs = (Map.Entry<String, Trigger>)it.next();
-	        inputManager.addMapping(pairs.getKey(), pairs.getValue());
-	        inputManager.addListener(actionListener, pairs.getKey());
-	        //it.remove(); // avoids a ConcurrentModificationException
-	    }
+		while (it.hasNext()) {
+			Map.Entry<String, Trigger> pairs = (Map.Entry<String, Trigger>)it.next();
+			inputManager.addMapping(pairs.getKey(), pairs.getValue());
+			inputManager.addListener(actionListener, pairs.getKey());
+			//it.remove(); // avoids a ConcurrentModificationException
+		}
 	}
-	
+
 	public void enable() {
 		enabled = true;
 	}
@@ -107,7 +107,7 @@ public class InputControl {
 		private Vector3i last;
 		private boolean inventoryopen;
 		private boolean buildmenuopen;
-		
+
 		public void onAction(String binding, boolean keyPressed, float tpf) {
 			if(enabled) {
 				if (binding.equals("Block_Del") && !keyPressed) 
@@ -130,38 +130,42 @@ public class InputControl {
 								if(chunk != null && blockLocation != null && chunk.getBlock(blockLocation) != null) {
 									SPPortal.self.hideHighlight();
 									Class<? extends Block> block = BlockManager.getInstance().getClass(chunk.getBlock(blockLocation).getType());
+
+									switch(GameBlock.getBlockByClass(block))
+									{
+									case GRASS:
+										item = parent.getInventoryManager().getItembyBlock(GameBlock.DIRT);
+										break;
+									case SUBSTRATUS:
+										return;
+									default:
+										item = parent.getInventoryManager().getItembyBlock(GameBlock.getBlockByClass(block));
+										break;
+									}
+
+									if(item != null && item.getBlock() != null)
+									{
+										parent.getInventoryManager().dropItem(item, blockAbsLocation, parent.player.getPlanet());
+									}
+
+									chunk.removeBlock(blockLocation); //Remove the Block
+								}
+							}
+							else if(dist <= 15F) //Is the block nearby?
+							{
+								BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
+								if(chunk != null && blockLocation != null && chunk.getBlock(blockLocation) != null) {
+									SPPortal.self.hideHighlight();
+									Class<? extends Block> block = BlockManager.getInstance().getClass(chunk.getBlock(blockLocation).getType());
 									item = parent.getInventoryManager().getItembyBlock(GameBlock.getBlockByClass(block));
 									if(item != null && item.getBlock() != null && item.getBlock().getName().equals("Grass")) {
 										item = parent.getInventoryManager().getItembyBlock(GameBlock.DIRT);
 										parent.getInventoryManager().dropItem(item, blockAbsLocation, parent.player.getPlanet());
 									}
-									else if(item.getBlock().getName().equals("Substratus")) {
-										return;
-									}
 									else if(item != null) {
 										parent.getInventoryManager().dropItem(item, blockAbsLocation, parent.player.getPlanet());
 									}
 									chunk.removeBlock(blockLocation); //Remove the Block
-								}
-							}
-							else
-							{
-								if(dist <= 15F) //Is the block nearby?
-								{
-									BlockTerrainControl chunk = parent.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0).getTerrControl();
-									if(chunk != null && blockLocation != null && chunk.getBlock(blockLocation) != null) {
-										SPPortal.self.hideHighlight();
-										Class<? extends Block> block = BlockManager.getInstance().getClass(chunk.getBlock(blockLocation).getType());
-										item = parent.getInventoryManager().getItembyBlock(GameBlock.getBlockByClass(block));
-										if(item != null && item.getBlock() != null && item.getBlock().getName().equals("Grass")) {
-											item = parent.getInventoryManager().getItembyBlock(GameBlock.DIRT);
-											parent.getInventoryManager().dropItem(item, blockAbsLocation, parent.player.getPlanet());
-										}
-										else if(item != null) {
-											parent.getInventoryManager().dropItem(item, blockAbsLocation, parent.player.getPlanet());
-										}
-										chunk.removeBlock(blockLocation); //Remove the Block
-									}
 								}
 							}
 						}
@@ -176,7 +180,7 @@ public class InputControl {
 					}
 					Vector3i blockLocation = (Vector3i) values[1];
 					Vector3f blockAbsLocation = (Vector3f) values[0];
-					
+
 					BlockChunkControl blockChunk = SPPortal.self.player.getPlanet().getTerrControl().getChunk(blockLocation);
 					Vector3i blockLocationRelChunk = blockLocation.subtract(blockChunk.getBlockLocation());
 					if(blockLocation != null)
@@ -264,7 +268,7 @@ public class InputControl {
 						parent.getGuiNode().attachChild(parent.InvText);
 						statson = true;
 					}
-				
+
 				}
 				else if(binding.equals("Slot1") && !keyPressed) {
 					parent.getInventoryManager().setSelectedHotSlot(0);
@@ -295,7 +299,7 @@ public class InputControl {
 				}
 				else if(binding.equals("Respawn") && !keyPressed)
 				{
-	
+
 					parent.player.spawnPlayer(parent.player.getSystem().getPlanet(0), 0);
 					parent.cam.setLocation(new Vector3f(parent.player.getLocation().getX(), parent.player.getLocation().getY()+parent.getCamHeight(), parent.player.getLocation().getZ()));
 				}
