@@ -98,10 +98,10 @@ public class CommandManager {
 					this.console.outputError("Invalid command.");
 					this.console.outputError("show <var>");
 				} else if (args[0].equalsIgnoreCase("renderstats")) {
-					String[] labels = parent.app.getRenderer().getStatistics().getLabels();
+					String[] labels = parent.portal.app.getRenderer().getStatistics().getLabels();
 					int[] stats = new int[labels.length];
-					parent.app.getRenderer().getStatistics().getData(stats);
-					for(int i=0;i<parent.app.getRenderer().getStatistics().getLabels().length; i++) {
+					parent.portal.app.getRenderer().getStatistics().getData(stats);
+					for(int i=0;i<parent.portal.app.getRenderer().getStatistics().getLabels().length; i++) {
 						this.console.output(labels[i] + ": " + stats[i]);
 					}
 				} else if(args[0].equalsIgnoreCase("wireframe")) {

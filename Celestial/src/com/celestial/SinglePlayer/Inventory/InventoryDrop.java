@@ -13,7 +13,9 @@ import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.control.BillboardControl;
 import com.jme3.scene.shape.Box;
+import com.jme3.scene.shape.Quad;
 
 /**
  * Inventory Drop Items
@@ -23,8 +25,9 @@ import com.jme3.scene.shape.Box;
  */
 public class InventoryDrop{
 	
-	private Box itemdropshape;
 	private Geometry itemdrop;
+	private BillboardControl itemQuad;
+	private Quad itemBox;
 	
 	private InventoryItem item;
 	private RigidBodyControl rigidBodyControl;
@@ -35,14 +38,16 @@ public class InventoryDrop{
 	
 	public InventoryDrop(InventoryItem item, Vector3f location, Planet planet) {
 		Material mat = new Material(Celestial.portal.getAssetManager(),  // Create new material and...
-			    "Common/MatDefs/Light/Lighting.j3md");
-		mat.setColor("Diffuse", new ColorRGBA(0.5f,0.5f,0.5f,0.3f));
-		mat.setColor("Ambient", new ColorRGBA(0.5f,0.5f,0.5f,0.3f));
-		mat.setTexture("DiffuseMap", Celestial.portal.getAssetManager().loadTexture(item.getIcon()));
+			    "Common/MatDefs/Misc/Unshaded.j3md");
+		//mat.setColor("Diffuse", new ColorRGBA(0.5f,0.5f,0.5f,0.3f));
+		//mat.setColor("Ambient", new ColorRGBA(0.5f,0.5f,0.5f,0.3f));
+		mat.setTexture("ColorMap", Celestial.portal.getAssetManager().loadTexture(item.getIcon()));
 		mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
 		
-		this.itemdropshape = new Box(0.3f,0.3f,0.3f);
-		this.itemdrop = new Geometry("DropItem", this.itemdropshape);
+		this.itemBox = new Quad(1,1);
+		this.itemdrop = new Geometry("DropItem", itemBox);
+		itemQuad = new BillboardControl();
+		this.itemdrop.addControl(itemQuad);
 		this.itemdrop.setMaterial(mat);
 		this.itemdrop.getMesh().scaleTextureCoordinates(new Vector2f(1f,1f));
 		
@@ -67,8 +72,8 @@ public class InventoryDrop{
         this.item = item;
 	}
 	
-	public Box getShape() {
-		return this.itemdropshape;
+	public BillboardControl getShape() {
+		return this.itemQuad;
 	}
 	
 	public Geometry getGeometry() {
