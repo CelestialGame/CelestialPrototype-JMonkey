@@ -350,13 +350,14 @@ public class SPPortal extends CelestialPortal{
 		//al.setColor(ColorRGBA.White);
 		//this.rootNode.addLight(al);
 		FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
-		SSAOFilter ssaoFilter = new SSAOFilter(12.94f, 43.92f, 0.33f, 0.61f);
+		this.getViewPort().addProcessor(fpp);
+		
+		SSAOFilter ssaoFilter = new SSAOFilter(12f, 30f, 1f, 0.61f);
 		fpp.addFilter(ssaoFilter);
 		
 		BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.SceneAndObjects);
 		fpp.addFilter(bloom);
 		
-		this.getViewPort().addProcessor(fpp);
 	}
 
 	public void initAudio() {
