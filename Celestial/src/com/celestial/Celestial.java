@@ -74,6 +74,7 @@ public class Celestial extends SimpleApplication
 	settings.setWidth(Celestial.width);
 	settings.setHeight(Celestial.height);
 	settings.setTitle(Celestial.title);
+	settings.setFrameRate(60);
 	
 	app = self;
 	app.setPauseOnLostFocus(false);

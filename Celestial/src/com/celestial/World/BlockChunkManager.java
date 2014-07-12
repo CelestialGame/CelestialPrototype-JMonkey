@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import com.celestial.Celestial;
+import com.celestial.SinglePlayer.SPPortal;
 import com.celestial.SinglePlayer.Components.Planet.Planet;
 import com.celestial.World.Chunks.ChunkGeneratorCallable;
 import com.cubes.BlockData;
@@ -29,7 +30,7 @@ public class BlockChunkManager
 	
     }
     
-    public void checkChunks(Vector3f camLocation)
+    public void checkChunks()
     {
 	for(Iterator<Entry<Vector3i, Future<Map<Vector3i, BlockData>>>> iterator = this.generatingChunks
 		.entrySet().iterator(); iterator.hasNext();)
@@ -76,7 +77,7 @@ public class BlockChunkManager
 		    
 		    Vector3f currentPlanetTranslation = getPlanet()
 			    .getCurrentPlanetTranslation();
-		    Vector3f planetToCamera = camLocation
+		    Vector3f planetToCamera = SPPortal.self.getCam().getLocation()
 			    .subtract(currentPlanetTranslation);
 		    Vector3f rotatedCameraTranslation = getPlanet()
 			    .getOriginalPlanetTranslation().add(

@@ -20,6 +20,7 @@ import com.cubes.render.GreedyMesher;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.MeshCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.material.RenderState.FaceCullMode;
@@ -34,6 +35,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+import com.jme3.shadow.DirectionalLightShadowRenderer;
+import com.jme3.shadow.EdgeFilteringMode;
 
 public class Planet
 {
@@ -67,6 +70,10 @@ public class Planet
     private Quaternion previousStarNodeRotation;
     private BulletAppState bulletAppState;
     private long seed;
+    
+    private DirectionalLight directionalLight;
+    
+    private DirectionalLightShadowRenderer dlsr;
     
     /**
      * Create a new Planet
@@ -135,6 +142,9 @@ public class Planet
 		.clone();
 	
 	star.getStarNode().attachChild(starNode);
+	
+	/* LIGHTING */
+	initLighting();
 	
 	/* PLANET TYPE DETERMINATION */
 	
@@ -268,6 +278,39 @@ public class Planet
 	
     }
     
+    private void initLighting()
+    {
+	this.directionalLight = new DirectionalLight();
+	this.directionalLight.setColor(ColorRGBA.White);
+	this.directionalLight.setDirection(this.getCurrentPlanetTranslation()
+		.subtract(this.starNode.getWorldTranslation()).normalize());
+	this.starNode.addLight(this.directionalLight);
+	
+	this.dlsr = new DirectionalLightShadowRenderer(
+		this.portal.getAssetManager(), 2048, 3);
+	this.dlsr.setShadowIntensity(0.4f);
+	this.dlsr.setLight(directionalLight);
+	// this.dlsr.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
+	this.portal.getViewPort().addProcessor(this.dlsr);
+    }
+    
+    public void update(PlanetUpdate update)
+    {
+	switch(update)
+	{
+	    case ROTATION:
+		this.rotate();
+		//this.directionalLight.setDirection(this.getCurrentPlanetTranslation()
+		//	.subtract(this.starNode.getWorldTranslation()).normalize());
+		break;
+	    case CHUNKLOADER:
+		this.updateChunks();
+		break;
+	    default:
+		return;
+	}
+    }
+    
     public float getAtmosphereDiameter()
     {
 	try
@@ -281,9 +324,9 @@ public class Planet
 	}
     }
     
-    public void updateChunks(Vector3f camLocation)
+    private void updateChunks()
     {
-	terrainControl.getBlockChunkManager().checkChunks(camLocation);
+	terrainControl.getBlockChunkManager().checkChunks();
     }
     
     public BulletAppState getBulletAppState()
@@ -347,7 +390,7 @@ public class Planet
 		this.planetNode.getWorldTranslation().getZ() + 1.5f);
     }
     
-    public void rotate()
+    private void rotate()
     {
 	this.previousPlanetRotation = planetNode.getWorldRotation().clone();
 	this.previousPlanetTranslation = planetNode.getWorldTranslation()

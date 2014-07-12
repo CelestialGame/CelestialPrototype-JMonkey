@@ -19,6 +19,7 @@ import com.celestial.SinglePlayer.Components.Sector;
 import com.celestial.SinglePlayer.Components.SolarSystem;
 import com.celestial.SinglePlayer.Components.Planet.Planet;
 import com.celestial.SinglePlayer.Components.Planet.PlanetFace;
+import com.celestial.SinglePlayer.Components.Planet.PlanetUpdate;
 import com.celestial.SinglePlayer.Input.InputControl;
 import com.celestial.SinglePlayer.Inventory.InventoryDrop;
 import com.celestial.SinglePlayer.Inventory.InventoryManager;
@@ -210,7 +211,7 @@ public class SPPortal extends CelestialPortal
 		for(SolarSystem sys : s.getSolarSystems())
 		    for(Planet p : sys.getPlanets())
 		    {
-			p.rotate();
+			p.update(PlanetUpdate.ROTATION);
 			if(player.getPlanet() != null)
 			    if(player.getPlanet() == p)
 			    {
@@ -252,7 +253,7 @@ public class SPPortal extends CelestialPortal
 	    for(SolarSystem sys : s.getSolarSystems())
 		for(Planet p : sys.getPlanets())
 		{
-		    p.updateChunks(this.cam.getLocation());
+		    p.update(PlanetUpdate.CHUNKLOADER);
 		}
     }
     

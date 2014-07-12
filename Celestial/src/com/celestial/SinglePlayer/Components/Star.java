@@ -31,61 +31,6 @@ public class Star
     private Geometry StarGeometry;
     private CelestialPortal portal;
     
-    public class LightMap
-    {
-	DirectionalLight top;
-	DirectionalLight bottom;
-	DirectionalLight front;
-	DirectionalLight back;
-	DirectionalLight left;
-	DirectionalLight right;
-	
-	public LightMap()
-	{
-	    top = new DirectionalLight();
-	    top.setDirection(new Vector3f(0f, 1f, 0f).normalizeLocal());
-	    top.setColor(ColorRGBA.White);
-	    
-	    bottom = new DirectionalLight();
-	    bottom.setDirection(new Vector3f(0f, -1f, 0f).normalizeLocal());
-	    bottom.setColor(ColorRGBA.White);
-	    
-	    front = new DirectionalLight();
-	    front.setDirection(new Vector3f(0f, 0f, 1f).normalizeLocal());
-	    front.setColor(ColorRGBA.White);
-	    
-	    back = new DirectionalLight();
-	    back.setDirection(new Vector3f(0f, 0f, -1f).normalizeLocal());
-	    back.setColor(ColorRGBA.White);
-	    
-	    left = new DirectionalLight();
-	    left.setDirection(new Vector3f(-1f, 0f, -0f).normalizeLocal());
-	    left.setColor(ColorRGBA.White);
-	    
-	    right = new DirectionalLight();
-	    right.setDirection(new Vector3f(1f, 0f, 0f).normalizeLocal());
-	    right.setColor(ColorRGBA.White);
-	}
-	
-	public LightMap(DirectionalLight top, DirectionalLight bottom,
-		DirectionalLight front, DirectionalLight back,
-		DirectionalLight left, DirectionalLight right)
-	{
-	    this.top = top;
-	    this.bottom = bottom;
-	    this.front = front;
-	    this.back = back;
-	    this.left = left;
-	    this.right = right;
-	}
-	
-	public DirectionalLight[] getLights()
-	{
-	    return new DirectionalLight[] { top, bottom, front, back, left,
-		    right };
-	}
-    }
-    
     /**
      * Generates a star at given location
      * 
@@ -136,39 +81,6 @@ public class Star
 	portal.getRootNode().attachChild(StarNode);
 	
 	this.StarNode.setQueueBucket(Bucket.Opaque);
-	
-	/*
-	 * this.lightMap = new LightMap();
-	 * 
-	 * for(DirectionalLight light : this.lightMap.getLights()) {
-	 * this.StarNode.addLight(light); }
-	 */
-	this.light = new PointLight();
-	light.setPosition(location);
-	light.setColor(ColorRGBA.White);
-	light.setRadius(10000f);
-	this.StarNode.addLight(light);
-	
-	PointLightShadowRenderer plsr = new PointLightShadowRenderer(
-		this.portal.getAssetManager(), SPPortal.SHADOWMAP_SIZE);
-	plsr.setLight(light);
-	// plsr.setEdgeFilteringMode(EdgeFilteringMode.PCF4);
-	// plsr.setFlushQueues(false);
-	// plsr.displayFrustum();
-	// plsr.displayDebug();
-	portal.getViewPort().addProcessor(plsr);
-	
-	PointLightShadowFilter plsf = new PointLightShadowFilter(
-		this.portal.getAssetManager(), SPPortal.SHADOWMAP_SIZE);
-	plsf.setLight(light);
-	plsf.setEdgeFilteringMode(EdgeFilteringMode.Dither);
-	plsf.setEnabled(true);
-	
-	FilterPostProcessor fpp = new FilterPostProcessor(
-		this.portal.getAssetManager());
-	fpp.addFilter(plsf);
-	
-	portal.getViewPort().addProcessor(fpp);
 	
 	this.StarNode.move(location);
     }

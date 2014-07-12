@@ -36,7 +36,7 @@ public class SolarSystem
 	
 	this.star = new Star(this);
 	
-	Planet p = new Planet(star, 25, new Vector3f(3000, 0, 3000), name
+	Planet p = new Planet(star, 25, new Vector3f(3000, -2000, 3000), name
 		+ " III");
 	/*
 	 * Planet p1 = new Planet(star, 1, new Vector3f(1000, 0, 1000), name +
