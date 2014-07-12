@@ -1,9 +1,15 @@
 package com.cubes.render;
 
+import java.util.ArrayList;
+
 import com.cubes.Block;
+import com.cubes.Block.Face;
 import com.cubes.BlockChunkControl;
+import com.cubes.BlockManager;
 import com.cubes.BlockSkin;
 import com.cubes.BlockType;
+import com.cubes.Vector3i;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Mesh;
 
 public class NaiveMesher extends VoxelMesher {
@@ -16,10 +22,10 @@ public class NaiveMesher extends VoxelMesher {
         ArrayList<Float> normals = new ArrayList<>();
         Vector3f tmpLocation = new Vector3f();
         Vector3i tmpI = new Vector3i();
-        for (int val = 0; val < terrain.getBlocks().length; val++) {
-        	terrain.vectorFromInt555(val, tmpI);
+        for (int val = 0; val < terrain.getBlockData().size(); val++) {
+        	//terrain.vectorFromInt555(val, tmpI);
             tmpLocation.setX(tmpI.getX()).setY(tmpI.getY()).setZ(tmpI.getZ());
-            BlockType bt = MaterialManager.getInstance().getType(terrain.getBlocks()[val]);
+            BlockType bt = BlockManager.getInstance().getType(terrain.getBlockData().get(val).getBlockType());
             if (bt != null) {
                 BlockSkin skin = bt.getSkin();
                 Vector3f faceLoc_frontBotLeft = tmpLocation.add(Block.FRONT_BOTTOM_LEFT);
@@ -35,27 +41,27 @@ public class NaiveMesher extends VoxelMesher {
                     if (terrain.isFaceVisible(tmpI, face)) {
                         // Write the verts
                         switch (face) {
-                            case TOP:
+                            case Top:
                                 writeQuad(verts, indices, normals, 
                                         faceLoc_rearTopLeft, faceLoc_rearTopRight, faceLoc_frontTopLeft, faceLoc_frontTopRight, face);
                                 break;
-                            case BOTTOM:
+                            case Bottom:
                                  writeQuad(verts, indices, normals,
                                         faceLoc_rearBotRight, faceLoc_rearBotLeft, faceLoc_frontBotRight, faceLoc_frontBotLeft, face);
                                 break;
-                            case LEFT:
+                            case Left:
                                 writeQuad(verts, indices, normals, 
                                         faceLoc_frontBotLeft, faceLoc_rearBotLeft, faceLoc_frontTopLeft, faceLoc_rearTopLeft, face);
                                 break;
-                            case RIGHT:
+                            case Right:
                                 writeQuad(verts, indices, normals, 
                                         faceLoc_rearBotRight, faceLoc_frontBotRight, faceLoc_rearTopRight, faceLoc_frontTopRight, face);
                                 break;
-                            case FRONT:
+                            case Front:
                                 writeQuad(verts, indices, normals, 
                                         faceLoc_rearBotLeft, faceLoc_rearBotRight, faceLoc_rearTopLeft, faceLoc_rearTopRight, face);
                                 break;
-                            case BACK:
+                            case Back:
                                 writeQuad(verts, indices, normals, 
                                         faceLoc_frontBotRight, faceLoc_frontBotLeft, faceLoc_frontTopRight, faceLoc_frontTopLeft, face);
                                 break;
