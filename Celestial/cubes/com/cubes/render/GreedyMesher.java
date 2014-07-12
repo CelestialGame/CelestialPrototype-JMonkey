@@ -34,6 +34,7 @@ import com.cubes.BlockChunkControl;
 import com.cubes.BlockManager;
 import com.cubes.Vector3i;
 import com.cubes.Block.Face;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Mesh;
 
@@ -43,8 +44,10 @@ public class GreedyMesher extends VoxelMesher {
 
 	@Override
     public Mesh generateMesh(BlockChunkControl terrain, int chunkSize) {
+		this.terrain = terrain;
+		
         ArrayList<Vector3f> verts = new ArrayList<Vector3f>();
-        ArrayList<Vector3f> textCoords = new ArrayList<Vector3f>();
+        ArrayList<Vector2f> textCoords = new ArrayList<Vector2f>();
         ArrayList<Integer> indices = new ArrayList<Integer>();
         ArrayList<Float> normals = new ArrayList<Float>();
 
@@ -93,7 +96,7 @@ public class GreedyMesher extends VoxelMesher {
                     
                     n = 0;
                     for (j = 0; j < chunkSize; j++) {
-                        for (i = 0; i < chunkSize; ) {
+                        for (i = 0; i < chunkSize;) {
                             // Loop until we find a start point
                             if (mask[n] != 0) {
                                 // Find the width of this mask section, w == current width

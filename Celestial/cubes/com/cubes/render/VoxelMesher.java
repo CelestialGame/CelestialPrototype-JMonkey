@@ -37,8 +37,10 @@ package com.cubes.render;
 import com.cubes.Block.Face;
 import com.cubes.BlockChunkControl;
 import com.cubes.BlockSkin;
+import com.cubes.BlockSkin_TextureLocation;
 import com.cubes.BlockTerrainControl;
 import com.cubes.Vector3i;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer;
@@ -47,13 +49,15 @@ import com.jme3.util.BufferUtils;
 import java.util.ArrayList;
 
 public abstract class VoxelMesher {
+	protected BlockChunkControl terrain;
+	
     public abstract Mesh generateMesh(BlockChunkControl terrain, int chunkSize);
     
-    protected Mesh genMesh(ArrayList<Vector3f> vertexList, ArrayList<Vector3f> textCoordsList, ArrayList<Integer> indicesList, ArrayList<Float> normalsList) {
+    protected Mesh genMesh(ArrayList<Vector3f> vertexList, ArrayList<Vector2f> textCoordsList, ArrayList<Integer> indicesList, ArrayList<Float> normalsList) {
         // Dump all of the Data into buffers on a Mesh
         Mesh mesh = new Mesh();
         mesh.setBuffer(VertexBuffer.Type.Position, 3, BufferUtils.createFloatBuffer(vertexList.toArray(new Vector3f[vertexList.size()])));
-        mesh.setBuffer(VertexBuffer.Type.TexCoord, 3, BufferUtils.createFloatBuffer(textCoordsList.toArray(new Vector3f[textCoordsList.size()])));
+        mesh.setBuffer(VertexBuffer.Type.TexCoord, 2, BufferUtils.createFloatBuffer(textCoordsList.toArray(new Vector2f[textCoordsList.size()])));
         int[] indices = new int[indicesList.size()];
         for (int i = 0; i < indices.length; i++) {
             indices[i] = indicesList.get(i);
@@ -102,10 +106,10 @@ public abstract class VoxelMesher {
         normals.addAll(face.getNormals());
         
         // Add the verts in the necessary order
-        verts.add(bottomLeft);
-        verts.add(topLeft);
-        verts.add(topRight);
-        verts.add(bottomRight);    
+        verts.add(bottomLeft.mult(terrain.getTerrain().getSettings().getBlockSize()));
+        verts.add(topLeft.mult(terrain.getTerrain().getSettings().getBlockSize()));
+        verts.add(topRight.mult(terrain.getTerrain().getSettings().getBlockSize()));
+        verts.add(bottomRight.mult(terrain.getTerrain().getSettings().getBlockSize()));    
     }
     
     /**
@@ -118,11 +122,19 @@ public abstract class VoxelMesher {
      * @param height
      * @param skin 
      */
-    protected void writeTextureCoords(ArrayList<Vector3f> textureCoords, BlockChunkControl terrain, Vector3i blockLoc, Face face, int width, int height, BlockSkin skin) {
-        int textOffset = skin.getTextureOffset(terrain, blockLoc, face);
-        textureCoords.add(new Vector3f(0, 0, textOffset));
-        textureCoords.add(new Vector3f(width, 0, textOffset));
-        textureCoords.add(new Vector3f(0, height, textOffset));
-        textureCoords.add(new Vector3f(width, height, textOffset));
+    protected void writeTextureCoords(ArrayList<Vector2f> textureCoords, BlockChunkControl terrain, Vector3i blockLoc, Face face, int width, int height, BlockSkin skin) {
+        BlockSkin_TextureLocation textureLocation = skin.getTextureLocation(terrain, blockLoc, face);
+        textureCoords.add(getTextureCoordinates(textureLocation, 0, 0));
+        textureCoords.add(getTextureCoordinates(textureLocation, 1, 0));
+        textureCoords.add(getTextureCoordinates(textureLocation, 0, 1));
+        textureCoords.add(getTextureCoordinates(textureLocation, 1, 1));
+    }
+    
+    private static Vector2f getTextureCoordinates(BlockSkin_TextureLocation textureLocation, int xUnitsToAdd, int yUnitsToAdd){
+        float textureCount = 16;
+        float textureUnit = 1f / textureCount;
+        float x = (((textureLocation.getColumn() + xUnitsToAdd) * textureUnit));
+        float y = ((((-1 * textureLocation.getRow()) + (yUnitsToAdd - 1)) * textureUnit) + 1);
+        return new Vector2f(x, y);
     }
 }
