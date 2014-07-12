@@ -17,6 +17,7 @@ import com.cubes.BlockChunkListener;
 import com.cubes.BlockTerrainControl;
 import com.cubes.Vector3i;
 import com.cubes.render.GreedyMesher;
+import com.cubes.render.NaiveMesher;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.MeshCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
