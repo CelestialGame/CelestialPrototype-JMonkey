@@ -43,7 +43,7 @@ import java.util.ArrayList;
 public class GreedyMesher extends VoxelMesher {
 
 	@Override
-    public Mesh generateMesh(BlockChunkControl terrain, int chunkSize) {
+    public Mesh generateMesh(BlockChunkControl terrain, int chunkSize, boolean isTransparent) {
 		this.terrain = terrain;
 		
         ArrayList<Vector3f> verts = new ArrayList<Vector3f>();
@@ -181,7 +181,8 @@ public class GreedyMesher extends VoxelMesher {
             }
         }
         if (indices.isEmpty()) {
-            return null;
+            //return new NaiveMesher().generateMesh(terrain, chunkSize, isTransparent);
+        	return null;
         }
         return genMesh(verts, textCoords, indices, normals);
     }

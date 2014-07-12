@@ -202,10 +202,13 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 				node.attachChild(optimizedGeometry_Transparent);
 				updateBlockMaterial();
 			}
-			//optimizedGeometry_Opaque.setMesh(BlockChunk_MeshOptimizer.generateOptimizedMesh(this, BlockChunk_TransparencyMerger.OPAQUE));
-			//optimizedGeometry_Transparent.setMesh(BlockChunk_MeshOptimizer.generateOptimizedMesh(this, BlockChunk_TransparencyMerger.TRANSPARENT));
-			optimizedGeometry_Opaque.setMesh(terrain.getMesher().generateMesh(this, terrain.getSettings().getChunkSizeX()));
-			optimizedGeometry_Transparent.setMesh(terrain.getMesher().generateMesh(this, terrain.getSettings().getChunkSizeX()));
+			try {
+				optimizedGeometry_Opaque.setMesh(terrain.getMesher().generateMesh(this, terrain.getSettings().getChunkSizeX(), false));
+				optimizedGeometry_Transparent.setMesh(terrain.getMesher().generateMesh(this, terrain.getSettings().getChunkSizeX(), true));
+			} catch (IllegalArgumentException e) {
+				optimizedGeometry_Opaque.setMesh(BlockChunk_MeshOptimizer.generateOptimizedMesh(this, BlockChunk_TransparencyMerger.OPAQUE));
+				optimizedGeometry_Transparent.setMesh(BlockChunk_MeshOptimizer.generateOptimizedMesh(this, BlockChunk_TransparencyMerger.TRANSPARENT));
+			}
 			LodGenerator lod = new LodGenerator(optimizedGeometry_Opaque);
 			lod.bakeLods(LodGenerator.TriangleReductionMethod.COLLAPSE_COST, 0.9f);
 			lod = new LodGenerator(optimizedGeometry_Transparent);
@@ -301,6 +304,20 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 		//TODO: Read data from file (Serialize)
 	}
 
+	public boolean isFaceVisible(Vector3i loc, Face face, boolean isTransparent) {
+		BlockType block = getBlock(loc);
+        if(block.getSkin().isTransparent() == isTransparent){
+            BlockType neighborBlock = getNeighborBlock_Local(loc, face);
+            if(neighborBlock != null){
+                if(block.getSkin().isTransparent() != neighborBlock.getSkin().isTransparent()){
+                    return true;
+                }
+                return false;
+            }
+            return true;
+        }
+        return false;
+	}
 	public boolean isFaceVisible(Vector3i loc, Face face) {
 		try {
 			Vector3i vec = loc.add(face.getOffsetVector());
@@ -320,6 +337,9 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 				&& y < this.terrain.getSettings().getChunkSizeY()  
 				&& z < this.terrain.getSettings().getChunkSizeZ()  
 				&& x > -1 && y > -1 && z > -1;
+	}
+	public boolean isLocationInChunk(Vector3i loc) {
+		return isLocationInChunk(loc.getX(), loc.getY(), loc.getZ());
 	}
 	
 	@Override 

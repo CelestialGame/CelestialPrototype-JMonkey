@@ -50,8 +50,9 @@ import java.util.ArrayList;
 
 public abstract class VoxelMesher {
 	protected BlockChunkControl terrain;
+	private boolean isTransparent;
 	
-    public abstract Mesh generateMesh(BlockChunkControl terrain, int chunkSize);
+    public abstract Mesh generateMesh(BlockChunkControl terrain, int chunkSize, boolean isTransparent);
     
     protected Mesh genMesh(ArrayList<Vector3f> vertexList, ArrayList<Vector2f> textCoordsList, ArrayList<Integer> indicesList, ArrayList<Float> normalsList) {
         // Dump all of the Data into buffers on a Mesh

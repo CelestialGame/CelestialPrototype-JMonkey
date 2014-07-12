@@ -16,7 +16,7 @@ import com.jme3.scene.Mesh;
 public class NaiveMesher extends VoxelMesher {
 
 	@Override
-	public Mesh generateMesh(BlockChunkControl terrain, int chunkSize) {
+	public Mesh generateMesh(BlockChunkControl terrain, int chunkSize, boolean isTransparent) {
 		this.terrain = terrain;
 		
 		ArrayList<Vector3f> verts = new ArrayList<>();
@@ -32,17 +32,17 @@ public class NaiveMesher extends VoxelMesher {
 					try {
 						BlockType bt = BlockManager.getInstance().getType(terrain.getBlockData().get(tmpI).getBlockType());
 						BlockSkin skin = bt.getSkin();
-						Vector3f faceLoc_frontBotLeft = tmpLocation.add(Block.FRONT_BOTTOM_LEFT.mult(terrain.getTerrain().getSettings().getBlockSize()));
-						Vector3f faceLoc_frontBotRight = tmpLocation.add(Block.FRONT_BOTTOM_RIGHT.mult(terrain.getTerrain().getSettings().getBlockSize()));
-						Vector3f faceLoc_rearBotLeft = tmpLocation.add(Block.REAR_BOTTOM_LEFT.mult(terrain.getTerrain().getSettings().getBlockSize()));
-						Vector3f faceLoc_rearBotRight = tmpLocation.add(Block.REAR_BOTTOM_RIGHT.mult(terrain.getTerrain().getSettings().getBlockSize()));
-						Vector3f faceLoc_frontTopLeft = tmpLocation.add(Block.FRONT_TOP_LEFT.mult(terrain.getTerrain().getSettings().getBlockSize()));
-						Vector3f faceLoc_frontTopRight = tmpLocation.add(Block.FRONT_TOP_RIGHT.mult(terrain.getTerrain().getSettings().getBlockSize()));
-						Vector3f faceLoc_rearTopLeft = tmpLocation.add(Block.REAR_TOP_LEFT.mult(terrain.getTerrain().getSettings().getBlockSize()));
-						Vector3f faceLoc_rearTopRight = tmpLocation.add(Block.REAR_TOP_RIGHT.mult(terrain.getTerrain().getSettings().getBlockSize()));
+						Vector3f faceLoc_frontBotLeft = tmpLocation.add(Block.FRONT_BOTTOM_LEFT);
+						Vector3f faceLoc_frontBotRight = tmpLocation.add(Block.FRONT_BOTTOM_RIGHT);
+						Vector3f faceLoc_rearBotLeft = tmpLocation.add(Block.REAR_BOTTOM_LEFT);
+						Vector3f faceLoc_rearBotRight = tmpLocation.add(Block.REAR_BOTTOM_RIGHT);
+						Vector3f faceLoc_frontTopLeft = tmpLocation.add(Block.FRONT_TOP_LEFT);
+						Vector3f faceLoc_frontTopRight = tmpLocation.add(Block.FRONT_TOP_RIGHT);
+						Vector3f faceLoc_rearTopLeft = tmpLocation.add(Block.REAR_TOP_LEFT);
+						Vector3f faceLoc_rearTopRight = tmpLocation.add(Block.REAR_TOP_RIGHT);
 						// Loop over all 6 faces and verify which one should be visible as we currently don't cache this value
 						for (Face face : Face.values()) {
-							if (terrain.isFaceVisible(tmpI, face)) {
+							if (terrain.isFaceVisible(tmpI, face, isTransparent)) {
 								// Write the verts
 								switch (face) {
 								case Top:
