@@ -400,10 +400,10 @@ public class SPPortal extends CelestialPortal
 	
 	SSAOFilter ssaoFilter = new SSAOFilter(12f, 30f, 1f, 0.61f);
 	fpp.addFilter(ssaoFilter);
-	/*
+	
 	BloomFilter bloom = new BloomFilter(
 		BloomFilter.GlowMode.SceneAndObjects);
-	fpp.addFilter(bloom);*/
+	fpp.addFilter(bloom);
 	
     }
     
