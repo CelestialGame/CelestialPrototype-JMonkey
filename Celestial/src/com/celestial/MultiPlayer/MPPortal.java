@@ -8,6 +8,7 @@ package com.celestial.MultiPlayer;
 
 import com.celestial.Celestial;
 import com.celestial.CelestialPortal;
+import com.celestial.SinglePlayer.Components.Player;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.input.InputManager;
 import com.jme3.renderer.RenderManager;
@@ -40,7 +41,7 @@ public class MPPortal extends CelestialPortal
     }
     
     @Override
-    public BetterCharacterControl getPlayer()
+    public Player getPlayer()
     {
 	return null;
     }
@@ -48,12 +49,6 @@ public class MPPortal extends CelestialPortal
     @Override
     public void simpleRender(RenderManager rm)
     {
-    }
-    
-    @Override
-    public float getCamHeight()
-    {
-	return 0;
     }
     
     @Override

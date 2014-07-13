@@ -8,7 +8,7 @@
 	<classpathentry kind="lib" path="jmonkey/lib/gluegen-rt.jar"/>
 	<classpathentry kind="lib" path="jmonkey/lib/j-ogg-oggd.jar"/>
 	<classpathentry kind="lib" path="jmonkey/lib/j-ogg-vorbisd.jar"/>
-	<classpathentry kind="lib" path="jmonkey/lib/jbullet.jar"/>
+	<classpathentry kind="lib" path="jmonkey/lib/jbullet.jar" sourcepath="jmonkey/source"/>
 	<classpathentry kind="lib" path="jmonkey/lib/jglfont-core.jar"/>
 	<classpathentry kind="lib" path="jmonkey/lib/jinput.jar"/>
 	<classpathentry kind="lib" path="jmonkey/lib/jME3-blender.jar">
@@ -31,7 +31,7 @@
 			<attribute name="javadoc_location" value="http://hub.jmonkeyengine.org/javadoc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="jmonkey/lib/jME3-jbullet.jar">
+	<classpathentry kind="lib" path="jmonkey/lib/jME3-jbullet.jar" sourcepath="jmonkey/source">
 		<attributes>
 			<attribute name="javadoc_location" value="http://hub.jmonkeyengine.org/javadoc/"/>
 		</attributes>

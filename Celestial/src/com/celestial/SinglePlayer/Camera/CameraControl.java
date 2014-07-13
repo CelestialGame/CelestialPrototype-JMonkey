@@ -127,9 +127,6 @@ public class CameraControl
 	    this.cam.setLocation(new Vector3f(this.parent.player.getLocation()
 		    .getX(), this.parent.player.getLocation().getY(),
 		    this.parent.player.getLocation().getZ()));
-	    this.cam.setLocation(cam.getLocation().add(
-		    this.parent.player.getLocalUp().mult(
-			    this.parent.getCamHeight())));
 	}
 	
 	this.parent.getParent().getListener()

@@ -386,7 +386,7 @@ public class InputControl
 			parent.player.getBulletAppState().setEnabled(true);
 			parent.player.setLocation(new Vector3f(cam
 				.getLocation().getX(), cam.getLocation().getY()
-				- parent.getCamHeight(), cam.getLocation()
+				, cam.getLocation()
 				.getZ()));
 			parent.player.setVisibleToClient(false);
 		    }
@@ -454,7 +454,7 @@ public class InputControl
 			    .getPlanet(0), 0);
 		    parent.cam.setLocation(new Vector3f(parent.player
 			    .getLocation().getX(), parent.player.getLocation()
-			    .getY() + parent.getCamHeight(), parent.player
+			    .getY(), parent.player
 			    .getLocation().getZ()));
 		}
 		else if(binding.equals("Inventory") && !keyPressed)

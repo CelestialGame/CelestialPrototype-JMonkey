@@ -26,12 +26,9 @@ public class Listener implements PhysicsCollisionListener
 	    while(itr.hasNext())
 	    {
 		InventoryDrop drop = itr.next();
-		if((e.getObjectA().equals(drop.getCollisionBox()) && e
-			.getObjectB().equals(
-				SPPortal.self.player.getCollisionBox()))
+		if((e.getObjectA().equals(drop.getCollisionBox()) && e.getNodeB().getName().equals("Player")
 			|| (e.getObjectB().equals(drop.getCollisionBox()) && e
-				.getObjectA().equals(
-					SPPortal.self.player.getCollisionBox())))
+				.getNodeA().getName().equals("Player"))))
 		{
 		    invmanager.pickupDrop(drop, 1);
 		    invmanager.updateAll();

@@ -10,9 +10,9 @@ import com.celestial.CelestialPortal;
 import com.celestial.SinglePlayer.Components.Planet.Planet;
 import com.celestial.SinglePlayer.Components.Planet.PlanetFace;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.PhysicsSpace;
-import com.jme3.bullet.control.BetterCharacterControl;
-import com.jme3.bullet.objects.PhysicsRigidBody;
+import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
+import com.jme3.bullet.control.CharacterControl;
+import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -21,7 +21,8 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 
-public class Player extends BetterCharacterControl
+@SuppressWarnings("deprecation")
+public class Player extends CharacterControl
 {
     
     private CelestialPortal portal;
@@ -38,16 +39,17 @@ public class Player extends BetterCharacterControl
     
     public Player(CelestialPortal portal, String name)
     {
-	super(1.2f, 5.8f, 1f);
+	super(new CapsuleCollisionShape((portal.csettings.getBlockSize() / 2), portal.csettings.getBlockSize() * 2f), 0.05f);
 	this.portal = portal;
 	playerSpatial = portal.getAssetManager().loadModel(
 		"assets/models/player/simpleplayer.blend");
 	playerSpatial.scale(0.5f, 1.5f, 1);
 	playerSpatial.scale(0.5f);
 	playerNode = (Node) playerSpatial;
+	playerNode.setName("Player");
 	playerNode.addControl(this);
-	this.setJumpForce(new Vector3f(0, 15f, 0));
-	this.setPhysicsDamping(1f);
+	this.setJumpSpeed(25f);
+	this.setFallSpeed(20f);
 	portal.getRootNode().attachChild(playerNode);
 	this.cam = portal.cam;
 	this.name = name;
@@ -71,27 +73,22 @@ public class Player extends BetterCharacterControl
     
     public Vector3f getLocation()
     {
-	return this.location;
+	return this.getPhysicsLocation();
     }
     
     public Quaternion getRotation()
     {
-	return this.rotation;
+	return this.cam.getRotation();
     }
     
     public Vector3f getLocalUp()
     {
-	return this.localUp;
+	return this.cam.getUp();
     }
     
     public Vector3f getLocalLeft()
     {
-	return this.localLeft;
-    }
-    
-    public Vector3f getLocalForward()
-    {
-	return this.localForward;
+	return this.cam.getLeft();
     }
     
     @Override
@@ -113,12 +110,6 @@ public class Player extends BetterCharacterControl
 	    
 	    this.setLocation(translation);
 	}
-    }
-    
-    @Override
-    public void physicsTick(PhysicsSpace space, float tpf)
-    {
-	super.physicsTick(space, tpf);
     }
     
     public void spawnPlayer(Planet planet, int face)
@@ -152,7 +143,6 @@ public class Player extends BetterCharacterControl
 	{
 	    this.setBulletAppState(planet.getBulletAppState());
 	    planet.getPlanetNode().attachChild(this.getNode());
-	    planet.getPlanetNode().attachChild(this.playerSpatial);
 	}
 	else
 	{
@@ -379,11 +369,6 @@ public class Player extends BetterCharacterControl
 	return portal;
     }
     
-    public PhysicsRigidBody getCollisionBox()
-    {
-	return this.rigidBody;
-    }
-    
     public Node getNode()
     {
 	return this.playerNode;
@@ -412,10 +397,12 @@ public class Player extends BetterCharacterControl
 	}
 	this.bulletAppState = state;
 	this.bulletAppState.getPhysicsSpace().add(this);
+	this.bulletAppState.getPhysicsSpace().addAll(this.getNode());
     }
     
     public void setTranslationUpdate(Vector3f translation)
     {
 	this.translationUpdate = translation;
     }
+    
 }

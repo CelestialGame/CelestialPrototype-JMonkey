@@ -60,7 +60,7 @@ public abstract class CelestialPortal
     
     public abstract void simpleRender(RenderManager rm);
     
-    public abstract BetterCharacterControl getPlayer();
+    public abstract Player getPlayer();
     
     public InventoryManager getInventoryManager()
     {
@@ -101,8 +101,6 @@ public abstract class CelestialPortal
     {
 	return settings;
     }
-    
-    public abstract float getCamHeight();
     
     public AssetManager getAssetManager()
     {

@@ -81,7 +81,7 @@ public class CommandManager {
 							this.console.output("Noclip On");
 						} else {
 							Celestial.portal.player.getBulletAppState().setEnabled(true);
-							Celestial.portal.player.setLocation(new Vector3f(Celestial.portal.cam.getLocation().getX(), Celestial.portal.cam.getLocation().getY()-Celestial.portal.getCamHeight(), Celestial.portal.cam.getLocation().getZ()));
+							Celestial.portal.player.setLocation(new Vector3f(Celestial.portal.cam.getLocation().getX(), Celestial.portal.cam.getLocation().getY(), Celestial.portal.cam.getLocation().getZ()));
 							Celestial.portal.player.setVisibleToClient(false);
 							this.console.output("Noclip Off");
 						}
