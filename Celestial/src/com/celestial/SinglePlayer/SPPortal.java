@@ -141,7 +141,6 @@ public class SPPortal extends CelestialPortal
 	sky.rotate(270 * FastMath.DEG_TO_RAD, 0, 0);
 	this.rootNode.attachChild(sky);
 	
-	/** TODO: lighting fix -_- :P **/
 	initLighting();
 	
 	this.player = new Player(this, "John Doe");
@@ -401,10 +400,10 @@ public class SPPortal extends CelestialPortal
 	
 	SSAOFilter ssaoFilter = new SSAOFilter(12f, 30f, 1f, 0.61f);
 	fpp.addFilter(ssaoFilter);
-	
+	/*
 	BloomFilter bloom = new BloomFilter(
 		BloomFilter.GlowMode.SceneAndObjects);
-	fpp.addFilter(bloom);
+	fpp.addFilter(bloom);*/
 	
     }
     

@@ -93,19 +93,19 @@ public class BlockChunkManager
 		    float distance = rotatedCameraTranslation
 			    .distance(centerOfChunk);
 		    Vector3i location = new Vector3i(x, y, z);
-		    if(distance > Planet.VIEW_DISTANCE)
-		    {
-			if(this.generatingChunks.containsKey(location)
-				|| !this.terrainControl.isChunkLoaded(location))
-			    continue;
-			// this.terrainControl.unLoadChunk(new Vector3i(x,y,z));
-		    }
-		    else
+		    if(distance <= Planet.VIEW_DISTANCE || SPPortal.generateEntire)
 		    {
 			if(this.generatingChunks.containsKey(location)
 				|| this.terrainControl.isChunkLoaded(location))
 			    continue;
 			this.startChunkGeneration(location);
+		    }
+		    else
+		    {
+			if(this.generatingChunks.containsKey(location)
+				|| !this.terrainControl.isChunkLoaded(location))
+			    continue;
+			// this.terrainControl.unLoadChunk(new Vector3i(x,y,z));
 		    }
 		}
     }

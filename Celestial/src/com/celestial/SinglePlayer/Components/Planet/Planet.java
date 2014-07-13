@@ -254,17 +254,33 @@ public class Planet
 		    * atmosphereSizeFactor);
 	    this.atmospheregeom = new Geometry("Atmosphere", this.atmospherebox);
 	    this.atmospheremat = new Material(portal.getAssetManager(),
-		    "Common/MatDefs/Misc/Unshaded.j3md");
+		    "Common/MatDefs/Light/Lighting.j3md");
 	    
-	    if(this.type.equals(PlanetType.HABITABLE))
-		this.atmospheremat.setColor("Color", new ColorRGBA(0.3f, 0.5f,
-			1, 0.75f));
-	    else if(this.type.equals(PlanetType.INNER))
-		this.atmospheremat.setColor("Color", new ColorRGBA(0.68f, 0.4f,
-			0.09f, 0.75f));
-	    else
-		this.atmospheremat.setColor("Color", new ColorRGBA(0.25f,
-			0.38f, 0.98f, 0.75f));
+	    this.atmospheremat.setBoolean("UseMaterialColors", true);
+	    this.atmospheremat.setBoolean("UseAlpha", true);
+	    switch(type)
+	    {
+		case HABITABLE:
+		    this.atmospheremat.setColor("Ambient", new ColorRGBA(0.3f, 0.5f,
+				1, 0.75f));
+		    this.atmospheremat.setColor("Diffuse", new ColorRGBA(0.3f, 0.5f,
+				1, 0.75f));
+		    break;
+		case INNER:
+		    this.atmospheremat.setColor("Ambient", new ColorRGBA(0.68f, 0.4f,
+				0.09f, 0.75f));
+		    this.atmospheremat.setColor("Diffuse", new ColorRGBA(0.68f, 0.4f,
+				0.09f, 0.75f));
+		    break;
+		default:
+		    this.atmospheremat.setColor("Ambient", new ColorRGBA(0.25f,
+				0.38f, 0.98f, 0.75f));
+		    this.atmospheremat.setColor("Diffuse", new ColorRGBA(0.25f,
+				0.38f, 0.98f, 0.75f));
+		    this.atmospheremat.setColor("Specular", new ColorRGBA(1f, 1f, 1f, 1f));
+		    break;
+	    }
+
 	    this.atmospheregeom.setMaterial(this.atmospheremat);
 	    
 	    this.atmospheremat.getAdditionalRenderState().setBlendMode(
@@ -291,7 +307,7 @@ public class Planet
 		this.portal.getAssetManager(), 2048, 3);
 	this.dlsr.setShadowIntensity(0.4f);
 	this.dlsr.setLight(directionalLight);
-	// this.dlsr.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
+	this.dlsr.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
 	this.portal.getViewPort().addProcessor(this.dlsr);
     }
     

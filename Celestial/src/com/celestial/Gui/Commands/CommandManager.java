@@ -57,7 +57,7 @@ public class CommandManager {
 					this.console.outputError("Invalid command.");
 					this.console.outputError("generateEntire [bool]");
 				} else if(args.length == 1)
-					if(parent.getPortal() instanceof SPPortal) {
+					if(Celestial.getPortal() instanceof SPPortal) {
 						try {
 							SPPortal.generateEntire = Boolean.parseBoolean(args[0]);
 						} catch (Exception e) {
@@ -73,16 +73,16 @@ public class CommandManager {
 				}
 			}  else if (command.equalsIgnoreCase("noclip")) {
 				if(args.length == 0) {
-					if(this.parent.portal instanceof SPPortal) {
-						if(parent.portal.player.getBulletAppState().isEnabled()) {
-							parent.portal.player.getBulletAppState().setEnabled(false);
-							parent.portal.setCamSpeed(100);
-							parent.portal.player.setVisibleToClient(true);
+					if(Celestial.portal instanceof SPPortal) {
+						if(Celestial.portal.player.getBulletAppState().isEnabled()) {
+							Celestial.portal.player.getBulletAppState().setEnabled(false);
+							Celestial.portal.setCamSpeed(100);
+							Celestial.portal.player.setVisibleToClient(true);
 							this.console.output("Noclip On");
 						} else {
-							parent.portal.player.getBulletAppState().setEnabled(true);
-							parent.portal.player.setLocation(new Vector3f(parent.portal.cam.getLocation().getX(), parent.portal.cam.getLocation().getY()-parent.portal.getCamHeight(), parent.portal.cam.getLocation().getZ()));
-							parent.portal.player.setVisibleToClient(false);
+							Celestial.portal.player.getBulletAppState().setEnabled(true);
+							Celestial.portal.player.setLocation(new Vector3f(Celestial.portal.cam.getLocation().getX(), Celestial.portal.cam.getLocation().getY()-Celestial.portal.getCamHeight(), Celestial.portal.cam.getLocation().getZ()));
+							Celestial.portal.player.setVisibleToClient(false);
 							this.console.output("Noclip Off");
 						}
 					} else {
@@ -98,10 +98,10 @@ public class CommandManager {
 					this.console.outputError("Invalid command.");
 					this.console.outputError("show <var>");
 				} else if (args[0].equalsIgnoreCase("renderstats")) {
-					String[] labels = parent.portal.app.getRenderer().getStatistics().getLabels();
+					String[] labels = Celestial.portal.app.getRenderer().getStatistics().getLabels();
 					int[] stats = new int[labels.length];
-					parent.portal.app.getRenderer().getStatistics().getData(stats);
-					for(int i=0;i<parent.portal.app.getRenderer().getStatistics().getLabels().length; i++) {
+					Celestial.portal.app.getRenderer().getStatistics().getData(stats);
+					for(int i=0;i<Celestial.portal.app.getRenderer().getStatistics().getLabels().length; i++) {
 						this.console.output(labels[i] + ": " + stats[i]);
 					}
 				} else if(args[0].equalsIgnoreCase("wireframe")) {
@@ -112,9 +112,9 @@ public class CommandManager {
 					else
 						parent.getViewPort().removeProcessor(wP);
 				} else if(args[0].equalsIgnoreCase("planetface")) {
-					if(this.parent.portal instanceof SPPortal) {
-						this.console.output(""+parent.portal.player.getCurrentFaceOfPlanet(parent.portal.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0)));
-						this.console.output(""+parent.portal.player.getPlanet().getPlanetNode().getWorldTranslation().distance(parent.portal.player.getPlanet().getStar().getStarNode().getWorldTranslation()));
+					if(Celestial.portal instanceof SPPortal) {
+						this.console.output(""+Celestial.portal.player.getCurrentFaceOfPlanet(Celestial.portal.galaxy.getPlanet(new SectorCoord(0,0,0), 0, 0)));
+						this.console.output(""+Celestial.portal.player.getPlanet().getPlanetNode().getWorldTranslation().distance(Celestial.portal.player.getPlanet().getStar().getStarNode().getWorldTranslation()));
 					} else {
 						this.console.outputError("Unsupported command.");
 					}
