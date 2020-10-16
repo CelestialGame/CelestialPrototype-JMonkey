@@ -20,7 +20,7 @@ Thanks to being written so simply, we were able to understand how it worked and 
 
 Well, let the screenshots do the talking:
 
-[TODO: put screenshots]()
+![Small Habital Planet Generation](https://github.com/kevinpthorne/CelestialGame/raw/master/90160021_548268139129243_8473094490658177024_n.png)
 
 ## Known Issues and Limitations
 
