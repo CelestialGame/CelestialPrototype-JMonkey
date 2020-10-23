@@ -206,13 +206,14 @@ public class BlockChunkControl extends AbstractControl implements BitSerializabl
 				optimizedGeometry_Opaque.setMesh(terrain.getMesher().generateMesh(this, terrain.getSettings().getChunkSizeX(), false));
 				optimizedGeometry_Transparent.setMesh(terrain.getMesher().generateMesh(this, terrain.getSettings().getChunkSizeX(), true));
 			} catch (IllegalArgumentException e) {
+				//If the mesher messes up for some reason
 				optimizedGeometry_Opaque.setMesh(BlockChunk_MeshOptimizer.generateOptimizedMesh(this, BlockChunk_TransparencyMerger.OPAQUE));
 				optimizedGeometry_Transparent.setMesh(BlockChunk_MeshOptimizer.generateOptimizedMesh(this, BlockChunk_TransparencyMerger.TRANSPARENT));
 			}
 			LodGenerator lod = new LodGenerator(optimizedGeometry_Opaque);
-			lod.bakeLods(LodGenerator.TriangleReductionMethod.COLLAPSE_COST, 0.9f);
+			lod.bakeLods(LodGenerator.TriangleReductionMethod.COLLAPSE_COST, 0.1f, 0.5f);
 			lod = new LodGenerator(optimizedGeometry_Transparent);
-			lod.bakeLods(LodGenerator.TriangleReductionMethod.COLLAPSE_COST, 0.9f);
+			lod.bakeLods(LodGenerator.TriangleReductionMethod.COLLAPSE_COST, 0.1f, 0.5f);
 			optimizedGeometry_Opaque.addControl(lc_Opaque);
 			optimizedGeometry_Transparent.addControl(lc_Transparent);
 			needsMeshUpdate = false;

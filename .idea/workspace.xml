@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="6e22d2a3-6093-4f53-b4d7-811c24c301f0" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/Celestial/cubes/com/cubes/BlockChunkControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Celestial/cubes/com/cubes/BlockChunkControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Celestial/src/com/celestial/Celestial.java" beforeDir="false" afterPath="$PROJECT_DIR$/Celestial/src/com/celestial/Celestial.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Celestial/src/com/celestial/SinglePlayer/Camera/CameraControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Celestial/src/com/celestial/SinglePlayer/Camera/CameraControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Celestial/src/com/celestial/SinglePlayer/Components/Galaxy.java" beforeDir="false" afterPath="$PROJECT_DIR$/Celestial/src/com/celestial/SinglePlayer/Components/Galaxy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Celestial/src/com/celestial/SinglePlayer/Components/Planet/Planet.java" beforeDir="false" afterPath="$PROJECT_DIR$/Celestial/src/com/celestial/SinglePlayer/Components/Planet/Planet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Celestial/src/com/celestial/SinglePlayer/Components/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/Celestial/src/com/celestial/SinglePlayer/Components/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Celestial/src/com/celestial/SinglePlayer/Components/SolarSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/Celestial/src/com/celestial/SinglePlayer/Components/SolarSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Celestial/src/com/celestial/SinglePlayer/SPPortal.java" beforeDir="false" afterPath="$PROJECT_DIR$/Celestial/src/com/celestial/SinglePlayer/SPPortal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Celestial/src/com/celestial/World/BlockChunkManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Celestial/src/com/celestial/World/BlockChunkManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Celestial/src/com/celestial/World/Chunks/ChunkGeneratorCallable.java" beforeDir="false" afterPath="$PROJECT_DIR$/Celestial/src/com/celestial/World/Chunks/ChunkGeneratorCallable.java" afterDir="false" />
+    </list>
+    <ignored path="Celestial.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="Celestial" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf />
+  </component>
+  <component name="Git.Settings">
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-1928" />
+    <option name="y" value="-8" />
+    <option name="width" value="1938" />
+    <option name="height" value="1060" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane" />
+      <pane id="PackagesPane" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="FullScreen" value="false" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="Applet">
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="TestNG">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <predefined_log_file enabled="true" id="idea.log" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\kevint\AppData\Roaming\Subversion</configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6e22d2a3-6093-4f53-b4d7-811c24c301f0" name="Default" comment="" />
+      <created>1550203695080</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1550203695080</updated>
+      <workItem from="1550207062894" duration="1270000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="1270000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-1928" y="-8" width="1936" height="1056" extended-state="6" />
+    <layout>
+      <window_info id="Image Layers" />
+      <window_info id="Capture Tool" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25266525" />
+      <window_info id="Structure" order="1" weight="0.25" />
+      <window_info id="Palette&#9;" order="2" />
+      <window_info id="UI Designer" order="3" />
+      <window_info id="Favorites" order="4" side_tool="true" />
+      <window_info anchor="bottom" id="Database Changes" />
+      <window_info anchor="bottom" id="Flutter Performance" side_tool="true" />
+      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
+      <window_info anchor="bottom" id="Application Servers" order="8" />
+      <window_info anchor="bottom" id="Version Control" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.33044422" />
+      <window_info anchor="bottom" id="Messages" order="11" />
+      <window_info anchor="right" id="Maven" />
+      <window_info anchor="right" id="Capture Analysis" />
+      <window_info anchor="right" id="Flutter Outline" />
+      <window_info anchor="right" id="Flutter Inspector" />
+      <window_info anchor="right" id="Database" />
+      <window_info anchor="right" id="Theme Preview" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="Maven Projects" order="4" />
+      <window_info anchor="right" id="Designer" order="5" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file:$PROJECT_DIR$/../../../../..//$PROJECT_DIR$/Celestial/src/com/celestial/World/BlockChunkManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="20" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:$PROJECT_DIR$/../../../../..//$PROJECT_DIR$/Celestial/cubes/com/cubes/BlockTerrainControl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3079">
+          <caret line="47" column="73" selection-start-line="47" selection-start-column="73" selection-end-line="47" selection-end-column="73" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
